@@ -168,11 +168,12 @@ export const CoreContextProvider = props => {
             });
 
             const patientId = localStorage.getItem("userId");
-            fetchDeviceData(patientId);
+            const username = localStorage.getItem("userName");
+            
             setShowLoader(false);
 
 
-            if (userData.length === 0)
+            if (userData.length === 0)  
                 window.location.assign('profile');
 
             else
@@ -471,10 +472,10 @@ export const CoreContextProvider = props => {
 
     }
 
-    const fetchWSData = (userid, usertype) => {
+    const fetchWSData = (userid,username, usertype, dataSetdevice) => {
 
-        const token = localStorage.getItem('app_jwt');
-       console.log('fetchWSData : userId' + userId);
+       const token = localStorage.getItem('app_jwt');
+       console.log('fetchWSData : userId' + userid);
 
         let data = "";
         if (usertype === "patient") {
@@ -555,27 +556,21 @@ export const CoreContextProvider = props => {
             setweightData(dataSetweight);
 
             //compare with api data and push into array.
-            fetchWSDeviceApiData(userid, usertype, dataSetweight);
-
-            
-
-
+            fetchWSDeviceApiData(userid, username, usertype, dataSetweight,dataSetdevice);
         })
 
     }
 
-    const fetchWSDeviceApiData = (userid, usertype, dataSetweight) => {
+    const fetchWSDeviceApiData = (userid,username, usertype, dataSetweight, deviceData) => {
 
         const token = localStorage.getItem('app_jwt');
         
-        const username = localStorage.getItem('userName');
         const deviceinfo = [];
         deviceData.forEach(x=>{
             deviceinfo.push(x.deviceID)
         });
         const _deviceData = deviceData;
-        console.log("device Data" + _deviceData);
-
+      
          // Case 2 : Get Device for this user.
         let data = {
 
@@ -585,6 +580,7 @@ export const CoreContextProvider = props => {
 
         }
         
+        console.log("device deviceinfo 1212" + deviceinfo);
           axios.post('https://api.iglucose.com/readings/', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -1184,13 +1180,9 @@ export const CoreContextProvider = props => {
     }
 
 
-    const fetchDeviceData = (patientId) => {
-
+     const  fetchDeviceData = (patientId, username, usertype,type) => {
         console.log('patientId' + patientId);
         const token = localStorage.getItem('app_jwt');
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        };
         const data = {
             "TableName": "UserDetail",
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
@@ -1202,10 +1194,7 @@ export const CoreContextProvider = props => {
                 ":v_GSI1PK": { "S": patientId }
             }
         }
-
-
-
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+      axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1218,7 +1207,7 @@ export const CoreContextProvider = props => {
             let deviceType = '';
 
             //    console.log('deviceData', deviceData);
-
+         
             deviceData.forEach((p, index) => {
                 console.log('p' + index, p);
                 let devicedata = {};
@@ -1249,6 +1238,16 @@ export const CoreContextProvider = props => {
             });
 
             setdeviceData(dataSetdevice);
+
+            if(type =='Weight'){
+                fetchWSData(patientId, username, usertype ,dataSetdevice)
+            }
+            if(type =='Blood Pressure'){
+                
+            }
+            if(type =='Blood Glucose'){
+                
+            }
         })
 
     }

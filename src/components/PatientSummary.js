@@ -17,6 +17,7 @@ import IonRangeSlider from 'react-ion-slider';
 import { DataGrid } from '@material-ui/data-grid';
 
 import {Weight} from './Weight';
+import {BloodGlucose} from './BloodGlucose';
 
 const PatientSummary = props => {
     const coreContext = useContext(CoreContext);
@@ -57,10 +58,6 @@ const PatientSummary = props => {
 
         setPatient(patientData);
 
-        coreContext.fetchDeviceData("PATIENT_" + patientId);
-        coreContext.fetchBloodGlucose(patientId, usertype);
-        coreContext.fetchBloodPressure(patientId, usertype);
-        coreContext.fetchWSData("PATIENT_"+patientId, usertype);
         
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 
@@ -167,66 +164,7 @@ const PatientSummary = props => {
         reset,
     } = useStopwatch({ autoStart: true });
 
-    const bgcolumns = [
-        { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
-        {
-          field: 'reading',
-          headerName: 'Reading',
-          type: 'number',
-          editable: false,
-          width: 200
-        },
-        {
-          field: 'meal',
-          headerName: 'Before/After Meal',
-          width: 110,
-          editable: false,
-          width: 200
-        },
-        {
-            field: 'timeSlots',
-            headerName: 'Recorded TimeSlot',
-            width: 110,
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'date_recorded',
-            headerName: 'Date Recorded',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'reading_id',
-            headerName: 'Reading Id',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          {
-            field: 'battery',
-            headerName: 'Battery',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          
-          
-      ];
-    const renderVitalDataBG = () => {
-        if (coreContext.bloodglucoseData.length > 0) {
-            return (
-                <div style={{ height: 400, width: '100%' }}>
-                  <DataGrid
-                    rows={coreContext.bloodglucoseData}
-                    columns={bgcolumns}
-                    pageSize={10}
-                  />
-                </div>
-              );
-            }
-
-    }
+   
 
     const onBGChange = (e) => {
         setBgMin(e.from);
@@ -611,10 +549,11 @@ const PatientSummary = props => {
                                         </TabPanel>
                                         <TabPanel>
                                         <div className='card'>
-                                             <h4 className="card-header">Blood Glucose</h4>
+                                            <BloodGlucose></BloodGlucose>
+                                             {/* <h4 className="card-header">Blood Glucose</h4>
                                          <div className="card-body">
                                              {renderVitalDataBG()}
-                                        </div>
+                                        </div> */}
                                         </div>
                                         </TabPanel>
                                         <TabPanel>

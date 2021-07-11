@@ -10,21 +10,32 @@ const Weight = props => {
     const [patientId, setPatientId] = useState('');
 
     const fetchWeight = () => {
-
       const patient = JSON.parse(localStorage.getItem('app_patient'));
       let patientId =  localStorage.getItem("userId");
+      console.log('Ashok'+patientId);
+      
       let userType = localStorage.getItem("userType");
+      let userName = localStorage.getItem("userName");
       if(patient != undefined){
-        patientId =patient.ehrId;
-        userType = 'patient';
+        if(patient.ehrId !== undefined)
+        {
+          patientId =patient.ehrId;
+          userType = 'patient';
+        userName = patient.name;
+        }
+        
       }
-        coreContext.fetchDeviceData(patientId);
-        coreContext.fetchWSData(patientId,userType);
-        localStorage.setItem('app_patient', null);
+      
+      if(patientId !==undefined){
+        coreContext.fetchDeviceData(patientId,userName,userType, 'Weight');
+      }
+      //localStorage.removeItem('app_patient');
     }
 
-    //useEffect(fetchWeight, []);
-    useEffect(fetchWeight, [coreContext.deviceData.length]);
+    
+    
+    useEffect(fetchWeight, []);
+    
    
     const columns = [
         { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},

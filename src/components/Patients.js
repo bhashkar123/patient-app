@@ -55,7 +55,6 @@ const Patients = props => {
         const userType = localStorage.getItem("userType");
         const userId = localStorage.getItem("userId");
         coreContext.fetchPateintListfromApi(userType, userId);
-       
     }
 
 

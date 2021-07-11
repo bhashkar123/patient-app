@@ -18,7 +18,7 @@ const MyProfile = props => {
     const getUserData = () => {
         const patient = JSON.parse(localStorage.getItem('app_patient'));
         const pId = localStorage.getItem("userId");
-        coreContext.fetchDeviceData(pId);
+       // coreContext.fetchDeviceData(pId);
         const patientId = pId.split("_").pop();
 
         setpatientId(patientId);
@@ -30,6 +30,7 @@ const MyProfile = props => {
         setWeight(patient.weight);
         setBMI(patient.bmi);
 
+        coreContext.fetchDeviceData("PATIENT_"+patientId,patient.userName, 'patient','patient');
         if (patient.userName.includes('||0')) {
             const u = patient.userName.replace('||0', '');
             setUserName(u);
@@ -39,6 +40,7 @@ const MyProfile = props => {
     }
 
     useEffect(getUserData, []);
+    
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
