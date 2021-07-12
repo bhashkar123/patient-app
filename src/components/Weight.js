@@ -61,6 +61,13 @@ const Weight = props => {
             width: 200
           },
           {
+            field: 'reading_id',
+            headerName: 'Reading Id',
+            width: 110,
+            editable: false,
+            width: 200
+          },
+          {
             field: 'deviceid',
             headerName: 'Device Id',
             editable: false,

@@ -569,13 +569,11 @@ export const CoreContextProvider = props => {
         deviceData.forEach(x=>{
             deviceinfo.push(x.deviceID)
         });
-        const _deviceData = deviceData;
       
          // Case 2 : Get Device for this user.
         let data = {
 
             "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
-
             "device_ids": deviceinfo
 
         }
@@ -602,6 +600,9 @@ export const CoreContextProvider = props => {
                     // if (wt.BMI !== undefined) {
                     //     wtdata.bmi = wt.BMI.n;
                     // }
+                    if (wt.reading_id !== undefined) {
+                        wtdata.reading_id = wt.reading_id;
+                    }
                     if (wt.GSI1PK !== undefined) {
                         wtdata.gSI1PK = wt.GSI1PK.s;
                     }
@@ -617,13 +618,10 @@ export const CoreContextProvider = props => {
                     if (wt.date_received !== undefined) {
                         wtdata.measurementDateTime = wt.date_received;
                     }
-                    
-                    
                     wtdata.measurementDateTimeStamp = null;
                     
                     wtdata.batteryVoltage = null;
                     wtdata.signalStrength = null;
-
                        
                     dataSetApiweight.push(wtdata);
                 }
@@ -632,7 +630,12 @@ export const CoreContextProvider = props => {
             });
             if(dataSetweight.length ==0 ){
                 dataSetweight = dataSetApiweight;
-               
+
+                // Adding in db.
+                dataSetApiweight.forEach(x=>{
+
+                    pushWSInDB(userid,username, usertype, x)
+                });
             } 
             else
             {
@@ -744,8 +747,6 @@ export const CoreContextProvider = props => {
             "GSI1SK": doctorId
         });
 
-
-
         axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -760,6 +761,43 @@ export const CoreContextProvider = props => {
         });
     }
 
+
+    const pushWSInDB = (userId,userName, usertype, wt) => {
+        const token = localStorage.getItem('app_jwt');
+        const date = new Date();
+        
+        const patientId = userId.split("_").pop();
+
+        const data = JSON.stringify({
+            "TableName": "UserDetail",
+            "ExpressionAttributeValues": {
+                ":v_PK": { "S": "DEVICE_WS_READING" },
+                ":v_SK": { "S": "DEVICE_WS_READING_" + wt.reading_id },
+                ":MeasurementDateTime": { "S": + wt.date_received },
+                ":DeviceId": { "N": + wt.deviceid },
+                ":GSI1SK": { "S": + "DEVICE_WS_" + userId },
+                ":UserName": { "S": + wt.username },
+                ":weight": { "N": + wt.weight },
+                ":GSI1PK": { "S": + "DEVICE_WS_"+ userId},
+                ":CreatedDate": { "S": + date },
+                ":IMEI": { "S": + wt.deviceid },
+                ":v_ActiveStatus": { "S": "Active" }
+            } });
+
+      
+        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Registered") {
+                alert("Device Inserted Successfully.");
+            }
+        });
+    }
 
     const UpdateThreshold = (patient, type, high, low, userType) => {
         const token = localStorage.getItem('app_jwt');
@@ -1211,6 +1249,7 @@ export const CoreContextProvider = props => {
             deviceData.forEach((p, index) => {
                 console.log('p' + index, p);
                 let devicedata = {};
+                devicedata.id = index;
                 if (p.DeviceType.s === "BP") {
                     deviceType = "Blood Pressure";
                 } else if (p.DeviceType.s === "BG") {

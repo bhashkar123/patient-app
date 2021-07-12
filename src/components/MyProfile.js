@@ -5,6 +5,7 @@ import { CoreContext } from '../context/core-context';
 import Input from './common/Input';
 import ImageUploader from './common/UploadImage';
 import { LockFill } from 'react-bootstrap-icons';
+import { DataGrid } from '@material-ui/data-grid';
 
 const MyProfile = props => {
     const coreContext = useContext(CoreContext);
@@ -111,16 +112,41 @@ const MyProfile = props => {
         setBirthDate(e.target.value);
     }
 
+    const columns = [
+        { field: 'deviceName', headerName: 'Device Name', width: 200 ,  type: 'string'},
+          {
+            field: 'deviceID',
+            headerName: 'Device ID',
+            type: 'number',
+            width: 200,
+            editable: false,
+          },
+          
+          
+      ];
     const renderDeviceData = () => {
-        if (coreContext.deviceData.length > 0) {
-            return coreContext.deviceData.map((deviceData, index) => {
-                return <tr>
-                    {/* <td> {++index}</td> */}
-                    <td>{deviceData.deviceName} </td>
-                    <td>{deviceData.deviceID} </td>
-                </tr>
-            });
-        }
+        // if (coreContext.deviceData.length > 0) {
+        //     return coreContext.deviceData.map((deviceData, index) => {
+        //         return <tr>
+        //             {/* <td> {++index}</td> */}
+        //             <td>{deviceData.deviceName} </td>
+        //             <td>{deviceData.deviceID} </td>
+        //         </tr>
+        //     });
+        // }
+        if (coreContext.deviceData.length > 0){
+            return (
+                <div style={{ height: 680, width: '100%' }}>
+                  <DataGrid
+                    rows={coreContext.deviceData}
+                    columns={columns}
+                    pageSize={10}
+                    sortModel={[{ field: 'measurementDateTime', sort: 'desc' }]}
+                   
+                  />
+                </div>
+              );
+            }
 
     }
 
@@ -176,17 +202,7 @@ const MyProfile = props => {
                             <div className="row">
                                 <div className="col-md-12">
                                     <h6><span class="badge badge-primary">Provider Registered Devices</span></h6>
-                                    <table className="table table-bordered table-striped table-hover table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Device Name</th>
-                                                <th>Device ID</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {renderDeviceData()}
-                                        </tbody>
-                                    </table>
+                                    {renderDeviceData()}
                                 </div>
 
                                 <div className="col-md-12">
