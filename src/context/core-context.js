@@ -194,9 +194,11 @@ export const CoreContextProvider = props => {
         if (usertype === "admin") {
             data = {
                 "TableName": "UserDetail", "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)", "FilterExpression":
-                    "ActiveStatus = :v_status", "ExpressionAttributeValues": {
+                    "ActiveStatus = :v_status",
+                     "ExpressionAttributeValues": {
                         ":v_PK":
-                            { "S": "patient" }, ":v_SK": { "S": "PATIENT_" },
+                            { "S": "patient" }, 
+                            ":v_SK": { "S": "PATIENT_" },
                         ":v_status": { "S": "Active" }
                     }
             }
@@ -632,10 +634,10 @@ export const CoreContextProvider = props => {
                 dataSetweight = dataSetApiweight;
 
                 // Adding in db.
-                dataSetApiweight.forEach(x=>{
+                // dataSetApiweight.forEach(x=>{
 
-                    pushWSInDB(userid,username, usertype, x)
-                });
+                //     pushWSInDB(userid,username, usertype, x)
+                // });
             } 
             else
             {
