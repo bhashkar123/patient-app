@@ -8,15 +8,36 @@ const BloodPressure = props => {
     const [patientId, setPatientId] = useState('');
     
     const fetchBloodPressure = () => {
-        const patientId =  localStorage.getItem("userId");
-        const userType = localStorage.getItem("userType");
-        coreContext.fetchBloodPressure(patientId,userType);
+      let userType = localStorage.getItem("userType");
+        
+
+        const patient = JSON.parse(localStorage.getItem('app_patient'));
+        let patientId =  localStorage.getItem("userId");
+        let userName = localStorage.getItem("userName");
+        if(patient != undefined){
+          if(patient.ehrId !== undefined)
+          {
+            patientId =patient.ehrId;
+            userType = 'patient';
+            userName = patient.name;
+          }
+          
+        }
+        
+        if(patientId !==undefined){
+          coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , undefined);
+        }
     }
 
     useEffect(fetchBloodPressure, []);
    
     const columns = [
-        { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
+        { 
+          field: 'username',
+           headerName: 'Patient Name', 
+           width: 200 ,  
+           type: 'string'
+          },
         {
           field: 'systolic',
           headerName: 'Systolic',

@@ -45,16 +45,32 @@ const PatientProfile = props => {
     useEffect(fetchThreadMessages, [coreContext.patient.mobile_phone]);
 
     const fetchPatient = () => {
-        const patientId = localStorage.getItem("userId");
-        const usertype = localStorage.getItem("userType");
-        //  coreContext.fetchPatient(patientId);
+        const userType = localStorage.getItem("userType");
+       //  coreContext.fetchPatient(patientId);
         //const patientId =userId.split("_").pop();
         localStorage.setItem("userId", patientId)
 
 
-        coreContext.fetchBgData(patientId, usertype);
-        coreContext.fetchBpData(patientId, usertype);
-        coreContext.fetchWSData(patientId, usertype);
+        coreContext.fetchBgData(patientId, userType);
+       // coreContext.fetchBloodPressure(patientId, username, usertype);
+       const patient = JSON.parse(localStorage.getItem('app_patient'));
+        let patientId =  localStorage.getItem("userId");
+        let userName = localStorage.getItem("userName");
+        if(patient != undefined){
+          if(patient.ehrId !== undefined)
+          {
+            patientId =patient.ehrId;
+            userType = 'patient';
+            userName = patient.name;
+          }
+          
+        }
+        
+        if(patientId !==undefined){
+          coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , undefined);
+          coreContext.fetchDeviceData(patientId,userName,userType, 'Weight',undefined);
+        }
+      
 
         if (coreContext.bgData.length > 0)
             setBs(coreContext.bgData[0].gSI1PK); //assuming retrieve bg sort by date desc

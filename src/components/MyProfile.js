@@ -141,7 +141,7 @@ const MyProfile = props => {
                     rows={coreContext.deviceData}
                     columns={columns}
                     pageSize={10}
-                    sortModel={[{ field: 'measurementDateTime', sort: 'desc' }]}
+                   
                    
                   />
                 </div>

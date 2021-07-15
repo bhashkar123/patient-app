@@ -18,6 +18,7 @@ import { DataGrid } from '@material-ui/data-grid';
 
 import {Weight} from './Weight';
 import {BloodGlucose} from './BloodGlucose';
+import { BloodPressure } from './BloodPressure';
 
 const PatientSummary = props => {
     const coreContext = useContext(CoreContext);
@@ -246,20 +247,7 @@ const PatientSummary = props => {
           
       ];
 
-    const renderVitalDataBP = () => {
-        if (coreContext.bloodpressureData.length > 0) {
-            return (
-                <div style={{ height: 400, width: '100%' }}>
-                  <DataGrid
-                    rows={coreContext.bloodglucoseData}
-                    columns={bpcolumns}
-                    pageSize={10}
-                  />
-                </div>
-              );
-        }
-
-    }
+   
 
     const renderDeviceData = () => {
         if (coreContext.deviceData.length > 0) {
@@ -539,10 +527,7 @@ const PatientSummary = props => {
                                         </TabList>
                                         <TabPanel>
                                         <div className='card'>
-                                             <h4 className="card-header">Blood Pressure</h4>
-                                         <div className="card-body">
-                                             {renderVitalDataBP()}
-                                        </div>
+                                             <BloodPressure></BloodPressure>
                                         </div>
                                            
 

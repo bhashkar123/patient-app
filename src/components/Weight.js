@@ -27,7 +27,7 @@ const Weight = props => {
       }
       
       if(patientId !==undefined){
-        coreContext.fetchDeviceData(patientId,userName,userType, 'Weight');
+        coreContext.fetchDeviceData(patientId,userName,userType, 'Weight',undefined);
       }
       //localStorage.removeItem('app_patient');
     }
@@ -46,13 +46,13 @@ const Weight = props => {
           editable: false,
           width: 200
         },
-        {
-          field: 'timeSlots',
-          headerName: 'Time Slot',
-          width: 110,
-          editable: false,
-          width: 200
-        },
+        // {
+        //   field: 'timeSlots',
+        //   headerName: 'Time Slot',
+        //   width: 110,
+        //   editable: false,
+        //   width: 200
+        // },
         {
             field: 'measurementDateTime',
             headerName: 'Date-Time',
@@ -73,22 +73,6 @@ const Weight = props => {
             editable: false,
             width: 200
           },
-          {
-            field: 'batteryVoltage',
-            headerName: 'Battery voltage',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          {
-            field: 'signalStrength',
-            headerName: 'Signal Strength',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          
-          
       ];
       
       //https://material-ui.com/components/data-grid/

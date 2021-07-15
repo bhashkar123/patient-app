@@ -191,12 +191,10 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail", "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)", "FilterExpression":
-                    "ActiveStatus = :v_status", "ExpressionAttributeValues": {
-                        ":v_PK":
-                            { "S": "patient" }, ":v_SK": { "S": "PATIENT_" },
-                        ":v_status": { "S": "Active" }
-                    }
+                "TableName":"UserDetail",
+                "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
+                "FilterExpression":"ActiveStatus = :v_status",
+                "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"},":v_status":{"S":"Active"}}
             }
 
         }
@@ -290,10 +288,10 @@ export const CoreContextProvider = props => {
                     patient.BMI = parseFloat(num1).toFixed(2);
                 }
 
+                // if (patient.userId !== undefined && patient.name) {
+                //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+                // }
                 ps.push(patient);
-                if (patient.userId !== undefined && patient.name) {
-                    fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
-                }
             });
 
             setPatients(ps);
@@ -468,12 +466,12 @@ export const CoreContextProvider = props => {
                 
                 wtdata.actionTaken = wt.ActionTaken.s;
                 wtdata.weight = Math.round(wt.weight.n);
-                wtdata.timeSlots = wt.TimeSlots.s;
-                wtdata.measurementDateTime = wt.MeasurementDateTime.s;
-                wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
-                wtdata.username = wt.UserName.s;
-                wtdata.batteryVoltage = wt.batteryVoltage.n;
-                wtdata.signalStrength = wt.signalStrength.n;
+                if(wt.TimeSlots !==undefined) wtdata.timeSlots = wt.TimeSlots.s;
+                if(wt.MeasurementDateTime !==undefined)  wtdata.measurementDateTime = wt.MeasurementDateTime.s;
+                if(wt.MeasurementTimestamp !==undefined) wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
+                if(wt.UserName !==undefined)  wtdata.username = wt.UserName.s;
+                if(wt.batteryVoltage !==undefined) wtdata.batteryVoltage = wt.batteryVoltage.n;
+                if(wt.signalStrength !==undefined) wtdata.signalStrength = wt.signalStrength.n;
 
 
                 dataSetweight.push(wtdata);
@@ -1201,24 +1199,27 @@ export const CoreContextProvider = props => {
                     deviceType = "No Device";
                 }
                 devicedata.deviceName = deviceType;
-                
-                devicedata.deviceID = p.DeviceId.s;
+                if(p.DeviceId !=undefined){
+                    devicedata.deviceID = p.DeviceId.s;
 
-                if(patient!= ''){
+                    if (deviceType == 'Weight') {
+                        localStorage.setItem('WdeviceID', p.DeviceId.s);
+                    }
+                    if (deviceType == 'Blood Pressure') {
+                        localStorage.setItem('BPdeviceID', p.DeviceId.s);
+                    }
+                    if (deviceType == 'Blood Glucose') {
+                        localStorage.setItem('BGdeviceID', p.DeviceId.s);
+                    }
+                }
+
+                if(patient !==undefined){
                     patient.deviceName =devicedata.deviceName ;
                     patient.deviceID =devicedata.deviceID ;
                 }
                 dataSetdevice.push(devicedata);
 
-                if (deviceType == 'Weight') {
-                    localStorage.setItem('WdeviceID', p.DeviceId.s);
-                }
-                if (deviceType == 'Blood Pressure') {
-                    localStorage.setItem('BPdeviceID', p.DeviceId.s);
-                }
-                if (deviceType == 'Blood Glucose') {
-                    localStorage.setItem('BGdeviceID', p.DeviceId.s);
-                }
+               
             });
 
             setdeviceData(dataSetdevice);
