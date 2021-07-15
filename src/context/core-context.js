@@ -196,7 +196,6 @@ export const CoreContextProvider = props => {
                 "FilterExpression":"ActiveStatus = :v_status",
                 "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"},":v_status":{"S":"Active"}}
             }
-
         }
         if (usertype === "doctor") {
             data = {
@@ -1160,7 +1159,8 @@ export const CoreContextProvider = props => {
      const  fetchDeviceData = (patientId, username, usertype,type, patient) => {
         console.log('patientId' + patientId);
         const token = localStorage.getItem('app_jwt');
-        const data = {
+        
+        let data = {
             "TableName": "UserDetail",
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "FilterExpression": "DeviceStatus = :v_status AND GSI1PK = :v_GSI1PK",
@@ -1171,6 +1171,19 @@ export const CoreContextProvider = props => {
                 ":v_GSI1PK": { "S": patientId }
             }
         }
+        if(usertype =="admin")
+        {
+            //fetchPateintListfromApi();
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
+                "FilterExpression": "DeviceStatus = :v_status",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "patient" },
+                    ":v_SK": { "S": "DEVICE_" },
+                    ":v_status": { "S": "Active" }
+                }
+        }}
       axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -1184,43 +1197,68 @@ export const CoreContextProvider = props => {
             let deviceType = '';
 
             //    console.log('deviceData', deviceData);
-         
             deviceData.forEach((p, index) => {
                 console.log('p' + index, p);
                 let devicedata = {};
                 devicedata.id = index;
-                if (p.DeviceType.s === "BP") {
-                    deviceType = "Blood Pressure";
-                } else if (p.DeviceType.s === "BG") {
-                    deviceType = "Blood Glucose";
-                } else if (p.DeviceType.s === "WS") {
-                    deviceType = "Weight";
-                } else {
-                    deviceType = "No Device";
-                }
-                devicedata.deviceName = deviceType;
+
                 if(p.DeviceId !=undefined){
                     devicedata.deviceID = p.DeviceId.s;
-
-                    if (deviceType == 'Weight') {
-                        localStorage.setItem('WdeviceID', p.DeviceId.s);
-                    }
-                    if (deviceType == 'Blood Pressure') {
-                        localStorage.setItem('BPdeviceID', p.DeviceId.s);
-                    }
-                    if (deviceType == 'Blood Glucose') {
-                        localStorage.setItem('BGdeviceID', p.DeviceId.s);
+                }
+                if(p.DeviceType !=undefined){
+                    devicedata.DeviceType = p.DeviceType.s;
+                }
+                if(p.GSI1PK !=undefined){
+                    devicedata.patientId = p.GSI1PK.s;
+                  
+                    if(patients.length >0){
+                        let patient = patients.filter(p => p.ehrId === devicedata.patientId);
+                        if(patient.length >0 ) devicedata.username =patient[0].name;
+                    }else{
+                        devicedata.username=username;
                     }
                 }
-
-                if(patient !==undefined){
-                    patient.deviceName =devicedata.deviceName ;
-                    patient.deviceID =devicedata.deviceID ;
-                }
+               
                 dataSetdevice.push(devicedata);
 
-               
             });
+
+            // deviceData.forEach((p, index) => {
+            //     console.log('p' + index, p);
+            //     let devicedata = {};
+            //     devicedata.id = index;
+            //     if (p.DeviceType.s === "BP") {
+            //         deviceType = "Blood Pressure";
+            //     } else if (p.DeviceType.s === "BG") {
+            //         deviceType = "Blood Glucose";
+            //     } else if (p.DeviceType.s === "WS") {
+            //         deviceType = "Weight";
+            //     } else {
+            //         deviceType = "No Device";
+            //     }
+            //     devicedata.deviceName = deviceType;
+            //     if(p.DeviceId !=undefined){
+            //         devicedata.deviceID = p.DeviceId.s;
+
+            //         if (deviceType == 'Weight') {
+            //             localStorage.setItem('WdeviceID', p.DeviceId.s);
+            //         }
+            //         if (deviceType == 'Blood Pressure') {
+            //             localStorage.setItem('BPdeviceID', p.DeviceId.s);
+            //         }
+            //         if (deviceType == 'Blood Glucose') {
+            //             localStorage.setItem('BGdeviceID', p.DeviceId.s);
+            //         }
+            //     }
+
+            //     if(patient !==undefined){
+            //         patient.deviceName =devicedata.deviceName ;
+            //         patient.deviceID =devicedata.deviceID ;
+            //     }
+            //     dataSetdevice.push(devicedata);
+
+               
+            // });
 
             setdeviceData(dataSetdevice);
 
@@ -1407,13 +1445,9 @@ export const CoreContextProvider = props => {
         const deviceinfo = [];
         if(usertype =="admin")
         {
-            deviceinfo.push("867730052513003");
-            deviceinfo.push("863859040790045");
-            deviceinfo.push("863859040760527");
-            deviceinfo.push("86892305142486");
-             deviceinfo.push("86773005259358");
-            deviceinfo.push("867730052593583");
-            
+            dataSetdevice.forEach(x =>{
+                if(x.deviceID!=undefined) deviceinfo.push(x.deviceID);
+            });
         }else
         {
             dataSetdevice.forEach(x=>{
@@ -1448,7 +1482,6 @@ export const CoreContextProvider = props => {
 
                     bpdata.id = index;
 
-                    if (bp.reading_type == "blood_pressure") {
                         // if (bp.GSI1PK !== undefined) {
                         //     bpdata.gSI1PK = bp.GSI1PK.s;
                         // }
@@ -1476,12 +1509,8 @@ export const CoreContextProvider = props => {
                         if( bp.TimeSlots !== undefined){
                             bpdata.timeSlots = bp.TimeSlots.s;
                         }
-
-                        
-
-                        
-                    }
-
+         
+               
                     dataSetbp.push(bpdata);
                 });
 
