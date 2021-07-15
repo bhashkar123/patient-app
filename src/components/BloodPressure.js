@@ -51,20 +51,15 @@ const BloodPressure = props => {
             width: 200,
             editable: false,
           },
+          ,
           {
-            field: 'batteryVoltage',
-            headerName: 'Battery Voltage',
+            field: 'date_received',
+            headerName: 'Date Time',
             type: 'number',
             width: 200,
             editable: false,
           },
-          {
-            field: 'signalStrength',
-            headerName: 'Signal Strength',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
+         
           
           
       ];
@@ -74,7 +69,7 @@ const BloodPressure = props => {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid
-                    rows={coreContext.bloodglucoseData}
+                    rows={coreContext.bloodpressureData}
                     columns={columns}
                     pageSize={10}
                   />
