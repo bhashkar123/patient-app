@@ -186,19 +186,15 @@ export const CoreContextProvider = props => {
     // capture from patient List page.
     const fetchPateintListfromApi = (usertype, userId) => {
         const token = localStorage.getItem('app_jwt');
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        };
+       
         let data = "";
 
         if (usertype === "admin") {
             data = {
                 "TableName": "UserDetail", "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)", "FilterExpression":
-                    "ActiveStatus = :v_status",
-                     "ExpressionAttributeValues": {
+                    "ActiveStatus = :v_status", "ExpressionAttributeValues": {
                         ":v_PK":
-                            { "S": "patient" }, 
-                            ":v_SK": { "S": "PATIENT_" },
+                            { "S": "patient" }, ":v_SK": { "S": "PATIENT_" },
                         ":v_status": { "S": "Active" }
                     }
             }
@@ -274,7 +270,7 @@ export const CoreContextProvider = props => {
                 }
                 if (p.Coach !== undefined) {
                 patient.CoachName = p.Coach.s;
-            }
+               }
                 if (p.SK !== undefined) {
                     patient.ehrId = p.SK.s;
                 }
@@ -295,6 +291,9 @@ export const CoreContextProvider = props => {
                 }
 
                 ps.push(patient);
+                if (patient.userId !== undefined && patient.name) {
+                    fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+                }
             });
 
             setPatients(ps);
@@ -398,80 +397,7 @@ export const CoreContextProvider = props => {
 
     }
 
-    const fetchBpData = (userid, usertype) => {
-
-        const token = localStorage.getItem('app_jwt');
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        };
-        let data = "";
-        if (usertype === "patient") {
-            data = {
-                "TableName": "UserDetail",
-                "IndexName": "Patient-Doctor-Device-Index",
-                "KeyConditionExpression": "GSI1PK = :v_PK",
-                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-                "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_BP_" + userid },
-                    ":v_ActiveStatus": { "S": "Deactive" }
-                }
-            }
-        }
-
-        if (usertype === "doctor") {
-            data = {
-                "TableName": "UserDetail",
-                "KeyConditionExpression": "PK = :v_PK",
-                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-                "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_BP_READING" },
-                    ":v_GSI1SK": { "S": "DEVICE_BP_" + userid },
-                    ":v_ActiveStatus": { "S": "Deactive" }
-                }
-            }
-        }
-
-        if (usertype === "admin") {
-            data = {
-                "TableName": "UserDetail",
-                "KeyConditionExpression": "PK = :v_PK",
-                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-                "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_BP_READING" }
-                }
-            }
-        }
-
-
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
-            headers: {
-                Accept: "application/json, text/plain, */*",
-                // "Content-Type": "application/json",
-                Authorization: "Bearer " + token
-            }
-        }
-        ).then((response) => {
-            const bpData = response.data;
-            const dataSetbp = [];
-
-            bpData.forEach(p => {
-                let bpdata = {};
-                bpdata.UserName = p.UserName.s;
-                bpdata.systolic = p.systolic.n;
-                bpdata.diastolic = p.diastolic.n;
-                bpdata.pulse = p.pulse.n;
-                bpdata.timeSlots = p.TimeSlots.s;
-                bpdata.measurementDateTime = p.MeasurementDateTime.s;
-
-                bpdata.diastolic = p.diastolic.n;
-
-                dataSetbp.push(bpdata);
-            });
-
-            setbpData(dataSetbp);
-        })
-
-    }
+   
 
     const fetchWSData = (userid,username, usertype, dataSetdevice) => {
 
@@ -482,8 +408,12 @@ export const CoreContextProvider = props => {
         if (usertype === "patient") {
             data = {
                 "TableName": "UserDetail",
+                "IndexName": "Patient-Doctor-Device-Index",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
-                    ":GSI1SK": { "S": "DEVICE_WS_" + userid }
+                    ":v_PK": { "S": "DEVICE_WS_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
                 }
             }
         }
@@ -495,8 +425,8 @@ export const CoreContextProvider = props => {
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
                     ":v_PK": { "S": "DEVICE_WS_READING" },
-                    ":v_GSI1SK": { "S": "DEVICE_WS_" + userid }
-                     , ":v_ActiveStatus": { "S": "Deactive" }
+                    ":v_GSI1SK": { "S": "DEVICE_WS_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
                 }
             }
         }
@@ -504,8 +434,11 @@ export const CoreContextProvider = props => {
         if (usertype === "admin") {
             data = {
                 "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_WS_READING" }
+                    ":v_PK": { "S": "DEVICE_WS_READING" },
+                    ":v_ActiveStatus": { "S": "Deactive" }
                 }
             }
         }
@@ -530,28 +463,17 @@ export const CoreContextProvider = props => {
                 // if (wt.BMI !== undefined) {
                 //     wtdata.bmi = wt.BMI.n;
                 // }
-                wtdata.gSI1PK = wt.GSI1PK.s;
-                wtdata.deviceid = wt.DeviceId.n;
+                if(wt.GSI1PK !==undefined)wtdata.gSI1PK = wt.GSI1PK.s;
+                if(wt.DeviceId !==undefined)wtdata.deviceid = wt.DeviceId.n;
+                
                 wtdata.actionTaken = wt.ActionTaken.s;
-                wtdata.weight = Math.round(wt.weight.s);
-                if(wt.TimeSlots !==undefined){
-                    wtdata.timeSlots = wt.TimeSlots.s;
-                }
-                if(wt.MeasurementDateTime !==undefined){
-                    wtdata.measurementDateTime = wt.MeasurementDateTime.s;
-                }
-                if(wt.MeasurementTimestamp !==undefined){
-                    wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
-                }
-                if(wt.UserName !==undefined){
-                    wtdata.username = wt.UserName.s;
-                }
-                if(wt.batteryVoltage !==undefined){
-                    wtdata.batteryVoltage = wt.batteryVoltage.n;
-                }
-                if(wt.signalStrength !==undefined){
-                    wtdata.signalStrength = wt.signalStrength.n;
-                }
+                wtdata.weight = Math.round(wt.weight.n);
+                wtdata.timeSlots = wt.TimeSlots.s;
+                wtdata.measurementDateTime = wt.MeasurementDateTime.s;
+                wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
+                wtdata.username = wt.UserName.s;
+                wtdata.batteryVoltage = wt.batteryVoltage.n;
+                wtdata.signalStrength = wt.signalStrength.n;
 
 
                 dataSetweight.push(wtdata);
@@ -561,130 +483,116 @@ export const CoreContextProvider = props => {
 
             setweightData(dataSetweight);
 
-
+            //compare with api data and push into array.
+            fetchWSDeviceApiData(userid, username, usertype, dataSetweight,dataSetdevice);
         })
 
     }
 
-    const fetchBloodPressure = (userid, usertype) =>  {
+    const fetchWSDeviceApiData = (userid,username, usertype, dataSetweight, dataSetdevice) => {
 
         const token = localStorage.getItem('app_jwt');
-        console.log('fetchWSData : userId' + userid);
- 
-         let data = "";
-         if (usertype === "patient") {
-             data = {
-                 "TableName": "UserDetail",
-                 "IndexName": "Patient-Doctor-Device-Index",
-                 "KeyConditionExpression": "GSI1PK = :v_PK",
-                //  "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-                 "ExpressionAttributeValues": {
-                     ":v_PK": { "S": "DEVICE_BP_" + userid }
-                    //  , ":v_ActiveStatus": { "S": "Deactive" }
-                 }
-             }
-         }
- 
-         if (usertype === "doctor") {
-             data = {
-                 "TableName": "UserDetail",
-                 "KeyConditionExpression": "PK = :v_PK",
-                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-                 "ExpressionAttributeValues": {
-                     ":v_PK": { "S": "DEVICE_BP_READING" },
-                     ":v_GSI1SK": { "S": "DEVICE_BP_" + userid }
-                    //  ,":v_ActiveStatus": { "S": "Deactive" }
-                 }
-             }
-         }
- 
-         if (usertype === "admin") {
-             data = {
-                 "TableName": "UserDetail",
-                 "KeyConditionExpression": "PK = :v_PK",
-                 "ExpressionAttributeValues": {
-                     ":v_PK": { "S": "DEVICE_BP_READING" }
-                    //  ,  ":v_ActiveStatus": { "S": "Deactive" }
-                 }
-             }
-         }
- 
- 
- 
-         axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
-             headers: {
-                 Accept: "application/json, text/plain, */*",
-                 // "Content-Type": "application/json",
-                 Authorization: "Bearer " + token
-             }
-         }
-         ).then((response) => {
-            const reading = response.data;
-            const dataSetbp = [];
+        
+        const deviceinfo = [];
+        if(usertype =="admin")
+        {
+            deviceinfo.push("867730052513003");
+            deviceinfo.push("863859040790045");
+            deviceinfo.push("863859040760527");
+            deviceinfo.push("86892305142486");
+             deviceinfo.push("86773005259358");
+            deviceinfo.push("867730052593583");
             
+            
+        }else
+        {
+            dataSetdevice.forEach(x=>{
+                deviceinfo.push(x.deviceID)
+            });
+        }
+      
+         // Case 2 : Get Device for this user.
+        let data = {
+            "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
+            "device_ids": deviceinfo,
+            "reading_type" : ["weight"]
 
-            reading.forEach((bp, index) => {
-                console.log('p' + index, bp);
-                let bpdata = {};
+        }
+        
+        console.log("device deviceinfo 1212" + deviceinfo);
+          axios.post('https://api.iglucose.com/readings/', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const responseData = response.data;
+            const weightapiData = responseData.readings;
+            const dataSetApiweight = [];
+          
+            weightapiData.forEach((wt, index) => {
+                console.log('p' + index, wt);
+                let wtdata = {};
 
-               
-                bpdata.id = index;
-                 // if (wt.BMI !== undefined) {
-                 //     wtdata.bmi = wt.BMI.n;
-                 // }
-                 if(bp.UserName !==undefined){
-                    bpdata.username = bp.UserName.s;
+                if (wt.reading_type == "weight"){
+                    wtdata.id = index;
+                    // if (wt.BMI !== undefined) {
+                    //     wtdata.bmi = wt.BMI.n;
+                    // }
+                    if (wt.reading_id !== undefined) {
+                        wtdata.reading_id = wt.reading_id;
+                    }
+                    if (wt.GSI1PK !== undefined) {
+                        wtdata.gSI1PK = wt.GSI1PK.s;
+                    }
+                    wtdata.username = username;
+                    if (wt.device_id !== undefined) {
+                        wtdata.deviceid = wt.device_id;
+                    }
+                   // wtdata.actionTaken = wt.ActionTaken.s;
+                    if (wt.weight_lbs !== undefined) {
+                        wtdata.weight = wt.weight_lbs;
+                    }
+                    wtdata.timeSlots = null;
+                    if (wt.date_received !== undefined) {
+                        wtdata.measurementDateTime = wt.date_received;
+                    }
+                    wtdata.measurementDateTimeStamp = null;
+                    
+                    wtdata.batteryVoltage = null;
+                    wtdata.signalStrength = null;
+                       
+                    dataSetApiweight.push(wtdata);
                 }
-                //  if(bp.GSI1PK !==undefined){
-                //     bpdata.gSI1PK = bp.GSI1PK.s;
-                //  }
-                //  if(bp.irregular !==undefined){
-                //     bpdata.irregular = bp.irregular.n;
-                //  }
-                
-                 if (bp.systolic !== undefined) {
-                    bpdata.systolic = bp.systolic.n;
-                }
+                // console.log('pos', wtdata);
 
-                if (bp.diastolic !== undefined) {
-                    bpdata.diastolic = bp.diastolic.n;
-                }
-                if (bp.pulse !== undefined) {
-                    bpdata.pulse = bp.pulse.n;
-                }
+            });
+            if(dataSetweight.length ==0 ){
+                dataSetweight = dataSetApiweight;
 
-                if (bp.date_recorded !== undefined) {
-                    bpdata.date_recorded = bp.date_recorded;
-                }
+                // Adding in db.
+                dataSetApiweight.forEach(x=>{
 
-                if (bp.date_received !== undefined) {
-                    bpdata.date_received = bp.date_received;
-                }
+                    pushWSInDB(userid,username, usertype, x)
+                });
+            } 
+            else
+            {
+                // dataSetApiweight.forEach(p=>{
+                //     if(dataSetweight.filter(x=>x.date_recorded != p.date_recorded)){
+                //         dataSetweight.push(p);
+                //     }
+                // });
+            }
+            setweightData(dataSetweight);
+            setweightdeviceApiData(dataSetApiweight);
 
-                if( bp.TimeSlots !== undefined){
-                    bpdata.timeSlots = bp.TimeSlots.s;
-                }
 
-                // if (bp.MeasurementDateTime !== undefined) {
-                //     bpdata.measurementDateTime = bp.MeasurementDateTime.s;
-                // }
+        })
 
-              
-                // if (bp.actionTaken !== undefined) {
-                //     bpdata.actionTaken = bp.ActionTaken.s;
-                // }
- 
-                 dataSetbp.push(bpdata);
-                 // console.log('pos', wtdata);
-              
-             });
- 
-             setbloodpressureData(dataSetbp);
- 
- 
-         })
- 
-     }
+    }
 
     const fetchThresold = (userid, usertype) => {
 
@@ -795,7 +703,42 @@ export const CoreContextProvider = props => {
     }
 
 
-    
+    const pushWSInDB = (userId,userName, usertype, wt) => {
+        const token = localStorage.getItem('app_jwt');
+        const date = new Date();
+        
+        const patientId = userId.split("_").pop();
+
+        const data = JSON.stringify({
+            "TableName": "UserDetail",
+            "ExpressionAttributeValues": {
+                ":v_PK": { "S": "DEVICE_WS_READING" },
+                ":v_SK": { "S": "DEVICE_WS_READING_" + wt.reading_id },
+                ":MeasurementDateTime": { "S": + wt.date_received },
+                ":DeviceId": { "N": + wt.deviceid },
+                ":GSI1SK": { "S": + "DEVICE_WS_" + userId },
+                ":UserName": { "S": + wt.username },
+                ":weight": { "N": + wt.weight },
+                ":GSI1PK": { "S": + "DEVICE_WS_"+ userId},
+                ":CreatedDate": { "S": + date },
+                ":IMEI": { "S": + wt.deviceid },
+                ":v_ActiveStatus": { "S": "Active" }
+            } });
+
+      
+        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Registered") {
+                alert("Device Inserted Successfully.");
+            }
+        });
+    }
 
     const UpdateThreshold = (patient, type, high, low, userType) => {
         const token = localStorage.getItem('app_jwt');
@@ -1216,7 +1159,7 @@ export const CoreContextProvider = props => {
     }
 
 
-     const  fetchDeviceData = (patientId, username, usertype,type) => {
+     const  fetchDeviceData = (patientId, username, usertype,type, patient) => {
         console.log('patientId' + patientId);
         const token = localStorage.getItem('app_jwt');
         const data = {
@@ -1258,9 +1201,13 @@ export const CoreContextProvider = props => {
                     deviceType = "No Device";
                 }
                 devicedata.deviceName = deviceType;
+                
                 devicedata.deviceID = p.DeviceId.s;
 
-
+                if(patient!= ''){
+                    patient.deviceName =devicedata.deviceName ;
+                    patient.deviceID =devicedata.deviceID ;
+                }
                 dataSetdevice.push(devicedata);
 
                 if (deviceType == 'Weight') {
@@ -1276,11 +1223,12 @@ export const CoreContextProvider = props => {
 
             setdeviceData(dataSetdevice);
 
+            
             if(type =='Weight'){
                 fetchWSData(patientId, username, usertype ,dataSetdevice)
             }
             if(type =='Blood Pressure'){
-                
+                fetchBloodPressure(patientId, username, usertype ,dataSetdevice)
             }
             if(type =='Blood Glucose'){
                 
@@ -1449,154 +1397,246 @@ export const CoreContextProvider = props => {
     }
 
 
-    // const fetchBloodPressure = (userid, usertype) => {
-    //     const token = localStorage.getItem('app_jwt');
-    //     const isAuth = localStorage.getItem('app_isAuth');
-    //     const username = localStorage.getItem('userName');
-    //     if (isAuth === 'yes') {
-    //         setIsAuthenticated(true);
-    //         setJwt(token);
-    //         setUserId(userId);
-    //     }
-    //     else {
-    //         relogin();
-    //     }
+    const fetchBloodPressure = (userid,username, usertype, dataSetdevice) => {
 
-    //     const deviceinfo = [];
-    //     const BPdeviceId = localStorage.getItem("BPdeviceID");
-    //     const BGdeviceId = localStorage.getItem("BGdeviceID");
-    //     const WdeviceId = localStorage.getItem("WdeviceID");
-    //     if (BPdeviceId !== null) {
-    //         deviceinfo.push(BPdeviceId);
-    //     }
-    //     if (BGdeviceId !== null) {
-    //         deviceinfo.push(BGdeviceId);
-    //     }
-    //     if (WdeviceId !== null) {
-    //         deviceinfo.push(WdeviceId);
-    //     }
+        const token = localStorage.getItem('app_jwt');
+        console.log('fetchWSData : userId' + userid);
+
+        
+        const deviceinfo = [];
+        if(usertype =="admin")
+        {
+            deviceinfo.push("867730052513003");
+            deviceinfo.push("863859040790045");
+            deviceinfo.push("863859040760527");
+            deviceinfo.push("86892305142486");
+             deviceinfo.push("86773005259358");
+            deviceinfo.push("867730052593583");
+            
+        }else
+        {
+            dataSetdevice.forEach(x=>{
+                deviceinfo.push(x.deviceID)
+            });
+        }
+      
+
+         // Case 2 : Get Device for this user.
+        let data = {
+            "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
+            "device_ids": deviceinfo,
+            "reading_type" : ["blood_pressure"]
+
+        }
+        
+            axios.post('https://api.iglucose.com/readings/', data, {
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    // "Content-Type": "application/json",
+                    Authorization: "Bearer " + token
+                }
+            }
+            ).then((response) => {
+                const responseData = response.data;
+                const dataSetbp = [];
+                const reading = responseData.readings;
+
+                reading.forEach((bp, index) => {
+                    console.log('p' + index, bp);
+                    let bpdata = {};
+
+                    bpdata.id = index;
+
+                    if (bp.reading_type == "blood_pressure") {
+                        // if (bp.GSI1PK !== undefined) {
+                        //     bpdata.gSI1PK = bp.GSI1PK.s;
+                        // }
+
+                        bpdata.username = username;
+                        if (bp.systolic_mmhg !== undefined) {
+                            bpdata.systolic = bp.systolic_mmhg;
+                        }
+
+                        if (bp.diastolic_mmhg !== undefined) {
+                            bpdata.diastolic = bp.diastolic_mmhg;
+                        }
+                        if (bp.pulse_bpm !== undefined) {
+                            bpdata.pulse = bp.pulse_bpm;
+                        }
+
+                        if (bp.date_recorded !== undefined) {
+                            bpdata.date_recorded = bp.date_recorded;
+                        }
+
+                        if (bp.date_received !== undefined) {
+                            bpdata.date_received = bp.date_received;
+                        }
+
+                        if( bp.TimeSlots !== undefined){
+                            bpdata.timeSlots = bp.TimeSlots.s;
+                        }
+
+                        
+
+                        
+                    }
+
+                    dataSetbp.push(bpdata);
+                });
+
+                setbloodpressureData(dataSetbp);
+            })
+        
+
+        // }
+
+        // const token = localStorage.getItem('app_jwt');
+        // const isAuth = localStorage.getItem('app_isAuth');
+        // const username = localStorage.getItem('userName');
+        // if (isAuth === 'yes') {
+        //     setIsAuthenticated(true);
+        //     setJwt(token);
+        //     setUserId(userId);
+        // }
+        // else {
+        //     relogin();
+        // }
+
+        // const deviceinfo = [];
+        // const BPdeviceId = localStorage.getItem("BPdeviceID");
+        // const BGdeviceId = localStorage.getItem("BGdeviceID");
+        // const WdeviceId = localStorage.getItem("WdeviceID");
+        // if (BPdeviceId !== null) {
+        //     deviceinfo.push(BPdeviceId);
+        // }
+        // if (BGdeviceId !== null) {
+        //     deviceinfo.push(BGdeviceId);
+        // }
+        // if (WdeviceId !== null) {
+        //     deviceinfo.push(WdeviceId);
+        // }
 
 
-    //     if (deviceinfo.length > 0) {
-    //         let data = {
+        // if (deviceinfo.length > 0) {
+        //     let data = {
 
-    //             "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
+        //         "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
 
-    //             "device_ids": deviceinfo
+        //         "device_ids": deviceinfo
 
-    //         }
+        //     }
 
-    //         // let data = "";
-    //         // if (usertype === "patient") {
-    //         //     data = {
-    //         //         "TableName": "UserDetail",
-    //         //         "IndexName": "Patient-Doctor-Device-Index",
-    //         //         "KeyConditionExpression": "GSI1PK = :v_PK",
-    //         //         "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-    //         //         "ExpressionAttributeValues": {
-    //         //             ":v_PK": { "S": "DEVICE_BP_" + userid },
-    //         //             ":v_ActiveStatus": { "S": "Deactive" }
-    //         //         }
-    //         //     }
-    //         // }
+        //     // let data = "";
+        //     // if (usertype === "patient") {
+        //     //     data = {
+        //     //         "TableName": "UserDetail",
+        //     //         "IndexName": "Patient-Doctor-Device-Index",
+        //     //         "KeyConditionExpression": "GSI1PK = :v_PK",
+        //     //         "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+        //     //         "ExpressionAttributeValues": {
+        //     //             ":v_PK": { "S": "DEVICE_BP_" + userid },
+        //     //             ":v_ActiveStatus": { "S": "Deactive" }
+        //     //         }
+        //     //     }
+        //     // }
 
-    //         // if (usertype === "doctor") {
-    //         //     data = {
-    //         //         "TableName": "UserDetail",
-    //         //         "KeyConditionExpression": "PK = :v_PK",
-    //         //         "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-    //         //         "ExpressionAttributeValues": {
-    //         //             ":v_PK": { "S": "DEVICE_BP_READING" },
-    //         //             ":v_GSI1SK": { "S": "DEVICE_BP_" + userid },
-    //         //             ":v_ActiveStatus": { "S": "Deactive" }
-    //         //         }
-    //         //     }
-    //         // }
+        //     // if (usertype === "doctor") {
+        //     //     data = {
+        //     //         "TableName": "UserDetail",
+        //     //         "KeyConditionExpression": "PK = :v_PK",
+        //     //         "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+        //     //         "ExpressionAttributeValues": {
+        //     //             ":v_PK": { "S": "DEVICE_BP_READING" },
+        //     //             ":v_GSI1SK": { "S": "DEVICE_BP_" + userid },
+        //     //             ":v_ActiveStatus": { "S": "Deactive" }
+        //     //         }
+        //     //     }
+        //     // }
 
 
-    //         // if (usertype === "admin") {
-    //         //     data = {
-    //         //         "TableName": "UserDetail",
-    //         //         "KeyConditionExpression": "PK = :v_PK",
-    //         //         "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-    //         //         "ExpressionAttributeValues": {
-    //         //             ":v_PK": { "S": "DEVICE_BP_READING" },
-    //         //             ":v_ActiveStatus": { "S": "Deactive" }
-    //         //         }
-    //         //     }
-    //         // }
+        //     // if (usertype === "admin") {
+        //     //     data = {
+        //     //         "TableName": "UserDetail",
+        //     //         "KeyConditionExpression": "PK = :v_PK",
+        //     //         "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+        //     //         "ExpressionAttributeValues": {
+        //     //             ":v_PK": { "S": "DEVICE_BP_READING" },
+        //     //             ":v_ActiveStatus": { "S": "Deactive" }
+        //     //         }
+        //     //     }
+        //     // }
 
-    //         axios.post('https://api.iglucose.com/readings/', data, {
-    //             headers: {
-    //                 Accept: "application/json, text/plain, */*",
-    //                 // "Content-Type": "application/json",
-    //                 Authorization: "Bearer " + token
-    //             }
-    //         }
-    //         ).then((response) => {
-    //             const responseData = response.data;
-    //             const dataSetbp = [];
-    //             const reading = responseData.readings;
+        //     axios.post('https://api.iglucose.com/readings/', data, {
+        //         headers: {
+        //             Accept: "application/json, text/plain, */*",
+        //             // "Content-Type": "application/json",
+        //             Authorization: "Bearer " + token
+        //         }
+        //     }
+        //     ).then((response) => {
+        //         const responseData = response.data;
+        //         const dataSetbp = [];
+        //         const reading = responseData.readings;
 
-    //             reading.forEach((bp, index) => {
-    //                 console.log('p' + index, bp);
-    //                 let bpdata = {};
+        //         reading.forEach((bp, index) => {
+        //             console.log('p' + index, bp);
+        //             let bpdata = {};
 
-    //                 bpdata.id = index;
+        //             bpdata.id = index;
 
-    //                 if (bp.reading_type == "blood_pressure") {
-    //                     if (bp.GSI1PK !== undefined) {
-    //                         bpdata.gSI1PK = bp.GSI1PK.s;
-    //                     }
+        //             if (bp.reading_type == "blood_pressure") {
+        //                 if (bp.GSI1PK !== undefined) {
+        //                     bpdata.gSI1PK = bp.GSI1PK.s;
+        //                 }
 
-    //                     bpdata.username = username;
-    //                     if (bp.systolic_mmhg !== undefined) {
-    //                         bpdata.systolic = bp.systolic_mmhg;
-    //                     }
+        //                 bpdata.username = username;
+        //                 if (bp.systolic_mmhg !== undefined) {
+        //                     bpdata.systolic = bp.systolic_mmhg;
+        //                 }
 
-    //                     if (bp.diastolic_mmhg !== undefined) {
-    //                         bpdata.diastolic = bp.diastolic_mmhg;
-    //                     }
-    //                     if (bp.pulse_bpm !== undefined) {
-    //                         bpdata.pulse = bp.pulse_bpm;
-    //                     }
+        //                 if (bp.diastolic_mmhg !== undefined) {
+        //                     bpdata.diastolic = bp.diastolic_mmhg;
+        //                 }
+        //                 if (bp.pulse_bpm !== undefined) {
+        //                     bpdata.pulse = bp.pulse_bpm;
+        //                 }
 
-    //                     if (bp.date_recorded !== undefined) {
-    //                         bpdata.date_recorded = bp.date_recorded;
-    //                     }
+        //                 if (bp.date_recorded !== undefined) {
+        //                     bpdata.date_recorded = bp.date_recorded;
+        //                 }
 
-    //                     if (bp.date_received !== undefined) {
-    //                         bpdata.date_received = bp.date_received;
-    //                     }
+        //                 if (bp.date_received !== undefined) {
+        //                     bpdata.date_received = bp.date_received;
+        //                 }
 
-    //                     if( bp.TimeSlots !== undefined){
-    //                         bpdata.timeSlots = bp.TimeSlots.s;
-    //                     }
+        //                 if( bp.TimeSlots !== undefined){
+        //                     bpdata.timeSlots = bp.TimeSlots.s;
+        //                 }
 
-    //                     if (bp.MeasurementDateTime !== undefined) {
-    //                         bpdata.measurementDateTime = bp.MeasurementDateTime.s;
-    //                     }
+        //                 if (bp.MeasurementDateTime !== undefined) {
+        //                     bpdata.measurementDateTime = bp.MeasurementDateTime.s;
+        //                 }
 
-    //                     if (bp.batteryVoltage !== undefined) {
-    //                         bpdata.batteryVoltage = bp.batteryVoltage.s;
-    //                     }
+        //                 if (bp.batteryVoltage !== undefined) {
+        //                     bpdata.batteryVoltage = bp.batteryVoltage.s;
+        //                 }
 
-    //                     if (bp.signalStrength !== undefined) {
-    //                         bpdata.signalStrength = bp.signalStrength.s;
-    //                     }
-    //                     if (bp.actionTaken !== undefined) {
-    //                         bpdata.actionTaken = bp.ActionTaken.s;
-    //                     }
-    //                 }
+        //                 if (bp.signalStrength !== undefined) {
+        //                     bpdata.signalStrength = bp.signalStrength.s;
+        //                 }
+        //                 if (bp.actionTaken !== undefined) {
+        //                     bpdata.actionTaken = bp.ActionTaken.s;
+        //                 }
+        //             }
 
-    //                 dataSetbp.push(bpdata);
-    //             });
+        //             dataSetbp.push(bpdata);
+        //         });
 
-    //             setbloodpressureData(dataSetbp);
-    //         })
-    //     }
+        //         setbloodpressureData(dataSetbp);
+        //     })
+        // }
 
-    // }
+    }
 
     const fetchBloodGlucose = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');
@@ -1690,6 +1730,7 @@ export const CoreContextProvider = props => {
 
     }
 
+
     const backUpMessages = () => {
         axios.get('/backup-messages').then((response) => {
             const messages = response.data.messages;
@@ -1774,7 +1815,6 @@ export const CoreContextProvider = props => {
         setPatient,
         jwt,
         fetchBgData,
-        fetchBpData,
         fetchWSData,
         fetchThresold,
         backUpMessages,
