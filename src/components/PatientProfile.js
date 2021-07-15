@@ -48,13 +48,14 @@ const PatientProfile = props => {
         const userType = localStorage.getItem("userType");
        //  coreContext.fetchPatient(patientId);
         //const patientId =userId.split("_").pop();
+        let patientId =  localStorage.getItem("userId");
         localStorage.setItem("userId", patientId)
 
 
         coreContext.fetchBgData(patientId, userType);
        // coreContext.fetchBloodPressure(patientId, username, usertype);
        const patient = JSON.parse(localStorage.getItem('app_patient'));
-        let patientId =  localStorage.getItem("userId");
+       
         let userName = localStorage.getItem("userName");
         if(patient != undefined){
           if(patient.ehrId !== undefined)
