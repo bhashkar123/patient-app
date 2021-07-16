@@ -32,6 +32,19 @@ const Menu = (props) => {
         return '';
     }
 
+    const renderDeviceInformation = () => {
+
+        const userType = localStorage.getItem("userType");
+        if (userType === 'admin') return <React.Fragment> <li className="nav-item">
+            <a className="nav-link" href="/device-info"><GiCagedBall size={20} /> Device information</a>
+        </li>
+            <NavDropdown.Divider />
+        </React.Fragment>
+
+        return '';
+    }
+
+  
     const renderPatientInformation = () => {
 
         const userType = localStorage.getItem("userType");
@@ -90,6 +103,7 @@ const Menu = (props) => {
             </li>
             <NavDropdown.Divider />
             {renderOrderInformation()}
+            {renderDeviceInformation()}
         </ul>
 
     </nav>)

@@ -90,9 +90,6 @@ const BloodPressure = props => {
             width: 200,
             editable: false,
           },
-         
-          
-          
       ];
 
     const renderBloodPressure = () => {

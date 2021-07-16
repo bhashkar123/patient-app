@@ -1375,43 +1375,7 @@ export const CoreContextProvider = props => {
 
             });
 
-            // deviceData.forEach((p, index) => {
-            //     console.log('p' + index, p);
-            //     let devicedata = {};
-            //     devicedata.id = index;
-            //     if (p.DeviceType.s === "BP") {
-            //         deviceType = "Blood Pressure";
-            //     } else if (p.DeviceType.s === "BG") {
-            //         deviceType = "Blood Glucose";
-            //     } else if (p.DeviceType.s === "WS") {
-            //         deviceType = "Weight";
-            //     } else {
-            //         deviceType = "No Device";
-            //     }
-            //     devicedata.deviceName = deviceType;
-            //     if(p.DeviceId !=undefined){
-            //         devicedata.deviceID = p.DeviceId.s;
-
-            //         if (deviceType == 'Weight') {
-            //             localStorage.setItem('WdeviceID', p.DeviceId.s);
-            //         }
-            //         if (deviceType == 'Blood Pressure') {
-            //             localStorage.setItem('BPdeviceID', p.DeviceId.s);
-            //         }
-            //         if (deviceType == 'Blood Glucose') {
-            //             localStorage.setItem('BGdeviceID', p.DeviceId.s);
-            //         }
-            //     }
-
-            //     if(patient !==undefined){
-            //         patient.deviceName =devicedata.deviceName ;
-            //         patient.deviceID =devicedata.deviceID ;
-            //     }
-            //     dataSetdevice.push(devicedata);
-
-               
-            // });
-
+           
             setdeviceData(dataSetdevice);
 
             

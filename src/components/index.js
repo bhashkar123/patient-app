@@ -17,3 +17,4 @@ export * from './MyProfile';
 export * from './ResetPassword';
 export * from './PatientProfile';
 export * from './Thresold';
+export * from './DeviceInfo';

@@ -59,6 +59,7 @@ function App() {
               <Route exact path='/thresold' component={Pages.Thresold} />
               <Route exact path='/patient-summary/:patient' component={Pages.PatientSummary} />
               <Route exact path='/patient-profile/:patient' component={Pages.PatientProfile} />
+              <Route exact path='/device-info' component={Pages.Deviceinfo} />
               <Redirect exact from="/login" to="/patients" />
               <Redirect exact from="/" to="/patients" />
             </Switch>
