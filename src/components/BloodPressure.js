@@ -23,13 +23,23 @@ const BloodPressure = props => {
           }
           
         }
-        
+       
         if(patientId !==undefined){
-          coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , undefined);
+          if(userType =="admin")
+          {
+            coreContext.fetchPateintListfromApi('admin',null);
+            if(coreContext.patients.length >0)
+            {
+              coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , coreContext.patients);
+            }
+
+          }else{
+            coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , coreContext.patients);
+          }
         }
     }
 
-    useEffect(fetchBloodPressure, []);
+    useEffect(fetchBloodPressure, [coreContext.patients.length]);
    
     const columns = [
         { 
@@ -93,6 +103,7 @@ const BloodPressure = props => {
                     rows={coreContext.bloodpressureData}
                     columns={columns}
                     pageSize={10}
+                    sortModel={[{ field: 'date_recorded', sort: 'desc' }]}
                   />
                 </div>
               );

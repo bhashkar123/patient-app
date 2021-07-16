@@ -26,15 +26,27 @@ const Weight = props => {
         
       }
       
+
       if(patientId !==undefined){
-        coreContext.fetchDeviceData(patientId,userName,userType, 'Weight',undefined);
+        if(userType =="admin")
+        {
+          coreContext.fetchPateintListfromApi('admin',null);
+          if(coreContext.patients.length >0)
+          {
+            coreContext.fetchDeviceData(patientId,userName,userType, 'Weight' , coreContext.patients);
+          }
+
+        }else{
+          coreContext.fetchDeviceData(patientId,userName,userType, 'Weight' , coreContext.patients);
+        }
       }
+     
       //localStorage.removeItem('app_patient');
     }
 
     
+    useEffect(fetchWeight, [coreContext.patients.length]);
     
-    useEffect(fetchWeight, []);
     
    
     const columns = [
@@ -85,7 +97,7 @@ const Weight = props => {
                 rows={coreContext.weightData}
                 columns={columns}
                 pageSize={10}
-                sortModel={[{ field: 'measurementDateTime', sort: 'desc' }]}
+               sortModel={[{ field: 'measurementDateTime', sort: 'desc' }]} 
                
               />
             </div>
