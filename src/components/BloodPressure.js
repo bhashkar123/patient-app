@@ -28,7 +28,7 @@ const BloodPressure = props => {
        
     }
 
-    useEffect(fetchBloodPressure, []);
+    useEffect(fetchBloodPressure, [coreContext.bloodpressureData.length]);
    
     const columns = [
       { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
@@ -85,6 +85,11 @@ const BloodPressure = props => {
 
     return <div className='card'>
     <h4 className="card-header">BLOOD PRESSURE INFORMATION</h4>
+    <div style={{ display: "flex", paddingTop:'10px' }}>
+        <button  style={{ marginLeft: "94%"  }} onClick={() => fetchBloodPressure()}>
+          Refresh
+        </button>
+      </div>
     <div className="card-body">
     {renderBloodPressure()}
     </div>

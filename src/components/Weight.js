@@ -26,31 +26,17 @@ const Weight = props => {
         
       }
       
-
-      if(patientId !==undefined){
-        if(userType =="admin")
-        {
-          coreContext.fetchPateintListfromApi('admin',null);
-          if(coreContext.patients.length >0)
-          {
-            coreContext.fetchDeviceData(patientId,userName,userType, 'Weight' , coreContext.patients);
-          }
-
-        }else{
-          coreContext.fetchDeviceData(patientId,userName,userType, 'Weight' , coreContext.patients);
-        }
-      }
+      coreContext.fetchWSData(patientId,userType);
      
-      //localStorage.removeItem('app_patient');
     }
-
-    
-    useEffect(fetchWeight, [coreContext.patients.length]);
-    
-    
+    useEffect(fetchWeight, [coreContext.weightData.length]);
    
     const columns = [
-        { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
+        { field: 
+          'username', 
+          headerName: 'Patient Name', 
+          width: 200 ,  
+          type: 'string'},
         {
           field: 'weight',
           headerName: 'Weight',
@@ -58,29 +44,22 @@ const Weight = props => {
           editable: false,
           width: 200
         },
-        // {
-        //   field: 'timeSlots',
-        //   headerName: 'Time Slot',
-        //   width: 110,
-        //   editable: false,
-        //   width: 200
-        // },
         {
-            field: 'measurementDateTime',
+            field: 'MeasurementDateTime',
             headerName: 'Date-Time',
             width: 110,
             editable: false,
             width: 200
           },
           {
-            field: 'reading_id',
-            headerName: 'Reading Id',
+            field: 'timeSlots',
+            headerName: 'Time Slots',
             width: 110,
             editable: false,
             width: 200
           },
           {
-            field: 'deviceid',
+            field: 'DeviceId',
             headerName: 'Device Id',
             editable: false,
             width: 200
@@ -97,7 +76,7 @@ const Weight = props => {
                 rows={coreContext.weightData}
                 columns={columns}
                 pageSize={10}
-               sortModel={[{ field: 'measurementDateTime', sort: 'desc' }]} 
+               sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]} 
                
               />
             </div>
@@ -108,7 +87,11 @@ const Weight = props => {
 
     return <div className='card'>
         <h4 className="card-header">WEIGHT INFORMATION</h4>
-       
+        <div style={{ display: "flex", paddingTop:'10px' }}>
+        <button  style={{ marginLeft: "94%"  }} onClick={() => fetchWeight()}>
+          Refresh
+        </button>
+      </div>
         <div className="card-body">
         {renderWeight()}
         </div>

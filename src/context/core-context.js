@@ -394,282 +394,62 @@ export const CoreContextProvider = props => {
 
     }
 
-   
 
-    // const fetchWSData = (userid,username, usertype, dataSetdevice) => {
+    const fetchWSData = (userid, usertype) => {
 
-    //    const token = localStorage.getItem('app_jwt');
-    //    console.log('fetchWSData : userId' + userid);
-
-    //     let data = "";
-    //     if (usertype === "patient") {
-    //         data = {
-    //             "TableName": "UserDetail",
-    //             "IndexName": "Patient-Doctor-Device-Index",
-    //             "KeyConditionExpression": "GSI1PK = :v_PK",
-    //             "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-    //             "ExpressionAttributeValues": {
-    //                 ":v_PK": { "S": "DEVICE_WS_" + userid },
-    //                 ":v_ActiveStatus": { "S": "Deactive" }
-    //             }
-    //         }
-    //     }
-
-    //     if (usertype === "doctor") {
-    //         data = {
-    //             "TableName": "UserDetail",
-    //             "KeyConditionExpression": "PK = :v_PK",
-    //             "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-    //             "ExpressionAttributeValues": {
-    //                 ":v_PK": { "S": "DEVICE_WS_READING" },
-    //                 ":v_GSI1SK": { "S": "DEVICE_WS_" + userid },
-    //                 ":v_ActiveStatus": { "S": "Deactive" }
-    //             }
-    //         }
-    //     }
-
-    //     if (usertype === "admin") {
-    //         data = {
-    //             "TableName": "UserDetail",
-    //             "KeyConditionExpression": "PK = :v_PK",
-    //             "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-    //             "ExpressionAttributeValues": {
-    //                 ":v_PK": { "S": "DEVICE_WS_READING" },
-    //                 ":v_ActiveStatus": { "S": "Deactive" }
-    //             }
-    //         }
-    //     }
-
-
-
-    //     axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
-    //         headers: {
-    //             Accept: "application/json, text/plain, */*",
-    //             // "Content-Type": "application/json",
-    //             Authorization: "Bearer " + token
-    //         }
-    //     }
-    //     ).then((response) => {
-    //         const weightData = response.data;
-    //         const dataSetweight = [];
-          
-    //         weightData.forEach((wt, index) => {
-    //             console.log('p' + index, wt);
-    //             let wtdata = {};
-    //             wtdata.id = index;
-    //             // if (wt.BMI !== undefined) {
-    //             //     wtdata.bmi = wt.BMI.n;
-    //             // }
-    //             if(wt.GSI1PK !==undefined)wtdata.gSI1PK = wt.GSI1PK.s;
-    //             if(wt.DeviceId !==undefined)wtdata.deviceid = wt.DeviceId.n;
-                
-    //             wtdata.actionTaken = wt.ActionTaken.s;
-    //             wtdata.weight = Math.round(wt.weight.n);
-    //             if(wt.TimeSlots !==undefined) wtdata.timeSlots = wt.TimeSlots.s;
-    //             if(wt.MeasurementDateTime !==undefined)  wtdata.measurementDateTime = wt.MeasurementDateTime.s;
-    //             if(wt.MeasurementTimestamp !==undefined) wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
-    //             if(wt.UserName !==undefined)  wtdata.username = wt.UserName.s;
-    //             if(wt.batteryVoltage !==undefined) wtdata.batteryVoltage = wt.batteryVoltage.n;
-    //             if(wt.signalStrength !==undefined) wtdata.signalStrength = wt.signalStrength.n;
-
-
-    //             dataSetweight.push(wtdata);
-    //             // console.log('pos', wtdata);
-
-    //         });
-
-    //         setweightData(dataSetweight);
-
-    //         //compare with api data and push into array.
-    //         fetchWSDeviceApiData(userid, username, usertype, dataSetweight,dataSetdevice);
-    //     })
-
-    // }
-
-
-
-    const fetchWSData = (userid,username, usertype, dataSetdevice) => {
-
-        const token = localStorage.getItem('app_jwt');
-        
-        const deviceinfo = [];
-        if(usertype =="admin")
-        {
-            dataSetdevice.forEach(x =>{
-                if(x.deviceID!=undefined) deviceinfo.push(x.deviceID);
-            });
-        }else
-        {
-            dataSetdevice.forEach(x=>{
-                deviceinfo.push(x.deviceID)
-            });
-        }
       
-
-         // Case 2 : Get Device for this user.
-        let data = {
-            "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
-            "device_ids": deviceinfo,
-            "reading_type" : ["weight"]
-
+    const token = localStorage.getItem('app_jwt');
+        const isAuth = localStorage.getItem('app_isAuth');
+        if (isAuth === 'yes') {
+            setIsAuthenticated(true);
+            setJwt(token);
+            setUserId(userId);
         }
-        
-            axios.post('https://api.iglucose.com/readings/', data, {
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    // "Content-Type": "application/json",
-                    Authorization: "Bearer " + token
+        else {
+            relogin();
+        }
+
+        let data = "";
+        if (usertype === "patient") {
+            data = {
+                "TableName": "UserDetail",
+                "IndexName": "Patient-Doctor-Device-Index",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_WS_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
                 }
             }
-            ).then((response) => {
-
-                const responseData = response.data;
-                const weightData = responseData.readings;
-                const dataSetweight = [];
-              
-                weightData.forEach((wt, index) => {
-                    console.log('p' + index, wt);
-                    let wtdata = {};
-                    wtdata.id = index;
-                  
-                    if(usertype =="admin"){
-                            
-                            const userinfo = dataSetdevice.filter(p => p.deviceID === wt.device_id);
-                            if(userinfo.length >0){
-                            if(userinfo.length >0 && userinfo[0].username!== undefined) wtdata.username =userinfo[0].username;
-                            }
-                            console.log(dataSetdevice);
-                            }else{
-                                wtdata.username = username;
-                    }
-
-                    if (wt.reading_id !== undefined) {
-                        wtdata.reading_id = wt.reading_id;
-                    }
-                    // if (wt.GSI1PK !== undefined) {
-                    //     wtdata.gSI1PK = wt.GSI1PK.s;
-                    // }
-                    
-                    if (wt.device_id !== undefined) {
-                        wtdata.deviceid = wt.device_id;
-                    }
-                   // wtdata.actionTaken = wt.ActionTaken.s;
-                    if (wt.weight_lbs !== undefined) {
-                        wtdata.weight = wt.weight_lbs;
-                    }
-                    wtdata.timeSlots = null;
-                    if (wt.date_received !== undefined) {
-                        wtdata.measurementDateTime = wt.date_received;
-                    }
-                    wtdata.measurementDateTimeStamp = null;
-                    
-                    wtdata.batteryVoltage = null;
-                    wtdata.signalStrength = null;
-
-                    //if(wt.GSI1PK !==undefined)wtdata.gSI1PK = wt.GSI1PK.s;
-                    if(wt.DeviceId !==undefined)wtdata.deviceid = wt.DeviceId.n;
-                    
-                   
-    
-    
-                    dataSetweight.push(wtdata);
-                    // console.log('pos', wtdata);
-    
-                });
-    
-                setweightData(dataSetweight);
-    
-                // const responseData = response.data;
-                // const dataSetbp = [];
-                // const reading = responseData.readings;
-
-                // reading.forEach((bp, index) => {
-                //     console.log('p' + index, bp);
-                //     let bpdata = {};
-
-                //     bpdata.id = index;
-
-                
-                //         if(usertype =="admin"){
-                //             if(bp.device_id =="867730052593583")
-                //             {
-                //                 console.log("device_id"+bp.device_id);
-                //             }
-                //             const userinfo = dataSetdevice.filter(p => p.deviceID === bp.device_id);
-                //             if(userinfo.length >0){
-                //                 if(userinfo.length >0 && userinfo[0].username!== undefined) bpdata.username =userinfo[0].username;
-                //             }
-                //             console.log(dataSetdevice);
-                //         }else{
-                //             bpdata.username = username;
-                //         }
-                //         if (bp.systolic_mmhg !== undefined) {
-                //             bpdata.systolic = bp.systolic_mmhg;
-                //         }
-
-                //         if (bp.diastolic_mmhg !== undefined) {
-                //             bpdata.diastolic = bp.diastolic_mmhg;
-                //         }
-                //         if (bp.pulse_bpm !== undefined) {
-                //             bpdata.pulse = bp.pulse_bpm;
-                //         }
-
-                //         if (bp.date_recorded !== undefined) {
-                //             bpdata.date_recorded = bp.date_recorded;
-                //         }
-
-                //         if (bp.date_received !== undefined) {
-                //             bpdata.date_received = bp.date_received;
-                //         }
-
-                //         if( bp.TimeSlots !== undefined){
-                //             bpdata.timeSlots = bp.TimeSlots.s;
-                //         }
-         
-               
-                //     dataSetbp.push(bpdata);
-                // });
-
-                // setbloodpressureData(dataSetbp);
-            })
-        
-
-       
-
-    }
-
-    const fetchWSDeviceApiData = (userid,username, usertype, dataSetweight, dataSetdevice) => {
-
-        const token = localStorage.getItem('app_jwt');
-        
-        const deviceinfo = [];
-        if(usertype =="admin")
-        {
-            deviceinfo.push("867730052513003");
-            deviceinfo.push("863859040790045");
-            deviceinfo.push("863859040760527");
-            deviceinfo.push("86892305142486");
-             deviceinfo.push("86773005259358");
-            deviceinfo.push("867730052593583");
-            
-            
-        }else
-        {
-            dataSetdevice.forEach(x=>{
-                deviceinfo.push(x.deviceID)
-            });
         }
-      
-         // Case 2 : Get Device for this user.
-        let data = {
-            "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
-            "device_ids": deviceinfo,
-            "reading_type" : ["weight"]
 
+        if (usertype === "doctor") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_READING" },
+                    ":v_GSI1SK": { "S": "DEVICE_WS_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
         }
-        
-        console.log("device deviceinfo 1212" + deviceinfo);
-          axios.post('https://api.iglucose.com/readings/', data, {
+
+
+        if (usertype === "admin") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_WS_READING" },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -677,68 +457,43 @@ export const CoreContextProvider = props => {
             }
         }
         ).then((response) => {
-            const responseData = response.data;
-            const weightapiData = responseData.readings;
-            const dataSetApiweight = [];
-          
-            weightapiData.forEach((wt, index) => {
-                console.log('p' + index, wt);
+            const weightData = response.data;
+            const dataSetwt = [];
+
+
+            weightData.forEach((wt, index) => {
+                //   console.log('p' + index, bg);
                 let wtdata = {};
-
-                if (wt.reading_type == "weight"){
-                    wtdata.id = index;
-                    // if (wt.BMI !== undefined) {
-                    //     wtdata.bmi = wt.BMI.n;
-                    // }
-                    if (wt.reading_id !== undefined) {
-                        wtdata.reading_id = wt.reading_id;
-                    }
-                    if (wt.GSI1PK !== undefined) {
-                        wtdata.gSI1PK = wt.GSI1PK.s;
-                    }
-                    wtdata.username = username;
-                    if (wt.device_id !== undefined) {
-                        wtdata.deviceid = wt.device_id;
-                    }
-                   // wtdata.actionTaken = wt.ActionTaken.s;
-                    if (wt.weight_lbs !== undefined) {
-                        wtdata.weight = wt.weight_lbs;
-                    }
-                    wtdata.timeSlots = null;
-                    if (wt.date_received !== undefined) {
-                        wtdata.measurementDateTime = wt.date_received;
-                    }
-                    wtdata.measurementDateTimeStamp = null;
-                    
-                    wtdata.batteryVoltage = null;
-                    wtdata.signalStrength = null;
-                       
-                    dataSetApiweight.push(wtdata);
+                wtdata.id = index;
+                wtdata.gSI1PK = wt.GSI1PK.s;
+                wtdata.username = wt.UserName.s;
+                if (wt.DeviceId !== undefined) {
+                    wtdata.DeviceId = wt.DeviceId.n;
                 }
-                // console.log('pos', wtdata);
+                if (wt.weight !== undefined) {
+                    wtdata.weight = parseFloat(wt.weight.n).toFixed(2); 
+                }
+                if (wt.TimeSlots !== undefined) {
+                    wtdata.timeSlots = wt.TimeSlots.s;
+                }
+                if (wt.MeasurementDateTime !== undefined) {
+                    wtdata.MeasurementDateTime = wt.MeasurementDateTime.s;
+                }
+                if (wt.CreatedDate !== undefined) {
+                    wtdata.CreatedDate = wt.CreatedDate.s;
+                }
+               
+               // bpdata.date_recorded = bp.date_recorded.s;
 
+                if (wt.reading_id !== undefined) {
+                    wtdata.reading_id = wt.reading_id.n;
+                }
+                wtdata.actionTaken = wt.ActionTaken.s;
+              
+                dataSetwt.push(wtdata);
             });
-            if(dataSetweight.length ==0 ){
-                dataSetweight = dataSetApiweight;
 
-                // Adding in db.
-                dataSetApiweight.forEach(x=>{
-
-                    pushWSInDB(userid,username, usertype, x)
-                });
-            } 
-            else
-            {
-                // dataSetApiweight.forEach(p=>{
-                //     if(dataSetweight.filter(x=>x.date_recorded != p.date_recorded)){
-                //         dataSetweight.push(p);
-                //     }
-                // });
-            }
-            setweightData(dataSetweight);
-           // setweightdeviceApiData(dataSetApiweight);
-
-
+            setweightData(dataSetwt);
         })
 
     }

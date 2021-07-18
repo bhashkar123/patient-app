@@ -43,10 +43,6 @@ const Patients = props => {
     const editPatient = () => {
 
     }
-
-
-
-
     const coreContext = useContext(CoreContext);
     
     const fetchPatients = () => {
@@ -77,7 +73,7 @@ const Patients = props => {
     useEffect(fetchCoach, []);
 
     useEffect(coreContext.checkLocalAuth, []);
-    useEffect(fetchPatients, [coreContext.patients.length]);
+    useEffect(fetchPatients, []);
 
     const setPatient = (p) => {
         console.log(p);
