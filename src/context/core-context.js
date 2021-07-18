@@ -1552,245 +1552,116 @@ export const CoreContextProvider = props => {
     }
 
 
-    const fetchBloodPressure = (userid,username, usertype, dataSetdevice) => {
-
+    const fetchBloodPressure = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');
-        
-        const deviceinfo = [];
-        if(usertype =="admin")
-        {
-            dataSetdevice.forEach(x =>{
-                if(x.deviceID!=undefined) deviceinfo.push(x.deviceID);
-            });
-        }else
-        {
-            dataSetdevice.forEach(x=>{
-                deviceinfo.push(x.deviceID)
-            });
+        const isAuth = localStorage.getItem('app_isAuth');
+        if (isAuth === 'yes') {
+            setIsAuthenticated(true);
+            setJwt(token);
+            setUserId(userId);
         }
-      
-
-         // Case 2 : Get Device for this user.
-        let data = {
-            "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
-            "device_ids": deviceinfo,
-            "reading_type" : ["blood_pressure"]
-
+        else {
+            relogin();
         }
-        
-            axios.post('https://api.iglucose.com/readings/', data, {
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    // "Content-Type": "application/json",
-                    Authorization: "Bearer " + token
+
+        let data = "";
+        if (usertype === "patient") {
+            data = {
+                "TableName": "UserDetail",
+                "IndexName": "Patient-Doctor-Device-Index",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
                 }
             }
-            ).then((response) => {
-                const responseData = response.data;
-                const dataSetbp = [];
-                const reading = responseData.readings;
+        }
 
-                reading.forEach((bp, index) => {
-                    console.log('p' + index, bp);
-                    let bpdata = {};
+        if (usertype === "doctor") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_READING" },
+                    ":v_GSI1SK": { "S": "DEVICE_BP_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
 
-                    bpdata.id = index;
 
-                        // if (bp.GSI1PK !== undefined) {
-                        //     bpdata.gSI1PK = bp.GSI1PK.s;
-                        // }
+        if (usertype === "admin") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_READING" },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
 
-                        if(usertype =="admin"){
-                            if(bp.device_id =="867730052593583")
-                            {
-                                console.log("device_id"+bp.device_id);
-                            }
-                            const userinfo = dataSetdevice.filter(p => p.deviceID === bp.device_id);
-                            if(userinfo.length >0){
-                                if(userinfo.length >0 && userinfo[0].username!== undefined) bpdata.username =userinfo[0].username;
-                            }
-                            console.log(dataSetdevice);
-                        }else{
-                            bpdata.username = username;
-                        }
-                        if (bp.systolic_mmhg !== undefined) {
-                            bpdata.systolic = bp.systolic_mmhg;
-                        }
+        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const bloodpressureData = response.data;
+            const dataSetbp = [];
 
-                        if (bp.diastolic_mmhg !== undefined) {
-                            bpdata.diastolic = bp.diastolic_mmhg;
-                        }
-                        if (bp.pulse_bpm !== undefined) {
-                            bpdata.pulse = bp.pulse_bpm;
-                        }
 
-                        if (bp.date_recorded !== undefined) {
-                            bpdata.date_recorded = bp.date_recorded;
-                        }
-
-                        if (bp.date_received !== undefined) {
-                            bpdata.date_received = bp.date_received;
-                        }
-
-                        if( bp.TimeSlots !== undefined){
-                            bpdata.timeSlots = bp.TimeSlots.s;
-                        }
-         
+            bloodpressureData.forEach((bp, index) => {
+                //   console.log('p' + index, bg);
+                let bpdata = {};
+                bpdata.id = index;
+                bpdata.gSI1PK = bp.GSI1PK.s;
+                bpdata.username = bp.UserName.s;
+                if (bp.reading !== undefined) {
+                    bpdata.reading = bp.reading.n;
+                }
+                if (bp.irregular !== undefined) {
+                    bpdata.irregular = bp.irregular.n;
+                }
+                if (bp.systolic !== undefined) {
+                    bpdata.systolic = parseFloat(bp.systolic.n).toFixed(2); 
+                }
+                if (bp.diastolic !== undefined) {
+                    bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(2);
+                }
+                if (bp.pulse !== undefined) {
+                    bpdata.pulse = bp.pulse.n;
+                }
+                if (bp.battery !== undefined) {
+                    bpdata.battery = bp.battery.n;
+                }
+                if (bp.TimeSlots !== undefined) {
+                    bpdata.timeSlots = bp.TimeSlots.s;
+                }
+                if (bp.MeasurementDateTime !== undefined) {
+                    bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
+                }
+                if (bp.CreatedDate !== undefined) {
+                    bpdata.CreatedDate = bp.CreatedDate.s;
+                }
                
-                    dataSetbp.push(bpdata);
-                });
+               // bpdata.date_recorded = bp.date_recorded.s;
 
-                setbloodpressureData(dataSetbp);
-            })
-        
+                if (bp.reading_id !== undefined) {
+                    bpdata.reading_id = bp.reading_id.n;
+                }
+                bpdata.actionTaken = bp.ActionTaken.s;
+              
+                dataSetbp.push(bpdata);
+            });
 
-        // }
-
-        // const token = localStorage.getItem('app_jwt');
-        // const isAuth = localStorage.getItem('app_isAuth');
-        // const username = localStorage.getItem('userName');
-        // if (isAuth === 'yes') {
-        //     setIsAuthenticated(true);
-        //     setJwt(token);
-        //     setUserId(userId);
-        // }
-        // else {
-        //     relogin();
-        // }
-
-        // const deviceinfo = [];
-        // const BPdeviceId = localStorage.getItem("BPdeviceID");
-        // const BGdeviceId = localStorage.getItem("BGdeviceID");
-        // const WdeviceId = localStorage.getItem("WdeviceID");
-        // if (BPdeviceId !== null) {
-        //     deviceinfo.push(BPdeviceId);
-        // }
-        // if (BGdeviceId !== null) {
-        //     deviceinfo.push(BGdeviceId);
-        // }
-        // if (WdeviceId !== null) {
-        //     deviceinfo.push(WdeviceId);
-        // }
-
-
-        // if (deviceinfo.length > 0) {
-        //     let data = {
-
-        //         "api_key": "474258B3-18AF-4197-A127-4C3E478B0642-1591996272",
-
-        //         "device_ids": deviceinfo
-
-        //     }
-
-        //     // let data = "";
-        //     // if (usertype === "patient") {
-        //     //     data = {
-        //     //         "TableName": "UserDetail",
-        //     //         "IndexName": "Patient-Doctor-Device-Index",
-        //     //         "KeyConditionExpression": "GSI1PK = :v_PK",
-        //     //         "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-        //     //         "ExpressionAttributeValues": {
-        //     //             ":v_PK": { "S": "DEVICE_BP_" + userid },
-        //     //             ":v_ActiveStatus": { "S": "Deactive" }
-        //     //         }
-        //     //     }
-        //     // }
-
-        //     // if (usertype === "doctor") {
-        //     //     data = {
-        //     //         "TableName": "UserDetail",
-        //     //         "KeyConditionExpression": "PK = :v_PK",
-        //     //         "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-        //     //         "ExpressionAttributeValues": {
-        //     //             ":v_PK": { "S": "DEVICE_BP_READING" },
-        //     //             ":v_GSI1SK": { "S": "DEVICE_BP_" + userid },
-        //     //             ":v_ActiveStatus": { "S": "Deactive" }
-        //     //         }
-        //     //     }
-        //     // }
-
-
-        //     // if (usertype === "admin") {
-        //     //     data = {
-        //     //         "TableName": "UserDetail",
-        //     //         "KeyConditionExpression": "PK = :v_PK",
-        //     //         "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-        //     //         "ExpressionAttributeValues": {
-        //     //             ":v_PK": { "S": "DEVICE_BP_READING" },
-        //     //             ":v_ActiveStatus": { "S": "Deactive" }
-        //     //         }
-        //     //     }
-        //     // }
-
-        //     axios.post('https://api.iglucose.com/readings/', data, {
-        //         headers: {
-        //             Accept: "application/json, text/plain, */*",
-        //             // "Content-Type": "application/json",
-        //             Authorization: "Bearer " + token
-        //         }
-        //     }
-        //     ).then((response) => {
-        //         const responseData = response.data;
-        //         const dataSetbp = [];
-        //         const reading = responseData.readings;
-
-        //         reading.forEach((bp, index) => {
-        //             console.log('p' + index, bp);
-        //             let bpdata = {};
-
-        //             bpdata.id = index;
-
-        //             if (bp.reading_type == "blood_pressure") {
-        //                 if (bp.GSI1PK !== undefined) {
-        //                     bpdata.gSI1PK = bp.GSI1PK.s;
-        //                 }
-
-        //                 bpdata.username = username;
-        //                 if (bp.systolic_mmhg !== undefined) {
-        //                     bpdata.systolic = bp.systolic_mmhg;
-        //                 }
-
-        //                 if (bp.diastolic_mmhg !== undefined) {
-        //                     bpdata.diastolic = bp.diastolic_mmhg;
-        //                 }
-        //                 if (bp.pulse_bpm !== undefined) {
-        //                     bpdata.pulse = bp.pulse_bpm;
-        //                 }
-
-        //                 if (bp.date_recorded !== undefined) {
-        //                     bpdata.date_recorded = bp.date_recorded;
-        //                 }
-
-        //                 if (bp.date_received !== undefined) {
-        //                     bpdata.date_received = bp.date_received;
-        //                 }
-
-        //                 if( bp.TimeSlots !== undefined){
-        //                     bpdata.timeSlots = bp.TimeSlots.s;
-        //                 }
-
-        //                 if (bp.MeasurementDateTime !== undefined) {
-        //                     bpdata.measurementDateTime = bp.MeasurementDateTime.s;
-        //                 }
-
-        //                 if (bp.batteryVoltage !== undefined) {
-        //                     bpdata.batteryVoltage = bp.batteryVoltage.s;
-        //                 }
-
-        //                 if (bp.signalStrength !== undefined) {
-        //                     bpdata.signalStrength = bp.signalStrength.s;
-        //                 }
-        //                 if (bp.actionTaken !== undefined) {
-        //                     bpdata.actionTaken = bp.ActionTaken.s;
-        //                 }
-        //             }
-
-        //             dataSetbp.push(bpdata);
-        //         });
-
-        //         setbloodpressureData(dataSetbp);
-        //     })
-        // }
+            setbloodpressureData(dataSetbp);
+        })
 
     }
 

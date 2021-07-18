@@ -24,73 +24,49 @@ const BloodPressure = props => {
           
         }
        
-        if(patientId !==undefined){
-          if(userType =="admin")
-          {
-            coreContext.fetchPateintListfromApi('admin',null);
-            if(coreContext.patients.length >0)
-            {
-              coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , coreContext.patients);
-            }
-
-          }else{
-            coreContext.fetchDeviceData(patientId,userName,userType, 'Blood Pressure' , coreContext.patients);
-          }
-        }
+        coreContext.fetchBloodPressure(patientId,userType);
+       
     }
 
-    useEffect(fetchBloodPressure, [coreContext.patients.length]);
+    useEffect(fetchBloodPressure, []);
    
     const columns = [
-        { 
-          field: 'username',
-           headerName: 'Patient Name', 
-           width: 200 ,  
-           type: 'string'
-          },
-        {
-          field: 'systolic',
-          headerName: 'Systolic',
+      { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
+      {
+        field: 'systolic',
+        headerName: 'Systolic',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
+        field: 'diastolic',
+        headerName: 'Diastolic',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
+          field: 'pulse',
+          headerName: 'Pulse',
+          width: 200,
+          editable: false,
           type: 'number',
+        },
+        {
+          field: 'MeasurementDateTime',
+          headerName: 'Time Slots',
           editable: false,
           width: 200
         },
         {
-          field: 'diastolic',
-          headerName: 'Diastolic',
-          width: 110,
+          field: 'CreatedDate',
+          headerName: 'Recorded Date',
+          type: 'number',
+          width: 200,
           editable: false,
-          width: 200
         },
-        {
-            field: 'pulse',
-            headerName: 'Pulse',
-            width: 110,
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'timeSlots',
-            headerName: 'Time Slots',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'date_recorded',
-            headerName: 'Date Time',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          ,
-          {
-            field: 'date_received',
-            headerName: 'Date Time',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-      ];
+    ];
 
     const renderBloodPressure = () => {
         if (coreContext.bloodpressureData.length > 0) {
@@ -100,7 +76,7 @@ const BloodPressure = props => {
                     rows={coreContext.bloodpressureData}
                     columns={columns}
                     pageSize={10}
-                    sortModel={[{ field: 'date_recorded', sort: 'desc' }]}
+                    sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
                   />
                 </div>
               );
