@@ -406,13 +406,13 @@ const PatientSummary = props => {
                         <MDBCardTitle>Care Team</MDBCardTitle>
                         <MDBCardText>
                             <div>
-                                <b style={{ paddingRight: '10px' }}>Provider Name:</b>TBD
+                                <b style={{ paddingRight: '10px' }}>Provider Name:</b>{coreContext.patient.ProviderName}
                             </div>
                             <div >
-                                <b style={{ paddingRight: '10px' }}>Care Coordinator:</b>TBD
+                                <b style={{ paddingRight: '10px' }}>Care Coordinator:</b>{coreContext.patient.CareName}
                             </div>
                             <div >
-                                <b style={{ paddingRight: '10px' }}>Coach     :</b>  TBD
+                                <b style={{ paddingRight: '10px' }}>Coach     :</b>  {coreContext.patient.CoachName}
                             </div>
                         </MDBCardText>
 
@@ -421,11 +421,7 @@ const PatientSummary = props => {
             </div>
     }
 
-    const handleOnChange = (value) => {
-        this.setState({
-            volume: value
-        })
-    }
+   
 
     const renderTabs = () => {
 
