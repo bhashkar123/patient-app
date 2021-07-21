@@ -191,7 +191,7 @@ const Patients = props => {
         
         <Modal show={showModal} onHide={handleModalClose} size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Patient</Modal.Title>
+                <Modal.Title>Edit Patient </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form autoComplete='off' onSubmit={handleSubmit(editPatient)} noValidate>

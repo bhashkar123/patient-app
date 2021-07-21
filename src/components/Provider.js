@@ -24,8 +24,8 @@ const Provider = props => {
     const [confirmpassword, setConfirmPassword] = useState('');
     const [patientId, setPatientId] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
-
-
+    const handleModalShow = () => setShowModal(true);
+    const [showModal, setShowModal] = useState(false);
 
     const fetchProviders = () => {
         const patientId = props.match.params.patient;
@@ -78,7 +78,10 @@ const Provider = props => {
 ];
 
     const showEditForm = (patient) => {
-        
+         setName(patient.name);
+         setPhone(patient.phone);
+         setEmail(patient.email);
+        handleModalShow();
     }
 
     const deletePatient = (patient) => {

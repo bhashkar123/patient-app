@@ -718,7 +718,7 @@ export const CoreContextProvider = props => {
     const fetchNameFromId = (id, array) => {
 
         const ent = array.filter(a => a.value === id);
-        return ent;
+        return ent[0];
     }
 
     const UpdatePatient = (name, phone, birthDate, height, provider, coordinator, coach, patientId) => {
@@ -729,29 +729,31 @@ export const CoreContextProvider = props => {
         let carecoordinatorname = fetchNameFromId(coordinator, careCoordinatorOptions);
         let coachname = fetchNameFromId(coach, coachOptions);
         let coach_id = coach;
-        const data = JSON.stringify({
+        const data = {
             "TableName": "UserDetail",
             "Key": {
                 "PK": { "S": "patient" },
-                "SK": { "S": "" + patientId + "" }
+                "SK": { "S": "PATIENT_" +patientId }
             },
-            "UpdateExpression": "SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
-            "ExpressionAttributeValues": {
-                ":v_GSI1SK": { "S": "" + doctor_id + "" },
-                ":v_GSI1PK": { "S": "patient" },
-                ":v_username": { "S": "" + name + "" },
-                ":v_mobile": { "S": "" + phone + "" },
-                //":v_IMEI":{"S":""+patient_emei+""},
-                // ":v_BMI":{"S":""+patient_bmi+""},
-                ":v_DOB": { "S": "" + birthDate + "" },
-                ":v_Height": { "S": "" + height + "" },
-                ":v_CarecoordinatorId": { "S": "" + carecoordinator_id + "" },
-                ":v_CoachId": { "S": "" + coach_id + "" },
-                ":v_CarecoordinatorName": { "S": "" + carecoordinatorname + "" },
-                ":v_CoachName": { "S": "" + coachname + "" }
+            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
+            "ExpressionAttributeValues":{":v_GSI1SK":{"S":"Select Provider"},
+            ":v_GSI1PK":{"S":"patient"},
+            ":v_username":{"S": name},
+            ":v_mobile":{"S":phone},
+            //":v_IMEI":{"S":""+patient_emei+""},
+            // ":v_BMI":{"S":""+patient_bmi+""},
+            ":v_DOB":{"S":"" + birthDate + ""},
+            ":v_Height":{"S":"" + height + ""},
+            ":v_CarecoordinatorId":{"S":"" + carecoordinatorname.id + ""},
+            ":v_CoachId":{"S": "" + coachname.name + ""},
+            ":v_CarecoordinatorName":{"S": "" + carecoordinatorname.name + ""},
+            ":v_CoachName":{"S": "" + coachname.name + ""}
 
-            }
-        });
+           }
+
+
+
+        };
 
         axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
             headers: {
@@ -761,8 +763,11 @@ export const CoreContextProvider = props => {
             }
         }
         ).then((response) => {
-            if (response.data === "Registered") {
+            if (response.data === "Updated") {
                 alert("Patient data Update Successfully.");
+            }else
+            {
+                alert("Patient data did not Update  Successfully.");
             }
         });
     }
@@ -770,15 +775,15 @@ export const CoreContextProvider = props => {
     const DeletePatient = (patientId) => {
         const token = localStorage.getItem('app_jwt');
 
-        const data = JSON.stringify({
+        const data = {
             "TableName": "UserDetail",
             "Key": {
-                "SK": { "S": "" + patientId + "" },
+                "SK": { "S": "PATIENT_" +patientId },
                 "PK": { "S": "patient" }
             },
             "UpdateExpression": "SET ActiveStatus = :v_ActiveStatus",
             "ExpressionAttributeValues": { ":v_ActiveStatus": { "S": "Deactive" } }
-        });
+        };
 
         axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
             headers: {
@@ -788,8 +793,8 @@ export const CoreContextProvider = props => {
             }
         }
         ).then((response) => {
-            if (response.data === "Registered") {
-                alert("Patient data Update Successfully.");
+            if (response.data === "Updated") {
+                alert("Patient Deleted Successfully.");
             }
         });
     }
