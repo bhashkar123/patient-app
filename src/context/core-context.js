@@ -480,9 +480,11 @@ export const CoreContextProvider = props => {
                 }
                 if (wt.MeasurementDateTime !== undefined) {
                     wtdata.MeasurementDateTime = wt.MeasurementDateTime.s;
+                    wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
                 }
                 if (wt.CreatedDate !== undefined) {
                     wtdata.CreatedDate = wt.CreatedDate.s;
+                    wtdata.CreatedDate = new Date(wtdata.CreatedDate);
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
@@ -750,10 +752,7 @@ export const CoreContextProvider = props => {
             ":v_CoachName":{"S": "" + coachname.name + ""}
 
            }
-
-
-
-        };
+     };
 
         axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
             headers: {
@@ -1391,10 +1390,10 @@ export const CoreContextProvider = props => {
                     bpdata.irregular = bp.irregular.n;
                 }
                 if (bp.systolic !== undefined) {
-                    bpdata.systolic = parseFloat(bp.systolic.n).toFixed(2); 
+                    bpdata.systolic = parseFloat(bp.systolic.n).toFixed(0); 
                 }
                 if (bp.diastolic !== undefined) {
-                    bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(2);
+                    bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
                 }
                 if (bp.pulse !== undefined) {
                     bpdata.pulse = bp.pulse.n;
@@ -1404,12 +1403,15 @@ export const CoreContextProvider = props => {
                 }
                 if (bp.TimeSlots !== undefined) {
                     bpdata.timeSlots = bp.TimeSlots.s;
+                   
                 }
                 if (bp.MeasurementDateTime !== undefined) {
-                    bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
+                    bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
+                    bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
                 }
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
+                    bpdata.CreatedDate =  new Date(bpdata.CreatedDate);
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
@@ -1426,6 +1428,8 @@ export const CoreContextProvider = props => {
         })
 
     }
+
+  
 
     const fetchBloodGlucose = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');

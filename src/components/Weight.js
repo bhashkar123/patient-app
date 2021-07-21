@@ -49,7 +49,7 @@ const Weight = props => {
             headerName: 'Date-Time',
             width: 110,
             editable: false,
-            width: 200
+            width: 500
           },
           {
             field: 'timeSlots',
