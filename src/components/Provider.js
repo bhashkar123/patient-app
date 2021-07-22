@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { Modal, Button } from 'react-bootstrap';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
+import { useForm } from "react-hook-form";
+import Input from './common/Input';
+
 import {
     DataGrid,
     GridColDef,
@@ -21,11 +24,23 @@ const Provider = props => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
     const [confirmpassword, setConfirmPassword] = useState('');
     const [patientId, setPatientId] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
+    const handleModalClose = () => setShowModal(false);
     const handleModalShow = () => setShowModal(true);
+
     const [showModal, setShowModal] = useState(false);
+
+    const editProvider = () => {
+
+    }
+
+    const { register, handleSubmit, errors } = useForm({
+        mode: 'onSubmit',
+        reValidateMode: 'onBlur',
+    });
 
     const fetchProviders = () => {
         const patientId = props.match.params.patient;
@@ -78,9 +93,10 @@ const Provider = props => {
 ];
 
     const showEditForm = (patient) => {
-         setName(patient.name);
+         setName(patient.provider);
          setPhone(patient.phone);
          setEmail(patient.email);
+         setPatientId(patient.id);
         handleModalShow();
     }
 
@@ -123,7 +139,6 @@ const Provider = props => {
             </table>
         </div>
 
-
         <Modal show={coreContext.showProviderModal} onHide={coreContext.handleProviderModalClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Verification Code</Modal.Title>
@@ -142,6 +157,31 @@ const Provider = props => {
             </Modal.Footer>
         </Modal>
 
+
+        <Modal show={showModal} onHide={handleModalClose} size='lg'>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit Provider </Modal.Title>
+            </Modal.Header>
+            <Modal.Body  >
+              
+                    <div className="row" >
+                         <div className="col-md-6" >
+                            <Input label='Name' elementType='text' minLength={5} maxLength={55} placeholder='Enter name' onChange={e => setName(e.target.value)} name='name' value={name} required={true} register={register} errors={errors} />
+                     </div>
+                    </div>
+                    <div className="row">
+                    <div className="col-md-6">
+                    <Input label='Phone' elementType='text' placeholder='Enter phone' onChange={e => setPhone(e.target.value)} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='phone' value={phone} />
+                    </div>
+                    </div>
+                    
+                    <Input blockButton={true} value='Submit' onClick={() => coreContext.UpdateProvider(name, phone, email, patientId)} elementType='button' variant='primary' />
+                    <br />
+                    <center> {coreContext.renderLoader()}</center>
+                    <center> <Input variant='danger' label={message} elementType='label' /></center>
+              
+            </Modal.Body>
+        </Modal>
 
     </div >
 }

@@ -779,6 +779,39 @@ export const CoreContextProvider = props => {
         });
     }
 
+
+    const UpdateProvider = (username, mobile,patientId) => {
+      
+        const token = localStorage.getItem('app_jwt');
+       
+        const data = {"TableName":"UserDetail",
+        "Key":{
+            "SK": { "S": "PATIENT_" +patientId },
+          "PK":{"S":"doctor"}
+        },
+        "UpdateExpression":"SET UserName = :v_username, ContactNo = :v_mobile",
+        "ExpressionAttributeValues":{":v_username":{"S":""+username+""},
+                                     ":v_mobile":{"S":""+mobile+""}
+                                    }
+     };
+
+        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Updated") {
+                alert("Patient data Update Successfully.");
+            }else
+            {
+                alert("Patient data did not Update  Successfully.");
+            }
+        });
+    }
+
     const DeletePatient = (patientId) => {
         const token = localStorage.getItem('app_jwt');
 
@@ -1635,6 +1668,7 @@ export const CoreContextProvider = props => {
         addCareCoordinator,
         addCoach,
         UpdatePatient,
+        UpdateProvider,
         showProviderModal,
         handleProviderModalClose,
         verifyProviderVerificationCode,
