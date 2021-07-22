@@ -840,6 +840,33 @@ export const CoreContextProvider = props => {
     }
 
 
+    const DeleteProvider = (patientId) => {
+        const token = localStorage.getItem('app_jwt');
+
+        const data = {
+            "TableName": "UserDetail",
+            "Key": {
+                "SK": { "S": "PATIENT_" +patientId },
+                "PK": { "S": "doctor" }
+            },
+            "UpdateExpression": "SET ActiveStatus = :v_ActiveStatus",
+            "ExpressionAttributeValues": { ":v_ActiveStatus": { "S": "Deactive" } }
+        };
+
+        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Updated") {
+                alert("Patient Deleted Successfully.");
+            }
+        });
+    }
+
     const verifyProviderVerificationCode = (code, userName, careTeamType, url = '') => {
         const token = localStorage.getItem('app_jwt');
         console.log(code, userName);
@@ -858,25 +885,13 @@ export const CoreContextProvider = props => {
         ).then((response) => {
 
             if (response.data === "User Confirmed") {
-                // if(localStorage.getItem("userType") === "admin"){
-                // 	window.location.replace('doctor_info.html');
-                // }else{
-                // 	window.location.replace('auth-login.html');
-                // }
+               
                 alert('Record added successfully...');
                 handleProviderModalClose();
                 handlePatientConfirmationModalClose();
                 let rf = resetForm + 1;
                 setResetForm(rf);
-                if (careTeamType === 'Coach') {
-                    fetchCoach();
-                }
-                if (careTeamType === 'Provider') {
-                    fetchProviders();
-                }
-                if (careTeamType === 'CareCoordinator') {
-                    fetchCareCoordinator();
-                }
+               
                 if (url) window.location.assign(url);
             }
         });
@@ -1659,6 +1674,7 @@ export const CoreContextProvider = props => {
         addDevice,
         UpdateProfie,
         DeletePatient,
+        DeleteProvider,
         userDetails,
         fetchProviders,
         addProvider,
