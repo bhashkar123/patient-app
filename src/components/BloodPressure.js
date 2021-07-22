@@ -72,13 +72,14 @@ const BloodPressure = props => {
 
     const renderBloodPressure = () => {
         if (coreContext.bloodpressureData.length > 0) {
+          coreContext.bloodpressureData = coreContext.bloodpressureData.sort((b, a) => a.MeasurementDateTime - b.MeasurementDateTime);
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid
                     rows={coreContext.bloodpressureData}
                     columns={columns}
                     pageSize={10}
-                    sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
+                   
                   />
                 </div>
               );

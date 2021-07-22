@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import loader from '../assets/images/835.gif';
+import Moment from 'moment';
+
+
+
+
 export const CoreContext = React.createContext({
 
 });
@@ -481,10 +486,13 @@ export const CoreContextProvider = props => {
                 if (wt.MeasurementDateTime !== undefined) {
                     wtdata.MeasurementDateTime = wt.MeasurementDateTime.s;
                     wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
+                    wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
+                    
                 }
                 if (wt.CreatedDate !== undefined) {
                     wtdata.CreatedDate = wt.CreatedDate.s;
                     wtdata.CreatedDate = new Date(wtdata.CreatedDate);
+                    wtdata.CreatedDate =Moment(wtdata.CreatedDate).format('MMM-DD-YYYY hh:mm:ss A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
@@ -1408,10 +1416,12 @@ export const CoreContextProvider = props => {
                 if (bp.MeasurementDateTime !== undefined) {
                     bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+                    bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
                 }
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
                     bpdata.CreatedDate =  new Date(bpdata.CreatedDate);
+                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MMM-DD-YYYY hh:mm:ss A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;

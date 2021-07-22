@@ -70,14 +70,13 @@ const Weight = props => {
 
     const renderWeight = () => {
         if (coreContext.weightData.length > 0){
+          coreContext.weightData = coreContext.weightData.sort((b, a) => a.MeasurementDateTime - b.MeasurementDateTime);
         return (
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
                 rows={coreContext.weightData}
                 columns={columns}
                 pageSize={10}
-               sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]} 
-               
               />
             </div>
           );
