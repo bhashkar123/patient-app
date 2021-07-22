@@ -153,16 +153,15 @@ const Patients = props => {
             field: 'BMI',
             headerName: 'BMI',
             type: "number",
-            width: 150,
+            width:150,
             editable: false,
           },
           { 
             field: "", 
             headerName: "Action",
-            width: 300,
-            type: "number",
+            width: 140,
             renderCell: (params) => (
-                <div>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+                <div style={{  width: '40px', marginLeft:'70px' }}>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
                 <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
                 </div>
             
