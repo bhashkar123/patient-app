@@ -308,20 +308,7 @@ const PatientSummary = props => {
           
       ];
       
-    const renderVitalDataW = () => {
-        if (coreContext.wsData.length > 0) {
-            return (
-                <div style={{ height: 400, width: '100%' }}>
-                  <DataGrid
-                    rows={coreContext.weightData}
-                    columns={wcolumns}
-                    pageSize={10}
-                   
-                  />
-                </div>
-              );
-        }
-    }
+
 
 
     const renderThreads = () => {

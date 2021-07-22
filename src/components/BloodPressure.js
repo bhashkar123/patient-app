@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
+const Moment = require('moment');
 
 const BloodPressure = props => {
 
@@ -57,14 +58,12 @@ const BloodPressure = props => {
           field: 'MeasurementDateTime',
           headerName: 'Time Slots',
           editable: false,
-          type: 'dateTime',
           width: 200
         },
         {
           field: 'CreatedDate',
           headerName: 'Recorded Date',
           width: 200,
-          type: 'dateTime',
           editable: false
          
         },
@@ -72,7 +71,7 @@ const BloodPressure = props => {
 
     const renderBloodPressure = () => {
         if (coreContext.bloodpressureData.length > 0) {
-          coreContext.bloodpressureData = coreContext.bloodpressureData.sort((b, a) => a.MeasurementDateTime - b.MeasurementDateTime);
+          coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid

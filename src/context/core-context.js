@@ -486,6 +486,7 @@ export const CoreContextProvider = props => {
                 if (wt.MeasurementDateTime !== undefined) {
                     wtdata.MeasurementDateTime = wt.MeasurementDateTime.s;
                     wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
+                    wtdata.sortDateColumn =  wtdata.MeasurementDateTime;
                     wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
                     
                 }
@@ -1464,12 +1465,15 @@ export const CoreContextProvider = props => {
                 if (bp.MeasurementDateTime !== undefined) {
                     bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-                    bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
+                    bpdata.sortDateColumn =  bpdata.MeasurementDateTime;
+                    bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+
+                   
                 }
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
                     bpdata.CreatedDate =  new Date(bpdata.CreatedDate);
-                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MMM-DD-YYYY hh:mm:ss A');
+                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;

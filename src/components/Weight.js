@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
+const Moment = require('moment');
 
 const Weight = props => {
 
@@ -70,7 +71,7 @@ const Weight = props => {
 
     const renderWeight = () => {
         if (coreContext.weightData.length > 0){
-          coreContext.weightData = coreContext.weightData.sort((b, a) => a.MeasurementDateTime - b.MeasurementDateTime);
+          coreContext.weightData  = coreContext.weightData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
         return (
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
