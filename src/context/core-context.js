@@ -1467,8 +1467,6 @@ export const CoreContextProvider = props => {
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
                     bpdata.sortDateColumn =  bpdata.MeasurementDateTime;
                     bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-
-                   
                 }
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;

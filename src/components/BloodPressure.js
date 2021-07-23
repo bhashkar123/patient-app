@@ -56,13 +56,13 @@ const BloodPressure = props => {
         },
         {
           field: 'MeasurementDateTime',
-          headerName: 'Time Slots',
+          headerName: 'Date Recorded',
           editable: false,
           width: 200
         },
         {
           field: 'CreatedDate',
-          headerName: 'Recorded Date',
+          headerName: 'Date Received',
           width: 200,
           editable: false
          

@@ -53,11 +53,17 @@ const Weight = props => {
             width: 500
           },
           {
-            field: 'timeSlots',
-            headerName: 'Time Slots',
-            width: 110,
+            field: 'MeasurementDateTime',
+            headerName: 'Date Recorded',
             editable: false,
             width: 200
+          },
+          {
+            field: 'CreatedDate',
+            headerName: 'Date Received',
+            width: 200,
+            editable: false
+           
           },
           {
             field: 'DeviceId',
