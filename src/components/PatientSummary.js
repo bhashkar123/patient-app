@@ -19,6 +19,8 @@ import { DataGrid } from '@material-ui/data-grid';
 import {Weight} from './Weight';
 import {BloodGlucose} from './BloodGlucose';
 import { BloodPressure } from './BloodPressure';
+import Moment from 'moment';
+
 
 const PatientSummary = props => {
     const coreContext = useContext(CoreContext);
@@ -47,6 +49,12 @@ const PatientSummary = props => {
     const [deviceType, setDeviceType] = useState('');
     const [deviceId, setDeviceId] = useState('');
     const [thData, setThData] = useState([]);
+    const [timerLogs, setTimerLog] = useState([]);
+    const [taskType, setTaskType] = useState('');
+    const [performedBy, setPerformedBy] = useState('');
+    const [endDT, setendDT] = useState('');
+    const [startDT, setstartDT] = useState('');
+    const [totalLogtime, settotalLogtime] = useState(0);
 
 
    
@@ -193,62 +201,21 @@ const PatientSummary = props => {
         setWeightMax(e.to);
     }
 
-    const bpcolumns = [
-        { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
-        {
-          field: 'systolic',
-          headerName: 'Systolic',
-          type: 'number',
-          editable: false,
-          width: 200
-        },
-        {
-          field: 'diastolic',
-          headerName: 'Diastolic',
-          width: 110,
-          editable: false,
-          width: 200
-        },
-        {
-            field: 'pulse',
-            headerName: 'Pulse',
-            width: 110,
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'timeSlots',
-            headerName: 'Time Slots',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'date_recorded',
-            headerName: 'Date Time',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          {
-            field: 'batteryVoltage',
-            headerName: 'Battery Voltage',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          {
-            field: 'signalStrength',
-            headerName: 'Signal Strength',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          
-          
-      ];
-
-   
-
+    const renderTimelogs = () =>{
+     if (timerLogs.length > 0) {
+            return timerLogs.map((tl, index) => {
+                return <tr>
+                    <td>{tl.taskType} </td>
+                    <td>{tl.performedBy} </td>
+                    <td>{tl.performedOn} </td>
+                    <td>{tl.timeAmount} </td>
+                    <td>{tl.startDT} </td>
+                    <td>{tl.endDT} </td>
+                </tr>
+            });
+        }
+    }
+    
     const renderDeviceData = () => {
         if (coreContext.deviceData.length > 0) {
             return coreContext.deviceData.map((deviceData, index) => {
@@ -261,57 +228,7 @@ const PatientSummary = props => {
 
     }
 
-    const wcolumns = [
-        { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
-        {
-          field: 'weight',
-          headerName: 'Weight',
-          type: 'number',
-          editable: false,
-          width: 200
-        },
-        {
-          field: 'timeSlots',
-          headerName: 'Time Slot',
-          width: 110,
-          editable: false,
-          width: 200
-        },
-        {
-            field: 'measurementDateTime',
-            headerName: 'Date-Time',
-            width: 110,
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'deviceid',
-            headerName: 'Device Id',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'batteryVoltage',
-            headerName: 'Battery voltage',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          {
-            field: 'signalStrength',
-            headerName: 'Signal Strength',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
-          
-          
-      ];
-      
-
-
-
-    const renderThreads = () => {
+const renderThreads = () => {
         if (coreContext.threads.length > 0) {
             return coreContext.threads.map((message => {
                 return <div style={{ fontWeight: 'bold', lineHeight: 1 }} className="card-body"><span className={message.direction === 'inbound' ? 'float-left' : 'float-right'}>{message.body}</span><br />
@@ -408,12 +325,52 @@ const PatientSummary = props => {
             </div>
     }
 
-   
+    
+    const handleSelect  = (index) => {
+        console.log(index);
+        let _timerLog = {};
+        if(index ==7) {
+           setstartDT(new Date());
+        }
+        if(index !=7){
+            setendDT(new Date());
+        }
+
+        if(index ==8){
+            pause();//
+          
+            // after pause then should add in list.
+            
+            _timerLog.taskType=taskType;
+            _timerLog.performedBy = performedBy;
+            _timerLog.performedOn = Moment(date).format('MMM-DD-YYYY hh:mm:ss A') ;
+            _timerLog.timeAmount = minutes +":"+ seconds;
+            _timerLog.startDT = Moment(startDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
+            _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ;  ;
+            timerLogs.push(_timerLog)
+            setTimerLog(timerLogs);
+            console.log(index);
+            if(totalLogtime  > 0){
+                settotalLogtime(totalLogtime + seconds);
+            }else {
+                settotalLogtime(seconds);
+            }
+       
+           
+        
+        }
+    }
+    
+    const handleLeaveTab  = (index) => {
+        if(index ==7){
+            console.log('leave');
+            console.log(index +'leave');
+        }
+    }
 
     const renderTabs = () => {
-
         if (coreContext.patient)
-            return <Tabs>
+            return <Tabs  onSelect={index => handleSelect(index)} onMouseLeave={index => handleLeaveTab(index)}>
                 <TabList>
                     <Tab onClick={pause}>Conditions</Tab>
                     <Tab onClick={pause}>Programs</Tab>
@@ -423,7 +380,8 @@ const PatientSummary = props => {
                     <Tab onClick={pause}>Alerts</Tab>
                     <Tab onClick={pause}>Documents</Tab>
                     <Tab onClick={reset}>Task Timer</Tab>
-                    <Tab onClick={pause}>Time Logs</Tab>
+                    {/* <Tab onClick={pause}>Time Logs</Tab> */}
+                    <Tab eventKey={'TimeLog'}>Time Logs</Tab>
                     <Tab onClick={pause}>Devices</Tab>
                     <Tab onClick={pause}>Portal</Tab>
                 </TabList>
@@ -534,6 +492,7 @@ const PatientSummary = props => {
                                                 <div className='row'>
                                                     <div className="col-md-6">
                                                         <div className="card">
+                                                            
                                                             <div>
                                                                 {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("PATIENT_" + patient.userId, 'BG', bgMax, bgMin, userType)} className="btn btn-primary mb-2 float-right"> Update</button> : ''}
                                                             </div>
@@ -688,19 +647,19 @@ const PatientSummary = props => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         Task Type
-                                        <select className="form-control mt-2 mb-2">
-                                            <option value="">Select a Task Type</option>
-                                            <option value="">Case Coordination</option>
-                                            <option value="">Care Plan Reconciliation</option>
+                                        <select value={taskType} onChange={e => setTaskType(e.target.value)} className="form-control mb-2 mr-sm-2">
+                                            <option value="SelectTask">Select a Task Type</option>
+                                            <option value="CaseCoordination">Case Coordination</option>
+                                            <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
                                         </select>
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
                                             Performed By
-                                            <select className="form-control mt-2">
-                                                <option value="">Select a User</option>
-                                                <option value="">User I</option>
-                                                <option value="">User II</option>
+                                            <select value={performedBy} onChange={e => setPerformedBy(e.target.value)} className="form-control mb-2 mr-sm-2">
+                                                <option value="SelectUser">Select a User</option>
+                                                <option value="User1">User I</option>
+                                                <option value="User II">User II</option>
                                             </select>
                                         </div>
                                         <div className="col-md-6">
@@ -714,8 +673,7 @@ const PatientSummary = props => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-2"></div>
-                                <div className="col-md-4">
+                                 {/* <div className="col-md-4">
                                     <div className="card timer-div">
                                         <div className="card-body">
                                             <p className="mb-2">Task Timer</p>
@@ -734,7 +692,7 @@ const PatientSummary = props => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                             </div>
                         </div>
@@ -749,18 +707,23 @@ const PatientSummary = props => {
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-12">
-                                    Total Time Logs: {minutes} : {seconds}
+                                    Total Time Logs: {totalLogtime}
                                 </div>
                             </div>
 
                             <table className='table table-bordered table-sm mt-4'>
                                 <tr>
-                                    <th>Category</th>
+                                    <th>Task Type</th>
                                     <th>Logged By</th>
-                                    <th>Performed By</th>
-                                    <th>Date</th>
+                                    <th>Performed On</th>
                                     <th>Time Amount</th>
+                                    <th>Start Date/Time</th>
+                                    <th>End Date/Time</th>
                                 </tr>
+
+                                <tbody>
+                                            {renderTimelogs()}
+                                        </tbody>
                             </table>
                         </div>
                     </div>
@@ -846,9 +809,15 @@ const PatientSummary = props => {
     }
 
     return (<div className='card'>
-        <div>
-            <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateTimeLog(props.match.params.patient, userId, { minutes }, { seconds })} className="btn btn-primary mb-2 float-right"> Update Time Log</button>
-        </div>
+          <div className="btn btn-primary mb-2 float-right" style={{ backgroundColor: 'transparent' }} id="stopwatch">
+                                                <span className="min-time"><span className="time-txt">min</span><span className="time-num">{minutes}</span></span>
+                                                <span className="dots">:</span>
+                                                <span className="sec-time"><span className="time-txt">sec</span><span className="time-num">{seconds}</span></span>
+                                                <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
+                                                <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
+                                                <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
+                                                {/* <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateTimeLog(props.match.params.patient, userId, { minutes }, { seconds })} className="btn btn-primary mb-2 float-right"> Update Time Log</button> */}
+                                            </div>
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderAddModifyFlags()}</div>
         <div className="card-header">{renderAddNotes()}</div>

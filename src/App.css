@@ -91,17 +91,27 @@ ul {
 .time-num {
   font-size: 40px;
   line-height: 1;
+  color: black;
 }
 
 .time-num, .time-txt {
   display: block;
+  margin-right: 5px;
 }
 
 .dots {
   font-size: 40px;
   line-height: 1.2;
+  color: black;
 }
 
 .dots, .min-time, .sec-time {
   display: inline-block;
+}
+.btn-sm{
+    height: 60px;
+    width: 80px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-right: 5px;
 }
