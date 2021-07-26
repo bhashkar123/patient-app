@@ -97,7 +97,7 @@ export const CoreContextProvider = props => {
     // capture from login page.  'yasser.sheikh@laitkor.com'  'M2n1shlko@1'
     const login = (email, password, url) => {
         setShowLoader(true);
-        axios.post('https://api.apatternplus.com/api/signin', { Username: email, Password: password }).then((response) => {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/signin', { Username: email, Password: password }).then((response) => {
             if (response.data === 'Incorrect username or password.') {
                 alert('Incorrect username or password.');
                 setShowLoader(false);
@@ -133,7 +133,7 @@ export const CoreContextProvider = props => {
         }
 
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -232,7 +232,7 @@ export const CoreContextProvider = props => {
             };
         }
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -365,7 +365,7 @@ export const CoreContextProvider = props => {
 
 
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -456,7 +456,7 @@ export const CoreContextProvider = props => {
 
 
         
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -531,7 +531,7 @@ export const CoreContextProvider = props => {
 
 
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -605,7 +605,7 @@ export const CoreContextProvider = props => {
             "GSI1SK": doctorId
         });
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -643,7 +643,7 @@ export const CoreContextProvider = props => {
             } });
 
       
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -673,7 +673,7 @@ export const CoreContextProvider = props => {
             }
         };
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -710,7 +710,7 @@ export const CoreContextProvider = props => {
             }
         };
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -763,7 +763,7 @@ export const CoreContextProvider = props => {
            }
      };
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -796,7 +796,7 @@ export const CoreContextProvider = props => {
                                     }
      };
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -826,7 +826,7 @@ export const CoreContextProvider = props => {
             "ExpressionAttributeValues": { ":v_ActiveStatus": { "S": "Deactive" } }
         };
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -854,7 +854,7 @@ export const CoreContextProvider = props => {
             "ExpressionAttributeValues": { ":v_ActiveStatus": { "S": "Deactive" } }
         };
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/updateitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -876,7 +876,7 @@ export const CoreContextProvider = props => {
             "code": code
         };
 
-        axios.post('https://api.apatternplus.com/api/confirmsignup', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/confirmsignup', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -910,7 +910,7 @@ export const CoreContextProvider = props => {
         };
 
 
-        axios.post('https://api.apatternplus.com/api/register', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/register', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -933,7 +933,7 @@ export const CoreContextProvider = props => {
                     "GSI1SK": "DOCTOR_" + id
                 });
 
-                axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -967,7 +967,7 @@ export const CoreContextProvider = props => {
         };
 
 
-        axios.post('https://api.apatternplus.com/api/register', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/register', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -990,7 +990,7 @@ export const CoreContextProvider = props => {
 
                 });
 
-                axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -1024,7 +1024,7 @@ export const CoreContextProvider = props => {
         };
 
 
-        axios.post('https://api.apatternplus.com/api/register', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/register', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1047,7 +1047,7 @@ export const CoreContextProvider = props => {
                     "GSI1SK": "CARECOORDINATOR_" + id
                 });
 
-                axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -1080,7 +1080,7 @@ export const CoreContextProvider = props => {
         };
 
 
-        axios.post('https://api.apatternplus.com/api/register', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/register', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1103,7 +1103,7 @@ export const CoreContextProvider = props => {
                     "GSI1SK": "COACH_" + id
                 });
 
-                axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -1154,7 +1154,7 @@ export const CoreContextProvider = props => {
                     ":v_status": { "S": "Active" }
                 }
         }}
-      axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+      axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1230,7 +1230,7 @@ export const CoreContextProvider = props => {
 
 
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1285,7 +1285,7 @@ export const CoreContextProvider = props => {
 
 
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1335,7 +1335,7 @@ export const CoreContextProvider = props => {
 
 
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1422,7 +1422,7 @@ export const CoreContextProvider = props => {
             }
         }
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1543,7 +1543,7 @@ export const CoreContextProvider = props => {
             }
         }
 
-        axios.post('https://api.apatternplus.com/api/DynamoDbAPIs/getitem', data, {
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
