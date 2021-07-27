@@ -201,20 +201,79 @@ const PatientSummary = props => {
         setWeightMax(e.to);
     }
 
-    const renderTimelogs = () =>{
-     if (timerLogs.length > 0) {
-            return timerLogs.map((tl, index) => {
-                return <tr>
-                    <td>{tl.taskType} </td>
-                    <td>{tl.performedBy} </td>
-                    <td>{tl.performedOn} </td>
-                    <td>{tl.timeAmount} </td>
-                    <td>{tl.startDT} </td>
-                    <td>{tl.endDT} </td>
-                </tr>
-            });
-        }
-    }
+    const columns = [
+        { field: 
+          'taskType', 
+          headerName: 'Task Type', 
+          width: 200 ,  
+          type: 'string'},
+        {
+          field: 'performedBy',
+          headerName: 'Performed By',
+          type: 'number',
+          editable: false,
+          width: 200
+        },
+        {
+            field: 'performedOn',
+            headerName: 'Performed On',
+            width: 110,
+            editable: false,
+            width: 500
+          },
+          {
+            field: 'timeAmount',
+            headerName: 'Time Amount',
+            editable: false,
+            type: Number,
+            width: 200
+          },
+          {
+            field: 'startDT',
+            headerName: 'Start Date',
+            width: 200,
+            editable: false
+           
+          },
+          {
+            field: 'endDT',
+            headerName: 'End Date',
+            editable: false,
+            width: 200
+          },
+      ];
+      
+
+      const renderTimelogs = () =>{
+        if (timerLogs.length > 0) {
+               return timerLogs.map((tl, index) => {
+                   return <tr>
+                       <td>{tl.taskType} </td>
+                       <td>{tl.performedBy} </td>
+                       <td>{tl.performedOn} </td>
+                       <td>{tl.timeAmount} </td>
+                       <td>{tl.startDT} </td>
+                       <td>{tl.endDT} </td>
+                   </tr>
+               });
+           }
+       }
+       
+    // const renderTimelogs = () =>{
+    //     if (timerLogs.length > 0){
+    //       //  timerLogs  = timerLogs.sort((a,b) => new Moment(b.startDT) - new Moment(a.startDT));
+    //       return (
+    //           <div style={{ height: 680, width: '100%' }}>
+    //             <DataGrid
+    //               rows={timerLogs}
+    //               columns={columns}
+    //               pageSize={10}
+    //             />
+    //           </div>
+    //         );
+    //       }
+   
+    // }
     
     const renderDeviceData = () => {
         if (coreContext.deviceData.length > 0) {
@@ -326,6 +385,8 @@ const renderThreads = () => {
     }
 
     
+    const [timelogIdCounter, settimelogIdCounter] = useState(1);
+
     const handleSelect  = (index) => {
         console.log(index);
         let _timerLog = {};
@@ -340,14 +401,16 @@ const renderThreads = () => {
             pause();//
           
             // after pause then should add in list.
-            
-            _timerLog.taskType=taskType;
+            _timerLog.id = timelogIdCounter;
+            _timerLog.taskType = taskType;
             _timerLog.performedBy = performedBy;
             _timerLog.performedOn = Moment(date).format('MMM-DD-YYYY hh:mm:ss A') ;
             _timerLog.timeAmount = minutes +":"+ seconds;
             _timerLog.startDT = Moment(startDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
-            _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ;  ;
-            timerLogs.push(_timerLog)
+            _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ;  
+           
+            timerLogs.push(_timerLog);
+           
             setTimerLog(timerLogs);
             console.log(index);
             if(totalLogtime  > 0){
@@ -355,7 +418,7 @@ const renderThreads = () => {
             }else {
                 settotalLogtime(seconds);
             }
-       
+            settimelogIdCounter(timelogIdCounter+1);
            
         
         }
@@ -711,6 +774,7 @@ const renderThreads = () => {
                                 </div>
                             </div>
 
+                            {/* {renderTimelogs()} */}
                             <table className='table table-bordered table-sm mt-4'>
                                 <tr>
                                     <th>Task Type</th>
