@@ -52,6 +52,11 @@ const PatientProfile = props => {
         localStorage.setItem("userId", patientId)
 
 
+        // Chart Data
+        coreContext.fetchBgChartData(patientId, userType);
+        coreContext.fetchBpChartData(patientId, userType);
+        coreContext.fetchWSChartData(patientId, userType);
+
         coreContext.fetchBgData(patientId, userType);
        // coreContext.fetchBloodPressure(patientId, username, usertype);
        const patient = JSON.parse(localStorage.getItem('app_patient'));
@@ -73,10 +78,10 @@ const PatientProfile = props => {
         }
       
 
-        if (coreContext.bgData.length > 0)
-            setBs(coreContext.bgData[0].gSI1PK); //assuming retrieve bg sort by date desc
-        if (coreContext.bpData.length > 0)
-            setBp(coreContext.bpData[0].pulse); //assuming retrieve bp sort by date desc
+        if (coreContext.bgChartData.length > 0)
+            setBs(coreContext.bgChartData[0].gSI1PK); //assuming retrieve bg sort by date desc
+        if (coreContext.bpChartData.length > 0)
+            setBp(coreContext.bpChartData[0].pulse); //assuming retrieve bp sort by date desc
         const d1 = [];
         const l1 = [];
         const d2 = [];
@@ -86,25 +91,25 @@ const PatientProfile = props => {
         const d4 = [];
         const l4 = [];
 
-        if (coreContext.bgData.length > 0) {
-            coreContext.bgData.forEach(e1 => {
+        if (coreContext.bgChartData.length > 0) {
+            coreContext.bgChartData.forEach(e1 => {
                 d1.push([e1.daterecorded, e1.gSI1PK]);
             });
 
             setData1(d1);
         }
 
-        if (coreContext.bpData.length > 0) {
-            coreContext.bpData.forEach(e1 => {
+        if (coreContext.bpChartData.length > 0) {
+            coreContext.bpChartData.forEach(e1 => {
                 d2.push([e1.measurementDateTime, e1.pulse]);
             });
 
             setData2(d2);
         }
 
-        if (coreContext.weightData.length > 0) {
+        if (coreContext.wsChartData.length > 0) {
             // Sorting has been fixed.
-            const sortedArray  = coreContext.weightData.sort((a,b) => new Moment(a.measurementDateTime) - new Moment(b.measurementDateTime));
+            const sortedArray  = coreContext.wsChartData.sort((a,b) => new Moment(a.measurementDateTime) - new Moment(b.measurementDateTime));
             console.log(sortedArray);
             sortedArray.forEach((e1, index) => {
                 console.log(e1.measurementDateTime);
@@ -135,7 +140,7 @@ const PatientProfile = props => {
 
     
 
-    useEffect(fetchPatient, [coreContext.weightData.length]);
+    useEffect(fetchPatient, [coreContext.wsChartData.length]);
     useEffect(coreContext.checkLocalAuth, []);
 
 

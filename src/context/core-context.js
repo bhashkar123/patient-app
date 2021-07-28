@@ -54,6 +54,12 @@ export const CoreContextProvider = props => {
     const [jwt, setJwt] = useState('');
     const [userId, setUserId] = useState('');
 
+    ///Chart Data
+
+    const [bgChartData, setbgChartData] = useState([]);
+    const [bpChartData, setbpChartData] = useState([]);
+    const [wsChartData, setwsChartData] = useState([]);
+
     const relogin = () => {
         setIsAuthenticated(false);
         setJwt('');
@@ -586,6 +592,7 @@ export const CoreContextProvider = props => {
         })
 
     }
+
     const addDevice = (deviceType, deviceId, patientId) => {
         const token = localStorage.getItem('app_jwt');
         const date = new Date();
@@ -620,42 +627,7 @@ export const CoreContextProvider = props => {
     }
 
 
-    const pushWSInDB = (userId,userName, usertype, wt) => {
-        const token = localStorage.getItem('app_jwt');
-        const date = new Date();
-        
-        const patientId = userId.split("_").pop();
-
-        const data = JSON.stringify({
-            "TableName": "UserDetail",
-            "ExpressionAttributeValues": {
-                ":v_PK": { "S": "DEVICE_WS_READING" },
-                ":v_SK": { "S": "DEVICE_WS_READING_" + wt.reading_id },
-                ":MeasurementDateTime": { "S": + wt.date_received },
-                ":DeviceId": { "N": + wt.deviceid },
-                ":GSI1SK": { "S": + "DEVICE_WS_" + userId },
-                ":UserName": { "S": + wt.username },
-                ":weight": { "N": + wt.weight },
-                ":GSI1PK": { "S": + "DEVICE_WS_"+ userId},
-                ":CreatedDate": { "S": + date },
-                ":IMEI": { "S": + wt.deviceid },
-                ":v_ActiveStatus": { "S": "Active" }
-            } });
-
-      
-        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
-            headers: {
-                Accept: "application/json, text/plain, */*",
-                // "Content-Type": "application/json",
-                Authorization: "Bearer " + token
-            }
-        }
-        ).then((response) => {
-            if (response.data === "Registered") {
-                alert("Device Inserted Successfully.");
-            }
-        });
-    }
+    
 
     const UpdateThreshold = (patient, type, high, low, userType) => {
         const token = localStorage.getItem('app_jwt');
@@ -1642,11 +1614,266 @@ export const CoreContextProvider = props => {
         });
     }
 
+    //chart Data
+    const fetchBgChartData = (userid, usertype) => {
+
+        const token = localStorage.getItem('app_jwt');
+       
+
+        let data = "";
+        if (usertype === "patient") {
+            data = {
+                "TableName": "UserDetail",
+                "IndexName": "Patient-Doctor-Device-Index",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BG_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        if (usertype === "doctor") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BG_READING" },
+                    ":v_GSI1SK": { "S": "DEVICE_BG_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        if (usertype === "admin") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BG_READING" },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+
+
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            // setJwt(response.data);
+            console.log('bgData', response.data);
+            const bgData = response.data;
+            const dataSetbg = [];
+
+            bgData.forEach(p => {
+                let bgdata = {};
+                let meal = '';
+                bgdata.TimeSlots = p.TimeSlots.s;
+                bgdata.daterecorded = p.date_recorded.s;
+                if (p.before_meal.bool === true) {
+                    meal = "Before Meal";
+                }
+                else {
+                    meal = "After Meal";
+                }
+                bgdata.meal = meal;
+
+                dataSetbg.push(bgdata);
+            });
+
+            setbgChartData(dataSetbg);
+        })
+
+    }
+
+    const fetchBpChartData = (userid, usertype) => {
+
+        const token = localStorage.getItem('app_jwt');
+       
+        let data = "";
+        if (usertype === "patient") {
+            data = {
+                "TableName": "UserDetail",
+                "IndexName": "Patient-Doctor-Device-Index",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        if (usertype === "doctor") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_READING" },
+                    ":v_GSI1SK": { "S": "DEVICE_BP_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        if (usertype === "admin") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BP_READING" },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const bpData = response.data;
+            const dataSetbp = [];
+
+            bpData.forEach(p => {
+                let bpdata = {};
+                bpdata.UserName = p.UserName.s;
+                bpdata.systolic = p.systolic.n;
+                bpdata.diastolic = p.diastolic.n;
+                bpdata.pulse = p.pulse.n;
+                if(p.TimeSlots!==undefined){
+                    bpdata.timeSlots = p.TimeSlots.s;
+                }
+                bpdata.measurementDateTime = p.MeasurementDateTime.s;
+
+                bpdata.diastolic = p.diastolic.n;
+
+                dataSetbp.push(bpdata);
+            });
+
+            setbpChartData(dataSetbp);
+        })
+
+    }
+
+    const fetchWSChartData = (userid, usertype) => {
+
+        const token = localStorage.getItem('app_jwt');
+       console.log('fetchWSData : userId' + userId);
+
+        let data = "";
+        if (usertype === "patient") {
+            data = {
+                "TableName": "UserDetail",
+                "IndexName": "Patient-Doctor-Device-Index",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_WS_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        if (usertype === "doctor") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_WS_READING" },
+                    ":v_GSI1SK": { "S": "DEVICE_WS_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+        if (usertype === "admin") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_WS_READING" },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+
+
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const weightData = response.data;
+            const dataSetweight = [];
+          
+            weightData.forEach((wt, index) => {
+                console.log('p' + index, wt);
+                let wtdata = {};
+                wtdata.id = index;
+                // if (wt.BMI !== undefined) {
+                //     wtdata.bmi = wt.BMI.n;
+                // }
+                wtdata.gSI1PK = wt.GSI1PK.s;
+                wtdata.deviceid = wt.DeviceId.n;
+                wtdata.actionTaken = wt.ActionTaken.s;
+                wtdata.weight = Math.round(wt.weight.n);
+                if(wt.timeSlots !==undefined){
+                 wtdata.timeSlots = wt.TimeSlots.s;
+                }
+
+                if(wt.MeasurementDateTime !==undefined){
+                    wtdata.measurementDateTime = wt.MeasurementDateTime.s;
+                   }
+                   if(wt.MeasurementTimestamp !==undefined){
+                    wtdata.measurementDateTimeStamp = wt.MeasurementTimestamp.n;
+                   }
+               
+                   
+                
+                wtdata.username = wt.UserName.s;
+                wtdata.batteryVoltage = wt.batteryVoltage.n;
+                wtdata.signalStrength = wt.signalStrength.n;
+
+
+                dataSetweight.push(wtdata);
+                // console.log('pos', wtdata);
+
+            });
+
+            setwsChartData(dataSetweight);
+     })
+
+    }
     return <CoreContext.Provider value={{
         patients,
         bgData,
         bpData,
         wsData,
+        bgChartData,
+        bpChartData,
+        wsChartData,
         deviceData,
         providerData,
         ccData,
@@ -1669,6 +1896,9 @@ export const CoreContextProvider = props => {
         jwt,
         fetchBgData,
         fetchWSData,
+        fetchBgChartData,
+        fetchWSChartData,
+        fetchBpChartData,
         fetchThresold,
         backUpMessages,
         renderLoader,
