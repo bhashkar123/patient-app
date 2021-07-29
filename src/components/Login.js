@@ -18,7 +18,8 @@ const Login = (props) => {
         //     const url = 'patient-profile/' + patientId;
         //     coreContext.login(email, password, url);
         // }else{
-        coreContext.login(email, password);
+       // coreContext.login(email, password);
+       coreContext.login(email, password, '/dashboard');
         // }
     }
 

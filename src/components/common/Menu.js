@@ -11,6 +11,7 @@ const Menu = (props) => {
         const userType = localStorage.getItem("userType");
         if (userType === 'admin') return <React.Fragment>
             <NavDropdown title={<div style={{ display: "inline-block" }}><GiCook size={20} /> Care Team </div>} id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/dashboard"> Dashboard</NavDropdown.Item>
                 <NavDropdown.Item href="/provider"> Provider</NavDropdown.Item>
                 <NavDropdown.Item href="/care-coordinator" > Care Coordinator</NavDropdown.Item>
                 <NavDropdown.Item href="/coach"> Coach</NavDropdown.Item>

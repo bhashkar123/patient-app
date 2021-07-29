@@ -101,7 +101,7 @@ export const CoreContextProvider = props => {
 
 
     // capture from login page.  'yasser.sheikh@laitkor.com'  'M2n1shlko@1'
-    const login = (email, password) => {
+    const login = (email, password, url) => {
         setShowLoader(true);
         axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/signin', { Username: email, Password: password }).then((response) => {
             if (response.data === 'Incorrect username or password.') {
@@ -120,15 +120,14 @@ export const CoreContextProvider = props => {
 
                 //  window.location.assign();
 
-                userDetails(email);
+                userDetails(email, url);
             }
         })
     }
 
-    const userDetails = (useremail) => {
-
+    const userDetails = (useremail, url = '') => {
         const token = localStorage.getItem('app_jwt');
-        let url ='';
+        //let url ='';
         const data = {
             "TableName": "UserDetail",
             "IndexName": "Email-Index",
@@ -168,12 +167,19 @@ export const CoreContextProvider = props => {
 
 
 
-                if (p.UserType.s === 'patient') {
+                if (p.UserType.s === 'patient' && url) {
 
                     if (pat.userName.includes('||0'))
                         url = 'profile';
                     else
                         url = 'patient-profile/' + p.SK.s.split("_").pop();
+                }
+                if (p.UserType.s === 'admin' && url) {
+
+                    if (pat.userName.includes('||0'))
+                        url = 'profile';
+                    else
+                        url = 'dashboard';
                 }
 
             });
@@ -183,16 +189,19 @@ export const CoreContextProvider = props => {
             
             setShowLoader(false);
 
-            const userType =   localStorage.getItem("userType");
-
-            if (userType === 'patient')  
-            {
-                window.location.assign(url);
-            }
+            if (userData.length === 0)  
+                window.location.assign('profile');
             else
-                { 
-                    window.location.assign('/dashboard');
-                }
+                if (url) window.location.assign(url);
+
+            // if (userType === 'patient')  
+            // {
+            //     window.location.assign(url);
+            // }
+            // else
+            //     { 
+            //         window.location.assign('/dashboard');
+            //     }
 
         })
 
