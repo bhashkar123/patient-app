@@ -101,7 +101,7 @@ export const CoreContextProvider = props => {
 
 
     // capture from login page.  'yasser.sheikh@laitkor.com'  'M2n1shlko@1'
-    const login = (email, password, url) => {
+    const login = (email, password) => {
         setShowLoader(true);
         axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/signin', { Username: email, Password: password }).then((response) => {
             if (response.data === 'Incorrect username or password.') {
@@ -120,17 +120,15 @@ export const CoreContextProvider = props => {
 
                 //  window.location.assign();
 
-                userDetails(email, url);
+                userDetails(email);
             }
         })
     }
 
-    const userDetails = (useremail, url = '') => {
+    const userDetails = (useremail) => {
 
         const token = localStorage.getItem('app_jwt');
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        };
+        let url ='';
         const data = {
             "TableName": "UserDetail",
             "IndexName": "Email-Index",
@@ -168,7 +166,9 @@ export const CoreContextProvider = props => {
 
                 localStorage.setItem("app_patient", JSON.stringify(pat));
 
-                if (p.UserType.s === 'patient' && url) {
+
+
+                if (p.UserType.s === 'patient') {
 
                     if (pat.userName.includes('||0'))
                         url = 'profile';
@@ -183,12 +183,16 @@ export const CoreContextProvider = props => {
             
             setShowLoader(false);
 
+            const userType =   localStorage.getItem("userType");
 
-            if (userData.length === 0)  
-                window.location.assign('profile');
-
+            if (userType === 'patient')  
+            {
+                window.location.assign(url);
+            }
             else
-                if (url) window.location.assign(url);
+                { 
+                    window.location.assign('/dashboard');
+                }
 
         })
 

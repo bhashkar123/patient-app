@@ -99,12 +99,25 @@ const PatientProfile = props => {
             setData1(d1);
         }
 
-        if (coreContext.bpChartData.length > 0) {
-            coreContext.bpChartData.forEach(e1 => {
-                d2.push([e1.measurementDateTime, e1.pulse]);
-            });
+        // if (coreContext.bpChartData.length > 0) {
+        //     coreContext.bpChartData.forEach(e1 => {
+        //         d2.push([e1.measurementDateTime, e1.pulse]);
+        //     });
 
+        //     setData2(d2);
+        // }
+
+        if (coreContext.bpChartData.length > 0) {
+            // Sorting has been fixed.
+            const sortedArray  = coreContext.bpChartData.sort((a,b) => new Moment(a.measurementDateTime) - new Moment(b.measurementDateTime));
+            console.log(sortedArray);
+            sortedArray.forEach((e1, index) => {
+                console.log(e1.measurementDateTime);
+                d2.push(Math.round(e1.diastolic));
+                l2.push(e1.measurementDateTime);
+            });
             setData2(d2);
+            setLabel2(l2);
         }
 
         if (coreContext.wsChartData.length > 0) {
@@ -141,6 +154,7 @@ const PatientProfile = props => {
     
 
     useEffect(fetchPatient, [coreContext.wsChartData.length]);
+    useEffect(fetchPatient, [coreContext.bpChartData.length]);
     useEffect(coreContext.checkLocalAuth, []);
 
 
