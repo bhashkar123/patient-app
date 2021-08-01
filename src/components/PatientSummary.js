@@ -107,46 +107,53 @@ const PatientSummary = props => {
         else {
             setThData(coreContext.thresoldData);
 
+            var bgdata = coreContext.thresoldData.filter(a => a.Element_value === 'Blood Glucose');
 
-            if (coreContext.thresoldData[0]) {
-                setBgMin(coreContext.thresoldData[0].bg_low);
-                setBgMax(coreContext.thresoldData[0].bg_high);
+            if (bgdata.length >0) {
+                setBgMin(bgdata[0].bg_low);
+                setBgMax(bgdata[0].bg_high);
             }
             else {
                 setBgMin(0);
                 setBgMax(0);
             }
 
-            if (coreContext.thresoldData[1]) {
-                setBmiMin(coreContext.thresoldData[1].bmi_low);
-                setBmiMax(coreContext.thresoldData[1].bmi_high);
+            var bpdata = coreContext.thresoldData.filter(a => a.Element_value === 'BMI');
+            if (bpdata.length >0 ) {
+                setBmiMin(bpdata[0].bmi_low);
+                setBmiMax(bpdata[0].bmi_high);
             }
             else {
                 setBmiMin(0);
                 setBmiMax(0);
             }
 
-            if (coreContext.thresoldData[2]) {
-                setDiastolicMin(coreContext.thresoldData[2].diastolic_low);
-                setDiastolicMax(coreContext.thresoldData[2].diastolic_high);
+            var dialostic = coreContext.thresoldData.filter(a => a.Element_value === 'DIASTOLIC');
+
+            if (dialostic.length > 0) {
+                setDiastolicMin(dialostic[0].diastolic_low);
+                setDiastolicMax(dialostic[0].diastolic_high);
             }
             else {
                 setDiastolicMin(0);
                 setDiastolicMax(0);
             }
 
-            if (coreContext.thresoldData[3]) {
-                setSystolicMin(coreContext.thresoldData[3].systolic_low);
-                setSystolicMax(coreContext.thresoldData[3].systolic_high);
+            var systolic = coreContext.thresoldData.filter(a => a.Element_value === 'SYSTOLIC');
+            if (systolic.length >0) {
+                setSystolicMin(systolic[0].systolic_low);
+                setSystolicMax(systolic[0].systolic_high);
             }
             else {
                 setSystolicMin(0);
                 setSystolicMax(0);
             }
 
-            if (coreContext.thresoldData[4]) {
-                setWeightMin(coreContext.thresoldData[4].weight_low);
-                setWeightMax(coreContext.thresoldData[4].weight_high);
+            var weight = coreContext.thresoldData.filter(a => a.Element_value === 'Weight');
+
+            if (weight.length >0) {
+                setWeightMin(weight[0].weight_low);
+                setWeightMax(weight[0].weight_high);
             }
             else {
                 setWeightMin(0);
