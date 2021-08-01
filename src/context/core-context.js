@@ -766,7 +766,7 @@ export const CoreContextProvider = props => {
     }
 
 
-    const UpdateProvider = (username, mobile,patientId) => {
+    const UpdateProvider = (username, mobile,email ,patientId) => {
       
         const token = localStorage.getItem('app_jwt');
        

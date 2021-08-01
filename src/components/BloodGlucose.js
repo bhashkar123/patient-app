@@ -12,8 +12,21 @@ const BloodGlucose = props => {
     const [patientId, setPatientId] = useState('');
 
     const fetchBloodGlucose = () => {
-        const patientId =  localStorage.getItem("userId");
-        const userType = localStorage.getItem("userType");
+       // const patientId =  localStorage.getItem("userId");
+        let userType = localStorage.getItem("userType");
+        let patient = JSON.parse(localStorage.getItem('app_patient'));
+        let patientId =  localStorage.getItem("userId");
+        let userName = localStorage.getItem("userName");
+        if(patient != undefined){
+          if(patient.ehrId !== undefined)
+          {
+            patientId =patient.ehrId;
+            userType = 'patient';
+            userName = patient.name;
+          }
+          
+        }
+       
         setPatientId(patientId);
         coreContext.fetchBloodGlucose(patientId,userType);
     }
