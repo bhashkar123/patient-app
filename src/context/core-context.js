@@ -1489,44 +1489,18 @@ export const CoreContextProvider = props => {
         }
 
         let data = "";
-        if (usertype === "patient") {
             data = {
                 "TableName": "UserDetail",
-                "IndexName": "Patient-Doctor-Device-Index",
-                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-                "KeyConditionExpression": "GSI1PK = :v_PK",
-                "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_BG_" + userid },
-                    ":v_ActiveStatus": { "S": "Deactive" }
+                        "IndexName": "Patient-Doctor-Device-Index",
+                        "KeyConditionExpression": "GSI1PK = :v_PK",
+                        "FilterExpression":"ActiveStatus <> :v_ActiveStatus AND ActionTaken = :v_ActionTaken",
+                        "ExpressionAttributeValues": {
+                            ":v_PK": {"S": "DEVICE_BG_"+userid },
+                            ":v_ActiveStatus": {"S": "Deactive" },
+                            ":v_ActionTaken": {"S": "E-Mail and SMS Sent." }
                 }
             }
-        }
-
-        if (usertype === "doctor") {
-            data = {
-                "TableName": "UserDetail",
-                "KeyConditionExpression": "PK = :v_PK",
-                "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-                "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_BG_READING" },
-                    ":v_GSI1SK": { "S": "DEVICE_BG_" + userid },
-                    ":v_ActiveStatus": { "S": "Deactive" }
-                }
-            }
-        }
-
-
-        if (usertype === "admin") {
-            data = {
-                "TableName": "UserDetail",
-                "KeyConditionExpression": "PK = :v_PK",
-                "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
-                "ExpressionAttributeValues": {
-                    ":v_PK": { "S": "DEVICE_BG_READING" },
-                    ":v_ActiveStatus": { "S": "Deactive" }
-                }
-            }
-        }
+       
 
         axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
