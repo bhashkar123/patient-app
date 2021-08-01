@@ -27,15 +27,37 @@ const Thresold = props => {
     const [weightMax, setWeightMax] = useState(0);
     const [patient, setPatient] = useState({});
     const [patientId, setPatientId] = useState({});
+    
+    const [disableChart, setdisableChart] = useState(false);
+   // let disableChart = false;
 
     const fetchThresold = () => {
         // const p = JSON.parse(localStorage.getItem('app_patient'));
         // setPatient(p);
-        const uId = localStorage.getItem("userId");
-        setUserType(localStorage.getItem("userType"));
-        const patientId = uId.split("_").pop();
+        
+       
+      
+        let userType = localStorage.getItem("userType");
+        let patient = JSON.parse(localStorage.getItem('app_patient'));
+        let patientId =  localStorage.getItem("userId");
         setPatient(patientId);
-        coreContext.fetchThresold("ADMIN", localStorage.getItem("userType"));
+        let userName = localStorage.getItem("userName");
+        setUserType(userType);
+        if(patient != undefined){
+          if(patient.ehrId !== undefined)
+          {
+            patientId =patient.ehrId;
+            userType = 'patient';
+            userName = patient.name;
+          }
+          
+        }
+        if(userType =='patient')
+        {
+           
+            setdisableChart(true);
+        }
+        coreContext.fetchThresold(patientId, localStorage.getItem("userType"));
         //  setThData(coreContext.thresoldData);
 
 
@@ -77,20 +99,22 @@ const Thresold = props => {
         else {
             setThData(coreContext.thresoldData);
 
-            if (coreContext.thresoldData[0]) {
-                setBgMin(coreContext.thresoldData[0].bg_low);
-                setBgMax(coreContext.thresoldData[0].bg_high);
+            var bgdata = coreContext.thresoldData.filter(a => a.Element_value === 'Blood Glucose');
+
+            if (bgdata.length >0) {
+                setBgMin(bgdata[0].bg_low);
+                setBgMax(bgdata[0].bg_high);
             }
             else {
                 setBgMin(0);
                 setBgMax(0);
             }
 
+            var bpdata = coreContext.thresoldData.filter(a => a.Element_value === 'BMI');
 
-
-            if (coreContext.thresoldData[1]) {
-                setBmiMin(coreContext.thresoldData[1].bmi_low);
-                setBmiMax(coreContext.thresoldData[1].bmi_high);
+            if (bpdata.length >0 ) {
+                setBmiMin(bpdata[0].bmi_low);
+                setBmiMax(bpdata[0].bmi_high);
             }
             else {
                 setBmiMin(0);
@@ -98,9 +122,11 @@ const Thresold = props => {
             }
 
 
-            if (coreContext.thresoldData[2]) {
-                setDiastolicMin(coreContext.thresoldData[2].diastolic_low);
-                setDiastolicMax(coreContext.thresoldData[2].diastolic_high);
+            var dialostic = coreContext.thresoldData.filter(a => a.Element_value === 'DIASTOLIC');
+
+            if (dialostic.length > 0) {
+                setDiastolicMin(dialostic[0].diastolic_low);
+                setDiastolicMax(dialostic[0].diastolic_high);
             }
             else {
                 setDiastolicMin(0);
@@ -109,19 +135,21 @@ const Thresold = props => {
 
 
 
-            if (coreContext.thresoldData[3]) {
-                setSystolicMin(coreContext.thresoldData[3].systolic_low);
-                setSystolicMax(coreContext.thresoldData[3].systolic_high);
+            var systolic = coreContext.thresoldData.filter(a => a.Element_value === 'SYSTOLIC');
+            if (systolic.length >0) {
+                setSystolicMin(systolic[0].systolic_low);
+                setSystolicMax(systolic[0].systolic_high);
             }
             else {
                 setSystolicMin(0);
                 setSystolicMax(0);
             }
 
+            var weight = coreContext.thresoldData.filter(a => a.Element_value === 'Weight');
 
-            if (coreContext.thresoldData[4]) {
-                setWeightMin(coreContext.thresoldData[4].weight_low);
-                setWeightMax(coreContext.thresoldData[4].weight_high);
+            if (weight.length >0) {
+                setWeightMin(weight[0].weight_low);
+                setWeightMax(weight[0].weight_high);
             }
             else {
                 setWeightMin(0);
@@ -168,7 +196,7 @@ const Thresold = props => {
 
 
     return <React.Fragment>
-        <div className='row'>
+        <div className='row'    >
             <div className="col-md-6">
                 <div className="card">
                     <div>
@@ -176,7 +204,7 @@ const Thresold = props => {
                     </div>
                     <h4 className="card-header"> {thData[0] ? thData[0].Element_value : 'Blood Glucose'} (mg / dl) </h4>
                     <div className="card-body">
-                        <IonRangeSlider keyboard={true} onStart={e => onBGChange(e)} onFinish={e => onBGChange(e)} type='double' min={0} max={500} from={bgMin} to={bgMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
+                        <IonRangeSlider disable = {disableChart} keyboard={true} onStart={e => onBGChange(e)} onFinish={e => onBGChange(e)} type='double' min={0} max={500} from={bgMin} to={bgMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
                 </div>
             </div>
@@ -188,7 +216,7 @@ const Thresold = props => {
                     </div>
                     <h4 className="card-header"> {thData[1] ? thData[1].Element_value : 'BMI'} (kg / m2) </h4>
                     <div className="card-body">
-                        <IonRangeSlider keyboard={true} onFinish={e => onBMIChange(e)} type='double' min={0} max={100} from={bmiMin} to={bmiMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
+                        <IonRangeSlider disable = {disableChart} keyboard={true} onFinish={e => onBMIChange(e)} type='double' min={0} max={100} from={bmiMin} to={bmiMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
                 </div>
             </div>
@@ -200,7 +228,7 @@ const Thresold = props => {
                     </div>
                     <h4 className="card-header"> {thData[2] ? thData[2].Element_value : 'Diastolic'} (mmHg) </h4>
                     <div className="card-body">
-                        <IonRangeSlider keyboard={true} onFinish={e => onDiastolicChange(e)} type='double' min={0} max={500} from={diastolicMin} to={diastolicMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
+                        <IonRangeSlider  disable = {disableChart} keyboard={true} onFinish={e => onDiastolicChange(e)} type='double' min={0} max={500} from={diastolicMin} to={diastolicMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
                 </div>
             </div>
@@ -212,7 +240,7 @@ const Thresold = props => {
                     </div>
                     <h4 className="card-header"> {thData[3] ? thData[3].Element_value : 'Systolic'} (mmHg) </h4>
                     <div className="card-body">
-                        <IonRangeSlider keyboard={true} onFinish={e => onSystolicChange(e)} type='double' min={0} max={500} from={systolicMin} to={systolicMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
+                        <IonRangeSlider  disable = {disableChart} keyboard={true} onFinish={e => onSystolicChange(e)} type='double' min={0} max={500} from={systolicMin} to={systolicMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
                 </div>
             </div>
@@ -223,7 +251,7 @@ const Thresold = props => {
                         {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("ADMIN_" + patient.userId, 'Weight', weightMax, weightMin, userType)} class="btn btn-primary mb-2 float-right"> Update</button> : ''}   </div>
                     <h4 className="card-header"> {thData[4] ? thData[4].Element_value : 'Weight'} (lb) </h4>
                     <div className="card-body">
-                        <IonRangeSlider keyboard={true} onFinish={e => onWeightChange(e)} type='double' min={50} max={700} from={weightMin} to={weightMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
+                        <IonRangeSlider disable = {disableChart}  keyboard={true} onFinish={e => onWeightChange(e)} type='double' min={50} max={700} from={weightMin} to={weightMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
                 </div>
             </div>

@@ -559,7 +559,7 @@ const renderThreads = () => {
                                                             <div>
                                                                 {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("PATIENT_" + patient.userId, 'BG', bgMax, bgMin, userType)} className="btn btn-primary mb-2 float-right"> Update</button> : ''}
                                                             </div>
-                                                            <h4 className="card-header"> {thData[0] ? thData[0].Element_value : 'Blood Glucose'} (mg / dl) </h4>
+                                                            <h4 className="card-header"> {thData[0] ? thData[0].Element_value : 'Blood Glucose'}  Blood Glucose (mg / dl) </h4>
                                                             <div className="card-body">
                                                                 <IonRangeSlider keyboard={true} onStart={e => onBGChange(e)} onFinish={e => onBGChange(e)} type='double' min={0} max={500} from={bgMin} to={bgMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                                                             </div>
@@ -571,7 +571,7 @@ const renderThreads = () => {
                                                             <div>
                                                                 {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("PATIENT_" + patient.userId, 'BMI', bmiMax, bmiMin, userType)} className="btn btn-primary mb-2 float-right"> Update</button> : ''}
                                                             </div>
-                                                            <h4 className="card-header"> {thData[1] ? thData[1].Element_value : 'BMI'} (kg / m2) </h4>
+                                                            <h4 className="card-header"> {thData[1] ? thData[1].Element_value : 'BMI'}BMI  (kg / m2) </h4>
                                                             <div className="card-body">
                                                                 <IonRangeSlider keyboard={true} onFinish={e => onBMIChange(e)} type='double' min={0} max={100} from={bmiMin} to={bmiMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                                                             </div>
