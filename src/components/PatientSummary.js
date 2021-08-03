@@ -20,6 +20,7 @@ import {Weight} from './Weight';
 import {BloodGlucose} from './BloodGlucose';
 import { BloodPressure } from './BloodPressure';
 import Moment from 'moment';
+import context from 'react-bootstrap/esm/AccordionContext';
 
 
 const PatientSummary = props => {
@@ -72,6 +73,7 @@ const PatientSummary = props => {
         
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 
+        coreContext.fetchTimeLog("PATIENT_" + patientId);
         /// setting default value
         if (coreContext.thresoldData.length === 0) {
             let thdata = {};
@@ -167,6 +169,8 @@ const PatientSummary = props => {
     }
 
     useEffect(fetchPatient, [coreContext.thresoldData.length]);
+
+    //useEffect(fetchPatient, [coreContext.timeLogData.length]);
     
 
     //useEffect(fetchPatient, [coreContext.patient]);
@@ -254,19 +258,21 @@ const PatientSummary = props => {
       
 
       const renderTimelogs = () =>{
-        if (timerLogs.length > 0) {
-               return timerLogs.map((tl, index) => {
-                   return <tr>
-                       <td>{tl.taskType} </td>
-                       <td>{tl.performedBy} </td>
-                       <td>{tl.performedOn} </td>
-                       <td>{tl.timeAmount} </td>
-                       <td>{tl.startDT} </td>
-                       <td>{tl.endDT} </td>
-                   </tr>
-               });
-           }
-       }
+        if (coreContext.timeLogData.length > 0) {
+            return coreContext.timeLogData.map((tl, index) => {
+                return <tr>
+                    <td>{tl.taskType} </td>
+                    <td>{tl.performedBy} </td>
+                    <td>{tl.performedOn} </td>
+                    <td>{tl.timeAmount} </td>
+                    <td>{tl.startDT} </td>
+                    <td>{tl.endDT} </td>
+                </tr>
+            });
+        }
+    }  
+       
+     
        
     // const renderTimelogs = () =>{
     //     if (timerLogs.length > 0){
@@ -416,11 +422,17 @@ const renderThreads = () => {
             _timerLog.performedOn = Moment(date).format('MMM-DD-YYYY hh:mm:ss A') ;
             _timerLog.timeAmount = minutes +":"+ seconds;
             _timerLog.startDT = Moment(startDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
-            _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ;  
+            _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
+            _timerLog.username = userName;
            
-            timerLogs.push(_timerLog);
+            if(_timerLog.performedOn !=="Invalid date")
+            {
+                coreContext.timeLogData.push(_timerLog);
+            }
+            //timerLogs.push(_timerLog);
+            
            
-            setTimerLog(timerLogs);
+            //setTimerLog(timerLogs);
             console.log(index);
             if(totalLogtime  > 0){
                 settotalLogtime(totalLogtime + seconds);
@@ -869,7 +881,7 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog( timerLogs, patient.userId, userName )} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog( coreContext.timeLogData, patient.userId, userName )} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>

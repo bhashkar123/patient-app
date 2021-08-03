@@ -20,6 +20,7 @@ export const CoreContextProvider = props => {
     const [weightApiData, setweightdeviceApiData] = useState([]);
 
     const [thresoldData, setThresoldData] = useState([]);
+    const [timeLogData, setTimeLogData] = useState([]);
     const [bloodpressureData, setbloodpressureData] = useState([]);
     const [bloodglucoseData, setbloodglucoseData] = useState([]);
 
@@ -599,6 +600,75 @@ export const CoreContextProvider = props => {
             setThresoldData(dataSetthresold);
 
             console.log('thresolddata', dataSetthresold);
+        })
+
+    }
+
+
+    const fetchTimeLog = (userid) => {
+
+        const token = localStorage.getItem('app_jwt');
+       
+        let data = "";
+        data = {
+            "TableName": "UserDetail",
+	                "KeyConditionExpression": "PK = :v_PK",
+                    "FilterExpression":  "GSI1PK = :v_GSI1PK",
+                    "ExpressionAttributeValues": {
+                            ":v_PK": { "S": "TIMELOG_READING" },
+                            ":v_GSI1PK": { "S": "TIMELOG_READING_"+userid }
+            }
+        }
+
+
+
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+
+            const timelogData = response.data;
+            console.log('timelogData data', response.data);
+            const dataSettimeLog = [];
+
+            timelogData.forEach((tl, index) => {
+                console.log('p' + index, tl);
+                let tldata = {};
+
+                if (tl.TaskType) {
+                    tldata.taskType = tl.TaskType.s;
+                }
+                if (tl.PerformedBy) {
+                    tldata.performedBy = tl.PerformedBy.s;
+                }
+                if (tl.PerformedOn) {
+                    tldata.performedOn = tl.PerformedOn.s;
+                }
+                if (tl.StartDT) {
+                    tldata.startDT = tl.StartDT.s;
+                }
+                if (tl.EndDT) {
+                    tldata.endDT = tl.EndDT.s;
+                }
+                if (tl.TimeAmount) {
+                    tldata.timeAmount = tl.TimeAmount.s;
+                }
+                if (tl.UserName) {
+                    tldata.UserName = tl.UserName.s;
+                }
+
+
+
+                dataSettimeLog.push(tldata);
+            });
+
+            setTimeLogData(dataSettimeLog);
+
+            console.log('timeLogData', dataSettimeLog);
         })
 
     }
@@ -1867,7 +1937,7 @@ export const CoreContextProvider = props => {
                 "GSI1SK": patientId,
                 "CreatedDate": date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
                 "UserName": userName,
-                "TaskType": timelog.TaskType,
+                "TaskType": timelog.taskType,
                 "PerformedBy": timelog.performedBy,
                 "PerformedOn": timelog.performedOn,
                 "TimeAmount": timelog.timeAmount,
@@ -1890,6 +1960,8 @@ export const CoreContextProvider = props => {
             });
 
         });
+
+        alert('TimeLog has been updated');
        
     }
 
@@ -1906,6 +1978,7 @@ export const CoreContextProvider = props => {
         ccData,
         coachData,
         thresoldData,
+        timeLogData,
         bloodglucoseData,
         bloodpressureData,
         weightData,
@@ -1927,6 +2000,7 @@ export const CoreContextProvider = props => {
         fetchWSChartData,
         fetchBpChartData,
         fetchThresold,
+        fetchTimeLog,
         backUpMessages,
         renderLoader,
         checkLocalAuth,
