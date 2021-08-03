@@ -214,7 +214,7 @@ const Thresold = props => {
                     <div>
                         {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("ADMIN_" + patient.userId, 'bmi', bmiMax, bmiMin, userType)} class="btn btn-primary mb-2 float-right"> Update</button> : ''}
                     </div>
-                    <h4 className="card-header"> {thData[1] ? thData[1].Element_value : 'BMI'} (kg / m2) </h4>
+                    <h4 className="card-header"> BMI (kg / m2) </h4>
                     <div className="card-body">
                         <IonRangeSlider disable = {disableChart} keyboard={true} onFinish={e => onBMIChange(e)} type='double' min={0} max={100} from={bmiMin} to={bmiMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
@@ -226,7 +226,7 @@ const Thresold = props => {
                     <div>
                         {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("ADMIN_" + patient.userId, 'Diastolic', diastolicMax, diastolicMin, userType)} class="btn btn-primary mb-2 float-right"> Update</button> : ''}
                     </div>
-                    <h4 className="card-header"> {thData[2] ? thData[2].Element_value : 'Diastolic'} (mmHg) </h4>
+                    <h4 className="card-header"> Diastolic (mmHg) </h4>
                     <div className="card-body">
                         <IonRangeSlider  disable = {disableChart} keyboard={true} onFinish={e => onDiastolicChange(e)} type='double' min={0} max={500} from={diastolicMin} to={diastolicMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
@@ -238,7 +238,7 @@ const Thresold = props => {
                     <div>
                         {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("ADMIN_" + patient.userId, 'Systolic', systolicMax, systolicMin, userType)} class="btn btn-primary mb-2 float-right"> Update</button> : ''}
                     </div>
-                    <h4 className="card-header"> {thData[3] ? thData[3].Element_value : 'Systolic'} (mmHg) </h4>
+                    <h4 className="card-header"> Systolic (mmHg) </h4>
                     <div className="card-body">
                         <IonRangeSlider  disable = {disableChart} keyboard={true} onFinish={e => onSystolicChange(e)} type='double' min={0} max={500} from={systolicMin} to={systolicMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>
@@ -249,7 +249,7 @@ const Thresold = props => {
                 <div className="card">
                     <div>
                         {userType === 'doctor' || userType === 'admin' || userType === 'provider' ? <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateThreshold("ADMIN_" + patient.userId, 'Weight', weightMax, weightMin, userType)} class="btn btn-primary mb-2 float-right"> Update</button> : ''}   </div>
-                    <h4 className="card-header"> {thData[4] ? thData[4].Element_value : 'Weight'}Weight (lb) </h4>
+                    <h4 className="card-header"> Weight (lb) </h4>
                     <div className="card-body">
                         <IonRangeSlider disable = {disableChart}  keyboard={true} onFinish={e => onWeightChange(e)} type='double' min={50} max={700} from={weightMin} to={weightMax} step={.01} grid={true} grid_margin={true} grid_number={5} />
                     </div>

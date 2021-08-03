@@ -743,27 +743,7 @@ const renderThreads = () => {
                                         </div>
                                     </div>
                                 </div>
-                                 {/* <div className="col-md-4">
-                                    <div className="card timer-div">
-                                        <div className="card-body">
-                                            <p className="mb-2">Task Timer</p>
-                                            <div style={{ textAlign: 'center' }}>
-                                            </div>
-
-                                            <div className="timer-content" id="stopwatch">
-                                                <span className="min-time"><span className="time-txt">min</span><span className="time-num">{minutes}</span></span>
-                                                <span className="dots">:</span>
-                                                <span className="sec-time"><span className="time-txt">sec</span><span className="time-num">{seconds}</span></span>
-                                            </div>
-                                            <div id="buttons">
-                                                <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
-                                                <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Stop</button>
-                                                <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
-
+                                 
                             </div>
                         </div>
                     </div>
@@ -887,7 +867,9 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                {/* <button type='button' style={{ width: '250px' }} onClick={() => coreContext.UpdateTimeLog(props.match.params.patient, userId, { minutes }, { seconds })} className="btn btn-primary mb-2 float-right"> Update Time Log</button> */}
+                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog(props.match.params.patient, userId, { minutes }, { seconds })} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                            </div>
+                                            <div className="btn btn-primary mb-2 float-right" style={{ backgroundColor: 'transparent' }}>
                                             </div>
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderAddModifyFlags()}</div>
