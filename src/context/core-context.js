@@ -1862,7 +1862,7 @@ export const CoreContextProvider = props => {
         timerLogs.forEach(timelog=>{
              const data = JSON.stringify({
                 "PK": "TIMELOG_READING",
-                "SK": "TIMELOG_READING_"+ timelog.TaskType+"_" + timelog.performedBy +"_"+ timelog.performedOn+"_"+ timelog.timeAmount,
+                "SK": "TIMELOG_READING_"+ timelog.taskType+"_" + timelog.performedBy +"_"+ timelog.performedOn+"_"+ timelog.timeAmount,
                 "GSI1PK": 'TIMELOG_READING_PATIENT_' + patientId,
                 "GSI1SK": patientId,
                 "CreatedDate": date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
