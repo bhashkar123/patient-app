@@ -635,9 +635,7 @@ export const CoreContextProvider = props => {
             }
         });
     }
-
-
-    
+  
 
     const UpdateThreshold = (patient, type, high, low, userType) => {
         const token = localStorage.getItem('app_jwt');
@@ -776,7 +774,7 @@ export const CoreContextProvider = props => {
        
         const data = {"TableName":"UserDetail",
         "Key":{
-            "SK": { "S": "PATIENT_" +patientId },
+            "SK": { "S":  patientId},
           "PK":{"S":"doctor"}
         },
         "UpdateExpression":"SET UserName = :v_username, ContactNo = :v_mobile",
@@ -1240,6 +1238,9 @@ export const CoreContextProvider = props => {
                 providerdata.email = p.Email.s;
                 providerdata.phone = p.ContactNo.s;
 
+                if(p.SK !==undefined){
+                    providerdata.doctor_id = p.SK.s;
+                }
 
                 dataSetdoctor.push(providerdata);
                 pOptions.push({ value: p.SK.s, name: p.UserName.s });
@@ -1257,9 +1258,7 @@ export const CoreContextProvider = props => {
     const fetchCareCoordinator = () => {
         const token = localStorage.getItem('app_jwt');
 
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        };
+      
         const data = {
             "TableName": "UserDetail",
             "ProjectionExpression": "PK,SK,UserName,Email,ContactNo",
@@ -1305,7 +1304,6 @@ export const CoreContextProvider = props => {
         }).catch(() => { relogin(); })
 
     }
-
 
     const fetchCoach = () => {
         const token = localStorage.getItem('app_jwt');
@@ -1357,7 +1355,6 @@ export const CoreContextProvider = props => {
         })
 
     }
-
 
     const fetchBloodPressure = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');
@@ -1478,8 +1475,6 @@ export const CoreContextProvider = props => {
 
     }
 
-  
-
     const fetchBloodGlucose = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');
         const isAuth = localStorage.getItem('app_isAuth');
@@ -1545,7 +1540,6 @@ export const CoreContextProvider = props => {
         })
 
     }
-
 
     const backUpMessages = () => {
         axios.get('/backup-messages').then((response) => {
@@ -1857,6 +1851,48 @@ export const CoreContextProvider = props => {
      })
 
     }
+
+    const UpdateTimeLog = (timerLogs, patientId, userName) => {
+        const token = localStorage.getItem('app_jwt');
+        const date = new Date();
+        
+       
+        if(timerLogs.length ==0 ) return;
+
+        timerLogs.forEach(timelog=>{
+             const data = JSON.stringify({
+                "PK": "TIMELOG_READING",
+                "SK": "TIMELOG_READING_"+ timelog.TaskType+"_" + timelog.performedBy +"_"+ timelog.performedOn+"_"+ timelog.timeAmount,
+                "GSI1PK": 'TIMELOG_READING_PATIENT_' + patientId,
+                "GSI1SK": patientId,
+                "CreatedDate": date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+                "UserName": userName,
+                "TaskType": timelog.TaskType,
+                "PerformedBy": timelog.performedBy,
+                "PerformedOn": timelog.performedOn,
+                "TimeAmount": timelog.timeAmount,
+                "StartDT": timelog.startDT,
+                "EndDT": timelog.endDT,
+               
+            });
+    
+            axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    // "Content-Type": "application/json",
+                    Authorization: "Bearer " + token
+                }
+            }
+            ).then((response) => {
+                if (response.data === "Registered") {
+                   console.log(response.data + timelog);
+                }
+            });
+
+        });
+       
+    }
+
     return <CoreContext.Provider value={{
         patients,
         bgData,
@@ -1906,6 +1942,7 @@ export const CoreContextProvider = props => {
         fetchCoach,
         addCareCoordinator,
         addCoach,
+        UpdateTimeLog,
         UpdatePatient,
         UpdateProvider,
         showProviderModal,

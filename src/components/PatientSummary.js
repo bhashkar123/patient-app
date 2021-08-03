@@ -29,6 +29,7 @@ const PatientSummary = props => {
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState('');
+    const [userName, setUserName] = useState('');
     const [bgMin, setBgMin] = useState(0);
     const [bgMax, setBgMax] = useState(0);
     const [bmiMin, setBmiMin] = useState(0);
@@ -63,6 +64,7 @@ const PatientSummary = props => {
         const usertype = localStorage.getItem("userType");
         setUserType(localStorage.getItem("userType"));
         setUserId(localStorage.getItem("userId"));
+        setUserName(localStorage.getItem("userName"));
         let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
         setPatient(patientData);
@@ -765,7 +767,7 @@ const renderThreads = () => {
                             <table className='table table-bordered table-sm mt-4'>
                                 <tr>
                                     <th>Task Type</th>
-                                    <th>Logged By</th>
+                                    <th>Performed By</th>
                                     <th>Performed On</th>
                                     <th>Time Amount</th>
                                     <th>Start Date/Time</th>
@@ -867,10 +869,9 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog(props.match.params.patient, userId, { minutes }, { seconds })} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog( timerLogs, userId, userName )} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
-                                            <div className="btn btn-primary mb-2 float-right" style={{ backgroundColor: 'transparent' }}>
-                                            </div>
+                                           
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderAddModifyFlags()}</div>
         <div className="card-header">{renderAddNotes()}</div>

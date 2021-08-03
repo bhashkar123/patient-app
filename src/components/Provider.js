@@ -96,7 +96,8 @@ const Provider = props => {
          setName(patient.provider);
          setPhone(patient.phone);
          setEmail(patient.email);
-         setPatientId(patient.id);
+         //setPatientId(patient.id);
+         setPatientId(patient.doctor_id);
         handleModalShow();
     }
 
