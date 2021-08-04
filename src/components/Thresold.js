@@ -32,32 +32,27 @@ const Thresold = props => {
    // let disableChart = false;
 
     const fetchThresold = () => {
-        // const p = JSON.parse(localStorage.getItem('app_patient'));
-        // setPatient(p);
-        
-       
-      
+        // // const p = JSON.parse(localStorage.getItem('app_patient'));
+        // // setPatient(p);
         let userType = localStorage.getItem("userType");
-        let patient = JSON.parse(localStorage.getItem('app_patient'));
-        let patientId =  localStorage.getItem("userId");
-        setPatient(patientId);
-        let userName = localStorage.getItem("userName");
-        setUserType(userType);
-        if(patient != undefined){
-          if(patient.ehrId !== undefined)
-          {
-            patientId =patient.ehrId;
-            userType = 'patient';
-            userName = patient.name;
-          }
-          
-        }
-        if(userType =='patient')
+        let patientId = localStorage.getItem("userId");
+        // check page if left side menu.
+        setdisableChart(true);
+        if(window.location.href.substring('bloodpressure')> 0)
         {
-           
-            setdisableChart(true);
+
         }
-        coreContext.fetchThresold(patientId, localStorage.getItem("userType"));
+        if(window.location.href.indexOf('patient-summary') >0 )
+        {
+            patientId = localStorage.getItem("ehrId");
+            userType = 'patient';
+            // clear this otherwise will be problem
+            localStorage.removeItem("ehrId");
+            setdisableChart(false);
+        }
+
+        setUserType(userType);
+        coreContext.fetchThresold(patientId, userType);
         //  setThData(coreContext.thresoldData);
 
 

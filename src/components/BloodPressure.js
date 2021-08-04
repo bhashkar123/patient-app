@@ -7,11 +7,14 @@ const BloodPressure = props => {
 
     const coreContext = useContext(CoreContext);
     const [patientId, setPatientId] = useState('');
+    const [userType, setUserType] = useState('');
+    const [disablelink, setdisablelink] = useState(false);
     
     const fetchBloodPressure = () => {
 
         let userType = localStorage.getItem("userType");
         let patientId = localStorage.getItem("userId");
+        setdisablelink(false);
         // check page if left side menu.
         if(window.location.href.substring('bloodpressure')> 0)
         {
@@ -23,8 +26,10 @@ const BloodPressure = props => {
             userType = 'patient';
             // clear this otherwise will be problem
             localStorage.removeItem("ehrId");
+            setdisablelink(true);
         }
-
+        setUserType(userType);
+        
         coreContext.fetchBloodPressure(patientId,userType);
        
     }
@@ -37,8 +42,9 @@ const BloodPressure = props => {
         headerName: 'Patient Name', 
         width: 200 ,  
         type: 'string',
+       
         renderCell: (params) => (
-          <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+          <a  disable = {disablelink} href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
         )
       },
       {
@@ -79,7 +85,7 @@ const BloodPressure = props => {
 
     const renderBloodPressure = () => {
         if (coreContext.bloodpressureData.length > 0) {
-          coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+          //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid

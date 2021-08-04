@@ -21,6 +21,7 @@ import {BloodGlucose} from './BloodGlucose';
 import { BloodPressure } from './BloodPressure';
 import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
+import { Thresold } from './Thresold';
 
 
 const PatientSummary  = props =>  {
@@ -583,7 +584,10 @@ const renderThreads = () => {
                                         </div>
                                         </TabPanel>
                                         <TabPanel>
-                                            <React.Fragment>
+                                        <div className="card-body">
+                                            <Thresold></Thresold>
+                                        </div>
+                                            {/* <React.Fragment>
                                                 <div className='row'>
                                                     <div className="col-md-6">
                                                         <div className="card">
@@ -645,7 +649,7 @@ const renderThreads = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </React.Fragment>
+                                            </React.Fragment> */}
                                         </TabPanel>
 
                                     </Tabs>
