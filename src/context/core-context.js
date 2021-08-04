@@ -870,6 +870,69 @@ export const CoreContextProvider = props => {
         });
     }
 
+    const UpdateCareCoordinator = (username, mobile,email ,patientId) => {
+      
+        const token = localStorage.getItem('app_jwt');
+       
+        const data = {"TableName":"UserDetail",
+        "Key":{
+            "SK": { "S":  patientId},
+          "PK":{"S":"carecoordinator"}
+        },
+        "UpdateExpression":"SET UserName = :v_username, ContactNo = :v_mobile",
+        "ExpressionAttributeValues":{":v_username":{"S":""+username+""},
+                                     ":v_mobile":{"S":""+mobile+""}
+                                    }
+     };
+
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Updated") {
+                alert("Care Coordinator Update Successfully.");
+            }else
+            {
+                alert("Patient data did not Update  Successfully.");
+            }
+        });
+    }
+
+    const UpdateCoach = (username, mobile,email ,patientId) => {
+      
+        const token = localStorage.getItem('app_jwt');
+       
+        const data = {"TableName":"UserDetail",
+        "Key":{
+            "SK": { "S":  patientId},
+          "PK":{"S":"coach"}
+        },
+        "UpdateExpression":"SET UserName = :v_username, ContactNo = :v_mobile",
+        "ExpressionAttributeValues":{":v_username":{"S":""+username+""},
+                                     ":v_mobile":{"S":""+mobile+""}
+                                    }
+     };
+
+        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Updated") {
+                alert("Coach Update Successfully.");
+            }else
+            {
+                alert("Patient data did not Update  Successfully.");
+            }
+        });
+    }
     const DeletePatient = (patientId) => {
         const token = localStorage.getItem('app_jwt');
 
@@ -1364,6 +1427,10 @@ export const CoreContextProvider = props => {
                 ccdata.email = p.Email.s;
                 ccdata.phone = p.ContactNo.s;
 
+                
+                if(p.SK !==undefined){
+                    ccdata.doctor_id = p.SK.s;
+                }
 
                 dataSetcareCoordinator.push(ccdata);
                 ccOptions.push({ value: p.SK.s, name: p.UserName.s });
@@ -1413,6 +1480,9 @@ export const CoreContextProvider = props => {
                 coachdata.email = p.Email.s;
                 coachdata.phone = p.ContactNo.s;
 
+                if(p.SK !==undefined){
+                    coachdata.doctor_id = p.SK.s;
+                }
 
                 dataSetcoach.push(coachdata);
                 cOptions.push({ value: p.SK.s, name: p.UserName.s });
@@ -2019,6 +2089,8 @@ export const CoreContextProvider = props => {
         UpdateTimeLog,
         UpdatePatient,
         UpdateProvider,
+        UpdateCareCoordinator,
+        UpdateCoach,
         showProviderModal,
         handleProviderModalClose,
         verifyProviderVerificationCode,

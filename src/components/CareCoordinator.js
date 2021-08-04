@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { Modal, Button } from 'react-bootstrap';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
+import { useForm } from "react-hook-form";
+import Input from './common/Input';
+
 import {
     DataGrid,
     GridColDef,
@@ -21,10 +24,29 @@ const CareCoordinator = props => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
     const [confirmpassword, setConfirmPassword] = useState('');
     const [patientId, setPatientId] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
+    const handleModalClose = () => setShowModal(false);
+    const handleModalShow = () => setShowModal(true);
 
+    const [showModal, setShowModal] = useState(false);
+
+    const editCareCoordinator = () => {
+
+    }
+
+    const { register, handleSubmit, errors } = useForm({
+        mode: 'onSubmit',
+        reValidateMode: 'onBlur',
+    });
+
+    const fetchCareCoordinator = () => {
+        const patientId = props.match.params.patient;
+        setPatientId(patientId);
+        coreContext.fetchCareCoordinator();
+    }
     const resetForm = () => {
         setName('');
         setEmail('');
@@ -35,17 +57,12 @@ const CareCoordinator = props => {
     }
     useEffect(resetForm, [coreContext.resetForm]);
 
-    const fetchCareCoordinator = () => {
-        const patientId = props.match.params.patient;
-        setPatientId(patientId);
-        coreContext.fetchCareCoordinator();
-    }
 
     useEffect(fetchCareCoordinator, []);
     const columns = [
         { 
             field: "name", 
-            headerName: "Coach Name",
+            headerName: "Care Coordinator Name",
             width: 300,
         },
         {
@@ -75,7 +92,12 @@ const CareCoordinator = props => {
 ];
 
 const showEditForm = (patient) => {
-        
+    setName(patient.name);
+    setPhone(patient.phone);
+    setEmail(patient.email);
+    //setPatientId(patient.id);
+    setPatientId(patient.doctor_id);
+   handleModalShow();
 }
 
 const deletePatient = (patient) => {
@@ -130,6 +152,31 @@ const deletePatient = (patient) => {
                     Cancel
                 </Button>
             </Modal.Footer>
+        </Modal>
+
+        <Modal show={showModal} onHide={handleModalClose} size='lg'>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit Care Coordinator </Modal.Title>
+            </Modal.Header>
+            <Modal.Body  >
+              
+                    <div className="row" >
+                         <div className="col-md-6" >
+                            <Input label='Name' elementType='text' minLength={5} maxLength={55} placeholder='Enter name' onChange={e => setName(e.target.value)} name='name' value={name} required={true} register={register} errors={errors} />
+                     </div>
+                    </div>
+                    <div className="row">
+                    <div className="col-md-6">
+                    <Input label='Phone' elementType='text' placeholder='Enter phone' onChange={e => setPhone(e.target.value)} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='phone' value={phone} />
+                    </div>
+                    </div>
+                    
+                    <Input blockButton={true} value='Submit' onClick={() => coreContext.UpdateCareCoordinator(name, phone, email, patientId)} elementType='button' variant='primary' />
+                    <br />
+                    <center> {coreContext.renderLoader()}</center>
+                    <center> <Input variant='danger' label={message} elementType='label' /></center>
+              
+            </Modal.Body>
         </Modal>
     </div >
 }
