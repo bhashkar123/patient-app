@@ -1,9 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
+
+
+
 const Moment = require('moment');
 
-const Weight = props => {
+const Weight = (props) => {
 
     const coreContext = useContext(CoreContext);
 
@@ -13,8 +16,8 @@ const Weight = props => {
     const fetchWeight = () => {
       const patient = JSON.parse(localStorage.getItem('app_patient'));
       let patientId =  localStorage.getItem("userId");
-      console.log('Ashok'+patientId);
       
+      let test = props.patients;
       let userType = localStorage.getItem("userType");
       let userName = localStorage.getItem("userName");
       if(patient != undefined){
@@ -22,7 +25,7 @@ const Weight = props => {
         {
           patientId =patient.ehrId;
           userType = 'patient';
-        userName = patient.name;
+          userName = patient.name;
         }
         
       }
@@ -32,12 +35,31 @@ const Weight = props => {
     }
     useEffect(fetchWeight, [coreContext.weightData.length]);
    
+    const setPatient = (p) => {
+      console.log(p);
+      coreContext.fetchPateintListfromApi('patient',p.userId);
+      let test = props.patients;
+      coreContext.setPatient(coreContext.patients[0]);
+      localStorage.setItem('app_patient', JSON.stringify(p));
+  }
+
+
+   const mapStateToProps = (state, ownprops) =>{
+     const items = ownprops.patients;
+     return items;
+   }
+
     const columns = [
         { field: 
           'username', 
           headerName: 'Patient Name', 
           width: 200 ,  
-          type: 'string'},
+          type: 'string',
+          renderCell: (params) => (
+            // <Link href={`mailto:${params.value}`}>{params.value}</Link>
+            <a  onClick={() => setPatient(params.row)} href={`/patient-summary/${params.row.userId}`}> {params.value} </a>
+        )
+        },
         {
           field: 'weight',
           headerName: 'Weight',
@@ -106,4 +128,4 @@ const Weight = props => {
 
 
 
-export { Weight }
+export {Weight}
