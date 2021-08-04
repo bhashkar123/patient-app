@@ -66,10 +66,10 @@ const PatientSummary = props => {
         setUserType(localStorage.getItem("userType"));
         setUserId(localStorage.getItem("userId"));
         setUserName(localStorage.getItem("userName"));
-        let patientData = JSON.parse(localStorage.getItem('app_patient'));
+        //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
-        setPatient(patientData);
-        
+        //setPatient(patientData);
+        coreContext.fetchPateintListfromApi('patient', patientId);
         
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 
@@ -324,7 +324,6 @@ const renderThreads = () => {
     }
 
     const renderTopDetails = () => {
-        coreContext.patient = JSON.parse(localStorage.getItem('app_patient'));
         if (coreContext.patient)
             return <div className="row">
                 <div className="col-md-3" style={{ fontWeight: 'bold' }}>{coreContext.patient.name}</div>
@@ -360,7 +359,10 @@ const renderThreads = () => {
     }
 
     const renderPatientinformation = () => {
-        if (coreContext.patient)
+        if (coreContext.patients.length >0 ){
+            coreContext.patient = coreContext.patients[0];
+        }
+        if (coreContext.patient )
             return <div className="row" style={{ marginLeft: '10px', backgroundColor: 'white' }}>
                 <MDBCard className="border row col-md-6" >
                     <MDBCardBody>

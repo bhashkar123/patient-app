@@ -251,7 +251,14 @@ export const CoreContextProvider = props => {
                 "ExpressionAttributeValues": { ":v_PK": { "S": "patient" }, ":v_CoachId": { "S": userId }, ":v_status": { "S": "Active" } }
             };
         }
-
+        if (usertype === "patient") {
+            data = {
+                "TableName":"UserDetail",
+                "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
+                "FilterExpression":"ActiveStatus = :v_status",
+                "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"+userId},":v_status":{"S":"Active"}}
+            }
+        }
         axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
