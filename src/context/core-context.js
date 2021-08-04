@@ -862,7 +862,7 @@ export const CoreContextProvider = props => {
         }
         ).then((response) => {
             if (response.data === "Updated") {
-                alert("Patient data Update Successfully.");
+                alert("Provider data Update Successfully.");
             }else
             {
                 alert("Patient data did not Update  Successfully.");
