@@ -61,7 +61,7 @@ const PatientSummary = props => {
 
    
     const fetchPatient = () => {
-        const patientId = props.match.params.patient;
+        const patientId = atob(props.match.params.patient);
         const usertype = localStorage.getItem("userType");
         setUserType(localStorage.getItem("userType"));
         setUserId(localStorage.getItem("userId"));
@@ -69,7 +69,7 @@ const PatientSummary = props => {
         let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
         setPatient(patientData);
-
+        
         
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 

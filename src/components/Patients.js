@@ -114,7 +114,7 @@ const Patients = props => {
                 
                 renderCell: (params) => (
                 // <Link href={`mailto:${params.value}`}>{params.value}</Link>
-                <a  onClick={() => setPatient(params.row)} href={`/patient-summary/${params.row.userId}`}> {params.value} </a>
+                <a  onClick={() => setPatient(params.row)} href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
             )
         },
         {
