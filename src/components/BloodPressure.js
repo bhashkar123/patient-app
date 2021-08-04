@@ -38,11 +38,10 @@ const BloodPressure = props => {
    
     const columns = [
       { 
-        field: 'userName', 
+        field: 'UserName', 
         headerName: 'Patient Name', 
         width: 200 ,  
         type: 'string',
-       
         renderCell: (params) => (
           <a  disable = {disablelink} href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
         )
@@ -83,20 +82,70 @@ const BloodPressure = props => {
         },
     ];
 
+    const patientcolumns = [
+      { 
+        field: 'UserName', 
+        headerName: 'Patient Name', 
+        width: 200 ,  
+        type: 'string'
+       
+      },
+      {
+        field: 'systolic',
+        headerName: 'Systolic',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
+        field: 'diastolic',
+        headerName: 'Diastolic',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
+          field: 'pulse',
+          headerName: 'Pulse',
+          width: 200,
+          editable: false,
+          type: 'number',
+        },
+        {
+          field: 'MeasurementDateTime',
+          headerName: 'Date Recorded',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'CreatedDate',
+          headerName: 'Date Received',
+          width: 200,
+          editable: false
+         
+        },
+    ];
+
     const renderBloodPressure = () => {
-        if (coreContext.bloodpressureData.length > 0) {
-          //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
-            return (
-                <div style={{ height: 680, width: '100%' }}>
-                  <DataGrid
-                    rows={coreContext.bloodpressureData}
-                    columns={columns}
-                    pageSize={10}
-                   
-                  />
-                </div>
-              );
-        }
+     let dgcolumns = columns;
+     if(userType === 'patient'){
+        dgcolumns = patientcolumns;
+     }
+     
+     if (coreContext.bloodpressureData.length > 0) {
+      //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+        return (
+            <div style={{ height: 680, width: '100%' }}>
+              <DataGrid
+                rows={coreContext.bloodpressureData}
+                columns={dgcolumns}
+                pageSize={10}
+               
+              />
+            </div>
+          );
+    }
+        
     }
 
     return <div className='card'>
