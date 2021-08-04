@@ -10,6 +10,7 @@ const BloodGlucose = props => {
 
     
     const [patientId, setPatientId] = useState('');
+    const [userType, setUserType] = useState('');
 
     const fetchBloodGlucose = () => {
        // const patientId =  localStorage.getItem("userId");
@@ -27,6 +28,7 @@ const BloodGlucose = props => {
             // clear this otherwise will be problem
             localStorage.removeItem("ehrId");
         }
+        setUserType(userType);
         coreContext.fetchBloodGlucose(patientId,userType);
     }
 
@@ -87,13 +89,72 @@ const BloodGlucose = props => {
           
       ];
 
+    const patientcolumns = [
+      { 
+        field: 'UserName', 
+        headerName: 'Patient Name', 
+        width: 200 ,  
+        type: 'string',
+        renderCell: (params) => (
+          <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+        )
+      },
+      {
+        field: 'reading',
+        headerName: 'Reading',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
+        field: 'meal',
+        headerName: 'Before/After Meal',
+        width: 110,
+        editable: false,
+        width: 200
+      },
+      {
+          field: 'timeSlots',
+          headerName: 'Recorded TimeSlot',
+          width: 110,
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'date_recorded',
+          headerName: 'Date Recorded',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'reading_id',
+          headerName: 'Reading Id',
+          type: 'number',
+          width: 200,
+          editable: false,
+        },
+        {
+          field: 'battery',
+          headerName: 'Battery',
+          type: 'number',
+          width: 200,
+          editable: false,
+        },
+        
+        
+    ];
+
     const renderBloodGlucose = () => {
+      let dgcolumns = columns;
+      if(userType === 'patient'){
+         dgcolumns = patientcolumns;
+      }
         if (coreContext.bloodglucoseData.length > 0) {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid
                     rows={coreContext.bloodglucoseData}
-                    columns={columns}
+                    columns={dgcolumns}
                     pageSize={10}
                   />
                 </div>

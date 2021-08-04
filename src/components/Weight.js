@@ -12,6 +12,7 @@ const Weight = (props) => {
 
     useEffect(coreContext.checkLocalAuth, []);
     const [patientId, setPatientId] = useState('');
+    const [userType, setUserType] = useState('');
 
     const fetchWeight = () => {
         let userType = localStorage.getItem("userType");
@@ -28,7 +29,7 @@ const Weight = (props) => {
             // clear this otherwise will be problem
             localStorage.removeItem("ehrId");
         }
-      
+        setUserType(userType);
       coreContext.fetchWSData(patientId,userType);
      
     }
@@ -79,17 +80,64 @@ const Weight = (props) => {
             width: 200
           },
       ];
+
+      const patientcolumns = [
+        { field: 
+          'UserName', 
+          headerName: 'Patient Name', 
+          width: 200 ,  
+          type: 'string'
+        },
+        {
+          field: 'weight',
+          headerName: 'Weight',
+          type: 'number',
+          editable: false,
+          width: 200
+        },
+        {
+            field: 'MeasurementDateTime',
+            headerName: 'Date-Time',
+            width: 110,
+            editable: false,
+            width: 500
+          },
+          {
+            field: 'MeasurementDateTime',
+            headerName: 'Date Recorded',
+            editable: false,
+            width: 200
+          },
+          {
+            field: 'CreatedDate',
+            headerName: 'Date Received',
+            width: 200,
+            editable: false
+           
+          },
+          {
+            field: 'DeviceId',
+            headerName: 'Device Id',
+            editable: false,
+            width: 200
+          },
+      ];
       
       //https://material-ui.com/components/data-grid/
 
     const renderWeight = () => {
+      let dgcolumns = columns;
+      if(userType === 'patient'){
+         dgcolumns = patientcolumns;
+      }
+      
         if (coreContext.weightData.length > 0){
-          coreContext.weightData  = coreContext.weightData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+        //  coreContext.weightData  = coreContext.weightData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
         return (
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
                 rows={coreContext.weightData}
-                columns={columns}
+                columns={dgcolumns}
                 pageSize={10}
               />
             </div>

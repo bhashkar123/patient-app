@@ -144,7 +144,7 @@ const BloodPressure = props => {
               />
             </div>
           );
-    }
+     }
         
     }
 
