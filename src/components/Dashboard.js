@@ -27,14 +27,14 @@ const Dashboard = props => {
                 <h4>A Pattern Medical Clinic Dashboard</h4>
 
             </div>
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
                 <DatePicker
                     selected={date}
                     onChange={(date) => setDate(date)}
                     placeholderText='Enter a date'
                     dateFormat='dd/MM/yyyy'
                 />
-            </div>
+            </div> */}
             <div className="col-md-3">
                 <input type="checkbox" />  Show Only My Patients
             </div>

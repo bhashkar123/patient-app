@@ -186,6 +186,18 @@ const TopMenu = () => {
             </NavDropdown>
     }
 
+    const renderpatientSearch = () => {
+        const userType = localStorage.getItem("userType");
+        if (userType !== 'patient') return  <Form inline>
+
+        <FormControl 
+            placeholder="Search patients..."
+            aria-label="Search patients..."
+            aria-describedby="basic-addon1"
+        />
+
+    </Form>
+    }
     const renderPatients = () => {
         
         if (coreContext.patients.length > 0) {
@@ -215,25 +227,8 @@ const TopMenu = () => {
                    {renderClinicalDataMenu() } 
                    {renderVitalMenu() } 
 
-                    {/* <Nav.Link href="sign-up">Sign Up</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-            <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-            </NavDropdown> */}
                 </Nav>
-                <Form inline>
-
-                    <FormControl
-                        placeholder="Search patients..."
-                        aria-label="Search patients..."
-                        aria-describedby="basic-addon1"
-                    />
-
-                </Form>
+                {renderpatientSearch()}
                
                 <Nav className="ml-auto">
                 <NavDropdown className='rightDropdown' title={localStorage.getItem("userName") ? localStorage.getItem("userName") : 'Guest'} id="collasible-nav-dropdown">
