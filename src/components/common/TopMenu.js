@@ -51,7 +51,7 @@ const TopMenu = () => {
     const [pos, setPos] = useState('');
     const [raf, setRaf] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
-
+    const [name, setName] = useState('');
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([coreContext.patients]);
 
@@ -157,6 +157,13 @@ const TopMenu = () => {
         handleShow();
     }
 
+    const search = (target) => {
+        alert('Enter clicked!!!' + target);  
+        if(target!=""){
+            // Call api and redirect to summary page
+            //coreContext.fetchPateintListfromApi('patient', '');
+        }
+      }
 
     const renderPatientMenu = () => {
         const userType = localStorage.getItem("userType");
@@ -189,12 +196,27 @@ const TopMenu = () => {
     const renderpatientSearch = () => {
         const userType = localStorage.getItem("userType");
         if (userType !== 'patient') return  <Form inline>
-
-        <FormControl 
+             <input
+                className="col-12 form-control"
+                name="name"
+                onKeyPress={e => {
+                    if (e.key === "Enter") {
+                    search(e.target.value)
+                    }
+                }} 
+                type="text"
+               
+                placeholder="Search patients..."
+              />
+        {/* <FormControl 
             placeholder="Search patients..."
             aria-label="Search patients..."
-            aria-describedby="basic-addon1"
-        />
+            aria-describedby="basic-addon1" onKeyPress={event => {
+                if (event.key === "Enter") {
+                  search(event);
+                }}}
+          
+        /> */}
 
     </Form>
     }
@@ -239,12 +261,7 @@ const TopMenu = () => {
                     </NavDropdown>
                     <Nav.Link href="#" onClick={handleShow}><PersonPlusFill /></Nav.Link>
                 </Nav>
-                {/* <Nav className="mr-auto">
-                    <Button onClick={handleShow} variant="secondary"></Button>
-                 <Button className="ml-4" onClick={handleMessageModalShow} variant="secondary">Send SMS</Button>
-                    <Nav.Link className="ml-4" href="patients">Patients' List</Nav.Link> 
-
-                </Nav> */}
+               
             </Navbar.Collapse>
         </Navbar >
 
