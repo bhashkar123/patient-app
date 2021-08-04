@@ -14,51 +14,36 @@ const Weight = (props) => {
     const [patientId, setPatientId] = useState('');
 
     const fetchWeight = () => {
-      const patient = JSON.parse(localStorage.getItem('app_patient'));
-      let patientId =  localStorage.getItem("userId");
-      
-      let test = props.patients;
-      let userType = localStorage.getItem("userType");
-      let userName = localStorage.getItem("userName");
-      if(patient != undefined){
-        if(patient.ehrId !== undefined)
+        let userType = localStorage.getItem("userType");
+        let patientId = localStorage.getItem("userId");
+        // check page if left side menu.
+        if(window.location.href.substring('weight')> 0)
         {
-          patientId =patient.ehrId;
-          userType = 'patient';
-          userName = patient.name;
+
         }
-        
-      }
+        if(window.location.href.indexOf('patient-summary') >0 )
+        {
+            patientId = localStorage.getItem("ehrId");
+            userType = 'patient';
+            // clear this otherwise will be problem
+            localStorage.removeItem("ehrId");
+        }
       
       coreContext.fetchWSData(patientId,userType);
      
     }
     useEffect(fetchWeight, [coreContext.weightData.length]);
    
-    const setPatient = (p) => {
-      console.log(p);
-      coreContext.fetchPateintListfromApi('patient',p.userId);
-      let test = props.patients;
-      coreContext.setPatient(coreContext.patients[0]);
-      localStorage.setItem('app_patient', JSON.stringify(p));
-  }
-
-
-   const mapStateToProps = (state, ownprops) =>{
-     const items = ownprops.patients;
-     return items;
-   }
 
     const columns = [
         { field: 
-          'username', 
+          'UserName', 
           headerName: 'Patient Name', 
           width: 200 ,  
           type: 'string',
           renderCell: (params) => (
-            // <Link href={`mailto:${params.value}`}>{params.value}</Link>
-            <a  onClick={() => setPatient(params.row)} href={`/patient-summary/${params.row.userId}`}> {params.value} </a>
-        )
+            <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+          )
         },
         {
           field: 'weight',

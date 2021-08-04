@@ -14,27 +14,34 @@ const BloodGlucose = props => {
     const fetchBloodGlucose = () => {
        // const patientId =  localStorage.getItem("userId");
         let userType = localStorage.getItem("userType");
-        let patient = JSON.parse(localStorage.getItem('app_patient'));
-        let patientId =  localStorage.getItem("userId");
-        let userName = localStorage.getItem("userName");
-        if(patient != undefined){
-          if(patient.ehrId !== undefined)
-          {
-            patientId =patient.ehrId;
-            userType = 'patient';
-            userName = patient.name;
-          }
-          
+        let patientId = localStorage.getItem("userId");
+        // check page if left side menu.
+        if(window.location.href.substring('bloodglucose')> 0)
+        {
+
         }
-       
-        setPatientId(patientId);
+        if(window.location.href.indexOf('patient-summary') >0 )
+        {
+            patientId = localStorage.getItem("ehrId");
+            userType = 'patient';
+            // clear this otherwise will be problem
+            localStorage.removeItem("ehrId");
+        }
         coreContext.fetchBloodGlucose(patientId,userType);
     }
 
-    useEffect(fetchBloodGlucose, []);
+    useEffect(fetchBloodGlucose,  [coreContext.bloodglucoseData.length]);
    
     const columns = [
-        { field: 'username', headerName: 'Patient Name', width: 200 ,  type: 'string'},
+        { 
+          field: 'UserName', 
+          headerName: 'Patient Name', 
+          width: 200 ,  
+          type: 'string',
+          renderCell: (params) => (
+            <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+          )
+        },
         {
           field: 'reading',
           headerName: 'Reading',

@@ -23,7 +23,7 @@ import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 
 
-const PatientSummary = props => {
+const PatientSummary  = props =>  {
     const coreContext = useContext(CoreContext);
     const [notes, setNotes] = useState('');
     const [date, setDate] = useState('');
@@ -58,6 +58,7 @@ const PatientSummary = props => {
     const [startDT, setstartDT] = useState('');
     const [totalLogtime, settotalLogtime] = useState(0);
 
+    const greeting = 'Welcome to React';
 
    
     const fetchPatient = () => {
@@ -362,7 +363,8 @@ const renderThreads = () => {
         if (coreContext.patients.length >0 ){
             coreContext.patient = coreContext.patients[0];
         }
-        if (coreContext.patient )
+        if (coreContext.patient ){
+            localStorage.setItem('ehrId',coreContext.patient.ehrId );
             return <div className="row" style={{ marginLeft: '10px', backgroundColor: 'white' }}>
                 <MDBCard className="border row col-md-6" >
                     <MDBCardBody>
@@ -399,7 +401,9 @@ const renderThreads = () => {
                     </MDBCardBody>
                 </MDBCard>
             </div>
-    }
+       }    
+
+}
 
     
     const [timelogIdCounter, settimelogIdCounter] = useState(1);
@@ -453,6 +457,10 @@ const renderThreads = () => {
             console.log(index +'leave');
         }
     }
+
+    function doSomething(value) {
+        console.log("doSomething called by child with value:", value);
+      }
 
     const renderTabs = () => {
         if (coreContext.patient)
@@ -554,7 +562,8 @@ const renderThreads = () => {
                                         </TabList>
                                         <TabPanel>
                                         <div className='card'>
-                                             <BloodPressure></BloodPressure>
+                                             {/* <BloodPressure ></BloodPressure> */}
+                                             <BloodPressure doSomething={doSomething} value={1}></BloodPressure>
                                         </div>
                                            
 

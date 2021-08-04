@@ -75,21 +75,6 @@ const Patients = props => {
     useEffect(coreContext.checkLocalAuth, []);
     useEffect(fetchPatients, []);
 
-    const setPatient = (p) => {
-        console.log(p);
-        coreContext.setPatient(p);
-        localStorage.setItem('app_patient', JSON.stringify(p));
-    }
-
-    const addToActionPatients = (patientId) => {
-        if (actionPatients.includes(patientId)) {
-            const newActionPatients = actionPatients.filter(ap => ap !== patientId);
-            setActionPatients(newActionPatients);
-        } else {
-            setActionPatients([...actionPatients, patientId]);
-        }
-    }
-
 
     const showEditForm = (patient) => {
         setName(patient.name);
@@ -114,7 +99,7 @@ const Patients = props => {
                 
                 renderCell: (params) => (
                 // <Link href={`mailto:${params.value}`}>{params.value}</Link>
-                <a  onClick={() => setPatient(params.row)} href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
+                <a   href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
             )
         },
         {

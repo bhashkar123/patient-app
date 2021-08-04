@@ -499,8 +499,15 @@ export const CoreContextProvider = props => {
                 //   console.log('p' + index, bg);
                 let wtdata = {};
                 wtdata.id = index;
-                wtdata.gSI1PK = wt.GSI1PK.s;
-                wtdata.username = wt.UserName.s;
+                if (wt.GSI1PK !== undefined) {
+                    wtdata.gSI1PK = wt.GSI1PK.s;
+                    wtdata.userId = wt.GSI1PK.s.split("_").pop(); 
+                }
+                if (wt.UserName !== undefined) {
+                    wtdata.UserName = wt.UserName.s;
+                }
+
+
                 if (wt.DeviceId !== undefined) {
                     wtdata.DeviceId = wt.DeviceId.n;
                 }
@@ -1501,8 +1508,13 @@ export const CoreContextProvider = props => {
                 //   console.log('p' + index, bg);
                 let bpdata = {};
                 bpdata.id = index;
-                bpdata.gSI1PK = bp.GSI1PK.s;
-                bpdata.username = bp.UserName.s;
+                if (bp.GSI1PK !== undefined) {
+                    bpdata.gSI1PK = bp.GSI1PK.s;
+                    bpdata.userId = bp.GSI1PK.s.split("_").pop(); 
+                }
+                if (bp.UserName !== undefined) {
+                    bpdata.UserName = bp.UserName.s;
+                }
                 if (bp.reading !== undefined) {
                     bpdata.reading = bp.reading.n;
                 }
@@ -1565,19 +1577,70 @@ export const CoreContextProvider = props => {
         }
 
         let data = "";
+
+        if (usertype === "patient") {
             data = {
                 "TableName": "UserDetail",
-                        "IndexName": "Patient-Doctor-Device-Index",
-                        "KeyConditionExpression": "GSI1PK = :v_PK",
-                        "FilterExpression":"ActiveStatus <> :v_ActiveStatus AND ActionTaken = :v_ActionTaken",
-                        "ExpressionAttributeValues": {
-                            ":v_PK": {"S": "DEVICE_BG_"+userid },
-                            ":v_ActiveStatus": {"S": "Deactive" },
-                            ":v_ActionTaken": {"S": "E-Mail and SMS Sent." }
+                "IndexName": "Patient-Doctor-Device-Index",
+                "FilterExpression":"ActiveStatus <> :v_ActiveStatus",
+                "KeyConditionExpression": "GSI1PK = :v_PK",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "DEVICE_BG_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
                 }
             }
-       
+        }
 
+        if (usertype === "doctor") {
+            data = {
+                "TableName": "UserDetail",
+                        "KeyConditionExpression": "PK = :v_PK",
+                        "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+                        "ExpressionAttributeValues": {
+                            ":v_PK": {"S": "DEVICE_BG_READING" },
+                            ":v_GSI1SK": {"S": "DEVICE_BG_" + userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+        if (usertype === "coach") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression": "CoachId = :v_CoachId AND ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": {"S": "DEVICE_BG_READING" },
+                    ":v_CoachId": {"S":+ userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+        if (usertype === "carecoordinator") {
+            data = {
+                "TableName": "UserDetail",
+                        "KeyConditionExpression": "PK = :v_PK",
+                        "FilterExpression": "CarecoordinatorId = :v_CarecoordinatorId AND ActiveStatus <> :v_ActiveStatus",
+                        "ExpressionAttributeValues": {
+                            ":v_PK": {"S": "DEVICE_BG_READING" },
+                            ":v_CarecoordinatorId": {"S":+ userid },
+                    ":v_ActiveStatus": { "S": "Deactive" }
+                }
+            }
+        }
+
+
+        if (usertype === "admin") {
+            data = {
+                "TableName": "UserDetail",
+                "KeyConditionExpression": "PK = :v_PK",
+                "FilterExpression":"ActiveStatus <> :v_ActiveStatus",
+                "ExpressionAttributeValues": {
+                    ":v_PK": {"S": "DEVICE_BG_READING" },
+                    ":v_ActiveStatus": {"S": "Deactive" }
+                }
+            }
+        }
+       
         axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -1594,8 +1657,13 @@ export const CoreContextProvider = props => {
                 //   console.log('p' + index, bg);
                 let bgdata = {};
                 bgdata.id = index;
-                bgdata.gSI1PK = bg.GSI1PK.s;
-                bgdata.username = bg.UserName.s;
+                if (bg.GSI1PK !== undefined) {
+                    bgdata.gSI1PK = bg.GSI1PK.s;
+                    bgdata.userId = bg.GSI1PK.s.split("_").pop(); 
+                }
+                if (bg.UserName !== undefined) {
+                    bgdata.UserName = bg.UserName.s;
+                }
                 if (bg.reading !== undefined) {
                     bgdata.reading = bg.reading.n;
                 }
