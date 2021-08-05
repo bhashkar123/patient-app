@@ -143,8 +143,22 @@ const Patients = props => {
             width: 150
           },
           {
+            field: 'bg_reading',
+            headerName: 'Glucose',
+            editable: false,
+            type: "number",
+            width: 150
+          },
+          {
             field: 'Weight',
             headerName: 'Weight',
+            type: "number",
+            width: 150,
+            editable: false,
+          },
+          {
+            field: 'Diastolic',
+            headerName: 'Diastolic',
             type: "number",
             width: 150,
             editable: false,

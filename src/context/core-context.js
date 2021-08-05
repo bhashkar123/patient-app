@@ -300,6 +300,10 @@ export const CoreContextProvider = props => {
                 if (p.Height !== undefined) {
                     patient.height = p.Height.s;
                 }
+                patient.pid = window.btoa(p.SK.s);
+                if (p.reading !== undefined) {
+                    patient.bg_reading = p.reading.s;
+                }
 
                 if (p.weight !== undefined) {
                     let num = p.weight.s;
