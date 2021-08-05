@@ -161,7 +161,8 @@ const TopMenu = () => {
         alert('Enter clicked!!!' + target);  
         if(target!=""){
             // Call api and redirect to summary page
-            //coreContext.fetchPateintListfromApi('patient', '');
+            coreContext.fetchPatientListfromApi('patient', '',target);
+            //href={`/patient-summary/${btoa(params.row.userId)}`
         }
       }
 

@@ -50,7 +50,7 @@ const Patients = props => {
         coreContext.userDetails(email);
         const userType = localStorage.getItem("userType");
         const userId = localStorage.getItem("userId");
-        coreContext.fetchPateintListfromApi(userType, userId);
+        coreContext.fetchPatientListfromApi(userType, userId);
     }
 
     
@@ -97,7 +97,6 @@ const Patients = props => {
                 field: "name", 
                 headerName: "Patient Name",
                 width: 250,
-                
                 renderCell: (params) => (
                 <a   href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
             )

@@ -209,7 +209,7 @@ export const CoreContextProvider = props => {
     }
 
     // capture from patient List page.
-    const fetchPateintListfromApi = (usertype, userId) => {
+    const fetchPatientListfromApi = (usertype, userId, userName) => {
         const token = localStorage.getItem('app_jwt');
        
         let data = "";
@@ -251,6 +251,14 @@ export const CoreContextProvider = props => {
                 "ExpressionAttributeValues": { ":v_PK": { "S": "patient" }, ":v_CoachId": { "S": userId }, ":v_status": { "S": "Active" } }
             };
         }
+        if (usertype === "patient" && userName !==undefined) {
+            data = {
+                "TableName":"UserDetail",
+                "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
+                "FilterExpression":"ActiveStatus = :v_status",
+                "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
+            }
+        }
         if (usertype === "patient") {
             data = {
                 "TableName":"UserDetail",
@@ -259,6 +267,8 @@ export const CoreContextProvider = props => {
                 "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"+userId},":v_status":{"S":"Active"}}
             }
         }
+       
+    
         axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -365,6 +375,9 @@ export const CoreContextProvider = props => {
             relogin();
         })
     }
+
+
+    
 
     const renderLoader = () => {
         if (showLoader) return (<span><img src={loader} alt="" /></span>);
@@ -2165,7 +2178,7 @@ export const CoreContextProvider = props => {
         weightApiData,
         fetchDeviceData,
         login,
-        fetchPateintListfromApi,
+        fetchPatientListfromApi,
         inbox,
         fetchMessages,
         outbox,
