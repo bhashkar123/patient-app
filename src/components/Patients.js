@@ -142,8 +142,15 @@ const Patients = props => {
             editable: false,
           },
           {
-            field: 'Diastolic',
+            field: 'diastolic',
             headerName: 'Diastolic',
+            type: "number",
+            width: 150,
+            editable: false,
+          },
+          {
+            field: 'systolic',
+            headerName: 'Systolic',
             type: "number",
             width: 150,
             editable: false,

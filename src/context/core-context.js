@@ -308,9 +308,21 @@ export const CoreContextProvider = props => {
                     patient.height = p.Height.s;
                 }
                 patient.pid = window.btoa(p.SK.s);
+                
                 if (p.reading !== undefined) {
                     patient.bg_reading = p.reading.s;
                 }
+                if (p.diastolic !== undefined) {
+                    let num = p.diastolic.s;
+                    if (num === '') num = 0;
+                    patient.diastolic = parseFloat(num).toFixed(2);
+                }
+                if (p.systolic !== undefined) {
+                    let num = p.systolic.s;
+                    if (num === '') num = 0;
+                    patient.systolic = parseFloat(num).toFixed(2);
+                }
+               
 
                 if (p.weight !== undefined) {
                     let num = p.weight.s;
