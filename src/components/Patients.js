@@ -13,8 +13,8 @@ import {
     GridCellValue
   } from "@material-ui/data-grid";
 
-import Link from "@material-ui/core/Link";
-
+import { makeStyles } from '@material-ui/styles';
+import { createMuiTheme, darken, lighten } from '@material-ui/core/styles';
 
 
 const Patients = props => {
@@ -38,7 +38,7 @@ const Patients = props => {
 
     const handleModalClose = () => setShowModal(false);
     const handleModalShow = () => setShowModal(true);
-
+    const defaultTheme = createMuiTheme();
 
     const editPatient = () => {
 
@@ -53,6 +53,7 @@ const Patients = props => {
         coreContext.fetchPateintListfromApi(userType, userId);
     }
 
+    
 
     const fetchProviders = () => {
         coreContext.fetchProviders();
@@ -146,17 +147,27 @@ const Patients = props => {
             headerName: "Action",
             width: 140,
             renderCell: (params) => (
-                <div style={{  width: '40px', marginLeft:'70px' }}>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+                <div style={{  width: '40px', marginLeft:'70px' }}  >  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
                 <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
                 </div>
             
         )
     }, ];
 
+    const useStyles = makeStyles((theme) => (
+        {
+            colCell: {
+            color: "Red"
+        }
+      }));
+      
+    const classes = useStyles();
+    
     const renderPatients = () => {
         if (coreContext.patients.length > 0) {
             return (
                 <div style={{ height: 680, width: '100%' }}>
+                  {/* <DataGrid className={classes.colCell} */}
                   <DataGrid
                     rows={coreContext.patients}
                     columns={columns}
@@ -167,7 +178,8 @@ const Patients = props => {
               );
         }
     }
-
+   
+    
     return <React.Fragment> <Table striped bordered hover responsive size='sm'>
         <caption>Patients' List  </caption>
         {renderPatients()}
@@ -210,3 +222,4 @@ const Patients = props => {
 }
 
 export { Patients }
+

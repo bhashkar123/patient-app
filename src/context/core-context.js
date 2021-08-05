@@ -316,8 +316,27 @@ export const CoreContextProvider = props => {
                 if (p.BMI !== undefined) {
                     let num1 = p.BMI.s;
                     if (num1 === '') num1 = 0;
-                    patient.BMI = parseFloat(num1).toFixed(2);
+                    if(parseFloat(num1) >0){
+                        if(parseFloat(num1).toFixed(2) < 18.5 )
+                        {
+                            patient.BMI = "Underweight" +" ("+parseFloat(num1).toFixed(2) +")";
+                        }
+                        if(parseFloat(num1).toFixed(2) >18.5 && parseFloat(num1).toFixed(2) < 24.9 )
+                        {
+                            patient.BMI = "Normal" +" ("+ parseFloat(num1).toFixed(2) +")";
+                        }
+                        if(parseFloat(num1).toFixed(2) >25 && parseFloat(num1).toFixed(2) < 29.9 )
+                        {
+                            patient.BMI = "Overweight" +" ("+ parseFloat(num1).toFixed(2) + ")";
+                        }
+                        if(parseFloat(num1).toFixed(2) >30)
+                        {
+                            patient.BMI = "Obese" +" (" + parseFloat(num1).toFixed(2) + ")";
+                        }
+                 }
+               
                 }
+                
 
                 // if (patient.userId !== undefined && patient.name) {
                 //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
