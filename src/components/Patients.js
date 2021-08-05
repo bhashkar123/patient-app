@@ -99,7 +99,6 @@ const Patients = props => {
                 width: 250,
                 
                 renderCell: (params) => (
-                // <Link href={`mailto:${params.value}`}>{params.value}</Link>
                 <a   href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
             )
         },
@@ -138,8 +137,7 @@ const Patients = props => {
           {
             field: 'BMI',
             headerName: 'BMI',
-            type: "number",
-            width:150,
+            width:250,
             editable: false,
           },
           { 
@@ -154,21 +152,20 @@ const Patients = props => {
         )
     }, ];
 
-    const useStyles = makeStyles((theme) => (
-        {
-            colCell: {
-            color: "Red"
-        }
-      }));
+    // const useStyles = makeStyles((theme) => (
+    //     {
+    //         colCell: {
+    //         color: "Red"
+    //     }
+    //   }));
       
-    const classes = useStyles();
+    // const classes = useStyles();
     
     const renderPatients = () => {
         if (coreContext.patients.length > 0) {
             return (
                 <div style={{ height: 680, width: '100%' }}>
-                  {/* <DataGrid className={classes.colCell} */}
-                  <DataGrid
+                  <DataGrid 
                     rows={coreContext.patients}
                     columns={columns}
                     pageSize={10}
