@@ -209,7 +209,7 @@ export const CoreContextProvider = props => {
     }
 
     // capture from patient List page.
-    const fetchPatientListfromApi = (usertype, userId, userName) => {
+    const fetchPatientListfromApi  = async (usertype, userId) => {
         const token = localStorage.getItem('app_jwt');
        
         let data = "";
@@ -251,14 +251,14 @@ export const CoreContextProvider = props => {
                 "ExpressionAttributeValues": { ":v_PK": { "S": "patient" }, ":v_CoachId": { "S": userId }, ":v_status": { "S": "Active" } }
             };
         }
-        if (usertype === "patient" && userName !==undefined) {
-            data = {
-                "TableName":"UserDetail",
-                "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
-                "FilterExpression":"ActiveStatus = :v_status",
-                "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
-            }
-        }
+        // if (usertype === "patient" && userName !==undefined) {
+        //     data = {
+        //         "TableName":"UserDetail",
+        //         "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
+        //         "FilterExpression":"ActiveStatus = :v_status",
+        //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
+        //     }
+        // }
         if (usertype === "patient") {
             data = {
                 "TableName":"UserDetail",
@@ -269,7 +269,7 @@ export const CoreContextProvider = props => {
         }
        
     
-        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
+       await axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",

@@ -7,7 +7,7 @@ import { Envelope, ChatLeftText, BoxArrowLeft,FileMedicalFill,FileMedical, Penci
 import Autosuggest from 'react-autosuggest';
 import { CoreContext } from '../../context/core-context';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-
+import { Router } from 'react-router';
 
 const TopMenu = () => {
 
@@ -157,12 +157,23 @@ const TopMenu = () => {
         handleShow();
     }
 
-    const search = (target) => {
-        alert('Enter clicked!!!' + target);  
-        if(target!=""){
+    const search = (userName) => {
+        if(userName!=""){
             // Call api and redirect to summary page
-            coreContext.fetchPatientListfromApi('patient', '',target);
-            //href={`/patient-summary/${btoa(params.row.userId)}`
+          let patient = coreContext.patients.filter(x => String(x.name).includes(userName));
+          if(patient.length ==0)
+          { 
+              alert('no record found');
+          }else
+          {
+            let userId = patient[0].userId;
+            //href = `/patient-summary/${btoa(userId)}`;
+            // <Redirect to="/somewhere/else"/>
+            let url ='';
+            this.context.router.push('/patient-summary');
+           // this.context.router.push(`/patient-summary');
+          }
+            
         }
       }
 
