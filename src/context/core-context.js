@@ -555,7 +555,9 @@ export const CoreContextProvider = props => {
                     wtdata.UserName = wt.UserName.s;
                 }
 
-
+                if(wt.SK !==undefined){
+                    wtdata.readingId = wt.SK.s.split("_").pop(); 
+                }
                 if (wt.DeviceId !== undefined) {
                     wtdata.DeviceId = wt.DeviceId.n;
                 }
@@ -2090,6 +2092,7 @@ export const CoreContextProvider = props => {
                 if(wt.timeSlots !==undefined){
                  wtdata.timeSlots = wt.TimeSlots.s;
                 }
+               
 
                 if(wt.MeasurementDateTime !==undefined){
                     wtdata.measurementDateTime = wt.MeasurementDateTime.s;

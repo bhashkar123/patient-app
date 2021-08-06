@@ -79,6 +79,13 @@ const Weight = (props) => {
             editable: false,
             width: 200
           },
+          {
+            field: 'readingId',
+            headerName: 'Reading Id',
+            type: 'number',
+            editable: false,
+            width: 200
+          },
       ];
 
       const patientcolumns = [
@@ -118,6 +125,13 @@ const Weight = (props) => {
           {
             field: 'DeviceId',
             headerName: 'Device Id',
+            editable: false,
+            width: 200
+          },
+          {
+            field: 'readingId',
+            headerName: 'Reading Id',
+            type: 'number',
             editable: false,
             width: 200
           },
