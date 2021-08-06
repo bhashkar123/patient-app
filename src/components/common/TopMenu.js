@@ -157,11 +157,15 @@ const TopMenu = () => {
         handleShow();
     }
 
-    const search = (target) => {
-        alert('Enter clicked!!!' + target);  
-        if(target!=""){
+    const search = (userName) => {
+        //alert('Enter clicked!!!' + userName);  
+        if(userName!=""){
             // Call api and redirect to summary page
             //coreContext.fetchPateintListfromApi('patient', '');
+            let patient = coreContext.patients.filter(app =>
+                app.name.toLowerCase().includes(userName))[0];
+            const url = '/patient-summary/' + btoa(patient.userId);
+            window.location.assign(url);
         }
       }
 

@@ -1177,6 +1177,7 @@ export const CoreContextProvider = props => {
                     }
                 });
             } else {
+                if(response.data=="User already exists") response.data ="Email already exists";
                 alert(response.data);
             }
         });
