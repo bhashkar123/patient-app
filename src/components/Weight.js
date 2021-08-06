@@ -56,16 +56,10 @@ const Weight = (props) => {
         },
         {
             field: 'MeasurementDateTime',
-            headerName: 'Date-Time',
+            headerName: 'Date Recorded',
             width: 110,
             editable: false,
             width: 500
-          },
-          {
-            field: 'MeasurementDateTime',
-            headerName: 'Date Recorded',
-            editable: false,
-            width: 200
           },
           {
             field: 'CreatedDate',
@@ -98,7 +92,7 @@ const Weight = (props) => {
                 <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
                 </div>
             
-        )
+             )
             }         
 
       ];
@@ -125,17 +119,12 @@ const Weight = (props) => {
         },
         {
             field: 'MeasurementDateTime',
-            headerName: 'Date-Time',
+            headerName: 'Date Recorded',
             width: 110,
             editable: false,
             width: 500
           },
-          {
-            field: 'MeasurementDateTime',
-            headerName: 'Date Recorded',
-            editable: false,
-            width: 200
-          },
+          
           {
             field: 'CreatedDate',
             headerName: 'Date Received',
