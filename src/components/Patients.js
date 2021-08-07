@@ -110,7 +110,7 @@ const Patients = props => {
         {
           field: 'CareName',
           headerName: 'Care',
-          width: 110,
+          width: 150,
           editable: false,
         },
         {
@@ -157,7 +157,7 @@ const Patients = props => {
           {
             field: 'BMI',
             headerName: 'BMI',
-            width:250,
+            width:200,
             editable: false,
           },
           { 
