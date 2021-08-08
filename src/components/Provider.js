@@ -70,7 +70,7 @@ const Provider = props => {
         field: 'email',
         headerName: 'Email',
         editable: false,
-        width: 200
+        width: 300
         },
           {
             field: 'phone',

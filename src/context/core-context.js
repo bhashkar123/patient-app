@@ -209,7 +209,7 @@ export const CoreContextProvider = props => {
     }
 
     // capture from patient List page.
-    const fetchPateintListfromApi = (usertype, userId) => {
+    const fetchPatientListfromApi  = async (usertype, userId) => {
         const token = localStorage.getItem('app_jwt');
        
         let data = "";
@@ -251,6 +251,14 @@ export const CoreContextProvider = props => {
                 "ExpressionAttributeValues": { ":v_PK": { "S": "patient" }, ":v_CoachId": { "S": userId }, ":v_status": { "S": "Active" } }
             };
         }
+        // if (usertype === "patient" && userName !==undefined) {
+        //     data = {
+        //         "TableName":"UserDetail",
+        //         "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
+        //         "FilterExpression":"ActiveStatus = :v_status",
+        //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
+        //     }
+        // }
         if (usertype === "patient") {
             data = {
                 "TableName":"UserDetail",
@@ -259,7 +267,9 @@ export const CoreContextProvider = props => {
                 "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"+userId},":v_status":{"S":"Active"}}
             }
         }
-        axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
+       
+    
+       await axios.post('https://rpmcrudapis20210725100004.azurewebsites.net/api/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -365,6 +375,9 @@ export const CoreContextProvider = props => {
             relogin();
         })
     }
+
+
+    
 
     const renderLoader = () => {
         if (showLoader) return (<span><img src={loader} alt="" /></span>);
@@ -542,7 +555,9 @@ export const CoreContextProvider = props => {
                     wtdata.UserName = wt.UserName.s;
                 }
 
-
+                if(wt.SK !==undefined){
+                    wtdata.readingId = wt.SK.s.split("_").pop(); 
+                }
                 if (wt.DeviceId !== undefined) {
                     wtdata.DeviceId = wt.DeviceId.n;
                 }
@@ -1657,9 +1672,14 @@ export const CoreContextProvider = props => {
                
                // bpdata.date_recorded = bp.date_recorded.s;
 
-                if (bp.reading_id !== undefined) {
-                    bpdata.reading_id = bp.reading_id.n;
-                }
+              
+               if(bp.SK !==undefined){
+                bpdata.deviceId = bp.SK.s.split("_").pop(); 
+               }  
+ 
+               if(bp.SK !==undefined){
+                bpdata.readingId = bp.SK.s.split("_").pop(); 
+               }  
                 bpdata.actionTaken = bp.ActionTaken.s;
               
                 dataSetbp.push(bpdata);
@@ -2078,6 +2098,7 @@ export const CoreContextProvider = props => {
                 if(wt.timeSlots !==undefined){
                  wtdata.timeSlots = wt.TimeSlots.s;
                 }
+               
 
                 if(wt.MeasurementDateTime !==undefined){
                     wtdata.measurementDateTime = wt.MeasurementDateTime.s;
@@ -2166,7 +2187,7 @@ export const CoreContextProvider = props => {
         weightApiData,
         fetchDeviceData,
         login,
-        fetchPateintListfromApi,
+        fetchPatientListfromApi,
         inbox,
         fetchMessages,
         outbox,
