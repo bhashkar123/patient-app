@@ -559,7 +559,7 @@ export const CoreContextProvider = props => {
                     wtdata.readingId = wt.SK.s.split("_").pop(); 
                 }
                 if (wt.DeviceId !== undefined) {
-                    wtdata.DeviceId = wt.DeviceId.n;
+                    wtdata.DeviceId = wt.DeviceId.s;
                 }
                 if (wt.weight !== undefined) {
                     wtdata.weight = parseFloat(wt.weight.n).toFixed(2); 
@@ -1636,9 +1636,7 @@ export const CoreContextProvider = props => {
                 if (bp.UserName !== undefined) {
                     bpdata.UserName = bp.UserName.s;
                 }
-                if (bp.reading !== undefined) {
-                    bpdata.reading = bp.reading.n;
-                }
+                
                 if (bp.irregular !== undefined) {
                     bpdata.irregular = bp.irregular.n;
                 }
@@ -1674,7 +1672,7 @@ export const CoreContextProvider = props => {
 
               
                if(bp.SK !==undefined){
-                bpdata.deviceId = bp.SK.s.split("_").pop(); 
+                bpdata.deviceId = bp.DeviceId.s;
                }  
  
                if(bp.SK !==undefined){
