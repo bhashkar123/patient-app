@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
+import { PencilSquare, Trash } from 'react-bootstrap-icons';
 const Moment = require('moment');
 
 const BloodPressure = props => {
@@ -80,7 +81,37 @@ const BloodPressure = props => {
           editable: false
          
         },
+        {
+          field: 'deviceId',
+          headerName: 'Device Id',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'readingId',
+          headerName: 'Reading Id',
+          width: 200,
+          editable: false
+         
+        },
+        { 
+          field: "", 
+          headerName: "Action",
+          width: 300,
+          
+          renderCell: (params) => (
+              <div>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+              <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
+              </div>
+          
+      )
+          }         
     ];
+
+    const showEditForm = (patient) => {
+    }
+    const deletePatient = (patient) => {
+    }
 
     const patientcolumns = [
       { 

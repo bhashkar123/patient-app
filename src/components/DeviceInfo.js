@@ -25,7 +25,7 @@ const Deviceinfo = props => {
       if(patientId !==undefined){
         if(userType =="admin")
         {
-          coreContext.fetchPateintListfromApi('admin',null);
+          coreContext.fetchPatientListfromApi('admin',null);
           if(coreContext.patients.length >0)
           {
             coreContext.fetchDeviceData(patientId,userName,userType, '' , coreContext.patients);

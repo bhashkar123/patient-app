@@ -71,11 +71,14 @@ const PatientSummary  = props =>  {
         //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
         //setPatient(patientData);
-        coreContext.fetchPateintListfromApi('patient', patientId);
+        coreContext.fetchPatientListfromApi('patient', patientId);
         
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 
         coreContext.fetchTimeLog("PATIENT_" + patientId);
+
+
+        coreContext.fetchDeviceData("PATIENT_" + patientId);
         /// setting default value
         if (coreContext.thresoldData.length === 0) {
             let thdata = {};
@@ -296,7 +299,7 @@ const PatientSummary  = props =>  {
         if (coreContext.deviceData.length > 0) {
             return coreContext.deviceData.map((deviceData, index) => {
                 return <tr>
-                    <td>{deviceData.deviceName} </td>
+                    <td>{deviceData.DeviceType} </td>
                     <td>{deviceData.deviceID} </td>
                 </tr>
             });
