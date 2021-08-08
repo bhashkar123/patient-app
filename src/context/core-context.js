@@ -1672,9 +1672,14 @@ export const CoreContextProvider = props => {
                
                // bpdata.date_recorded = bp.date_recorded.s;
 
-                if (bp.reading_id !== undefined) {
-                    bpdata.reading_id = bp.reading_id.n;
-                }
+              
+               if(bp.SK !==undefined){
+                bpdata.deviceId = bp.SK.s.split("_").pop(); 
+               }  
+ 
+               if(bp.SK !==undefined){
+                bpdata.readingId = bp.SK.s.split("_").pop(); 
+               }  
                 bpdata.actionTaken = bp.ActionTaken.s;
               
                 dataSetbp.push(bpdata);

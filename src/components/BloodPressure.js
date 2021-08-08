@@ -81,6 +81,19 @@ const BloodPressure = props => {
           editable: false
          
         },
+        {
+          field: 'deviceId',
+          headerName: 'Device Id',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'readingId',
+          headerName: 'Reading Id',
+          width: 200,
+          editable: false
+         
+        },
         { 
           field: "", 
           headerName: "Action",

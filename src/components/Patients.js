@@ -96,7 +96,7 @@ const Patients = props => {
         { 
                 field: "name", 
                 headerName: "Patient Name",
-                width: 250,
+                width: 200,
                 renderCell: (params) => (
                 <a   href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
             )
@@ -117,53 +117,53 @@ const Patients = props => {
             field: 'CoachName',
             headerName: 'Coach',
             editable: false,
-            width: 200
+            width: 150
           },
           {
             field: 'height',
             headerName: 'Height',
             editable: false,
             type: "number",
-            width: 150
+            width: 125
           },
           {
             field: 'bg_reading',
             headerName: 'Glucose',
             editable: false,
             type: "number",
-            width: 150
+            width: 130
           },
           {
             field: 'Weight',
             headerName: 'Weight',
             type: "number",
-            width: 150,
+            width: 125,
             editable: false,
           },
           {
             field: 'diastolic',
             headerName: 'Diastolic',
             type: "number",
-            width: 150,
+            width: 140,
             editable: false,
           },
           {
             field: 'systolic',
             headerName: 'Systolic',
             type: "number",
-            width: 150,
+            width: 140,
             editable: false,
           },
           {
             field: 'BMI',
             headerName: 'BMI',
-            width:200,
+            width:175,
             editable: false,
           },
           { 
             field: "", 
             headerName: "Action",
-            width: 140,
+            width: 120,
             renderCell: (params) => (
                 <div style={{  width: '40px', marginLeft:'70px' }}  >  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
                 <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
