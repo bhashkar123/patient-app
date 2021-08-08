@@ -108,7 +108,7 @@ const Weight = (props) => {
           'UserName', 
           headerName: 'Patient Name', 
           width: 200 ,  
-          type: 'string'
+          type: 'string',
         },
         {
           field: 'weight',
@@ -124,7 +124,6 @@ const Weight = (props) => {
             editable: false,
             width: 500
           },
-          
           {
             field: 'CreatedDate',
             headerName: 'Date Received',

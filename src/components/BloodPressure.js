@@ -118,8 +118,8 @@ const BloodPressure = props => {
         field: 'UserName', 
         headerName: 'Patient Name', 
         width: 200 ,  
-        type: 'string'
-       
+        type: 'string',
+        
       },
       {
         field: 'systolic',
@@ -151,6 +151,19 @@ const BloodPressure = props => {
         {
           field: 'CreatedDate',
           headerName: 'Date Received',
+          width: 200,
+          editable: false
+         
+        },
+        {
+          field: 'deviceId',
+          headerName: 'Device Id',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'readingId',
+          headerName: 'Reading Id',
           width: 200,
           editable: false
          
