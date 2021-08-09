@@ -4,10 +4,10 @@ import { Navbar, Nav, NavDropdown, Button, Modal, Form, Row, Col, FormControl } 
 import { Envelope, ChatLeftText, BoxArrowLeft,FileMedicalFill,FileMedical, PencilSquare, Gear, People, 
     PersonLinesFill,Speedometer,Speedometer2, PersonPlusFill, BoxArrowRight, Telephone, PersonFill,SuitHeartFill,ThermometerHigh,Weight } from 'react-bootstrap-icons';
     import { GiCook, GiAbstract071, GiAcid, GiWeight, GiAerialSignal, GiOrangeSlice, GiCagedBall } from 'react-icons/gi';
-import Autosuggest from 'react-autosuggest';
 import { CoreContext } from '../../context/core-context';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import { Router } from 'react-router';
+
+
 
 const TopMenu = () => {
 
@@ -54,6 +54,7 @@ const TopMenu = () => {
     const [name, setName] = useState('');
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([coreContext.patients]);
+    const [patientName, setPatientName] = useState('');
 
     const onChange = (event, { newValue }) => {
         setValue(newValue.name);
@@ -157,15 +158,20 @@ const TopMenu = () => {
         handleShow();
     }
 
-    const search = (userName) => {
+    const onSearch = () => {
         //alert('Enter clicked!!!' + userName);  
+        if(patientName=="") return;
+        let  userName = patientName.target.value;
         if(userName!=""){
-            // Call api and redirect to summary page
-            //coreContext.fetchPateintListfromApi('patient', '');
             let patient = coreContext.patients.filter(app =>
                 app.name.toLowerCase().includes(userName))[0];
-            const url = '/patient-summary/' + btoa(patient.userId);
-            window.location.assign(url);
+           const url = '/patient-summary/' + btoa(patient.userId);
+            
+            if (!window.location.href.includes('/patient-summary/')) {
+                window.location.href = url;
+            }else{
+                alert('This is already patient summary page.')
+            }
         }
       }
 
@@ -200,18 +206,24 @@ const TopMenu = () => {
     const renderpatientSearch = () => {
         const userType = localStorage.getItem("userType");
         if (userType !== 'patient') return  <Form inline>
+            <div className="row">
              <input
-                className="col-12 form-control"
                 name="name"
-                onKeyPress={e => {
-                    if (e.key === "Enter") {
-                    search(e.target.value)
-                    }
-                }} 
                 type="text"
-               
+                style={{  height: '38px', width: '200px' }}
+                onKeyPress={event => {
+                    setPatientName(event);
+                   }}
                 placeholder="Search patients..."
               />
+               <input
+                name="name"
+                type="button"
+                width="380" value="Search" style={{ marginLeft: '5px',  height: '38px', width: '200px' }}
+                onClick={onSearch}
+              />
+              </div>
+              
         {/* <FormControl 
             placeholder="Search patients..."
             aria-label="Search patients..."
