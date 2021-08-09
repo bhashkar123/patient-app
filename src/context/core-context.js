@@ -1671,7 +1671,7 @@ export const CoreContextProvider = props => {
                // bpdata.date_recorded = bp.date_recorded.s;
 
               
-               if(bp.SK !==undefined){
+               if(bp.DeviceId !==undefined){
                 bpdata.deviceId = bp.DeviceId.s;
                }  
  
