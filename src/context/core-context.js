@@ -262,7 +262,7 @@ export const CoreContextProvider = props => {
         }
         // if (usertype === "patient" && userName !==undefined) {
         //     data = {
-        //         "TableName":"UserDetail",
+        //         "TableName":userTable,
         //         "KeyConditionExpression":"PK = :v_PK AND begins_with(UserName, :v_UserName)",
         //         "FilterExpression":"ActiveStatus = :v_status",
         //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
@@ -437,7 +437,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -501,7 +501,7 @@ export const CoreContextProvider = props => {
         let data = "";
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
@@ -514,7 +514,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -528,7 +528,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -610,7 +610,7 @@ export const CoreContextProvider = props => {
        
         let data = "";
         data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "ProjectionExpression": "PK,SK,Low,High,TElements",
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "ExpressionAttributeValues": {
@@ -684,7 +684,7 @@ export const CoreContextProvider = props => {
        
         let data = "";
         data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
 	                "KeyConditionExpression": "PK = :v_PK",
                     "FilterExpression":  "GSI1PK = :v_GSI1PK",
                     "ExpressionAttributeValues": {
@@ -790,7 +790,7 @@ export const CoreContextProvider = props => {
         if(type =="BMI")  _type = "BMI";
         if(type =="WS")  _type = "Weight";
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "Key": {
                 "PK": { "S": "THRESHOLDRANGE_ADMIN" },
                 "SK": { "S": patient + "_" + type }
@@ -822,7 +822,7 @@ export const CoreContextProvider = props => {
         const userid = localStorage.getItem("userId");
         const token = localStorage.getItem('app_jwt');
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "Key": {
                 "PK": { "S": "patient" },
                 "SK": { "S": userid }
@@ -871,7 +871,7 @@ export const CoreContextProvider = props => {
         let coachname = fetchNameFromId(coach, coachOptions);
         let coach_id = coach;
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "Key": {
                 "PK": { "S": "patient" },
                 "SK": { "S": "PATIENT_" +patientId }
@@ -915,7 +915,7 @@ export const CoreContextProvider = props => {
       
         const token = localStorage.getItem('app_jwt');
        
-        const data = {"TableName":"UserDetail",
+        const data = {"TableName":userTable,
         "Key":{
             "SK": { "S":  patientId},
           "PK":{"S":"doctor"}
@@ -947,7 +947,7 @@ export const CoreContextProvider = props => {
       
         const token = localStorage.getItem('app_jwt');
        
-        const data = {"TableName":"UserDetail",
+        const data = {"TableName":userTable,
         "Key":{
             "SK": { "S":  patientId},
           "PK":{"S":"carecoordinator"}
@@ -979,7 +979,7 @@ export const CoreContextProvider = props => {
       
         const token = localStorage.getItem('app_jwt');
        
-        const data = {"TableName":"UserDetail",
+        const data = {"TableName":userTable,
         "Key":{
             "SK": { "S":  patientId},
           "PK":{"S":"coach"}
@@ -1010,7 +1010,7 @@ export const CoreContextProvider = props => {
         const token = localStorage.getItem('app_jwt');
 
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "Key": {
                 "SK": { "S": "PATIENT_" +patientId },
                 "PK": { "S": "patient" }
@@ -1038,7 +1038,7 @@ export const CoreContextProvider = props => {
         const token = localStorage.getItem('app_jwt');
 
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "Key": {
                 "SK": { "S": "PATIENT_" +patientId },
                 "PK": { "S": "doctor" }
@@ -1325,7 +1325,7 @@ export const CoreContextProvider = props => {
         const token = localStorage.getItem('app_jwt');
         
         let data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "FilterExpression": "DeviceStatus = :v_status AND GSI1PK = :v_GSI1PK",
             "ExpressionAttributeValues": {
@@ -1339,7 +1339,7 @@ export const CoreContextProvider = props => {
         {
             
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
                 "FilterExpression": "DeviceStatus = :v_status",
                 "ExpressionAttributeValues": {
@@ -1411,7 +1411,7 @@ export const CoreContextProvider = props => {
             headers: { Authorization: `Bearer ${token}` }
         };
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "ProjectionExpression": "PK,SK,UserName,Email,ContactNo",
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "FilterExpression": "ActiveStatus = :v_status",
@@ -1467,7 +1467,7 @@ export const CoreContextProvider = props => {
 
       
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "ProjectionExpression": "PK,SK,UserName,Email,ContactNo",
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "FilterExpression": "ActiveStatus = :v_status",
@@ -1520,7 +1520,7 @@ export const CoreContextProvider = props => {
         const token = localStorage.getItem('app_jwt');
 
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "ProjectionExpression": "PK,SK,UserName,Email,ContactNo",
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "FilterExpression": "ActiveStatus = :v_status",
@@ -1585,7 +1585,7 @@ export const CoreContextProvider = props => {
         let data = "";
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
@@ -1598,7 +1598,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1612,7 +1612,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1713,7 +1713,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "FilterExpression":"ActiveStatus <> :v_ActiveStatus",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
@@ -1726,7 +1726,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                         "KeyConditionExpression": "PK = :v_PK",
                         "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                         "ExpressionAttributeValues": {
@@ -1738,7 +1738,7 @@ export const CoreContextProvider = props => {
         }
         if (usertype === "coach") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "CoachId = :v_CoachId AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1750,7 +1750,7 @@ export const CoreContextProvider = props => {
         }
         if (usertype === "carecoordinator") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                         "KeyConditionExpression": "PK = :v_PK",
                         "FilterExpression": "CarecoordinatorId = :v_CarecoordinatorId AND ActiveStatus <> :v_ActiveStatus",
                         "ExpressionAttributeValues": {
@@ -1764,7 +1764,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression":"ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1886,7 +1886,7 @@ export const CoreContextProvider = props => {
         let data = "";
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
@@ -1899,7 +1899,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1912,7 +1912,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1965,7 +1965,7 @@ export const CoreContextProvider = props => {
         let data = "";
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
@@ -1978,7 +1978,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -1991,7 +1991,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -2042,7 +2042,7 @@ export const CoreContextProvider = props => {
         let data = "";
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
@@ -2055,7 +2055,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
@@ -2068,7 +2068,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {

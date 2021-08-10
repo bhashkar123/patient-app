@@ -257,8 +257,8 @@ const Patients = props => {
             </Modal.Header>
             <Modal.Body>
                 <Form autoComplete='off' onSubmit={handleSubmit(editPatient)} noValidate>
-                    <div className="row">
-                        <div className="col-md-6">
+                    <div >
+                        <div >
                             <Input label='Provider Name' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
 
                             <Input label='Care Coordinator' name='care' required={false} register={register} errors={errors} elementType='select' value={coordinator} options={coreContext.careCoordinatorOptions} onChange={e => setCoordinator(e.target.value)} />
