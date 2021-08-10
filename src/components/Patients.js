@@ -250,7 +250,8 @@ const Patients = props => {
             </Modal.Body>
         </Modal>
 
-        <Modal show={showAssignDrModal} onHide={handleAssignDrModalClose} size='lg'>
+<div style={{  width: '300px' }}>
+        <Modal show={showAssignDrModal} onHide={handleAssignDrModalClose}  >
             <Modal.Header closeButton>
                 <Modal.Title>Assign Care Team </Modal.Title>
             </Modal.Header>
@@ -274,7 +275,7 @@ const Patients = props => {
             </Modal.Body>
         </Modal>
 
-
+        </div>
     </React.Fragment>
 }
 
