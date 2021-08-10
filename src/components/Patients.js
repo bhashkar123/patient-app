@@ -3,7 +3,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { CoreContext } from '../context/core-context';
 import { Table, Pagination, Modal, Button, Form } from 'react-bootstrap';
-import { PencilSquare, Trash } from 'react-bootstrap-icons';
+import { PencilSquare, Trash, Person } from 'react-bootstrap-icons';
+import { IconName } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import Input from './common/Input';
 import {
@@ -38,6 +39,11 @@ const Patients = props => {
 
     const handleModalClose = () => setShowModal(false);
     const handleModalShow = () => setShowModal(true);
+
+    const handleAssignDrModalClose = () => setAssignDrShowModal(false);
+    const handleAssignDrModalShow = () => setAssignDrShowModal(true);
+    const [showAssignDrModal, setAssignDrShowModal] = useState(false);
+
     const defaultTheme = createMuiTheme();
 
     const editPatient = () => {
@@ -85,6 +91,13 @@ const Patients = props => {
         handleModalShow();
     }
 
+    const showAssignDoctor = (patient) => {
+      setName(patient.name);
+      setBirthDate(patient.dob);
+      setPhone(patient.mobile);
+      setPatientId(patient.userId);
+      handleAssignDrModalShow();
+  }
   
     
     const deletePatient = (patient) => {
@@ -165,8 +178,10 @@ const Patients = props => {
             headerName: "Action",
             width: 120,
             renderCell: (params) => (
-                <div style={{  width: '40px', marginLeft:'70px' }}  >  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-                <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
+                <div style={{  width: '100px' }}  >
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a>
                 </div>
             
         )
@@ -234,6 +249,31 @@ const Patients = props => {
                 </Form>
             </Modal.Body>
         </Modal>
+
+        <Modal show={showAssignDrModal} onHide={handleAssignDrModalClose} size='lg'>
+            <Modal.Header closeButton>
+                <Modal.Title>Assign Care Team </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form autoComplete='off' onSubmit={handleSubmit(editPatient)} noValidate>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <Input label='Provider Name' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
+
+                            <Input label='Care Coordinator' name='care' required={false} register={register} errors={errors} elementType='select' value={coordinator} options={coreContext.careCoordinatorOptions} onChange={e => setCoordinator(e.target.value)} />
+
+                            <Input label='Coach Name' name='coach' required={false} register={register} errors={errors} elementType='select' value={coach} options={coreContext.coachOptions} onChange={e => setCoach(e.target.value)} />
+
+                        </div>
+                    </div>
+                    <Input blockButton={true} value='Submit' onClick={() => coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId)} elementType='button' variant='primary' />
+                    <br />
+                    <center> {coreContext.renderLoader()}</center>
+                    <center> <Input variant='danger' label={message} elementType='label' /></center>
+                </Form>
+            </Modal.Body>
+        </Modal>
+
 
     </React.Fragment>
 }
