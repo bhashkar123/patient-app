@@ -184,7 +184,6 @@ const BloodPressure = props => {
                 rows={coreContext.bloodpressureData}
                 columns={dgcolumns}
                 pageSize={10}
-               
               />
             </div>
           );

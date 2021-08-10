@@ -58,6 +58,9 @@ export const CoreContextProvider = props => {
     
     const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
     //const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+
+    //const [userTable, setApiUrl] = useState('UserDetail');
+    const [userTable, setuserTable] = useState('UserDetailsDemo');
     ///Chart Data
 
     const [bgChartData, setbgChartData] = useState([]);
@@ -135,7 +138,7 @@ export const CoreContextProvider = props => {
         const token = localStorage.getItem('app_jwt');
         //let url ='';
         const data = {
-            "TableName": "UserDetail",
+            "TableName": userTable,
             "IndexName": "Email-Index",
             "KeyConditionExpression": "Email = :v_Email",
             "ExpressionAttributeValues": { ":v_Email": { "S": useremail } }
@@ -221,7 +224,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "admin") {
             data = {
-                "TableName":"UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
                 "FilterExpression":"ActiveStatus = :v_status",
                 "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"},":v_status":{"S":"Active"}}
@@ -229,7 +232,7 @@ export const CoreContextProvider = props => {
         }
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "KeyConditionExpression": "GSI1PK = :v_PK AND GSI1SK =  :v_SK",
                 "FilterExpression": "ActiveStatus = :v_status",
@@ -242,7 +245,7 @@ export const CoreContextProvider = props => {
         if (usertype === "carecoordinator") {
 
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK ",
                 "FilterExpression": "ActiveStatus = :v_status AND CarecoordinatorId = :v_CarecoordinatorId",
                 "ExpressionAttributeValues": { ":v_PK": { "S": "patient" }, ":v_CarecoordinatorId": { "S": userId }, ":v_status": { "S": "Active" } }
@@ -250,7 +253,7 @@ export const CoreContextProvider = props => {
         }
         if (usertype === "coach") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK ",
                 "FilterExpression": "ActiveStatus = :v_status AND CoachId = :v_CoachId",
                 "ExpressionAttributeValues": { ":v_PK": { "S": "patient" }, ":v_CoachId": { "S": userId }, ":v_status": { "S": "Active" } }
@@ -266,7 +269,7 @@ export const CoreContextProvider = props => {
         // }
         if (usertype === "patient") {
             data = {
-                "TableName":"UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
                 "FilterExpression":"ActiveStatus = :v_status",
                 "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"+userId},":v_status":{"S":"Active"}}
@@ -407,7 +410,7 @@ export const CoreContextProvider = props => {
         let data = "";
         if (usertype === "patient") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "IndexName": "Patient-Doctor-Device-Index",
                 "FilterExpression": "ActiveStatus <> :v_ActiveStatus",
                 "KeyConditionExpression": "GSI1PK = :v_PK",
@@ -420,7 +423,7 @@ export const CoreContextProvider = props => {
 
         if (usertype === "doctor") {
             data = {
-                "TableName": "UserDetail",
+                "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK",
                 "FilterExpression": "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
                 "ExpressionAttributeValues": {
