@@ -875,8 +875,8 @@ export const CoreContextProvider = props => {
                 "PK": { "S": "patient" },
                 "SK": { "S": "PATIENT_" +patientId }
             },
-            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username,DoctorName = :v_DoctorName, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
-            "ExpressionAttributeValues":{":v_GSI1SK":{"S":"Select Provider"},
+            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
+            "ExpressionAttributeValues":{":v_GSI1SK":{"S":""+providername.value+""},
             ":v_GSI1PK":{"S":"patient"},
             ":v_username":{"S": name},
             ":v_mobile":{"S":phone},
