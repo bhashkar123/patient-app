@@ -865,28 +865,28 @@ export const CoreContextProvider = props => {
     const UpdatePatient = (name, phone, birthDate, height, provider, coordinator, coach, patientId) => {
         console.log(name);
         const token = localStorage.getItem('app_jwt');
-        let doctor_id = provider;
-        let carecoordinator_id = coordinator;
+        let providername = fetchNameFromId(provider, providerOptions);
         let carecoordinatorname = fetchNameFromId(coordinator, careCoordinatorOptions);
         let coachname = fetchNameFromId(coach, coachOptions);
-        let coach_id = coach;
+     
         const data = {
             "TableName": userTable,
             "Key": {
                 "PK": { "S": "patient" },
                 "SK": { "S": "PATIENT_" +patientId }
             },
-            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
+            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username,DoctorName = :v_DoctorName, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
             "ExpressionAttributeValues":{":v_GSI1SK":{"S":"Select Provider"},
             ":v_GSI1PK":{"S":"patient"},
             ":v_username":{"S": name},
             ":v_mobile":{"S":phone},
+            ":v_DoctorName":{"S": providername.name},
             //":v_IMEI":{"S":""+patient_emei+""},
             // ":v_BMI":{"S":""+patient_bmi+""},
             ":v_DOB":{"S":"" + birthDate + ""},
             ":v_Height":{"S":"" + height + ""},
-            ":v_CarecoordinatorId":{"S":"" + carecoordinatorname.id + ""},
-            ":v_CoachId":{"S": "" + coachname.name + ""},
+            ":v_CarecoordinatorId":{"S":"" + carecoordinatorname.value + ""},
+            ":v_CoachId":{"S": "" + coachname.value + ""},
             ":v_CarecoordinatorName":{"S": "" + carecoordinatorname.name + ""},
             ":v_CoachName":{"S": "" + coachname.name + ""}
 
@@ -906,6 +906,46 @@ export const CoreContextProvider = props => {
             }else
             {
                 alert("Patient data did not Update  Successfully.");
+            }
+        });
+    }
+
+
+    const AssignCareTeam = (provider, coordinator, coach, patientId) => {
+        const token = localStorage.getItem('app_jwt');
+        let providername = fetchNameFromId(provider, providerOptions);
+        let carecoordinatorname = fetchNameFromId(coordinator, careCoordinatorOptions);
+        let coachname = fetchNameFromId(coach, coachOptions);
+        const data = {
+            "TableName": userTable,
+            "Key": {
+                "SK": { "S": "PATIENT_" +patientId },
+                "PK": { "S": "patient" }
+            },
+            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK,DoctorName = :v_DoctorName,CarecoordinatorName = :v_CareCoordinatorName,CarecoordinatorId = :v_CarecoordinatorId,Coach = :v_CoachName,CoachId = :v_CoachId ",
+            "ExpressionAttributeValues":{":v_GSI1SK":{"S":""+providername.value+""},
+            ":v_GSI1PK":{"S":"patient"},
+            ":v_DoctorName":{"S": providername.name},
+            ":v_CareCoordinatorName":{"S": carecoordinatorname.name},
+            ":v_CarecoordinatorId":{"S": carecoordinatorname.value},
+            ":v_CoachName":{"S": coachname.name},
+            ":v_CoachId":{"S": coachname.value}
+           }
+     };
+
+        axios.post(apiUrl+'/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Updated") {
+                alert("Care Team assigned Successfully.");
+            }else
+            {
+                console.log(response);
+                alert("Care Team  assigned did not Update  Successfully.");
             }
         });
     }
@@ -2227,6 +2267,7 @@ export const CoreContextProvider = props => {
         addCoach,
         UpdateTimeLog,
         UpdatePatient,
+        AssignCareTeam,
         UpdateProvider,
         UpdateCareCoordinator,
         UpdateCoach,
