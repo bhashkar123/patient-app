@@ -243,7 +243,12 @@ const Patients = props => {
 
                         </div>
                     </div>
-                    <Input blockButton={true} value='Submit' onClick={() => coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId)} elementType='button' variant='primary' />
+                    <Input blockButton={true} value='Submit' onClick={
+                        () =>{ 
+                                coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId);
+                                setShowModal(false);
+                            }
+                        } elementType='button' variant='primary' />
                     <br />
                     <center> {coreContext.renderLoader()}</center>
                     <center> <Input variant='danger' label={message} elementType='label' /></center>
@@ -268,7 +273,11 @@ const Patients = props => {
 
                         </div>
                     </div>
-                    <Input blockButton={true} value='Submit' onClick={() => coreContext.AssignCareTeam( provider, coordinator, coach, patientId)} elementType='button' variant='primary' />
+                    <Input blockButton={true} value='Submit' onClick={() => {
+                            coreContext.AssignCareTeam( provider, coordinator, coach, patientId);
+                            setAssignDrShowModal(false);
+                        } 
+                    }   elementType='button' variant='primary' />
                     <br />
                     <center> {coreContext.renderLoader()}</center>
                     <center> <Input variant='danger' label={message} elementType='label' /></center>
