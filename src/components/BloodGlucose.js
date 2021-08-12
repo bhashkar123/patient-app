@@ -87,7 +87,7 @@ const BloodGlucose = props => {
             editable: false,
           },
           { 
-            field: "", 
+            field: "sortDateColumn", 
             headerName: "Action",
             width: 300,
             
@@ -155,8 +155,10 @@ const BloodGlucose = props => {
           width: 200,
           editable: false,
         },
-        
-        
+        { 
+          field: "sortDateColumn", 
+          headerName: "Action",
+          }  
     ];
 
     const renderBloodGlucose = () => {
@@ -171,6 +173,7 @@ const BloodGlucose = props => {
                     rows={coreContext.bloodglucoseData}
                     columns={dgcolumns}
                     pageSize={10}
+                    sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
                   />
                 </div>
               );

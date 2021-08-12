@@ -579,7 +579,7 @@ export const CoreContextProvider = props => {
                 if (wt.MeasurementDateTime !== undefined) {
                     wtdata.MeasurementDateTime = wt.MeasurementDateTime.s;
                     wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
-                    wtdata.sortDateColumn =  wtdata.MeasurementDateTime;
+                    wtdata.sortDateColumn =  wt.MeasurementDateTime.s;
                     wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
                     
                 }
@@ -1708,7 +1708,7 @@ export const CoreContextProvider = props => {
                 if (bp.MeasurementDateTime !== undefined) {
                     bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-                    bpdata.sortDateColumn =  bpdata.MeasurementDateTime;
+                    bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
                     bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
                 }
                 if (bp.CreatedDate !== undefined) {
@@ -1842,7 +1842,11 @@ export const CoreContextProvider = props => {
                 }
                 bgdata.battery = bg.battery.n;
                 bgdata.timeSlots = bg.TimeSlots.s;
-                bgdata.date_recorded = bg.date_recorded.s;
+               
+                if(bg.date_recorded !==undefined){
+                    bgdata.sortDateColumn =  bg.date_recorded.s;
+                    bgdata.date_recorded = bg.date_recorded.s;
+                }
 
                 if (bg.reading_id !== undefined) {
                     bgdata.reading_id = bg.reading_id.n;

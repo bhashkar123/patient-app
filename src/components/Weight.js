@@ -57,9 +57,8 @@ const Weight = (props) => {
         {
             field: 'MeasurementDateTime',
             headerName: 'Date Recorded',
-            width: 110,
+            width: 310,
             editable: false,
-            width: 500
           },
           {
             field: 'CreatedDate',
@@ -81,9 +80,8 @@ const Weight = (props) => {
             editable: false,
             width: 200
           },
-
           { 
-            field: "", 
+            field: "sortDateColumn", 
             headerName: "Action",
             width: 300,
             
@@ -122,7 +120,7 @@ const Weight = (props) => {
             headerName: 'Date Recorded',
             width: 110,
             editable: false,
-            width: 500
+            width: 300
           },
           {
             field: 'CreatedDate',
@@ -144,6 +142,12 @@ const Weight = (props) => {
             editable: false,
             width: 200
           },
+          { 
+            field: "sortDateColumn", 
+            headerName: "Action"
+           
+          }         
+
       ];
       
       //https://material-ui.com/components/data-grid/
@@ -162,6 +166,7 @@ const Weight = (props) => {
                 rows={coreContext.weightData}
                 columns={dgcolumns}
                 pageSize={10}
+                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
               />
             </div>
           );

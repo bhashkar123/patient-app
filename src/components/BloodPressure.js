@@ -95,7 +95,7 @@ const BloodPressure = props => {
          
         },
         { 
-          field: "", 
+          field: "sortDateColumn", 
           headerName: "Action",
           width: 300,
           
@@ -104,8 +104,7 @@ const BloodPressure = props => {
               <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
               </div>
           
-      )
-          }         
+       )}         
     ];
 
     const showEditForm = (patient) => {
@@ -166,8 +165,12 @@ const BloodPressure = props => {
           headerName: 'Reading Id',
           width: 200,
           editable: false
-         
         },
+        { 
+          field: "sortDateColumn", 
+          headerName: "Action"
+         
+        }  
     ];
 
     const renderBloodPressure = () => {
@@ -184,6 +187,7 @@ const BloodPressure = props => {
                 rows={coreContext.bloodpressureData}
                 columns={dgcolumns}
                 pageSize={10}
+                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
               />
             </div>
           );
