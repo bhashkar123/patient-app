@@ -102,7 +102,7 @@ const Provider = props => {
     }
 
     const deletePatient = (patient) => {
-        coreContext.DeleteProvider(patient.id)
+        coreContext.DeleteProvider(patient.doctor_id);
     }
 
   

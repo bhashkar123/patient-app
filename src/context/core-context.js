@@ -59,8 +59,8 @@ export const CoreContextProvider = props => {
     const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
     const [userTable, setuserTable] = useState('UserDetailsDemo');
 
-    //const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
-    //const [userTable, setApiUrl] = useState('UserDetail');
+    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+    // const [userTable, setuserTable] = useState('UserDetail');
     
     ///Chart Data
 
@@ -1090,7 +1090,7 @@ export const CoreContextProvider = props => {
         const data = {
             "TableName": userTable,
             "Key": {
-                "SK": { "S": "PATIENT_" +patientId },
+                "SK": { "S":  ""+patientId +""},
                 "PK": { "S": "doctor" }
             },
             "UpdateExpression": "SET ActiveStatus = :v_ActiveStatus",
@@ -1106,7 +1106,7 @@ export const CoreContextProvider = props => {
         }
         ).then((response) => {
             if (response.data === "Updated") {
-                alert("Patient Deleted Successfully.");
+                alert("Provider-Doctor Deleted Successfully.");
             }
         });
     }
