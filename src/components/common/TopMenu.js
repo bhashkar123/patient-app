@@ -160,7 +160,15 @@ const TopMenu = () => {
 
     const onSearch = () => {
         //alert('Enter clicked!!!' + userName);  
+        const userType = localStorage.getItem("userType");
+        const userId = localStorage.getItem("userId");
         if(patientName=="") return;
+        if(coreContext.patients.length ==0)  {
+            //coreContext.fetchPatientListfromApi(userType, userId);
+            alert('Please open patient information page and search.');
+            return;    
+
+        }
         let  userName = patientName.target.value;
         if(userName!=""){
             let patient = coreContext.patients.filter(app =>

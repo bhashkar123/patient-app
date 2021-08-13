@@ -913,6 +913,20 @@ export const CoreContextProvider = props => {
         ).then((response) => {
             if (response.data === "Updated") {
                 alert("Patient data Update Successfully.");
+
+                // updating object
+                //fetchPatientListfromApi();
+                let patinet = patients.filter(p=>p.userId == patientId)[0];
+                if(patinet ==undefined) return;
+                patinet.height = height;
+                patinet.name = name;
+                patinet.phone = phone;
+                patinet.birthDate = birthDate;
+                patinet.phone = phone;
+                patinet.provider = provider;
+                patinet.coordinator = coordinator;
+                patinet.coach = coach;
+                // updating object
             }else
             {
                 alert("Patient data did not Update  Successfully.");

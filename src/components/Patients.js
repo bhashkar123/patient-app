@@ -59,8 +59,6 @@ const Patients = props => {
         coreContext.fetchPatientListfromApi(userType, userId);
     }
 
-    
-
     const fetchProviders = () => {
         coreContext.fetchProviders();
     }
@@ -73,6 +71,7 @@ const Patients = props => {
 
     useEffect(fetchCareCoordinator, []);
     useEffect(fetchPatients, [coreContext.patients.length]);
+   
 
     const fetchCoach = () => {
         coreContext.fetchCoach();
@@ -89,9 +88,10 @@ const Patients = props => {
         setBirthDate(patient.dob);
         setPhone(patient.mobile);
         setPatientId(patient.userId);
+        setHeight(patient.height);
         handleModalShow();
     }
-
+    
     const showAssignDoctor = (patient) => {
       setName(patient.name);
       setBirthDate(patient.dob);
