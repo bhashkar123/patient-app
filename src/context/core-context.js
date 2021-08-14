@@ -765,7 +765,7 @@ export const CoreContextProvider = props => {
             "GSI1SK": doctorId
         });
 
-        axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+        axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
             headers: {
                 Accept: "application/json, text/plain, */*",
                 // "Content-Type": "application/json",
@@ -1190,7 +1190,7 @@ export const CoreContextProvider = props => {
                     "GSI1SK": "DOCTOR_" + id
                 });
 
-                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -1247,7 +1247,7 @@ export const CoreContextProvider = props => {
 
                 });
 
-                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -1305,7 +1305,7 @@ export const CoreContextProvider = props => {
                     "GSI1SK": "CARECOORDINATOR_" + id
                 });
 
-                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -1361,7 +1361,7 @@ export const CoreContextProvider = props => {
                     "GSI1SK": "COACH_" + id
                 });
 
-                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+                axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
                     headers: {
                         Accept: "application/json, text/plain, */*",
                         // "Content-Type": "application/json",
@@ -2223,7 +2223,7 @@ export const CoreContextProvider = props => {
                
             });
     
-            axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName=UserDetail&actionType=register', {
+            axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
                 headers: {
                     Accept: "application/json, text/plain, */*",
                     // "Content-Type": "application/json",
