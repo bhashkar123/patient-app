@@ -99,7 +99,7 @@ const showEditForm = (patient) => {
 }
 
 const deletePatient = (patient) => {
-    coreContext.DeletePatient(patient.userId)
+    coreContext.DeleteCareTeam(patient.doctor_id,"coach","Coach");
 }
 
     const renderCoach = () => {

@@ -101,7 +101,7 @@ const showEditForm = (patient) => {
 }
 
 const deletePatient = (patient) => {
-    coreContext.DeletePatient(patient.userId)
+    coreContext.DeleteCareTeam(patient.doctor_id,"carecoordinator","Care Coordinator");
 }
     const renderCoordinators = () => {
         if (coreContext.ccData.length > 0) {
