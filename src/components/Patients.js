@@ -14,8 +14,9 @@ import {
     GridCellValue
   } from "@material-ui/data-grid";
 
-import { makeStyles } from '@material-ui/styles';
+
 import { createMuiTheme, darken, lighten } from '@material-ui/core/styles';
+import Loader from "react-loader-spinner";
 
 
 const Patients = props => {
@@ -198,6 +199,18 @@ const Patients = props => {
     // const classes = useStyles();
     
     const renderPatients = () => {
+       
+        if (coreContext.patients.length == 0) {
+            return (
+                <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                     <Loader
+                type="Puff"
+                color="#00BFFF"
+                height={100}
+                width={100}
+            /></div>
+              );
+        }
         if (coreContext.patients.length > 0) {
             return (
                 <div style={{ height: 680, width: '100%' }}>

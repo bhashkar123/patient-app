@@ -33,6 +33,7 @@
     "react-images-upload": "^1.2.8",
     "react-ion-slider": "^1.0.16",
     "react-linechart": "^1.1.12",
+    "react-loader-spinner": "^4.0.0",
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
