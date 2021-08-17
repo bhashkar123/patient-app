@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
+import Loader from "react-loader-spinner";
+
 
 const BloodGlucose = props => {
 
@@ -162,6 +164,17 @@ const BloodGlucose = props => {
     ];
 
     const renderBloodGlucose = () => {
+      if (coreContext.bloodglucoseData.length == 0) {
+        return (
+            <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                 <Loader
+            type="Circles"
+            color="#00BFFF"
+            height={100}
+            width={100}
+        /></div>
+          );
+    }
       let dgcolumns = columns;
       if(userType === 'patient'){
          dgcolumns = patientcolumns;

@@ -12,6 +12,9 @@ import { CoreContext } from './context/core-context';
 import { Row, Col } from 'react-bootstrap';
 import { TablePagination } from '@material-ui/core';
 
+
+
+
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -22,7 +25,7 @@ function App() {
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
 
-  let content = <div className='container-fluid'>
+  let content = <div>
     {isAuth ? (<TopMenu />) : ''}
 
     <Row>
@@ -39,7 +42,7 @@ function App() {
       {isAuth ? <React.Fragment>  <div className="col-md-2">
         <Menu />
       </div>
-        <div className="col-md-10">
+        <div style={{ marginLeft: '-90px', width: '80%' }}>
           <Router>
             <Switch>
 

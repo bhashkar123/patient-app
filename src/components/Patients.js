@@ -199,12 +199,11 @@ const Patients = props => {
     // const classes = useStyles();
     
     const renderPatients = () => {
-       
         if (coreContext.patients.length == 0) {
             return (
                 <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
                      <Loader
-                type="Puff"
+                type="Circles"
                 color="#00BFFF"
                 height={100}
                 width={100}
