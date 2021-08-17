@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
+import Loader from "react-loader-spinner";
 
 const Deviceinfo = props => {
 
@@ -59,6 +60,17 @@ const Deviceinfo = props => {
       //https://material-ui.com/components/data-grid/
 
     const renderdeviceinfo = () => {
+      if (coreContext.deviceData.length == 0) {
+        return (
+            <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                 <Loader
+            type="Circles"
+            color="#00BFFF"
+            height={100}
+            width={100}
+        /></div>
+          );
+    }
         if (coreContext.deviceData.length > 0){
         return (
             <div style={{ height: 680, width: '100%' }}>
