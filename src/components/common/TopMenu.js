@@ -6,10 +6,12 @@ import { Envelope, ChatLeftText, BoxArrowLeft,FileMedicalFill,FileMedical, Penci
     import { GiCook, GiAbstract071, GiAcid, GiWeight, GiAerialSignal, GiOrangeSlice, GiCagedBall } from 'react-icons/gi';
 import { CoreContext } from '../../context/core-context';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import { ImMenu } from "react-icons/im";
 
 
 
-const TopMenu = () => {
+
+const TopMenu = ({isAuth,showSidebar}) => {
 
     const coreContext = useContext(CoreContext);
 
@@ -55,6 +57,8 @@ const TopMenu = () => {
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([coreContext.patients]);
     const [patientName, setPatientName] = useState('');
+
+  
 
     const onChange = (event, { newValue }) => {
         setValue(newValue.name);
@@ -251,13 +255,16 @@ const TopMenu = () => {
         }
     }
     return (
+        <>
     <React.Fragment>
         <Navbar sticky='top' collapseOnSelect expand="lg" style={{ backgroundColor: '#012971' }} variant="dark">
+            <span type="button" onClick={showSidebar} style={{backgroundColor:"rgb(1, 41, 113)",color:"white", marginRight:"50px"}}><ImMenu/></span>
             <Navbar.Brand href="/">Patient App</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="/dashboard"> Dashboard</Nav.Link>
+                    
                     <NavDropdown title={<div style={{ display: "inline-block" }}><Envelope /> Mailbox </div>} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/inbox"><BoxArrowRight /> Inbox</NavDropdown.Item>
                         <NavDropdown.Item href="/outbox"><BoxArrowLeft /> Outbox</NavDropdown.Item>
@@ -277,6 +284,7 @@ const TopMenu = () => {
                 {renderpatientSearch()}
                
                 <Nav className="ml-auto">
+                
                 <NavDropdown className='rightDropdown' title={localStorage.getItem("userName") ? localStorage.getItem("userName") : 'Guest'} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/settings"><Gear /> Settings</NavDropdown.Item>
                         <NavDropdown.Item href="/profile"><PersonFill /> My Profile</NavDropdown.Item>
@@ -612,6 +620,8 @@ const TopMenu = () => {
             </Modal.Footer>
         </Modal>
     </React.Fragment >
+   
+    </>
     );
 }
 
