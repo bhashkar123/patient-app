@@ -14,8 +14,6 @@ import {
     GridCellValue
   } from "@material-ui/data-grid";
 
-
-import { createMuiTheme, darken, lighten } from '@material-ui/core/styles';
 import Loader from "react-loader-spinner";
 
 
@@ -44,9 +42,9 @@ const Patients = props => {
     const handleAssignDrModalClose = () => setAssignDrShowModal(false);
     const handleAssignDrModalShow = () => setAssignDrShowModal(true);
     const [showAssignDrModal, setAssignDrShowModal] = useState(false);
+    
 
-    const defaultTheme = createMuiTheme();
-
+    
     const editPatient = () => {
 
     }
