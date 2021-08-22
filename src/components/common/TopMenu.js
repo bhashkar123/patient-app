@@ -147,8 +147,18 @@ const TopMenu = ({changestyle,showSidebar}) => {
     }
 
     const handleOnSelect = (item) => {
-        setMobilePhone(item.mobile_phone);
+        // setMobilePhone(item.mobile_phone);
         setPatientid(item.id);
+
+        if(item.name!=""){
+           const url = '/patient-summary/' + btoa(item.userId);
+            
+            if (!window.location.href.includes('/patient-summary/')) {
+                window.location.href = url;
+            }else{
+                alert('This is already patient summary page.')
+            }
+        }
         // the item selected
         console.log(item)
     }
@@ -238,7 +248,6 @@ const TopMenu = ({changestyle,showSidebar}) => {
                                     onHover={handleOnHover}
                                     onSelect={handleOnSelect}
                                     onFocus={handleOnFocus}
-                                    fuseOptions={{ keys: ["name", "mobile_phone"] }}
                                     autoFocus
                                 />
                             </div>
