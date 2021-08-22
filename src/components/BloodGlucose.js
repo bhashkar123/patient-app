@@ -55,6 +55,20 @@ const BloodGlucose = props => {
           width: 200
         },
         {
+          field: 'bloodglucosemmol',
+          headerName: 'Blood Glucose (mmol)',
+          type: 'number',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'bloodglucosemgdl',
+          headerName: 'Blood Glucose (mgdl)',
+          type: 'number',
+          editable: false,
+          width: 200
+        },
+        {
           field: 'meal',
           headerName: 'Before/After Meal',
           width: 110,
@@ -62,25 +76,18 @@ const BloodGlucose = props => {
           width: 200
         },
         {
-            field: 'timeSlots',
-            headerName: 'Recorded TimeSlot',
-            width: 110,
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'date_recorded',
-            headerName: 'Date Recorded',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'reading_id',
-            headerName: 'Reading Id',
-            type: 'number',
-            width: 200,
-            editable: false,
-          },
+          field: 'MeasurementDateTime',
+          headerName: 'Date Recorded',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'CreatedDate',
+          headerName: 'Date Received',
+          width: 200,
+          editable: false
+         
+        },
           {
             field: 'battery',
             headerName: 'Battery',
@@ -124,6 +131,20 @@ const BloodGlucose = props => {
         width: 200
       },
       {
+        field: 'bloodglucosemmol',
+        headerName: 'Blood Glucose (mmol)',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
+        field: 'bloodglucosemgdl',
+        headerName: 'Blood Glucose (mgdl)',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+      {
         field: 'meal',
         headerName: 'Before/After Meal',
         width: 110,
@@ -131,18 +152,18 @@ const BloodGlucose = props => {
         width: 200
       },
       {
-          field: 'timeSlots',
-          headerName: 'Recorded TimeSlot',
-          width: 110,
-          editable: false,
-          width: 200
-        },
-        {
-          field: 'date_recorded',
-          headerName: 'Date Recorded',
-          editable: false,
-          width: 200
-        },
+        field: 'MeasurementDateTime',
+        headerName: 'Date Recorded',
+        editable: false,
+        width: 200
+      },
+      {
+        field: 'CreatedDate',
+        headerName: 'Date Received',
+        width: 200,
+        editable: false
+       
+      },
         {
           field: 'reading_id',
           headerName: 'Reading Id',
@@ -179,18 +200,19 @@ const BloodGlucose = props => {
       if(userType === 'patient'){
          dgcolumns = patientcolumns;
       }
-        if (coreContext.bloodglucoseData.length > 0) {
-            return (
-                <div style={{ height: 680, width: '100%' }}>
-                  <DataGrid
-                    rows={coreContext.bloodglucoseData}
-                    columns={dgcolumns}
-                    pageSize={10}
-                    sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
-                  />
-                </div>
-              );
-            }
+      if (coreContext.bloodglucoseData.length > 0) {
+        //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
+          return (
+              <div style={{ height: 680, width: '100%' }}>
+                <DataGrid
+                  rows={coreContext.bloodglucoseData}
+                  columns={dgcolumns}
+                  pageSize={10}
+                  sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+                />
+              </div>
+            );
+       }
     }
 
     return <div className='card'>
