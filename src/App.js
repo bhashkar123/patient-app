@@ -23,7 +23,7 @@ function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isAuth = localStorage.getItem('app_isAuth');
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState(true);
 
   const showSidebar = () => setSidebar(!sidebar);
   //const isAuth = true;
@@ -35,7 +35,7 @@ function App() {
    
   }, [showSidebar])
   const [style,setStyle]=useState(
-    { marginLeft: '-164px', width: '90%' }
+    { marginLeft: '-15px', width: '80%' }
 
   )
   const changestyle=()=>{
