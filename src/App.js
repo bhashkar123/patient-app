@@ -40,7 +40,7 @@ function App() {
   )
   const changestyle=()=>{
     if (style.marginLeft==="10px"){
-    setStyle({ marginLeft: '-164px', width: '90%' })
+    setStyle({ marginLeft: '-154px', width: '90%' })
     }
     else{
       setStyle({ marginLeft: '10px', width: '80%' })

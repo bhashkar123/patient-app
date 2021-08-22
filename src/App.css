@@ -115,3 +115,12 @@ ul {
     margin-bottom: 15px;
     margin-right: 5px;
 }
+.navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  margin-left: 15px;
+}
