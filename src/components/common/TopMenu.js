@@ -6,10 +6,12 @@ import { Envelope, ChatLeftText, BoxArrowLeft,FileMedicalFill,FileMedical, Penci
     import { GiCook, GiAbstract071, GiAcid, GiWeight, GiAerialSignal, GiOrangeSlice, GiCagedBall } from 'react-icons/gi';
 import { CoreContext } from '../../context/core-context';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import { ImMenu } from "react-icons/im";
 
 
 
-const TopMenu = () => {
+
+const TopMenu = ({changestyle,showSidebar}) => {
 
     const coreContext = useContext(CoreContext);
 
@@ -55,6 +57,8 @@ const TopMenu = () => {
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([coreContext.patients]);
     const [patientName, setPatientName] = useState('');
+
+  
 
     const onChange = (event, { newValue }) => {
         setValue(newValue.name);
@@ -143,8 +147,18 @@ const TopMenu = () => {
     }
 
     const handleOnSelect = (item) => {
-        setMobilePhone(item.mobile_phone);
+        // setMobilePhone(item.mobile_phone);
         setPatientid(item.id);
+
+        if(item.name!=""){
+           const url = '/patient-summary/' + btoa(item.userId);
+            
+            if (!window.location.href.includes('/patient-summary/')) {
+                window.location.href = url;
+            }else{
+                alert('This is already patient summary page.')
+            }
+        }
         // the item selected
         console.log(item)
     }
@@ -215,7 +229,7 @@ const TopMenu = () => {
         const userType = localStorage.getItem("userType");
         if (userType !== 'patient') return  <Form inline>
             <div className="row">
-             <input
+             {/* <input
                 name="name"
                 type="text"
                 style={{  height: '38px', width: '200px' }}
@@ -223,7 +237,7 @@ const TopMenu = () => {
                     setPatientName(event);
                    }}
                 placeholder="Search patients..."
-              />
+              /> */}
                {renderPatients()}
                     <div className='rowC'>
                         <header>
@@ -234,14 +248,11 @@ const TopMenu = () => {
                                     onHover={handleOnHover}
                                     onSelect={handleOnSelect}
                                     onFocus={handleOnFocus}
-                                    fuseOptions={{ keys: ["name", "mobile_phone"] }}
                                     autoFocus
                                 />
                             </div>
                         </header>
-                        <div>
-                            <Nav.Link href="#" onClick={handleAddPatient}><PersonPlusFill /></Nav.Link>
-                        </div>
+                        
                     </div>
                {/* <input
                 name="name"
@@ -270,13 +281,16 @@ const TopMenu = () => {
         }
     }
     return (
+        <>
     <React.Fragment>
         <Navbar sticky='top' collapseOnSelect expand="lg" style={{ backgroundColor: '#012971' }} variant="dark">
+            <span type="button" onClick={function(event){ showSidebar(); changestyle()}} style={{backgroundColor:"rgb(1, 41, 113)",color:"white", marginRight:"50px"}}><ImMenu/></span>
             <Navbar.Brand href="/">Patient App</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="/dashboard"> Dashboard</Nav.Link>
+                    
                     <NavDropdown title={<div style={{ display: "inline-block" }}><Envelope /> Mailbox </div>} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/inbox"><BoxArrowRight /> Inbox</NavDropdown.Item>
                         <NavDropdown.Item href="/outbox"><BoxArrowLeft /> Outbox</NavDropdown.Item>
@@ -296,6 +310,7 @@ const TopMenu = () => {
                 {renderpatientSearch()}
                
                 <Nav className="ml-auto">
+                
                 <NavDropdown className='rightDropdown' title={localStorage.getItem("userName") ? localStorage.getItem("userName") : 'Guest'} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/settings"><Gear /> Settings</NavDropdown.Item>
                         <NavDropdown.Item href="/profile"><PersonFill /> My Profile</NavDropdown.Item>
@@ -631,6 +646,8 @@ const TopMenu = () => {
             </Modal.Footer>
         </Modal>
     </React.Fragment >
+   
+    </>
     );
 }
 
