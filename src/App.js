@@ -19,7 +19,6 @@ import { TablePagination } from '@material-ui/core';
 
 
 
-
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -35,10 +34,22 @@ function App() {
   useEffect(() => {
    
   }, [showSidebar])
+  const [style,setStyle]=useState(
+    { marginLeft: '-164px', width: '80%' }
+
+  )
+  const changestyle=()=>{
+    if (style.marginLeft==="-15px"){
+    setStyle({ marginLeft: '-164px', width: '80%' })
+    }
+    else{
+      setStyle({ marginLeft: '-15px', width: '80%' })
+    }
+  }
 
   let content = <div>
     {/**/}
-    {isAuth ? (<TopMenu isAuth={isAuth} showSidebar={showSidebar}/>) : ''}
+    {isAuth ? (<TopMenu isAuth={isAuth} changestyle={changestyle} showSidebar={showSidebar}/>) : ''}
 
     <Row>
       {/* <Sidebar
@@ -56,7 +67,7 @@ function App() {
         <div className="col-md-2">
       {(sidebar===true)?<Menu/>: <Menu2/>}
       </div>
-        <div style={{ marginLeft: '-10px', width: '80%' }}>
+        <div style={style}>
           <Router>
             <Switch>
 
