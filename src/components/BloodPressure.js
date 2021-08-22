@@ -1,10 +1,80 @@
+import PropTypes from "prop-types";
+import TextField from "@material-ui/core/TextField";
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
+import IconButton from '@material-ui/core/IconButton';
+
+import ClearIcon from '@material-ui/icons/Clear';
+import SearchIcon from '@material-ui/icons/Search';
+import { makeStyles } from '@material-ui/styles';
+import { createTheme } from '@material-ui/core/styles';
+const defaultTheme = createTheme();
+const useStyles = makeStyles(
+  (theme) => ({
+    root: {
+      padding: theme.spacing(0.5, 0.5, 0),
+      justifyContent: 'space-between',
+      display: 'flex',
+      alignItems: 'flex-start',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+      margin: theme.spacing(1, 0.5, 1.5),
+      '& .MuiSvgIcon-root': {
+        marginRight: theme.spacing(0.5),
+      },
+      '& .MuiInput-underline:before': {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      },
+    },
+  }),
+  { defaultTheme },
+);
+
 
 const Moment = require('moment');
+function escapeRegExp(value) {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+function QuickSearchToolbar(props) {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <TextField
+        variant="standard"
+        value={props.value}
+        onChange={props.onChange}
+        placeholder="Search…"
+        InputProps={{
+          startAdornment: <SearchIcon fontSize="small" />,
+          endAdornment: (
+            <IconButton
+              title="Clear"
+              aria-label="Clear"
+              size="small"
+              style={{ visibility: props.value ? 'visible' : 'hidden' }}
+              onClick={props.clearSearch}
+            >
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          ),
+        }}
+      />
+    </div>
+  );
+}
+QuickSearchToolbar.propTypes = {
+  clearSearch: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired
+};
+
 
 const BloodPressure = props => {
 
@@ -12,6 +82,29 @@ const BloodPressure = props => {
     const [patientId, setPatientId] = useState('');
     const [userType, setUserType] = useState('');
     const [disablelink, setdisablelink] = useState(false);
+    const [searchText, setSearchText] = React.useState("");
+    const [rows, setRows] = React.useState(coreContext.bloodpressureData);
+    const requestSearch = (searchValue) => {
+      setSearchText(searchValue);
+      const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
+      const filteredRows = coreContext.bloodpressureData.filter((row) => {
+        return Object.keys(row).some((field) => {
+          return searchRegex.test(row[field].toString());
+        });
+      });
+      setRows(filteredRows);
+    };
+
+
+
+
+    React.useEffect(() => {
+      setRows(coreContext.bloodpressureData);
+    }, [coreContext.bloodpressureData]);
+  
+    
+  
+  
     
     const fetchBloodPressure = () => {
 
@@ -195,11 +288,14 @@ const BloodPressure = props => {
      }
      
      if (coreContext.bloodpressureData.length > 0) {
+      
+
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
         return (
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
-                rows={coreContext.bloodpressureData}
+              components={{ Toolbar: QuickSearchToolbar }}
+                rows={rows}
                 columns={dgcolumns}
                 pageSize={10}
                 sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}

@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from "react-sidebar";
 import * as Pages from './components';
 import './App.css';
+
 import './dgmaterial.css';
 
+
 import Menu from './components/common/Menu';
+import Menu2 from './components/common/Menu2';
 import TopMenu from './components/common/TopMenu';
 import { CoreContext } from './context/core-context';
 import { Row, Col } from 'react-bootstrap';
@@ -15,18 +18,38 @@ import { TablePagination } from '@material-ui/core';
 
 
 
+
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isAuth = localStorage.getItem('app_isAuth');
+  const [sidebar, setSidebar] = useState(true);
+
+  const showSidebar = () => setSidebar(!sidebar);
   //const isAuth = true;
   //const coreContext = useContext(CoreContext);
 
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
+  useEffect(() => {
+   
+  }, [showSidebar])
+  const [style,setStyle]=useState(
+    { marginLeft: '-15px', width: '80%' }
+
+  )
+  const changestyle=()=>{
+    if (style.marginLeft==="-15px"){
+    setStyle({ marginLeft: '-164px', width: '90%' })
+    }
+    else{
+      setStyle({ marginLeft: '-15px', width: '80%' })
+    }
+  }
 
   let content = <div>
-    {isAuth ? (<TopMenu />) : ''}
+    {/**/}
+    {isAuth ? (<TopMenu isAuth={isAuth} changestyle={changestyle} showSidebar={showSidebar}/>) : ''}
 
     <Row>
       {/* <Sidebar
@@ -38,11 +61,13 @@ function App() {
       <button onClick={() => setSidebarOpen(true)}>
         Open sidebar
       </button> */}
-
-      {isAuth ? <React.Fragment>  <div className="col-md-2">
-        <Menu />
+      
+      {isAuth ? <React.Fragment>  
+        
+        <div className="col-md-2">
+      {(sidebar===true)?<Menu/>: <Menu2/>}
       </div>
-        <div style={{ marginLeft: '-90px', width: '80%' }}>
+        <div style={style}>
           <Router>
             <Switch>
 
@@ -54,8 +79,11 @@ function App() {
               <Route exact path='/settings' component={Pages.Settings} />
               <Route exact path='/dashboard' component={Pages.Dashboard} />
               <Route exact path='/patients' component={Pages.Patients} />
-              <Route exact path='/bloodpressure' component={Pages.BloodPressure} />
-              <Route exact path='/bloodglucose' component={Pages.BloodGlucose} />
+            
+              <Route exact path='/bloodpressure'component={Pages.BloodPressure}/>
+            
+   
+              <Route exact path='/bloodglucose'  component={Pages.BloodGlucose} />
               <Route exact path='/weight' component={Pages.Weight} />
               <Route exact path='/logout' component={Pages.Logout} />
               <Route exact path='/profile' component={Pages.MyProfile} />

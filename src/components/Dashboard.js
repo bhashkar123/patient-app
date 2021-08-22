@@ -21,7 +21,7 @@ const Dashboard = props => {
     //  useEffect(fetchTokenfromApi, [coreContext.idToken.length]);
 
 
-    return (<div className='card'>
+    return (<div className='card' style={{marginLeft:"100px"}}>
         <div className="card-header row">
             <div className="col-md-5">
                 <h4>A Pattern Medical Clinic Dashboard</h4>
