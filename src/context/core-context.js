@@ -1634,6 +1634,26 @@ export const CoreContextProvider = props => {
 
     }
 
+
+    function formatAMPM(date) {
+        var d = new Date(date);
+        //alert(d);
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        var mm = d.getMonth() + 1;
+        var dd = d.getDate();
+        var yy = d.getFullYear();
+        //alert(yy);
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = mm + '-' + dd + '-' + yy + ' ' + hours + ':' + minutes + ' ' + ampm;
+        //alert(strTime);
+        //console.log(strTime);
+        return strTime;
+      }
+
     const fetchBloodPressure = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');
         const isAuth = localStorage.getItem('app_isAuth');
@@ -1730,15 +1750,17 @@ export const CoreContextProvider = props => {
                    
                 }
                 if (bp.MeasurementDateTime !== undefined) {
-                    bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
+                    bpdata.MeasurementDateTime =  (bp.MeasurementDateTime.s);
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-                    bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
-                    bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+                    let m = bpdata.MeasurementDateTime;
+                    // bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
+                     //bpdata.MeasurementDateTime = Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+                    // bpdata.MeasurementDateTime = m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds();
                 }
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
                     bpdata.CreatedDate =  new Date(bpdata.CreatedDate);
-                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
+                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
