@@ -167,6 +167,7 @@ const BloodPressure = props => {
           field: 'MeasurementDateTime',
           headerName: 'Date Recorded',
           editable: false,
+          type: 'dateTime',
           width: 200
         },
         {
@@ -190,7 +191,7 @@ const BloodPressure = props => {
          
         },
         { 
-          field: "sortDateColumn", 
+          field: "", 
           headerName: "Action",
           width: 300,
           
@@ -240,6 +241,7 @@ const BloodPressure = props => {
           field: 'MeasurementDateTime',
           headerName: 'Date Recorded',
           editable: false,
+          type: 'date',
           width: 200
         },
         {
@@ -262,7 +264,7 @@ const BloodPressure = props => {
           editable: false
         },
         { 
-          field: "sortDateColumn", 
+          field: "", 
           headerName: "Action"
          
         }  
@@ -296,14 +298,7 @@ const BloodPressure = props => {
                 rows={rows}
                 columns={dgcolumns}
                 pageSize={10}
-                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
-                componentsProps={{
-                  toolbar: {
-                    value: searchText,
-                    onChange: (event) => requestSearch(event.target.value),
-                    clearSearch: () => requestSearch("")
-                  }
-                }}
+                sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
               />
             </div>
           );

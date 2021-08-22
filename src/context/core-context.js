@@ -56,11 +56,11 @@ export const CoreContextProvider = props => {
     const [userId, setUserId] = useState('');
 
     
-    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
-    const [userTable, setuserTable] = useState('UserDetailsDemo');
+    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
+    // const [userTable, setuserTable] = useState('UserDetailsDemo');
 
-    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
-    // const [userTable, setuserTable] = useState('UserDetail');
+    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+    const [userTable, setuserTable] = useState('UserDetail');
     
     ///Chart Data
 
@@ -1634,6 +1634,26 @@ export const CoreContextProvider = props => {
 
     }
 
+
+    function formatAMPM(date) {
+        var d = new Date(date);
+        //alert(d);
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        var mm = d.getMonth() + 1;
+        var dd = d.getDate();
+        var yy = d.getFullYear();
+        //alert(yy);
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = mm + '-' + dd + '-' + yy + ' ' + hours + ':' + minutes + ' ' + ampm;
+        //alert(strTime);
+        //console.log(strTime);
+        return strTime;
+      }
+
     const fetchBloodPressure = (userid, usertype) => {
         const token = localStorage.getItem('app_jwt');
         const isAuth = localStorage.getItem('app_isAuth');
@@ -1730,15 +1750,17 @@ export const CoreContextProvider = props => {
                    
                 }
                 if (bp.MeasurementDateTime !== undefined) {
-                    bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
+                    bpdata.MeasurementDateTime =  (bp.MeasurementDateTime.s);
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-                    bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
-                    bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+                    let m = bpdata.MeasurementDateTime;
+                    // bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
+                     //bpdata.MeasurementDateTime = Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+                    // bpdata.MeasurementDateTime = m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds();
                 }
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
                     bpdata.CreatedDate =  new Date(bpdata.CreatedDate);
-                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
+                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
@@ -1860,24 +1882,44 @@ export const CoreContextProvider = props => {
                 }
                 if (bg.UserName !== undefined) {
                     bgdata.UserName = bg.UserName.s;
+                    if(bgdata.UserName=="Dale Cadwallader"){
+                        let test="";
+                    }
                 }
-                if (bg.reading !== undefined) {
-                    bgdata.reading = bg.reading.n;
-                }
-                bgdata.battery = bg.battery.n;
-                bgdata.timeSlots = bg.TimeSlots.s;
                
-                if(bg.date_recorded !==undefined){
-                    bgdata.sortDateColumn =  bg.date_recorded.s;
-                    bgdata.date_recorded = bg.date_recorded.s;
+                if (bg.bloodglucosemmol !== undefined) {
+                    bgdata.bloodglucosemmol = parseFloat(bg.bloodglucosemmol.n).toFixed(0);
                 }
 
-                if (bg.reading_id !== undefined) {
-                    bgdata.reading_id = bg.reading_id.n;
+                if (bg.bloodglucosemgdl !== undefined) {
+                    bgdata.bloodglucosemgdl = parseFloat(bg.bloodglucosemgdl.n).toFixed(0);
                 }
-                bgdata.actionTaken = bg.ActionTaken.s;
-                if (bg.before_meal.bool) bgdata.meal = "Before Meal";
-                if (!bg.before_meal.bool) bgdata.meal = "After Meal";
+
+                if (bg.before_meal) bgdata.meal = "Before Meal";
+                if (!bg.before_meal) bgdata.meal = "After Meal";
+
+                if (bg.battery !== undefined) {
+                    bgdata.battery = bg.battery.n;
+                }
+                if (bg.TimeSlots !== undefined) {
+                    bgdata.timeSlots = bg.TimeSlots.s;
+                   
+                }
+                if (bg.MeasurementDateTime !== undefined) {
+                    bgdata.MeasurementDateTime =  bg.MeasurementDateTime.s;
+                    bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+                    bgdata.sortDateColumn =  bg.MeasurementDateTime.s;
+                    bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+                }
+                if (bg.CreatedDate !== undefined) {
+                    bgdata.CreatedDate = bg.CreatedDate.s;
+                    bgdata.CreatedDate =  new Date(bgdata.CreatedDate);
+                    bgdata.CreatedDate =Moment(bgdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
+                }
+
+                if(bg.SK !==undefined){
+                    bgdata.readingId = bg.SK.s.split("_").pop(); 
+                   } 
 
                 dataSetbg.push(bgdata);
             });

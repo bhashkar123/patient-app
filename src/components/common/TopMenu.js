@@ -228,12 +228,31 @@ const TopMenu = ({changestyle,showSidebar}) => {
                    }}
                 placeholder="Search patients..."
               />
-               <input
+               {renderPatients()}
+                    <div className='rowC'>
+                        <header>
+                            <div style={{ width: 420 }}>
+                                <ReactSearchAutocomplete
+                                    items={coreContext.patients}
+                                    onSearch={handleOnSearch}
+                                    onHover={handleOnHover}
+                                    onSelect={handleOnSelect}
+                                    onFocus={handleOnFocus}
+                                    fuseOptions={{ keys: ["name", "mobile_phone"] }}
+                                    autoFocus
+                                />
+                            </div>
+                        </header>
+                        <div>
+                            <Nav.Link href="#" onClick={handleAddPatient}><PersonPlusFill /></Nav.Link>
+                        </div>
+                    </div>
+               {/* <input
                 name="name"
                 type="button"
                 width="380" value="Search" style={{ marginLeft: '5px',  height: '38px', width: '200px' }}
                 onClick={onSearch}
-              />
+              /> */}
               </div>
               
         {/* <FormControl 
