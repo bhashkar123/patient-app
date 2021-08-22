@@ -219,7 +219,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
         const userType = localStorage.getItem("userType");
         if (userType !== 'patient') return  <Form inline>
             <div className="row">
-             <input
+             {/* <input
                 name="name"
                 type="text"
                 style={{  height: '38px', width: '200px' }}
@@ -227,7 +227,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                     setPatientName(event);
                    }}
                 placeholder="Search patients..."
-              />
+              /> */}
                {renderPatients()}
                     <div className='rowC'>
                         <header>
@@ -243,9 +243,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                                 />
                             </div>
                         </header>
-                        <div>
-                            <Nav.Link href="#" onClick={handleAddPatient}><PersonPlusFill /></Nav.Link>
-                        </div>
+                        
                     </div>
                {/* <input
                 name="name"

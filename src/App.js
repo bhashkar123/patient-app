@@ -35,15 +35,15 @@ function App() {
    
   }, [showSidebar])
   const [style,setStyle]=useState(
-    { marginLeft: '-15px', width: '80%' }
+    { marginLeft: '10px', width: '80%' }
 
   )
   const changestyle=()=>{
-    if (style.marginLeft==="-15px"){
+    if (style.marginLeft==="10px"){
     setStyle({ marginLeft: '-164px', width: '90%' })
     }
     else{
-      setStyle({ marginLeft: '-15px', width: '80%' })
+      setStyle({ marginLeft: '10px', width: '80%' })
     }
   }
 
@@ -64,8 +64,8 @@ function App() {
       
       {isAuth ? <React.Fragment>  
         
-        <div className="col-md-2">
-      {(sidebar===true)?<Menu/>: <Menu2/>}
+        <div>
+        {(sidebar===true)?<Menu />: <Menu2/>}
       </div>
         <div style={style}>
           <Router>
