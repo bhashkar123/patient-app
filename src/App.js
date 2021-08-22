@@ -35,12 +35,12 @@ function App() {
    
   }, [showSidebar])
   const [style,setStyle]=useState(
-    { marginLeft: '-164px', width: '80%' }
+    { marginLeft: '-164px', width: '90%' }
 
   )
   const changestyle=()=>{
     if (style.marginLeft==="-15px"){
-    setStyle({ marginLeft: '-164px', width: '80%' })
+    setStyle({ marginLeft: '-164px', width: '90%' })
     }
     else{
       setStyle({ marginLeft: '-15px', width: '80%' })
