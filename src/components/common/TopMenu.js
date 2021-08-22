@@ -11,7 +11,7 @@ import { ImMenu } from "react-icons/im";
 
 
 
-const TopMenu = ({isAuth,showSidebar}) => {
+const TopMenu = ({changestyle,showSidebar}) => {
 
     const coreContext = useContext(CoreContext);
 
@@ -258,7 +258,7 @@ const TopMenu = ({isAuth,showSidebar}) => {
         <>
     <React.Fragment>
         <Navbar sticky='top' collapseOnSelect expand="lg" style={{ backgroundColor: '#012971' }} variant="dark">
-            <span type="button" onClick={showSidebar} style={{backgroundColor:"rgb(1, 41, 113)",color:"white", marginRight:"50px"}}><ImMenu/></span>
+            <span type="button" onClick={function(event){ showSidebar(); changestyle()}} style={{backgroundColor:"rgb(1, 41, 113)",color:"white", marginRight:"50px"}}><ImMenu/></span>
             <Navbar.Brand href="/">Patient App</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
