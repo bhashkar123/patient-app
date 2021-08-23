@@ -1750,13 +1750,12 @@ export const CoreContextProvider = props => {
                    
                 }
                 if (bp.MeasurementDateTime !== undefined) {
-                    bpdata.MeasurementDateTime =  (bp.MeasurementDateTime.s);
+                    bpdata.MeasurementDateTime =  bp.MeasurementDateTime.s;
                     bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-                    let m = bpdata.MeasurementDateTime;
-                    // bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
-                     //bpdata.MeasurementDateTime = Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
-                    // bpdata.MeasurementDateTime = m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds();
+                    bpdata.sortDateColumn =  bp.MeasurementDateTime.s;
+                  //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
                 }
+
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
                     bpdata.CreatedDate =  new Date(bpdata.CreatedDate);

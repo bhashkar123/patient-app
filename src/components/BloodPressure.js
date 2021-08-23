@@ -167,8 +167,12 @@ const BloodPressure = props => {
           field: 'MeasurementDateTime',
           headerName: 'Date Recorded',
           editable: false,
-          type: 'dateTime',
-          width: 200
+          type:'dateTime',
+          width: 200,
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
         },
         {
           field: 'CreatedDate',
@@ -191,7 +195,7 @@ const BloodPressure = props => {
          
         },
         { 
-          field: "", 
+          field: "sortDateColumn", 
           headerName: "Action",
           width: 300,
           
@@ -264,7 +268,7 @@ const BloodPressure = props => {
           editable: false
         },
         { 
-          field: "", 
+          field: "sortDateColumn", 
           headerName: "Action"
          
         }  
@@ -298,7 +302,14 @@ const BloodPressure = props => {
                 rows={rows}
                 columns={dgcolumns}
                 pageSize={10}
-                sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
+                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+                componentsProps={{
+                  toolbar: {
+                    value: searchText,
+                    onChange: (event) => requestSearch(event.target.value),
+                    clearSearch: () => requestSearch("")
+                  }
+                }}
               />
             </div>
           );
