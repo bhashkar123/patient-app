@@ -791,7 +791,7 @@ const renderThreads = () => {
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-12">
-                                    Total Time Logs: {totalLogtime}
+                                    Total Time Logs (min: sec): {totalLogtime}
                                 </div>
                             </div>
 
