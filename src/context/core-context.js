@@ -56,11 +56,11 @@ export const CoreContextProvider = props => {
     const [userId, setUserId] = useState('');
 
     
-    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
-    // const [userTable, setuserTable] = useState('UserDetailsDemo');
+    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
+    const [userTable, setuserTable] = useState('UserDetailsDemo');
 
-    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
-    const [userTable, setuserTable] = useState('UserDetail');
+    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+    // const [userTable, setuserTable] = useState('UserDetail');
     
     ///Chart Data
 
@@ -1480,10 +1480,18 @@ export const CoreContextProvider = props => {
             "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
             "FilterExpression": "ActiveStatus = :v_status",
             "ExpressionAttributeValues": {
-                ":v_PK": { "S": "doctor" },
+                ":v_PK" : { "S": "doctor" },
                 ":v_SK": { "S": "DOCTOR_" },
                 ":v_status": { "S": "Active" }
-            }
+            },
+            
+
+
+            // "ExpressionAttributeValues": {
+            //     ":v_PK": { "S": "doctor" },
+            //     ":v_SK": { "S": "DOCTOR_" },
+            //     ":v_status": { "S": "Active" }
+            // }
         }
 
 

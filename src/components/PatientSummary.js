@@ -47,6 +47,7 @@ const PatientSummary  = props =>  {
     const [weightMax, setWeightMax] = useState(0);
 
     const [patient, setPatient] = useState('');
+    const [patientId, setpatientId] = useState('');
     const [message, setMessage] = useState('');
     const [threadMobile, setThreadMobile] = useState('');
     const [deviceType, setDeviceType] = useState('');
@@ -68,6 +69,7 @@ const PatientSummary  = props =>  {
         setUserType(localStorage.getItem("userType"));
         setUserId(localStorage.getItem("userId"));
         setUserName(localStorage.getItem("userName"));
+        setpatientId(patientId);
         //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
         //setPatient(patientData);
@@ -899,7 +901,7 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog( coreContext.timeLogData, patient.userId, userName )} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName )} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
