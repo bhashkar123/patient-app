@@ -32,7 +32,7 @@ export const CoreContextProvider = props => {
     const [ccData, setccData] = useState([]);
     const [coachData, setcoachData] = useState([]);
     const [resetForm, setResetForm] = useState(0);
-
+    const [tasktimerUserData, settasktimerUserData] = useState([]);
     // const [idToken, setToken] = useState([]);
     const [patient, setPatient] = useState({});
     const [threads, setThreads] = useState([]);
@@ -1643,6 +1643,62 @@ export const CoreContextProvider = props => {
     }
 
 
+    const fetchTaskTimerUser = () => {
+        const token = localStorage.getItem('app_jwt');
+
+        const data = {
+            "TableName": userTable,
+            "ProjectionExpression": "PK,SK,UserId",
+            "KeyConditionExpression": " UserId > :v_user_id ",
+            "FilterExpression": "  ActiveStatus = :v_status AND PK <> :v_PK",
+            "ExpressionAttributeValues": {
+                ":v_PK": { "S": "patient" },
+                ":v_status": { "S": "Active" },
+                ":v_user_id": { "S": 2 }
+            }
+        }
+
+
+
+        axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const taskTimerUserData = response.data;
+            const dataSettaskTimerUserData = [];
+            
+            taskTimerUserData.forEach((p, index) => {
+                console.log('p' + index, p);
+               
+                let taskTimerUserdata = {};
+                taskTimerUserdata.id =index;
+                
+
+                if(p.PK !==undefined){
+                    taskTimerUserdata.user_id = p.SK.s;
+                }
+
+                if(p.UserName !==undefined){
+                    taskTimerUserdata.user_name = p.UserName.s;
+                }
+
+                dataSettaskTimerUserData.push(taskTimerUserdata);
+               
+            });
+
+            settasktimerUserData(dataSettaskTimerUserData);
+           
+        }).catch(() => {
+            relogin();
+        })
+
+    }
+
+
     function formatAMPM(date) {
         var d = new Date(date);
         //alert(d);
@@ -2325,6 +2381,7 @@ export const CoreContextProvider = props => {
         fetchBgChartData,
         fetchWSChartData,
         fetchBpChartData,
+        tasktimerUserData,
         fetchThresold,
         fetchTimeLog,
         backUpMessages,
@@ -2340,6 +2397,7 @@ export const CoreContextProvider = props => {
         UpdateThreshold,
         fetchCareCoordinator,
         fetchCoach,
+        fetchTaskTimerUser,
         addCareCoordinator,
         addCoach,
         UpdateTimeLog,

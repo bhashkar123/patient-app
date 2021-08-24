@@ -79,6 +79,7 @@ const PatientSummary  = props =>  {
 
         coreContext.fetchTimeLog("PATIENT_" + patientId);
 
+        //coreContext.fetchTaskTimerUser();
 
         coreContext.fetchDeviceData("PATIENT_" + patientId);
         /// setting default value
@@ -274,6 +275,18 @@ const PatientSummary  = props =>  {
                     <td>{tl.timeAmount} </td>
                     <td>{tl.startDT} </td>
                     <td>{tl.endDT} </td>
+                </tr>
+            });
+        }
+    }  
+
+
+    const renderTaskTimer = () =>{
+        if (coreContext.tasktimerUserData.length > 0) {
+            return coreContext.tasktimerUserData.map((tl, index) => {
+                return <tr>
+                    <td>{tl.user_id} </td>
+                    <td>{tl.user_name} </td>
                 </tr>
             });
         }
@@ -760,11 +773,12 @@ const renderThreads = () => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             Performed By
-                                            <select value={performedBy} onChange={e => setPerformedBy(e.target.value)} className="form-control mb-2 mr-sm-2">
+                                            {/* {renderTaskTimer()} */}
+                                            {/* <select value={performedBy} onChange={e => setPerformedBy(e.target.value)} className="form-control mb-2 mr-sm-2">
                                                 <option value="SelectUser">Select a User</option>
                                                 <option value="User1">User I</option>
                                                 <option value="User II">User II</option>
-                                            </select>
+                                            </select> */}
                                         </div>
                                         <div className="col-md-6">
                                             Performed On
