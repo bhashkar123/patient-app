@@ -22,9 +22,13 @@ import { BloodPressure } from './BloodPressure';
 import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { Thresold } from './Thresold';
+import Alert from './common/Alert';
+
 
 
 const PatientSummary  = props =>  {
+    
+    const [Prompt, setDirty, setPristine] = Alert();
     const coreContext = useContext(CoreContext);
     const [notes, setNotes] = useState('');
     const [date, setDate] = useState('');
@@ -36,6 +40,7 @@ const PatientSummary  = props =>  {
     const [bgMax, setBgMax] = useState(0);
     const [bmiMin, setBmiMin] = useState(0);
     const [bmiMax, setBmiMax] = useState(0);
+    const [PatientId, setPatientId] = useState("");
 
     const [diastolicMin, setDiastolicMin] = useState(0);
     const [diastolicMax, setDiastolicMax] = useState(0);
@@ -61,6 +66,31 @@ const PatientSummary  = props =>  {
     const [totalLogtime, settotalLogtime] = useState(0);
 
     const greeting = 'Welcome to React';
+    const fetchCareCoordinator = () => {
+        const patientId = props.match.params.patient;
+        setPatientId(patientId);
+        coreContext.fetchCareCoordinator();
+    }
+    useEffect(fetchCareCoordinator, []);
+
+    const fetchProviders = () => {
+        const patientId = props.match.params.patient;
+        setPatientId(patientId);
+        coreContext.fetchProviders();
+    }
+    useEffect(fetchProviders, [coreContext.providerData.length]);
+    const fetchCoach = () => {
+        const patientId = props.match.params.patient;
+        setPatientId(patientId);
+        coreContext.fetchCoach();
+    }
+
+    useEffect(fetchCoach, []);
+
+
+const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coachData]
+console.log(tt)
+
 
    
     const fetchPatient = () => {
@@ -764,7 +794,7 @@ const renderThreads = () => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         Task Type
-                                        <select value={taskType} onChange={e => setTaskType(e.target.value)} className="form-control mb-2 mr-sm-2">
+                                        <select value={taskType} onChange={e => {setTaskType(e.target.value);setDirty();}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
                                             <option value="CaseCoordination">Case Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
@@ -774,17 +804,22 @@ const renderThreads = () => {
                                         <div className="col-md-6">
                                             Performed By
                                             {/* {renderTaskTimer()} */}
-                                            {/* <select value={performedBy} onChange={e => setPerformedBy(e.target.value)} className="form-control mb-2 mr-sm-2">
+                                            <select value={performedBy} onChange={e => {setPerformedBy(e.target.value);setDirty();}} className="form-control mb-2 mr-sm-2">
                                                 <option value="SelectUser">Select a User</option>
-                                                <option value="User1">User I</option>
-                                                <option value="User II">User II</option>
-                                            </select> */}
+                                                {tt.map((curr)=>{
+                                                    return <option value={(!curr.name)?curr.provider:curr.name}> {(!curr.name)?curr.provider:curr.name}</option>
+                                                })}
+                                                
+                                               
+                                                
+                                            </select>
                                         </div>
                                         <div className="col-md-6">
                                             Performed On
                                             <DatePicker className='form-control mt-2'
                                                 selected={date}
-                                                onChange={(date) => setDate(date)}
+                                               // onChange={(date) => setDate(date)}
+                                                onChange={(date) => {setDate(date);setDirty();}}
                                                 placeholderText='Enter a date'
                                                 dateFormat='dd/MM/yyyy'
                                             />
@@ -942,6 +977,7 @@ const renderThreads = () => {
                 </div>
             </div>
         </div>
+        {Prompt}
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTabs()}</div>
 
     </div>)
