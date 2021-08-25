@@ -950,7 +950,7 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName )} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("")}} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
