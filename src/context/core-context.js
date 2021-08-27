@@ -21,6 +21,7 @@ export const CoreContextProvider = props => {
 
     const [thresoldData, setThresoldData] = useState([]);
     const [timeLogData, setTimeLogData] = useState([]);
+    const [AlltimeLogData, setAllTimeLogData] = useState([]);
     const [bloodpressureData, setbloodpressureData] = useState([]);
     const [bloodglucoseData, setbloodglucoseData] = useState([]);
 
@@ -679,7 +680,6 @@ export const CoreContextProvider = props => {
 
 
     const fetchTimeLog = (userid) => {
-
         const token = localStorage.getItem('app_jwt');
        
         let data = "";
@@ -692,9 +692,6 @@ export const CoreContextProvider = props => {
                             ":v_GSI1PK": { "S": "TIMELOG_READING_"+userid }
             }
         }
-
-
-
         axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -740,6 +737,66 @@ export const CoreContextProvider = props => {
             });
 
             setTimeLogData(dataSettimeLog);
+
+            console.log('timeLogData', dataSettimeLog);
+        })
+
+    }
+
+
+    const fetchAllTimeLog = () => {
+        const token = localStorage.getItem('app_jwt');
+        let data = "";
+        data = {
+            "TableName": userTable,
+	                "KeyConditionExpression": "PK = :v_PK",
+                    "ExpressionAttributeValues": {
+                            ":v_PK": { "S": "TIMELOG_READING" }
+                        }
+             }
+        axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+
+            const timelogData = response.data;
+            console.log('timelogData data', response.data);
+            const dataSettimeLog = [];
+
+            timelogData.forEach((tl, index) => {
+                console.log('p' + index, tl);
+                let tldata = {};
+
+                if (tl.TaskType) {
+                    tldata.taskType = tl.TaskType.s;
+                }
+                if (tl.PerformedBy) {
+                    tldata.performedBy = tl.PerformedBy.s;
+                }
+                if (tl.PerformedOn) {
+                    tldata.performedOn = tl.PerformedOn.s;
+                }
+                if (tl.StartDT) {
+                    tldata.startDT = tl.StartDT.s;
+                }
+                if (tl.EndDT) {
+                    tldata.endDT = tl.EndDT.s;
+                }
+                if (tl.TimeAmount) {
+                    tldata.timeAmount = tl.TimeAmount.s;
+                }
+                if (tl.UserName) {
+                    tldata.UserName = tl.UserName.s;
+                }
+
+                dataSettimeLog.push(tldata);
+            });
+
+            setAllTimeLogData(dataSettimeLog);
 
             console.log('timeLogData', dataSettimeLog);
         })
@@ -2361,6 +2418,7 @@ export const CoreContextProvider = props => {
         coachData,
         thresoldData,
         timeLogData,
+        AlltimeLogData,
         bloodglucoseData,
         bloodpressureData,
         weightData,
@@ -2384,6 +2442,7 @@ export const CoreContextProvider = props => {
         tasktimerUserData,
         fetchThresold,
         fetchTimeLog,
+        fetchAllTimeLog,
         backUpMessages,
         renderLoader,
         checkLocalAuth,

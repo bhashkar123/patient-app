@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import { CoreContext } from '../context/core-context';
 import { Bezier, Bezier2, Cash, GraphUp } from 'react-bootstrap-icons';
 import "react-datepicker/dist/react-datepicker.css";
-
+import Loader from "react-loader-spinner";
 
 const Dashboard = props => {
     const [date, setDate] = useState();
@@ -19,15 +19,39 @@ const Dashboard = props => {
         const userType = localStorage.getItem("userType");
         const userId = localStorage.getItem("userId");
         coreContext.fetchPatientListfromApi(userType, userId);
+        coreContext.fetchAllTimeLog();
     }
     useEffect(fetchPatients, []);
-    console.log(coreContext.patients)
-    coreContext.patients.map((curr)=>{
-        console.log("PATIENT_" + curr.userId)
-        coreContext.fetchTimeLog("PATIENT_1627874676698")
-        console.log(coreContext.timeLogData)
-    })
-    
+   
+
+    const renderTimeLogs = () => {
+        if (coreContext.AlltimeLogData.length == 0) {
+            return (
+                <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                     <Loader
+                type="Circles"
+                color="#00BFFF"
+                height={100}
+                width={100}
+            /></div>
+              );
+        }
+        if (coreContext.AlltimeLogData.length > 0) {
+
+            coreContext.patients.map((curr)=>{
+                console.log("PATIENT_" + curr.userId)
+                let patient = coreContext.AlltimeLogData.filter(app =>
+                    app.name.toLowerCase()== curr.userId);
+                console.log(patient[0].timeLogData);
+            })
+
+            return (
+                <div style={{ height: 680, width: '100%' }}>
+                
+                </div>
+              );
+        }
+    }
     // const fetchTokenfromApi = () => {
     //     coreContext.fetchTokenfromApi();
     //     localStorage.setItem('token', coreContext.idToken);
@@ -68,7 +92,8 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>Inactive</th>
                     <th style={{ textAlign: 'center' }}>Not Enrolled</th>
                 </tr>
-                <tr>
+                {renderTimeLogs()}
+                {/* <tr>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
@@ -78,7 +103,7 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                </tr>
+                </tr> */}
             </table>
         </div>
         <div className="card-body">
