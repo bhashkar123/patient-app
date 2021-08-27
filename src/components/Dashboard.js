@@ -9,6 +9,8 @@ import Loader from "react-loader-spinner";
 
 const Dashboard = props => {
     const [date, setDate] = useState();
+    const [zeromin, setZeroMin] = useState();
+    const [ninemin, setNineMin] = useState();
     const coreContext = useContext(CoreContext);
 
     useEffect(coreContext.checkLocalAuth, []);
@@ -39,12 +41,25 @@ const Dashboard = props => {
         if (coreContext.AlltimeLogData.length > 0) {
 
             coreContext.patients.map((curr)=>{
-                let patient = coreContext.AlltimeLogData.filter(app =>
+                let patientTimelog = coreContext.AlltimeLogData.filter(app =>
                     app.UserId == curr.userId);
                     
-                    if(patient.length > 0){
-                        console.log(patient.length);
-                        console.log(patient[0].timeAmount);
+                    if(patientTimelog.length > 0){
+                        let totalTimeLog=0;
+                        console.log(patientTimelog.length);
+                        patientTimelog.map((timelog)=>{
+                             totalTimeLog=timelog.timeAmount+totalTimeLog;
+                        });
+                        // var values = totalTimeLog.split(":");
+                        // var min = parseFloat(values[0])
+                        // var sec = parseFloat(values[1]);
+                        // // forcefully seeting
+                        // sec = 32;
+                        // if(sec < 60) {
+                        //     setZeroMin(totalTimeLog);
+                        // }
+                        
+                        console.log(patientTimelog[0].timeAmount);
                         console.log("curr.userId" +curr.userId);
                     }
             })
@@ -97,7 +112,7 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>Not Enrolled</th>
                 </tr>
                 {renderTimeLogs()}
-                {/* <tr>
+                <tr>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
@@ -106,8 +121,8 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                </tr> */}
+                    <th style={{ textAlign: 'center' }}><a href="/Patients">{zeromin}</a></th>
+                </tr>
             </table>
         </div>
         <div className="card-body">
