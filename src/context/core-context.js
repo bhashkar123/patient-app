@@ -792,7 +792,9 @@ export const CoreContextProvider = props => {
                 if (tl.UserName) {
                     tldata.UserName = tl.UserName.s;
                 }
-
+                if (tl.GSI1SK) {
+                    tldata.UserId = tl.GSI1SK.s;
+                }
                 dataSettimeLog.push(tldata);
             });
 

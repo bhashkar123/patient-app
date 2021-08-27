@@ -39,10 +39,14 @@ const Dashboard = props => {
         if (coreContext.AlltimeLogData.length > 0) {
 
             coreContext.patients.map((curr)=>{
-                console.log("PATIENT_" + curr.userId)
                 let patient = coreContext.AlltimeLogData.filter(app =>
-                    app.name.toLowerCase()== curr.userId);
-                console.log(patient[0].timeLogData);
+                    app.UserId == curr.userId);
+                    
+                    if(patient.length > 0){
+                        console.log(patient.length);
+                        console.log(patient[0].timeAmount);
+                        console.log("curr.userId" +curr.userId);
+                    }
             })
 
             return (
