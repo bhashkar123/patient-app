@@ -13,6 +13,21 @@ const Dashboard = props => {
 
     useEffect(coreContext.checkLocalAuth, []);
 
+    const fetchPatients = () => {
+        const email = localStorage.getItem('app_userEmail');
+        coreContext.userDetails(email);
+        const userType = localStorage.getItem("userType");
+        const userId = localStorage.getItem("userId");
+        coreContext.fetchPatientListfromApi(userType, userId);
+    }
+    useEffect(fetchPatients, []);
+    console.log(coreContext.patients)
+    coreContext.patients.map((curr)=>{
+        console.log("PATIENT_" + curr.userId)
+        coreContext.fetchTimeLog("PATIENT_1627874676698")
+        console.log(coreContext.timeLogData)
+    })
+    
     // const fetchTokenfromApi = () => {
     //     coreContext.fetchTokenfromApi();
     //     localStorage.setItem('token', coreContext.idToken);

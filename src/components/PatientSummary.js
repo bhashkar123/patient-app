@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
-import { CoreContext } from '../context/core-context';
+import CoreContextProvider, { CoreContext } from '../context/core-context';
 import { GenderMale, GenderFemale, PencilSquare, CaretDown } from 'react-bootstrap-icons';
 import DatePicker from "react-datepicker";
 import { ButtonGroup, Button, Form } from 'react-bootstrap';
@@ -89,7 +89,9 @@ const PatientSummary  = props =>  {
 
 
 const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coachData]
-console.log(tt)
+
+
+
 
 
    
@@ -108,6 +110,16 @@ console.log(tt)
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 
         coreContext.fetchTimeLog("PATIENT_" + patientId);
+        console.log("PATIENT_" + patientId)
+        let totaltime=0
+        console.log("Sahil")
+        console.log("akshy")
+        coreContext.timeLogData.map((curr)=>{
+            totaltime=totaltime+ Moment.duration(curr.timeAmount).asMinutes()
+        })
+        console.log(coreContext.timeLogData)
+        
+        console.log("totaltime",totaltime)    
 
         //coreContext.fetchTaskTimerUser();
 
