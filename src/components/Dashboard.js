@@ -59,13 +59,9 @@ const Dashboard = props => {
               );
         }
         if (coreContext.AlltimeLogData.length > 0) {
-            
-            
             coreContext.patients.map((curr)=>{
                 let patientTimelog = coreContext.AlltimeLogData.filter(app =>
                     app.UserId == curr.userId);
-                    
-                    
                     if(patientTimelog.length > 0){
                         let totalTimeLog=0;
                      //   console.log(patientTimelog);
@@ -114,11 +110,7 @@ const Dashboard = props => {
             })
             
 
-            return (
-                <div style={{ height: 680, width: '100%' }}>
-                
-                </div>
-              );
+         
               
         }
     }
