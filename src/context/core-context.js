@@ -225,6 +225,7 @@ export const CoreContextProvider = props => {
         const token = localStorage.getItem('app_jwt');
 
         setDpatient(d);
+        console.log(dpatient)
     }
     // capture from patient List page.
     const fetchPatientListfromApi  = async (usertype, userId) => {
@@ -2434,6 +2435,7 @@ export const CoreContextProvider = props => {
         weightData,
         weightApiData,
         fetchDeviceData,
+        getdp,
         login,
         fetchPatientListfromApi,
         inbox,

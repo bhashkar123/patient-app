@@ -37,7 +37,7 @@ const Dashboard = props => {
       coreContext.getdp(p);
         alert(p)
     }
-    useEffect(fetchdpatient, []);
+   // useEffect(fetchdpatient, []);
    
 
     const renderTimeLogs = () => {
