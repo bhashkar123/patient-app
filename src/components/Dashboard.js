@@ -13,7 +13,7 @@ const Dashboard = props => {
     const [zeromin, setZeroMin] = useState();
     const [ninemin, setNineMin] = useState();
     const coreContext = useContext(CoreContext);
-    const zero=[];
+    let zero=[];
             const nine=[];
             const nineteen=[];
             const thirtynine=[];
@@ -35,9 +35,15 @@ const Dashboard = props => {
 
     const fetchdpatient=(p)=>{
       coreContext.getdp(p);
+      //console.log(coreContext.dpatient)
         alert(p)
     }
    // useEffect(fetchdpatient, []);
+   const setPatient = (p) => {
+    console.log('sahil',p);
+ //   coreContext.setPatient(p);
+    localStorage.setItem('d_patient', JSON.stringify(p));
+}
    
 
     const renderTimeLogs = () => {
@@ -62,7 +68,7 @@ const Dashboard = props => {
                     
                     if(patientTimelog.length > 0){
                         let totalTimeLog=0;
-                        console.log(patientTimelog);
+                     //   console.log(patientTimelog);
                         patientTimelog.map((timelog)=>{
                              totalTimeLog=Moment.duration(timelog.timeAmount).asMinutes()+totalTimeLog;
                         });
@@ -71,19 +77,19 @@ const Dashboard = props => {
                         }
                         else if(totalTimeLog>=60 && totalTimeLog<=540){
                            // setOnetonine(onetonine+1)
-                           nine.push(curr.userId)
+                           nine.push(curr)
                            //nine=nine+1;
                             
                         }
                         else if(totalTimeLog>=600 && totalTimeLog<=1140){
                             // setOnetonine(onetonine+1)
-                            nineteen.push(curr.userId)
+                            nineteen.push(curr)
                             //nine=nine+1;
                              
                          }
                          else if(totalTimeLog>=1200 && totalTimeLog<=2340){
                             // setOnetonine(onetonine+1)
-                            thirtynine.push(curr.userId)
+                            thirtynine.push(curr)
                             //nine=nine+1;
                              
                          }
@@ -102,7 +108,7 @@ const Dashboard = props => {
                       
                     }
                     else{
-                            inactive.push(curr.user)
+                            inactive.push(curr.userId)
                     }
 
             })
@@ -162,14 +168,14 @@ const Dashboard = props => {
                 
                 
                 <tr>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients" onClick={()=>fetchdpatient(coreContext.patients)}>{coreContext.patients.length}</a> </th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{sixty.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{fiftynine.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{thirtynine.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{nineteen.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{nine.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{zero.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{inactive.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/patients">{coreContext.patients.length}</a> </th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(sixty)}>{sixty.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(fiftynine)}>{fiftynine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(thirtynine)}>{thirtynine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(nineteen)}>{nineteen.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(nine)}>{nine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients" onClick={() => setPatient(zero)}>{zero.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(inactive)}>{inactive.length}</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/dpatients">{zeromin}</a></th>
                 </tr>
             </table>

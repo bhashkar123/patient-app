@@ -15,9 +15,6 @@ import {
   } from "@material-ui/data-grid";
 
 import Loader from "react-loader-spinner";
-export const DPaients = React.createContext({
-
-});
 
 const DPatients = props => {
 
@@ -57,7 +54,15 @@ const DPatients = props => {
         coreContext.userDetails(email);
         const userType = localStorage.getItem("userType");
         const userId = localStorage.getItem("userId");
-        coreContext.fetchPatientListfromApi(userType, userId);
+        console.log("sahil",coreContext.dpatient)
+        
+        if (coreContext.dpatient.length>0){
+            coreContext.patients=coreContext.dpatient
+        }
+        else{
+            coreContext.fetchPatientListfromApi(userType, userId);
+        }
+        
     }
 
     const fetchProviders = () => {
@@ -199,6 +204,8 @@ const DPatients = props => {
     // const classes = useStyles();
     
     const renderPatients = () => {
+        const d_pat=localStorage.getItem("d_patient");
+        console.log(d_pat)
         if (coreContext.patients.length == 0) {
             return (
                 <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
@@ -214,7 +221,7 @@ const DPatients = props => {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 
-                    rows={coreContext.patients}
+                    rows={coreContext.patients.filter(curr=>d_pat.includes(curr.userId))}
                     columns={columns}
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
