@@ -6,15 +6,23 @@ import { CoreContext } from '../context/core-context';
 import { Bezier, Bezier2, Cash, GraphUp } from 'react-bootstrap-icons';
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
+import Moment from 'moment'
 
 const Dashboard = props => {
     const [date, setDate] = useState();
     const [zeromin, setZeroMin] = useState();
     const [ninemin, setNineMin] = useState();
     const coreContext = useContext(CoreContext);
-
+    const zero=[];
+            const nine=[];
+            const nineteen=[];
+            const thirtynine=[];
+            const fiftynine=[];
+            const sixty=[];
+            const inactive=[];
+    
     useEffect(coreContext.checkLocalAuth, []);
-
+   
     const fetchPatients = () => {
         const email = localStorage.getItem('app_userEmail');
         coreContext.userDetails(email);
@@ -24,6 +32,12 @@ const Dashboard = props => {
         coreContext.fetchAllTimeLog();
     }
     useEffect(fetchPatients, []);
+
+    const fetchdpatient=(p)=>{
+      coreContext.getdp(p);
+        alert(p)
+    }
+    useEffect(fetchdpatient, []);
    
 
     const renderTimeLogs = () => {
@@ -39,38 +53,70 @@ const Dashboard = props => {
               );
         }
         if (coreContext.AlltimeLogData.length > 0) {
-
+            
+            
             coreContext.patients.map((curr)=>{
                 let patientTimelog = coreContext.AlltimeLogData.filter(app =>
                     app.UserId == curr.userId);
                     
+                    
                     if(patientTimelog.length > 0){
                         let totalTimeLog=0;
-                        console.log(patientTimelog.length);
+                        console.log(patientTimelog);
                         patientTimelog.map((timelog)=>{
-                             totalTimeLog=timelog.timeAmount+totalTimeLog;
+                             totalTimeLog=Moment.duration(timelog.timeAmount).asMinutes()+totalTimeLog;
                         });
-                        // var values = totalTimeLog.split(":");
-                        // var min = parseFloat(values[0])
-                        // var sec = parseFloat(values[1]);
-                        // // forcefully seeting
-                        // sec = 32;
-                        // if(sec < 60) {
-                        //     setZeroMin(totalTimeLog);
-                        // }
-                        
-                        console.log(patientTimelog[0].timeAmount);
-                        console.log("curr.userId" +curr.userId);
+                        if(totalTimeLog>=0 && totalTimeLog<=60){
+                                zero.push(curr.userId)
+                        }
+                        else if(totalTimeLog>=60 && totalTimeLog<=540){
+                           // setOnetonine(onetonine+1)
+                           nine.push(curr.userId)
+                           //nine=nine+1;
+                            
+                        }
+                        else if(totalTimeLog>=600 && totalTimeLog<=1140){
+                            // setOnetonine(onetonine+1)
+                            nineteen.push(curr.userId)
+                            //nine=nine+1;
+                             
+                         }
+                         else if(totalTimeLog>=1200 && totalTimeLog<=2340){
+                            // setOnetonine(onetonine+1)
+                            thirtynine.push(curr.userId)
+                            //nine=nine+1;
+                             
+                         }
+                         else if(totalTimeLog>=2400 && totalTimeLog<=3540){
+                            // setOnetonine(onetonine+1)
+                            fiftynine.push(curr.userId)
+                            //nine=nine+1;
+                             
+                         }
+                         else if(totalTimeLog>=3600){
+                            // setOnetonine(onetonine+1)
+                            sixty.push(curr.userId)
+                            //nine=nine+1;
+                             
+                         }
+                      
                     }
+                    else{
+                            inactive.push(curr.user)
+                    }
+
             })
+            
 
             return (
                 <div style={{ height: 680, width: '100%' }}>
                 
                 </div>
               );
+              
         }
     }
+
     // const fetchTokenfromApi = () => {
     //     coreContext.fetchTokenfromApi();
     //     localStorage.setItem('token', coreContext.idToken);
@@ -112,16 +158,19 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>Not Enrolled</th>
                 </tr>
                 {renderTimeLogs()}
+            
+                
+                
                 <tr>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">{zeromin}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients" onClick={()=>fetchdpatient(coreContext.patients)}>{coreContext.patients.length}</a> </th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{sixty.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{fiftynine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{thirtynine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{nineteen.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{nine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{zero.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{inactive.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{zeromin}</a></th>
                 </tr>
             </table>
         </div>

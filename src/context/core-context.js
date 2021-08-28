@@ -55,6 +55,7 @@ export const CoreContextProvider = props => {
     const [showLoader, setShowLoader] = useState(false);
     const [jwt, setJwt] = useState('');
     const [userId, setUserId] = useState('');
+    const [dpatient,setDpatient]=useState([]);
 
     
     const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
@@ -68,6 +69,8 @@ export const CoreContextProvider = props => {
     const [bgChartData, setbgChartData] = useState([]);
     const [bpChartData, setbpChartData] = useState([]);
     const [wsChartData, setwsChartData] = useState([]);
+
+    
 
     const relogin = () => {
         setIsAuthenticated(false);
@@ -136,6 +139,7 @@ export const CoreContextProvider = props => {
         })
     }
 
+   
     const userDetails = (useremail, url = '') => {
         const token = localStorage.getItem('app_jwt');
         //let url ='';
@@ -217,7 +221,11 @@ export const CoreContextProvider = props => {
         })
 
     }
+    const getdp=(d)=>{
+        const token = localStorage.getItem('app_jwt');
 
+        setDpatient(d);
+    }
     // capture from patient List page.
     const fetchPatientListfromApi  = async (usertype, userId) => {
         const token = localStorage.getItem('app_jwt');

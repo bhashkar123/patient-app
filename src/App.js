@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import axios from 'axios';
 import Sidebar from "react-sidebar";
 import * as Pages from './components';
+import { DPatients } from './components/DPatients';
 import './App.css';
 
 import './dgmaterial.css';
@@ -79,6 +80,7 @@ function App() {
               <Route exact path='/settings' component={Pages.Settings} />
               <Route exact path='/dashboard' component={Pages.Dashboard} />
               <Route exact path='/patients' component={Pages.Patients} />
+              <Route exact path='/dpatients' component={DPatients} />
             
               <Route exact path='/bloodpressure'component={Pages.BloodPressure}/>
             
