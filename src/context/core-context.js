@@ -26,6 +26,8 @@ export const CoreContextProvider = props => {
     const [bloodglucoseData, setbloodglucoseData] = useState([]);
 
     const [deviceData, setdeviceData] = useState([]);
+    const [patientWDevice, setPatientWDevice] = useState([]);
+
     const [providerData, setdoctorData] = useState([]);
     const [providerOptions, setProviderOptions] = useState([]);
     const [coachOptions, setCoachOptions] = useState([]);
@@ -34,7 +36,7 @@ export const CoreContextProvider = props => {
     const [coachData, setcoachData] = useState([]);
     const [resetForm, setResetForm] = useState(0);
     const [tasktimerUserData, settasktimerUserData] = useState([]);
-    // const [idToken, setToken] = useState([]);
+    
     const [patient, setPatient] = useState({});
     const [threads, setThreads] = useState([]);
     const [inbox, setInbox] = useState([]);
@@ -1139,6 +1141,7 @@ export const CoreContextProvider = props => {
             }
         });
     }
+
     const DeletePatient = (patientId) => {
         const token = localStorage.getItem('app_jwt');
 
@@ -1453,7 +1456,7 @@ export const CoreContextProvider = props => {
     }
 
 
-     const  fetchDeviceData = (patientId, username, usertype,type, patient) => {
+    const  fetchDeviceData = (patientId, username, usertype,type, patient) => {
 
         const token = localStorage.getItem('app_jwt');
         
@@ -1474,11 +1477,12 @@ export const CoreContextProvider = props => {
             data = {
                 "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
-                "FilterExpression": "DeviceStatus = :v_status",
+                "FilterExpression": "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
                 "ExpressionAttributeValues": {
                     ":v_PK": { "S": "patient" },
                     ":v_SK": { "S": "DEVICE_" },
-                    ":v_status": { "S": "Active" }
+                    ":v_status": { "S": "Active" },
+                    ":v_deviceId": { "S": "Null" }
                 }
         }}
       axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
@@ -1511,12 +1515,14 @@ export const CoreContextProvider = props => {
                     if(patients.length >0){
                         let patient = patients.filter(p => p.ehrId === devicedata.patientId);
                         if(patient.length >0 ) devicedata.username =patient[0].name;
-                    }else{
+                    }
+                    else{
                         devicedata.username=username;
                     }
                 }
                
-                dataSetdevice.push(devicedata);
+                if(devicedata.username !==undefined)dataSetdevice.push(devicedata);
+                
 
             });
 
@@ -2416,6 +2422,64 @@ export const CoreContextProvider = props => {
        
     }
 
+    const  fetchPatientWithDevice = () => {
+
+        const token = localStorage.getItem('app_jwt');
+       
+        let  data = {
+                "TableName": userTable,
+                "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
+                "FilterExpression": "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "patient" },
+                    ":v_SK": { "S": "DEVICE_" },
+                    ":v_status": { "S": "Active" },
+                    ":v_deviceId": { "S": "Null" }
+                }
+        }
+      axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const deviceData = response.data;
+            const dataSetdevice = [];
+          
+            //    console.log('deviceData', deviceData);
+            deviceData.forEach((p, index) => {
+                console.log('p' + index, p);
+                let devicedata = {};
+                devicedata.id = index;
+
+                if(p.DeviceId !=undefined){
+                    devicedata.deviceID = p.DeviceId.s;
+                }
+                if(p.DeviceType !=undefined){
+                    devicedata.DeviceType = p.DeviceType.s;
+                }
+                if(p.GSI1PK !=undefined){
+                    devicedata.patientId = p.GSI1PK.s;
+                    if(patients.length >0){
+                        let patient = patients.filter(p => p.ehrId === devicedata.patientId);
+                        if(patient.length >0 ) devicedata.username =patient[0].name;
+                    }
+                    // else{
+                    //     devicedata.username=username;
+                    // }
+                }
+                dataSetdevice.push(devicedata);
+                
+            });
+           
+            setPatientWDevice(dataSetdevice);
+
+        })
+
+    }
+
     return <CoreContext.Provider value={{
         patients,
         bgData,
@@ -2436,6 +2500,7 @@ export const CoreContextProvider = props => {
         weightData,
         weightApiData,
         fetchDeviceData,
+        patientWDevice,
         getdp,
         dpatient,
         login,
@@ -2453,6 +2518,7 @@ export const CoreContextProvider = props => {
         fetchBgChartData,
         fetchWSChartData,
         fetchBpChartData,
+        fetchPatientWithDevice,
         tasktimerUserData,
         fetchThresold,
         fetchTimeLog,

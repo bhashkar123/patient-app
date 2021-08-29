@@ -10,16 +10,17 @@ import Moment from 'moment'
 
 const Dashboard = props => {
     const [date, setDate] = useState();
-    const [zeromin, setZeroMin] = useState();
-    const [ninemin, setNineMin] = useState();
     const coreContext = useContext(CoreContext);
     let zero=[];
-            const nine=[];
-            const nineteen=[];
-            const thirtynine=[];
-            const fiftynine=[];
-            const sixty=[];
-            const inactive=[];
+    const nine=[];
+    const nineteen=[];
+    const thirtynine=[];
+    const fiftynine=[];
+    const sixty=[];
+    const inactive=[];
+
+
+    let patientwdevice=[];
     
     useEffect(coreContext.checkLocalAuth, []);
    
@@ -28,15 +29,17 @@ const Dashboard = props => {
         coreContext.userDetails(email);
         const userType = localStorage.getItem("userType");
         const userId = localStorage.getItem("userId");
-        coreContext.fetchPatientListfromApi(userType, userId);
+        coreContext.fetchPatientListfromApi('admin');
         coreContext.fetchAllTimeLog();
+        coreContext.fetchPatientWithDevice();
     }
     useEffect(fetchPatients, []);
 
     const fetchdpatient=(p)=>{
       coreContext.getdp(p);
       //console.log(coreContext.dpatient)
-        alert(p)
+        alert(p);
+        alert(coreContext.patientWDevice);
     }
    // useEffect(fetchdpatient, []);
    const setPatient = (p) => {
@@ -115,12 +118,18 @@ const Dashboard = props => {
         }
     }
 
-    // const fetchTokenfromApi = () => {
-    //     coreContext.fetchTokenfromApi();
-    //     localStorage.setItem('token', coreContext.idToken);
-    // }
-
-    //  useEffect(fetchTokenfromApi, [coreContext.idToken.length]);
+    const renderRemotePatientMonitor = () => {
+       
+        if (coreContext.patientWDevice.length > 0 && coreContext.patients.length > 0) {
+                coreContext.patientWDevice.map((patientData)=>{
+                        let patient = coreContext.patients.filter(p => p.ehrId === patientData.patientId);
+                        if(patient.length >0 ) 
+                        {
+                            patientwdevice.push(patient);
+                        }
+                });
+        }
+    }
 
 
     return (<div className='card' style={{marginLeft:"100px"}}>
@@ -156,9 +165,6 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>Not Enrolled</th>
                 </tr>
                 {renderTimeLogs()}
-            
-                
-                
                 <tr>
                     <th style={{ textAlign: 'center' }}><a href="/patients">{coreContext.patients.length}</a> </th>
                     <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(sixty)}>{sixty.length}</a></th>
@@ -168,7 +174,7 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(nine)}>{nine.length}</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/dpatients" onClick={() => setPatient(zero)}>{zero.length}</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(inactive)}>{inactive.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients">{zeromin}</a></th>
+                    {/* <th style={{ textAlign: 'center' }}><a href="/dpatients">{zeromin}</a></th> */}
                 </tr>
             </table>
         </div>
@@ -186,9 +192,10 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>0 Mins</th>
                     <th style={{ textAlign: 'center' }}>Inactive</th>
                 </tr>
+                {renderRemotePatientMonitor()}
                 <tr>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(inactive)}>{patientwdevice.length}</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
