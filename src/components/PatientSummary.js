@@ -315,7 +315,7 @@ const PatientSummary  = props =>  {
   //  }
 
     const deleteDevice = (deviceData) => {
-        coreContext.DeleteDeviceData(deviceData.id)
+        coreContext.DeleteDeviceData(deviceData.deviceID);
     }
 
 
@@ -325,7 +325,7 @@ const PatientSummary  = props =>  {
                 return <tr>
                     <td>{deviceData.DeviceType} </td>
                     <td>{deviceData.deviceID} </td>
-                    <td> {deviceData.Action} <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteDevice(deviceData.row)}>  <Trash /></a></td>
+                    <td> {deviceData.Action} <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteDevice(deviceData)}>  <Trash /></a></td>
                 </tr>
             
             });
@@ -886,7 +886,7 @@ const renderThreads = () => {
                                             <option value="WS">Weight</option>
                                         </select>
                                         <input type="text" value={deviceId} onChange={e => setDeviceId(e.target.value)} className="form-control mb-2 mr-sm-2" placeholder="Enter device ID " />
-                                        <button type='button' onClick={() => coreContext.addDevice(deviceType, deviceId, props.match.params.patient)} className="btn btn-primary mb-2">Add Device</button>
+                                        <button type='button' onClick={() => coreContext.addDevice(deviceType, deviceId, patientId)} className="btn btn-primary mb-2">Add Device</button>
                                     </form>
                                 </div>
                             </div>
