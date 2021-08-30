@@ -2,7 +2,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { CoreContext } from '../context/core-context';
-import { GenderMale, GenderFemale, PencilSquare, CaretDown } from 'react-bootstrap-icons';
+import { GenderMale, GenderFemale, PencilSquare,  Trash } from 'react-bootstrap-icons';
 import DatePicker from "react-datepicker";
 import { ButtonGroup, Button, Form } from 'react-bootstrap';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -309,13 +309,19 @@ const PatientSummary  = props =>  {
     //       }
    
     // }
-    
+    const deleteDevice = (patient) => {
+        alert('Hi how are you');
+        //coreContext.DeletePatient(patient.userId)
+    }
+
+
     const renderDeviceData = () => {
         if (coreContext.deviceData.length > 0) {
             return coreContext.deviceData.map((deviceData, index) => {
                 return <tr>
                     <td>{deviceData.DeviceType} </td>
                     <td>{deviceData.deviceID} </td>
+                    <td><a style={{  marginRight: '5px' }} href="#" onClick={() => deleteDevice(deviceData.row)}>  <Trash /></a></td>
                 </tr>
             });
         }
