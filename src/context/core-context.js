@@ -1131,7 +1131,7 @@ export const CoreContextProvider = props => {
             "TableName": userTable,
             "Key": {
                 "SK":{"S":""+id+""},
-                 "PK":{"S":"patient"}
+                "PK":{"S":"patient"}
                 },
                 "UpdateExpression":"SET DeviceStatus = :v_ActiveStatus",
                 "ExpressionAttributeValues":{":v_ActiveStatus":{"S":"Deactive"}}
@@ -1466,6 +1466,9 @@ export const CoreContextProvider = props => {
                 }
                 if(p.GSI1PK !=undefined){
                     devicedata.patientId = p.GSI1PK.s;
+                }
+                if (p.SK !== undefined) {
+                    devicedata.id = p.SK.s;
                   
                     if(patients.length >0){
                         let patient = patients.filter(p => p.ehrId === devicedata.patientId);

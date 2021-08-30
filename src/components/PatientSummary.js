@@ -315,7 +315,7 @@ const PatientSummary  = props =>  {
   //  }
 
     const deleteDevice = (deviceData) => {
-        coreContext.DeleteDeviceData(deviceData.deviceID);
+        coreContext.DeleteDeviceData(deviceData.id);
     }
 
 
