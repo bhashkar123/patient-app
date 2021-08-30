@@ -309,9 +309,13 @@ const PatientSummary  = props =>  {
     //       }
    
     // }
-    const deleteDevice = (patient) => {
-        alert('Hi how are you');
+   // const deleteDevice = (patient) => {
+     //   alert('Hi how are you');
         //coreContext.DeletePatient(patient.userId)
+  //  }
+
+    const deleteDevice = (deviceData) => {
+        coreContext.DeleteDeviceData(deviceData.id)
     }
 
 
@@ -321,8 +325,9 @@ const PatientSummary  = props =>  {
                 return <tr>
                     <td>{deviceData.DeviceType} </td>
                     <td>{deviceData.deviceID} </td>
-                    <td><a style={{  marginRight: '5px' }} href="#" onClick={() => deleteDevice(deviceData.row)}>  <Trash /></a></td>
+                    <td> {deviceData.Action} <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteDevice(deviceData.row)}>  <Trash /></a></td>
                 </tr>
+            
             });
         }
 
@@ -863,6 +868,7 @@ const renderThreads = () => {
                                             <tr>
                                                 <th>Device Name</th>
                                                 <th>Device ID</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
