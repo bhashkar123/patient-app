@@ -4,6 +4,7 @@ import axios from 'axios';
 import Sidebar from "react-sidebar";
 import * as Pages from './components';
 import { DPatients } from './components/DPatients';
+import App2 from './App2';
 import './App.css';
 
 import './dgmaterial.css';
@@ -112,8 +113,17 @@ function App() {
   </div>
 
   return (
-
-    content
+<>
+    {content}
+    <Router>
+    <Switch>
+          <Route path="/covid">
+            <App2 />
+          </Route>
+          
+        </Switch>
+        </Router>
+    </>
   )
 }
 

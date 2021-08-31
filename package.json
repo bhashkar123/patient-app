@@ -42,6 +42,7 @@
     "react-scroll-to-bottom": "^4.1.2",
     "react-search-autocomplete": "^5.2.2",
     "react-sidebar": "^3.0.2",
+    "react-swipeable-views": "^0.14.0",
     "react-tabs": "^3.2.2",
     "react-timer-hook": "^3.0.3",
     "web-vitals": "^1.1.2"
