@@ -13,6 +13,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { useForm } from "react-hook-form";
+import logo from './logo.png'
 
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -56,15 +57,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function App2() {
-  const { register, handleSubmit,getValues ,onChange} = useForm();
+function App() {
+  const { register, handleSubmit,getValues,formState: { errors },trigger,onChange} = useForm({
+    mode: "onChange"
+  });
   const onSubmit = data => localStorage.setItem("dataSaved",JSON.stringify(data));
-  console.log(localStorage.getItem("dataSaved"))
+  //console.log(localStorage.getItem("dataSaved"))
   const [value, setValue] = useState(0);
   const [index,setIndex]=useState(0);
   const classes = useStyles();
   const theme = useTheme();
-  const saveda=()=>{
+  const saved=()=>{
 alert("data saved")
 }
   
@@ -79,11 +82,20 @@ alert("data saved")
   //  alert("clicked")
     setIndex(index-1);
   };
+  const handleTabs = (tab)=>{
+    //if (index-tab>=0){
+      
+      setIndex(tab);
+      setValue(tab);
+  //  }
+    //setIndex(ind)
+  }
     return ( <>
     <div className="container">
-      <div className="image"style={{width:"100%",height:"20vh"}}>
+      <div className="image"style={{width:"100%",height:"20vh",backgroundColor:"#dae4eb"}}>
       {/* <img src={require('C:\Users\Sahil Arora\Desktop\covid_Form\covid\src\logo.png')} /> */}
-      <h1>Covid 19 FORM</h1>
+      <img src={logo} className="mx-auto d-block"/>
+      <h2><center>A PATTERN Medical Clinic COVID-19 Intake Form</center></h2>
       </div>
       {/* //</div><div className={classes.root}> */}
       <AppBar position="static" color="default">
@@ -95,14 +107,14 @@ alert("data saved")
         //onChange={handleChange}
         aria-label="disabled tabs example"
       >
-        <Tab label="Patient information"  {...a11yProps(0)} />
-        <Tab label="Insurance Information"  {...a11yProps(1)} />
-        <Tab label="Healtha dn Medical history" {...a11yProps(2)} />
-        <Tab label="COVID-19 Questionnaire"{...a11yProps(3)} />
-        <Tab label="PHQ-2 &GAD"{...a11yProps(4)} />
+        <Tab label="Patient information" onClick={()=>handleTabs(0)} {...a11yProps(0)} />
+        <Tab label="Insurance Information" onClick={()=>handleTabs(1)} {...a11yProps(1)} />
+        <Tab label="Healtha dn Medical history" onClick={()=>handleTabs(2)} {...a11yProps(2)} />
+        <Tab label="COVID-19 Questionnaire"onClick={()=>handleTabs(3)} {...a11yProps(3)} />
+        <Tab label="PHQ-2 &GAD" onClick={()=>handleTabs(4)} {...a11yProps(4)} />
       </Tabs>
       </AppBar>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit}>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
@@ -110,19 +122,19 @@ alert("data saved")
       >
         
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <PatientInfo handleChangeIndex={handleChangeIndex}getValues={getValues} register={register} onChange={onChange}/>
+        <PatientInfo handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <InsuranceInfo handleChangeIndex={handleChangeIndex} handleReduceIndex={handleReduceIndex} register={register}/>
+        <InsuranceInfo handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <HealthHistory handleChangeIndex={handleChangeIndex} handleReduceIndex={handleReduceIndex} register={register}/>
+        <HealthHistory handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <COVID19 handleChangeIndex={handleChangeIndex} handleReduceIndex={handleReduceIndex} register={register}/>
+        <COVID19 handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-           <PHQ handleChangeIndex={handleChangeIndex} handleReduceIndex={handleReduceIndex} register={register}/>
+           <PHQ  handleSubmit={handleSubmit}handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
         </TabPanel>
     
         </SwipeableViews>
@@ -132,4 +144,4 @@ alert("data saved")
     );
 }
 
-export default App2;
+export default App;
