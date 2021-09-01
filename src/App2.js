@@ -83,11 +83,11 @@ alert("data saved")
     setIndex(index-1);
   };
   const handleTabs = (tab)=>{
-    //if (index-tab>=0){
+    if (index-tab>=0){
       
       setIndex(tab);
       setValue(tab);
-  //  }
+    }
     //setIndex(ind)
   }
     return ( <>
