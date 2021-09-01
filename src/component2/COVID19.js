@@ -1,5 +1,6 @@
 import { Tab } from '@material-ui/core';
 import React,{useState} from 'react'
+import './App2.css';
 import { useForm } from "react-hook-form";
 
 const COVID19 = ({handleChangeIndex,handleReduceIndex,errors,trigger,register}) => {

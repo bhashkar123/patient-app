@@ -1,0 +1,15 @@
+body {
+    background-color: #57606f;
+}
+
+.container {
+    background-color: white;
+    min-height: 90vh;
+    margin-top: 5vh;
+    max-width: 857px;
+}
+
+.error {
+    background-color: #b91f1f;
+    color: white;
+}

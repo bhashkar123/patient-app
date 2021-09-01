@@ -1,4 +1,4 @@
-import './App.css';
+import './App2.css';
 import InsuranceInfo from './component2/InsuranceInfo';
 import PatientInfo from './component2/PatientInfo';
 import HealthHistory from './component2/HealthHistory';
@@ -87,7 +87,7 @@ alert("data saved")
       
       setIndex(tab);
       setValue(tab);
-    }
+}
     //setIndex(ind)
   }
     return ( <>

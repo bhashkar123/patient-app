@@ -68,7 +68,7 @@ const PatientInfo = ({handleChangeIndex,register,trigger,errors}) => {
         <div className="col-md-3 mb-3">
     <label htmlFor="exampleFormControlInput1" className="form-label">Date</label>
     <input type="Date" defaultValue={date} className="form-control" placeholder="Select Date" name="CurrentDate" {...register("CurrentDate",{ required: true})}/>
-    {/* {errors.CurrentDate && <div className="error">This field is Required</div>}     */}
+    {errors.CurrentDate && <div className="error">This field is Required</div>}    
 </div>
 </div>
     <label htmlFor="basic-url" className="form-label">Full Name</label>
