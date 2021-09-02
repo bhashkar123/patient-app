@@ -4,6 +4,10 @@ import '../App.css'
 
 const PatientInfo = ({handleChangeIndex,register,trigger,errors}) => {
      const [CurrentMedicine, setCurrentMedicine] = useState("");
+     const [CurrentDate, setCurrentDate] = useState("");
+     const [FirstName, setFirstName] = useState("");
+     const [LastName, setLastName] = useState("");
+     const [sex, setSex] = useState("");
      const state=[ 'Armed Forces America','Armed Forces','Armed Forces Pacific','Alabama',
         'Alaska','American Samoa',
         'Arizona',
@@ -57,7 +61,21 @@ const PatientInfo = ({handleChangeIndex,register,trigger,errors}) => {
         var curr = new Date();
         curr.setDate(curr.getDate() + 3);
         var date = curr.toISOString().substr(0,10);
-    
+
+        
+        const renderCurrentDate = () => {
+            if (CurrentDate !== undefined) {
+                return (  
+                    <div className="col-md-3 mb-3">
+                    <label htmlFor="exampleFormControlInput1" className="form-label">Date</label>
+                    <input type="Date" defaultValue={date} className="form-control" placeholder="Select Date" name="CurrentDate" {...register("CurrentDate",{ required: true})}/>
+                    {CurrentDate && <div className="error">This field is Required
+                    </div>
+                    }    
+                </div>
+                );
+            }
+        }
    return (
         <>
  
@@ -65,24 +83,20 @@ const PatientInfo = ({handleChangeIndex,register,trigger,errors}) => {
                    <h1>Patient Information</h1>
         <form>
             <div className="row">
-        <div className="col-md-3 mb-3">
-    <label htmlFor="exampleFormControlInput1" className="form-label">Date</label>
-    <input type="Date" defaultValue={date} className="form-control" placeholder="Select Date" name="CurrentDate" {...register("CurrentDate",{ required: true})}/>
-    {errors.CurrentDate && <div className="error">This field is Required</div>}    
-</div>
+       {renderCurrentDate()}
 </div>
     <label htmlFor="basic-url" className="form-label">Full Name</label>
     <div className="row">
     <div className="input-group mb-3">
 
   <input type="text" className="form-control " placeholder="First" {...register("FirstName",{ required: true})} />
-  {/* {errors.FirstName && <div className="error">This field is Required</div>} */}
+  {FirstName && <div className="error">This field is Required</div>}
   <input type="text" className="form-control mx-2" placeholder="MI" {...register("MiddleName")}/>
   {/* {errors.MiddleName && <div className="error">This field is Required</div>} */}
   <input type="text" className="form-control "  placeholder="Last"{...register("LastName",{ required: true})}/>
-  {/* {errors.LastName && <div className="error">This field is Required</div>} */}
+  {LastName && <div className="error">This field is Required</div>}
   </div>
-  {errors.LastName &&errors.FirstName && <div className="error">First and Last are required.</div>}
+  {LastName &&FirstName && <div className="error">First and Last are required.</div>}
 </div>
 <div className="row">
     <div className="col-md-4">
@@ -101,7 +115,7 @@ const PatientInfo = ({handleChangeIndex,register,trigger,errors}) => {
         </div>
                 </div>
             </div>
-            {errors.sex && <div className="error">Sex is required.</div>}
+            {sex && <div className="error">Sex is required.</div>}
     </div>
     <div className="col-md-4">
         <label  className="labelspace">Date of Birth:</label>
