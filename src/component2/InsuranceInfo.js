@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import './App2.css';
+import '../App2.css';
 
 const InsuranceInfo = ({ handleChangeIndex, handleReduceIndex, register, errors, trigger }) => {
         const [relation, setRelation] = useState("");

@@ -1,5 +1,5 @@
 import React from 'react'
-import './App2.css';
+import '../App2.css';
 
 const HealthHistory = ({handleChangeIndex,handleReduceIndex,errors,trigger,register}) => {
     const disease=["Anemia","Asthma","Arthritis","Cancer","Gout","Diabetes","Epilepsy Seizures","Heart Disease","Heart Attack","Rheumatic Fever","High Blood Pressure","Digestive Problems","Ulcerative Colitis","Hepatitis","Kidney Disease","Liver Disease","Thyroid Problems","Tuberculosis","Venereal Disease","Neurological Disorders","Bleeding Disorders","Lung Disease (Chronic Obstructive Pulmonary Disease)","None"]

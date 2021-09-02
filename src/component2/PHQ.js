@@ -1,5 +1,5 @@
 import React from 'react'
-import './App2.css';
+import '../App2.css';
 
 const PHQ = ({handleReduceIndex,register,errors,trigger,handleSubmit}) => {
     const que=["Little interest or pleasure in doing things","Feeling down, depressed or hopeless","Feeling nervous, anxious or on edge","Not being able to stop or control worrying"]
