@@ -1,10 +1,16 @@
-import React from 'react'
-import '../App2.css';
+import React from 'react';
+import {useForm} from "react-hook-form"
+import '../App2.css'
 
-const PHQ = ({handleReduceIndex,register,errors,trigger,handleSubmit}) => {
+const PHQ = ({handleReduceIndex,tab5}) => {
     const que=["Little interest or pleasure in doing things","Feeling down, depressed or hopeless","Feeling nervous, anxious or on edge","Not being able to stop or control worrying"]
+    const { register, handleSubmit} = useForm();
+      const onSubmit = data => tab5(data);
+      
+      
     return (
         <div className="container" >
+
             <h2>
             PHQ-2 & GAD
 
@@ -12,6 +18,7 @@ const PHQ = ({handleReduceIndex,register,errors,trigger,handleSubmit}) => {
             <h4>
             Over the last 2 weeks, how often have you been bothered by the following problems?
             </h4>
+            <form onSubmit={handleSubmit(onSubmit)}>
             <table class="table">
   <thead>
     <tr>
@@ -28,10 +35,10 @@ const PHQ = ({handleReduceIndex,register,errors,trigger,handleSubmit}) => {
               <>
               <tr>
         <td>{curr}</td>
-        <td><input className="form-check-input" type="radio" name={curr}  value="0" {...register(curr)}/></td>
-        <td><input className="form-check-input" type="radio" name={curr}  value="1" {...register(curr)}/></td>
-        <td><input className="form-check-input" type="radio" name={curr}  value="2"{...register(curr)} /></td>
-        <td><input className="form-check-input" type="radio" name={curr}  value="3" {...register(curr)}/></td>
+        <td><input className="form-check-input" type="radio" name={curr}  value="0" ref={register}/></td>
+        <td><input className="form-check-input" type="radio" name={curr}  value="1" ref={register}/></td>
+        <td><input className="form-check-input" type="radio" name={curr}  value="2" ref={register}/></td>
+        <td><input className="form-check-input" type="radio" name={curr}  value="3" ref={register}/></td>
        
      </tr>
               </>
@@ -44,6 +51,7 @@ const PHQ = ({handleReduceIndex,register,errors,trigger,handleSubmit}) => {
 <button type="button" className="btn btn-lg btn-primary mt-2" onClick={()=>handleReduceIndex()}>Back</button>
 <button type="submit" className="btn btn-lg btn-primary mt-2 mx-5">Submit</button>
 </div>
+</form>
         </div>
 
     )

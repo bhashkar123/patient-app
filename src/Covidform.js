@@ -15,6 +15,7 @@ import AppBar from '@material-ui/core/AppBar';
 import { useForm } from "react-hook-form";
 import logo from './logo.png'
 
+
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 function TabPanel(props) {
@@ -55,22 +56,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-
-function App() {
-  const { register, handleSubmit,getValues,formState: { errors },trigger,onChange} = useForm({
-    mode: "onChange"
-  });
-  const onSubmit = data => localStorage.setItem("dataSaved",JSON.stringify(data));
+const Covidform=()=> {
   //console.log(localStorage.getItem("dataSaved"))
   const [value, setValue] = useState(0);
   const [index,setIndex]=useState(0);
   const classes = useStyles();
   const theme = useTheme();
-  const saved=()=>{
-alert("data saved")
-}
+  const [PatientData,SetPatientData]=useState();
+  const [CovidData,SetCovidData]=useState();
+  const [InsuranceData,SetInsuranceData]=useState();
+  const [HealthData,SetHealthData]=useState();
+  const [PHQData,SetPHQData]=useState();
+
   
+  const Tab1=(data)=>{
+    SetPatientData(data);
+   // console.log("sahil",PatientData)
+}
+console.log("sahil3",PatientData)
+  
+const Tab5=(data)=>{
+  SetPHQData(data);
+}
+
+const Tab2=(data)=>{
+  SetInsuranceData(data);
+}
+
+const Tab3=(data)=>{
+  SetHealthData(data);
+}
+
+const Tab4=(data)=>{
+  SetCovidData(data);
+}
+
     
   const handleChangeIndex = () => {
     setValue(value+1);
@@ -92,7 +112,7 @@ alert("data saved")
   }
     return ( <>
     <div className="container">
-      <div className="image"style={{width:"100%",height:"20vh",backgroundColor:"#dae4eb"}}>
+      <div className="image"style={{width:"100%",height:"25vh",backgroundColor:"#dae4eb"}}>
       {/* <img src={require('C:\Users\Sahil Arora\Desktop\covid_Form\covid\src\logo.png')} /> */}
       <img src={logo} className="mx-auto d-block"/>
       <h2><center>A PATTERN Medical Clinic COVID-19 Intake Form</center></h2>
@@ -114,7 +134,7 @@ alert("data saved")
         <Tab label="PHQ-2 &GAD" onClick={()=>handleTabs(4)} {...a11yProps(4)} />
       </Tabs>
       </AppBar>
-      <form onSubmit={handleSubmit}>
+      
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
@@ -122,26 +142,26 @@ alert("data saved")
       >
         
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <PatientInfo handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange}/>
+        <PatientInfo handleChangeIndex={handleChangeIndex} tab1={Tab1}/>
+        </TabPanel>
+         <TabPanel value={value} index={index} dir={theme.direction}>
+        <InsuranceInfo handleChangeIndex={handleChangeIndex}handleReduceIndex={handleReduceIndex} tab2={Tab2}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <InsuranceInfo handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
+        <HealthHistory handleChangeIndex={handleChangeIndex} handleReduceIndex={handleReduceIndex} tab3={Tab3}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <HealthHistory handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
+        <COVID19 handleChangeIndex={handleChangeIndex}handleReduceIndex={handleReduceIndex}tab4={Tab4}/>
         </TabPanel>
         <TabPanel value={value} index={index} dir={theme.direction}>
-        <COVID19 handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
-        </TabPanel>
-        <TabPanel value={value} index={index} dir={theme.direction}>
-           <PHQ  handleSubmit={handleSubmit}handleChangeIndex={handleChangeIndex}getValues={getValues } errors={errors} trigger={trigger}register={register} onChange={onChange} handleReduceIndex={handleReduceIndex} register={register}/>
-        </TabPanel>
+           <PHQ  handleChangeIndex={handleChangeIndex}handleReduceIndex={handleReduceIndex} tab5={Tab5}/>
+        </TabPanel> 
     
         </SwipeableViews>
-        </form>
+        
     </div>
         </>
     );
 }
 
-export default App;
+export default Covidform;
