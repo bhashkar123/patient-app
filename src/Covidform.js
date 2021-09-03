@@ -14,6 +14,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { useForm } from "react-hook-form";
 import logo from './logo.png'
+import Helmet from 'react-helmet';
 
 
 import Typography from '@material-ui/core/Typography';
@@ -111,7 +112,11 @@ const Tab4=(data)=>{
     //setIndex(ind)
   }
     return ( <>
-    <div className="container">
+    <div style={{backgroundColor:"#3d403e"}}>
+      <div style={{height:"5vh"}}>
+        </div>
+    <div className="container p-0">
+    
       <div className="image"style={{width:"100%",height:"25vh",backgroundColor:"#dae4eb"}}>
       {/* <img src={require('C:\Users\Sahil Arora\Desktop\covid_Form\covid\src\logo.png')} /> */}
       <img src={logo} className="mx-auto d-block"/>
@@ -159,6 +164,7 @@ const Tab4=(data)=>{
     
         </SwipeableViews>
         
+    </div>
     </div>
         </>
     );

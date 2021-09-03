@@ -10,6 +10,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
   const [Travelled, setTravelled] = useState("");
   const [CovidSymptom, setCovidSymptom] = useState([]);
   const [Citiesvisited, setCitiesvisited] = useState("");
+  const [mystyle,setMystyle]=useState({display:"none"})
 
   const addvalue=(Travell,ContactWithCOVIDPerson,SyptomsOnsetDiagnosesDuration,CovidSymptom,Citiesvisited)=>{
     if(!Travell||!ContactWithCOVIDPerson||!ContactWithCOVIDPerson||!CovidSymptom){
@@ -43,6 +44,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
   }
   const submitCovidHistory=(e)=>{
     e.preventDefault();
+    setMystyle({display:"block"})
     addvalue(Travell,ContactWithCOVIDPerson,SyptomsOnsetDiagnosesDuration,CovidSymptom,Citiesvisited);
             }
 
@@ -67,7 +69,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
         </div>
                 </div>
             </div>
-            {(!ContactWithCOVIDPerson)?<div className="error">Select any one option</div>:null}
+            {(!ContactWithCOVIDPerson)?<div className="error" style={mystyle}>Select any one option</div>:null}
     </div>
    
 </div>
@@ -76,7 +78,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
   
     <label htmlFor=""><b>Describe your main concerns (symptoms, onset, diagnoses, duration, etc.) or none. </b></label>
     <textarea className="form-control" rows="3" name="SyptomsOnsetDiagnosesDuration" value={SyptomsOnsetDiagnosesDuration} onChange={(e)=>setSyptomsOnsetDiagnosesDuration(e.target.value)} ></textarea>
-    {(!SyptomsOnsetDiagnosesDuration)?<div className="error">Describe your main concerns (symptoms, onset, diagnoses, duration, etc.) or none. is required</div>:null}
+    {(!SyptomsOnsetDiagnosesDuration)?<div className="error" style={mystyle}>Describe your main concerns (symptoms, onset, diagnoses, duration, etc.) or none. is required</div>:null}
   </div>
   <div className="row">
     <div className="col-md-6 mt-2">
@@ -93,7 +95,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
         </div>
                 </div>
             </div>
-            {(!Travell)?<div className="error">Select any one option</div>:null}
+            {(!Travell)?<div className="error" style={mystyle}>Select any one option</div>:null}
     </div>
     
 </div>
@@ -101,7 +103,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
 {(Travell==="yes")?<div className="form-group">
     <label htmlFor=""><b>Please specify the details of the cities/countries visited in the last month. </b></label>
     <textarea className="form-control" rows="3"  name="CityVisited" value={Citiesvisited} onChange={(e)=>setCitiesvisited(e.target.value)}></textarea>
-    {(!Citiesvisited)?<div className="error">Please specify the details of the cities/countries visited in the last month. is required</div>:null}
+    {(!Citiesvisited)?<div className="error" style={mystyle}>Please specify the details of the cities/countries visited in the last month. is required</div>:null}
   </div>:null}
 
 
@@ -129,7 +131,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
               </>
             );
           })}
-         {(CovidSymptom.length===0)?<div className="error">Please check all tha apply</div>:null}
+         {(CovidSymptom.length===0)?<div className="error" style={mystyle}>Please check all tha apply</div>:null}
        </div>
        <div className="btn-grp">
 <button type="button" className="btn btn-lg btn-primary mt-2" onClick={()=>{handleReduceIndex()}}>Back</button>

@@ -5,6 +5,7 @@ const HealthHistory = ({handleChangeIndex,handleReduceIndex,tab3}) => {
     const disease=["Anemia","Asthma","Arthritis","Cancer","Gout","Diabetes","Epilepsy Seizures","Heart Disease","Heart Attack","Rheumatic Fever","High Blood Pressure","Digestive Problems","Ulcerative Colitis","Hepatitis","Kidney Disease","Liver Disease","Thyroid Problems","Tuberculosis","Venereal Disease","Neurological Disorders","Bleeding Disorders","Lung Disease (Chronic Obstructive Pulmonary Disease)","None"]
     const [HealthHistory,setHealthHistry]=useState([]);
     const [Alergy, setAlergy] = useState("");
+    const [mystyle,setMystyle]=useState({display:"none"})
     const Health=[];
     const addvalue=(Alergy,HealthHistory)=>{
       if(!Alergy||!HealthHistory){
@@ -22,6 +23,7 @@ const HealthHistory = ({handleChangeIndex,handleReduceIndex,tab3}) => {
       
     }
     const submitHealthHistory=(e)=>{
+      setMystyle({display:"block"})
       e.preventDefault();
       addvalue(Alergy,HealthHistory);
               }
@@ -49,11 +51,12 @@ const HealthHistory = ({handleChangeIndex,handleReduceIndex,tab3}) => {
                       {curr}
                     </label>
                   </div>
-                  {(HealthHistory.length===0)?<div className="error">Please check all tha apply is required</div>:null}
+                 
                 </div>
               </>
             );
           })}
+           {(HealthHistory.length===0)?<div className="error" style={mystyle}>Please check all tha apply is required</div>:null}
           </div>
         
           
@@ -72,10 +75,11 @@ const HealthHistory = ({handleChangeIndex,handleReduceIndex,tab3}) => {
         </div>
                 </div>
             </div>
+            
     </div>
-    {(!Alergy)?<div className="error">Select any one</div>:null}
+    
 </div>
-
+{(!Alergy)?<div className="error" style={mystyle}>Select any one</div>:null}
 <div className="btn-grp">
 <button type="button" className="btn btn-lg btn-primary mt-2" onClick={()=>{handleReduceIndex()}}>Back</button>
 <button type="button" className="btn btn-lg btn-primary mt-2 mx-5" onClick={submitHealthHistory}>Next</button>

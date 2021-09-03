@@ -4,6 +4,10 @@ import { useForm } from "react-hook-form";
 
 
 const PatientInfo = ({handleChangeIndex,tab1}) => {
+    var curr = new Date();
+    curr.setDate(curr.getDate() + 3);
+    var date = curr.toISOString().substr(0,10);
+   
     const [CurrentDate, setCurrentDate] = useState(date);
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
@@ -19,6 +23,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
     const [CurrentMedicineStatus, setCurrentMedicineStatus] = useState("");
     const [listofMedicine, setlistofMedicine] = useState("");
     const [PhoneNumber,setPhoneNumber]=useState("");
+    const [mystyle,setMystyle]=useState({display:"none"})
   //  const onSubmit = data => console.log(data);
      const [CurrentMedicine, setCurrentMedicine] = useState("");
      const stateList=[ 'Armed Forces America','Armed Forces','Armed Forces Pacific','Alabama',
@@ -71,9 +76,6 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
         'West Virginia',
         'Wisconsin',
         'Wyoming']
-        var curr = new Date();
-        curr.setDate(curr.getDate() + 3);
-        var date = curr.toISOString().substr(0,10);
         const addvalue=(CurrentDate,FirstName,LastName,sex,DateOfBirth,PhoneNumber,EmailAddress,Address1,Address2,city,state,zip,CurrentMedicine,listofMedicine)=>{
             if (!FirstName||!FirstName||!LastName||!sex||!DateOfBirth||!PhoneNumber||!EmailAddress||!Address1||!Address2||!city||!state||!zip||!CurrentMedicine){
                 return null           
@@ -101,6 +103,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
         }
         }
         const submitPatientInfo=(e)=>{
+            setMystyle({display:"block"})
            e.preventDefault();
            addvalue(CurrentDate,FirstName,LastName,sex,DateOfBirth,PhoneNumber,EmailAddress,Address1,Address2,city,state,zip,CurrentMedicine,listofMedicine);
                    }
@@ -114,7 +117,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
             <div className="row">
         <div className="col-md-3 mb-3">
     <label htmlFor="exampleFormControlInput1" className="form-label">Date</label>
-    <input type="Date" defaultValue={date} className="form-control" placeholder="Select Date" value={CurrentDate} name="CurrentDate" onChange={(e)=>setCurrentDate(e.target.value)}/>
+    <input type="Date" className="form-control" placeholder="Select Date" value={CurrentDate} name="CurrentDate" onChange={(e)=>setCurrentDate(e.target.value)}/>
    
 </div>
 </div>
@@ -129,7 +132,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
   <input type="text" className="form-control "  placeholder="Last"name="LastName" value={LastName} onChange={(e)=>setLastName(e.target.value)} />
   
   </div>
-  {(!FirstName ||!LastName)?<div className="error">First and Last are required.</div>:null}
+  {(!FirstName ||!LastName)?<div className="error" style={mystyle}>First and Last are required.</div>:null}
   
 </div>
 <div className="row">
@@ -148,7 +151,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
             <label className="form-check-label" htmlFor="Female">Female</label>
         </div>
                 </div>
-                {(!sex)?<div className="error"> sex are required.</div>:null}
+                {(!sex)?<div className="error" style={mystyle}> sex are required.</div>:null}
             </div>
   
     </div>
@@ -160,7 +163,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
   
                 </div>
             </div>
-            {(!DateOfBirth)?<div className="error">Date of Birth is required.</div>:null}
+            {(!DateOfBirth)?<div className="error" style={mystyle}>Date of Birth is required.</div>:null}
     </div>
     <div className="col">
         <label  className="labelspace">Phone:</label>
@@ -170,13 +173,13 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
                    
                 </div>
             </div>
-            {(!PhoneNumber)?<div className="error">Phone Number is required.</div>:null}
+            {(!PhoneNumber)?<div className="error" style={mystyle}>Phone Number is required.</div>:null}
     </div>
 </div>
 <div className="mb-3">
   <label htmlFor="Email" className="form-label">Email address</label>
   <input type="email" className="form-control" placeholder="Enter Email...." name="EmailAddress" value={EmailAddress} onChange={(e)=>setEmailAddress(e.target.value)} />
-  {(!EmailAddress)?<div className="error">Email Address required.</div>:null}
+  {(!EmailAddress)?<div className="error" style={mystyle}>Email Address required.</div>:null}
  </div>
 <div className="mb-3">
   <label className="form-label " >Address:</label>
@@ -200,10 +203,10 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
       </div>
     
   </div>
-  {(!Address1||!zip||!state||!city)?<div className="error">AddressLine1,city,state,zip are required</div>:null}
+  {(!Address1||!zip||!state||!city)?<div className="error" style={mystyle}>AddressLine1,city,state,zip are required</div>:null}
   
 </div>
-<div className="form-group col-md-5" >
+<div className="form-group col-md-5" style={{marginLeft:"-10px"}} >
     <label htmlFor="exampleFormControlSelect1">Are you currently taking any medications? </label>
     <select className="form-control sahil" name="CurrentMedicine" value={CurrentMedicine} onChange={(e)=>setCurrentMedicine(e.target.value)}>
     <option></option>
@@ -211,17 +214,17 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
       <option value="no" >No</option>
   
     </select>
-    {(!CurrentMedicine)?<div className="error">Are you currently taking any medications? is required.</div>:null}
+    {(!CurrentMedicine)?<div className="error" style={mystyle}>Are you currently taking any medications? is required.</div>:null}
   </div>
   {(CurrentMedicine==="yes")?<div className="form-group" name="ListOfmedicine" value={listofMedicine} onChange={(e)=>setlistofMedicine(e.target.value)}>
     <label htmlFor="">Please List</label>
     <textarea className="form-control" rows="3" ></textarea>
-    {(!listofMedicine)?<div className="error">List of medicines are required.</div>:null}
+    {(!listofMedicine)?<div className="error" style={mystyle}>List of medicines are required.</div>:null}
   </div>  
   :null}
  
   
-<button type="button" className="btn btn-lg btn-primary mt-2" onClick={submitPatientInfo}>Next</button>
+<button type="button" className="btn btn-lg btn-primary mt-2" onClick={submitPatientInfo} >Next</button>
 
     </form>
     </div>
