@@ -1,11 +1,17 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import {useForm} from "react-hook-form"
 import '../App2.css'
+import { CoreContext } from '../context/core-context';
 
 const PHQ = ({handleReduceIndex,tab5}) => {
     const que=["Little interest or pleasure in doing things","Feeling down, depressed or hopeless","Feeling nervous, anxious or on edge","Not being able to stop or control worrying"]
+    const coreContext = useContext(CoreContext);
     const { register, handleSubmit} = useForm();
-      const onSubmit = data => tab5(data);
+      const onSubmit = data =>{
+        tab5(data);
+        alert('Submit');
+      coreContext.SubmitIntakeRequest();
+      } 
       
       
     return (

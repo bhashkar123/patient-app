@@ -1,13 +1,14 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import '../App2.css'
 import { useForm } from "react-hook-form";
+import { CoreContext } from '../context/core-context';
 
 
 const PatientInfo = ({handleChangeIndex,tab1}) => {
     var curr = new Date();
     curr.setDate(curr.getDate() + 3);
     var date = curr.toISOString().substr(0,10);
-   
+    const coreContext = useContext(CoreContext);
     const [CurrentDate, setCurrentDate] = useState(date);
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
@@ -99,6 +100,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
                 listofMedicine:listofMedicine
             }
             tab1(PatientData);
+            coreContext.getTab1data(PatientData);
             handleChangeIndex();
         }
         }
