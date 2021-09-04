@@ -2511,6 +2511,119 @@ export const CoreContextProvider = props => {
 
     }
 
+
+    // Submit intake
+    const SubmitIntakeRequest = () =>{
+        let token = localStorage.getItem('app_jwt');
+        let practiceid = '24451';
+        let departmentid = 0;
+        let appointmentid = 0;
+        let patientid = 0;
+
+        token = 'LIaSw6i4BWAv3HmmxGyzW9KAm60s';
+        
+        axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
+        { 
+            headers: {
+            Accept: "application/json, text/plain, */*",
+            // "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+            }
+        }).then(deptResponse => {
+            
+            //Get department Id
+            const department = deptResponse.data.departments.filter(a => a.departmentid === "1")[0];
+
+            if(department !==undefined){
+                alert(department.departmentid);
+                departmentid =department.departmentid;
+                //Get open Slots.
+                axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/open?practiceid='+practiceid+'&departmentid='+departmentid+'&reasonid=-1',
+                    { 
+                       headers: {
+                                Accept: "application/json, text/plain, */*",
+                                // "Content-Type": "application/json",
+                                Authorization: "Bearer " + token
+                                }
+                        }).then(appointmentsResponse => 
+                            {
+                            //Get department Id
+                                // Choose 1st open slots
+                                if(appointmentsResponse.data.appointments.length >0)
+                                {
+                                    const appointment = appointmentsResponse.data.appointments[0];    
+                                    alert(appointment.appointmentid);
+                                    //Create patient.
+                                   
+
+                                  
+                                    const params = new URLSearchParams();
+                                    params.append('firstname', 'Ashok');
+                                    params.append('lastname', 'Ashok');
+                                    params.append('departmentid', departmentid);
+                                    params.append('dob', '1/1/1980');
+                                    params.append('email', 'ashokkumar79892@gmail.com');
+                                    params.append('email', 'ashokkumar79892@gmail.com');
+                                    params.append('guarantoremail', '1/1/1980');
+                                    params.append('ssn', '123456789');
+
+
+                                    axios.post('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/patients', params, {
+                                        headers: {
+                                            Accept: "application/json, text/plain, */*",
+                                            // "Content-Type": "application/json",
+                                            Authorization: "Bearer " + token
+                                        }
+                                    }
+                                    ).then((patientresponse) => {
+
+                                        patientid = patientresponse.data[0].patientid;
+                                        alert(patientid);
+                                        if(patientresponse.data.patientid !==undefined)
+                                        {
+                                            // Call book Appt.
+
+                                                        const params = new URLSearchParams();
+                                                        params.append('patientid', practiceid);
+                                                        params.append('appointmenttypeid', '61');
+                                                        params.append('appointmentid', appointmentid);
+                                                        params.append('departmentid', departmentid);
+                                                        params.append('ignoreschedulablepermission', true);
+                                                       
+                                                        axios.post('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/'+ appointmentid, params, {
+                                                    headers: {
+                                                        Accept: "application/json, text/plain, */*",
+                                                        // "Content-Type": "application/json",
+                                                        Authorization: "Bearer " + token
+                                                    }
+                                                }
+                                                ).then((bookApptResponse) => {
+                                                    if(bookApptResponse!==undefined)
+                                                    {
+                                                        alert('you got appt and appt information:' + bookApptResponse.date +"," + appointmentid.appointmentid+","+appointmentid.starttime);
+                                                    }
+                                                });
+                                        }
+                                    });
+                                    
+
+                                }
+                                else
+                                {
+                                    alert('no Appointment avaliable');
+                                }
+
+                            });
+                
+            
+            //  console.log('messages', response.data.messages);
+            }
+        });
+    
+
+    }
+
+
     return <CoreContext.Provider value={{
         patients,
         bgData,
@@ -2589,7 +2702,8 @@ export const CoreContextProvider = props => {
         resetForm,
         providerOptions,
         coachOptions,
-        careCoordinatorOptions
+        careCoordinatorOptions,
+        SubmitIntakeRequest
     }}
     >
         {props.children}

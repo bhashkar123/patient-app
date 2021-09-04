@@ -1,7 +1,8 @@
 import { Tab } from '@material-ui/core';
-import React,{useState} from 'react'
+import React, { useEffect, useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
 import '../App2.css';
+import { CoreContext } from '../context/core-context';
 
 const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
   const [Travell, setTravell] = useState("");
@@ -11,6 +12,7 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
   const [CovidSymptom, setCovidSymptom] = useState([]);
   const [Citiesvisited, setCitiesvisited] = useState("");
   const [mystyle,setMystyle]=useState({display:"none"})
+  const coreContext = useContext(CoreContext);
 
   const addvalue=(Travell,ContactWithCOVIDPerson,SyptomsOnsetDiagnosesDuration,CovidSymptom,Citiesvisited)=>{
     if(!Travell||!ContactWithCOVIDPerson||!ContactWithCOVIDPerson||!CovidSymptom){
@@ -46,7 +48,9 @@ const COVID19 = ({handleChangeIndex,handleReduceIndex,tab4}) => {
     e.preventDefault();
     setMystyle({display:"block"})
     addvalue(Travell,ContactWithCOVIDPerson,SyptomsOnsetDiagnosesDuration,CovidSymptom,Citiesvisited);
-            }
+    alert('Submit');
+    coreContext.SubmitIntakeRequest();
+  }
 
 
  
