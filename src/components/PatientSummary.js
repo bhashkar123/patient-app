@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
-import CoreContextProvider, { CoreContext } from '../context/core-context';
-import { GenderMale, GenderFemale, PencilSquare, CaretDown } from 'react-bootstrap-icons';
+import { CoreContext } from '../context/core-context';
+import { GenderMale, GenderFemale, PencilSquare,  Trash } from 'react-bootstrap-icons';
 import DatePicker from "react-datepicker";
 import { ButtonGroup, Button, Form } from 'react-bootstrap';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -351,14 +351,25 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
     //       }
    
     // }
-    
+   // const deleteDevice = (patient) => {
+     //   alert('Hi how are you');
+        //coreContext.DeletePatient(patient.userId)
+  //  }
+
+    const deleteDevice = (deviceData) => {
+        coreContext.DeleteDeviceData(deviceData.id);
+    }
+
+
     const renderDeviceData = () => {
         if (coreContext.deviceData.length > 0) {
             return coreContext.deviceData.map((deviceData, index) => {
                 return <tr>
                     <td>{deviceData.DeviceType} </td>
                     <td>{deviceData.deviceID} </td>
+                    <td> {deviceData.Action} <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteDevice(deviceData)}>  <Trash /></a></td>
                 </tr>
+            
             });
         }
 
@@ -904,6 +915,7 @@ const renderThreads = () => {
                                             <tr>
                                                 <th>Device Name</th>
                                                 <th>Device ID</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -921,7 +933,7 @@ const renderThreads = () => {
                                             <option value="WS">Weight</option>
                                         </select>
                                         <input type="text" value={deviceId} onChange={e => setDeviceId(e.target.value)} className="form-control mb-2 mr-sm-2" placeholder="Enter device ID " />
-                                        <button type='button' onClick={() => coreContext.addDevice(deviceType, deviceId, props.match.params.patient)} className="btn btn-primary mb-2">Add Device</button>
+                                        <button type='button' onClick={() => coreContext.addDevice(deviceType, deviceId, patientId)} className="btn btn-primary mb-2">Add Device</button>
                                     </form>
                                 </div>
                             </div>
