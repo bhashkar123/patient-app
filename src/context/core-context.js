@@ -2520,7 +2520,7 @@ export const CoreContextProvider = props => {
         let appointmentid = 0;
         let patientid = 0;
 
-        token = 'LIaSw6i4BWAv3HmmxGyzW9KAm60s';
+        token = 'AqPfAUFa0ahN328xu33Nt1mSEqob';
         
         axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
         { 
@@ -2553,6 +2553,7 @@ export const CoreContextProvider = props => {
                                 {
                                     const appointment = appointmentsResponse.data.appointments[0];    
                                     alert(appointment.appointmentid);
+                                    appointmentid =appointment.appointmentid;
                                     //Create patient.
                                    
 
@@ -2579,7 +2580,7 @@ export const CoreContextProvider = props => {
 
                                         patientid = patientresponse.data[0].patientid;
                                         alert(patientid);
-                                        if(patientresponse.data.patientid !==undefined)
+                                        if(patientid !==undefined)
                                         {
                                             // Call book Appt.
 
