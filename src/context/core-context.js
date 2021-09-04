@@ -21,10 +21,13 @@ export const CoreContextProvider = props => {
 
     const [thresoldData, setThresoldData] = useState([]);
     const [timeLogData, setTimeLogData] = useState([]);
+    const [AlltimeLogData, setAllTimeLogData] = useState([]);
     const [bloodpressureData, setbloodpressureData] = useState([]);
     const [bloodglucoseData, setbloodglucoseData] = useState([]);
 
     const [deviceData, setdeviceData] = useState([]);
+    const [patientWDevice, setPatientWDevice] = useState([]);
+
     const [providerData, setdoctorData] = useState([]);
     const [providerOptions, setProviderOptions] = useState([]);
     const [coachOptions, setCoachOptions] = useState([]);
@@ -33,7 +36,7 @@ export const CoreContextProvider = props => {
     const [coachData, setcoachData] = useState([]);
     const [resetForm, setResetForm] = useState(0);
     const [tasktimerUserData, settasktimerUserData] = useState([]);
-    // const [idToken, setToken] = useState([]);
+    
     const [patient, setPatient] = useState({});
     const [threads, setThreads] = useState([]);
     const [inbox, setInbox] = useState([]);
@@ -54,6 +57,7 @@ export const CoreContextProvider = props => {
     const [showLoader, setShowLoader] = useState(false);
     const [jwt, setJwt] = useState('');
     const [userId, setUserId] = useState('');
+    const [dpatient,setDpatient]=useState([]);
 
     
     const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
@@ -67,6 +71,8 @@ export const CoreContextProvider = props => {
     const [bgChartData, setbgChartData] = useState([]);
     const [bpChartData, setbpChartData] = useState([]);
     const [wsChartData, setwsChartData] = useState([]);
+
+    
 
     const relogin = () => {
         setIsAuthenticated(false);
@@ -135,6 +141,7 @@ export const CoreContextProvider = props => {
         })
     }
 
+   
     const userDetails = (useremail, url = '') => {
         const token = localStorage.getItem('app_jwt');
         //let url ='';
@@ -216,7 +223,13 @@ export const CoreContextProvider = props => {
         })
 
     }
+    const getdp=(d)=>{
+        const token = localStorage.getItem('app_jwt');
 
+        setDpatient(...dpatient,d);
+        console.log(dpatient)
+    }
+    console.log(dpatient)
     // capture from patient List page.
     const fetchPatientListfromApi  = async (usertype, userId) => {
         const token = localStorage.getItem('app_jwt');
@@ -679,7 +692,6 @@ export const CoreContextProvider = props => {
 
 
     const fetchTimeLog = (userid) => {
-
         const token = localStorage.getItem('app_jwt');
        
         let data = "";
@@ -692,9 +704,6 @@ export const CoreContextProvider = props => {
                             ":v_GSI1PK": { "S": "TIMELOG_READING_"+userid }
             }
         }
-
-
-
         axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
             headers: {
                 Accept: "application/json, text/plain, */*",
@@ -740,6 +749,68 @@ export const CoreContextProvider = props => {
             });
 
             setTimeLogData(dataSettimeLog);
+
+            console.log('timeLogData', dataSettimeLog);
+        })
+
+    }
+
+
+    const fetchAllTimeLog = () => {
+        const token = localStorage.getItem('app_jwt');
+        let data = "";
+        data = {
+            "TableName": userTable,
+	                "KeyConditionExpression": "PK = :v_PK",
+                    "ExpressionAttributeValues": {
+                            ":v_PK": { "S": "TIMELOG_READING" }
+                        }
+             }
+        axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+
+            const timelogData = response.data;
+            console.log('timelogData data', response.data);
+            const dataSettimeLog = [];
+
+            timelogData.forEach((tl, index) => {
+                console.log('p' + index, tl);
+                let tldata = {};
+
+                if (tl.TaskType) {
+                    tldata.taskType = tl.TaskType.s;
+                }
+                if (tl.PerformedBy) {
+                    tldata.performedBy = tl.PerformedBy.s;
+                }
+                if (tl.PerformedOn) {
+                    tldata.performedOn = tl.PerformedOn.s;
+                }
+                if (tl.StartDT) {
+                    tldata.startDT = tl.StartDT.s;
+                }
+                if (tl.EndDT) {
+                    tldata.endDT = tl.EndDT.s;
+                }
+                if (tl.TimeAmount) {
+                    tldata.timeAmount = tl.TimeAmount.s;
+                }
+                if (tl.UserName) {
+                    tldata.UserName = tl.UserName.s;
+                }
+                if (tl.GSI1SK) {
+                    tldata.UserId = tl.GSI1SK.s;
+                }
+                dataSettimeLog.push(tldata);
+            });
+
+            setAllTimeLogData(dataSettimeLog);
 
             console.log('timeLogData', dataSettimeLog);
         })
@@ -1070,6 +1141,7 @@ export const CoreContextProvider = props => {
             }
         });
     }
+
     const DeletePatient = (patientId) => {
         const token = localStorage.getItem('app_jwt');
 
@@ -1412,7 +1484,7 @@ export const CoreContextProvider = props => {
     }
 
 
-     const  fetchDeviceData = (patientId, username, usertype,type, patient) => {
+    const  fetchDeviceData = (patientId, username, usertype,type, patient) => {
 
         const token = localStorage.getItem('app_jwt');
         
@@ -1433,11 +1505,12 @@ export const CoreContextProvider = props => {
             data = {
                 "TableName": userTable,
                 "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
-                "FilterExpression": "DeviceStatus = :v_status",
+                "FilterExpression": "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
                 "ExpressionAttributeValues": {
                     ":v_PK": { "S": "patient" },
                     ":v_SK": { "S": "DEVICE_" },
-                    ":v_status": { "S": "Active" }
+                    ":v_status": { "S": "Active" },
+                    ":v_deviceId": { "S": "Null" }
                 }
         }}
       axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
@@ -1473,12 +1546,14 @@ export const CoreContextProvider = props => {
                     if(patients.length >0){
                         let patient = patients.filter(p => p.ehrId === devicedata.patientId);
                         if(patient.length >0 ) devicedata.username =patient[0].name;
-                    }else{
+                    }
+                    else{
                         devicedata.username=username;
                     }
                 }
                
-                dataSetdevice.push(devicedata);
+                if(devicedata.username !==undefined)dataSetdevice.push(devicedata);
+                
 
             });
 
@@ -2378,6 +2453,64 @@ export const CoreContextProvider = props => {
        
     }
 
+    const  fetchPatientWithDevice = () => {
+
+        const token = localStorage.getItem('app_jwt');
+       
+        let  data = {
+                "TableName": userTable,
+                "KeyConditionExpression": "PK = :v_PK AND begins_with(SK, :v_SK)",
+                "FilterExpression": "DeviceStatus = :v_status AND DeviceId <> :v_deviceId",
+                "ExpressionAttributeValues": {
+                    ":v_PK": { "S": "patient" },
+                    ":v_SK": { "S": "DEVICE_" },
+                    ":v_status": { "S": "Active" },
+                    ":v_deviceId": { "S": "Null" }
+                }
+        }
+      axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            const deviceData = response.data;
+            const dataSetdevice = [];
+          
+            //    console.log('deviceData', deviceData);
+            deviceData.forEach((p, index) => {
+                console.log('p' + index, p);
+                let devicedata = {};
+                devicedata.id = index;
+
+                if(p.DeviceId !=undefined){
+                    devicedata.deviceID = p.DeviceId.s;
+                }
+                if(p.DeviceType !=undefined){
+                    devicedata.DeviceType = p.DeviceType.s;
+                }
+                if(p.GSI1PK !=undefined){
+                    devicedata.patientId = p.GSI1PK.s;
+                    if(patients.length >0){
+                        let patient = patients.filter(p => p.ehrId === devicedata.patientId);
+                        if(patient.length >0 ) devicedata.username =patient[0].name;
+                    }
+                    // else{
+                    //     devicedata.username=username;
+                    // }
+                }
+                dataSetdevice.push(devicedata);
+                
+            });
+           
+            setPatientWDevice(dataSetdevice);
+
+        })
+
+    }
+
     return <CoreContext.Provider value={{
         patients,
         bgData,
@@ -2392,11 +2525,15 @@ export const CoreContextProvider = props => {
         coachData,
         thresoldData,
         timeLogData,
+        AlltimeLogData,
         bloodglucoseData,
         bloodpressureData,
         weightData,
         weightApiData,
         fetchDeviceData,
+        patientWDevice,
+        getdp,
+        dpatient,
         login,
         fetchPatientListfromApi,
         inbox,
@@ -2412,9 +2549,11 @@ export const CoreContextProvider = props => {
         fetchBgChartData,
         fetchWSChartData,
         fetchBpChartData,
+        fetchPatientWithDevice,
         tasktimerUserData,
         fetchThresold,
         fetchTimeLog,
+        fetchAllTimeLog,
         backUpMessages,
         renderLoader,
         checkLocalAuth,

@@ -1,0 +1,10 @@
+.container {
+    background-color: white;
+    min-height: 90vh;
+    max-width: 857px;
+}
+
+.error {
+    background-color: #b91f1f;
+    color: white;
+}

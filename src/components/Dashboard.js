@@ -5,20 +5,131 @@ import DatePicker from "react-datepicker";
 import { CoreContext } from '../context/core-context';
 import { Bezier, Bezier2, Cash, GraphUp } from 'react-bootstrap-icons';
 import "react-datepicker/dist/react-datepicker.css";
-
+import Loader from "react-loader-spinner";
+import Moment from 'moment'
 
 const Dashboard = props => {
     const [date, setDate] = useState();
     const coreContext = useContext(CoreContext);
+    let zero=[];
+    const nine=[];
+    const nineteen=[];
+    const thirtynine=[];
+    const fiftynine=[];
+    const sixty=[];
+    const inactive=[];
 
+
+    let patientwdevice=[];
+    
     useEffect(coreContext.checkLocalAuth, []);
+   
+    const fetchPatients = () => {
+        const email = localStorage.getItem('app_userEmail');
+        coreContext.userDetails(email);
+        const userType = localStorage.getItem("userType");
+        const userId = localStorage.getItem("userId");
+        coreContext.fetchPatientListfromApi('admin');
+        coreContext.fetchAllTimeLog();
+        coreContext.fetchPatientWithDevice();
+    }
+    useEffect(fetchPatients, []);
 
-    // const fetchTokenfromApi = () => {
-    //     coreContext.fetchTokenfromApi();
-    //     localStorage.setItem('token', coreContext.idToken);
-    // }
+    const fetchdpatient=(p)=>{
+      coreContext.getdp(p);
+      //console.log(coreContext.dpatient)
+        alert(p);
+        alert(coreContext.patientWDevice);
+    }
+   // useEffect(fetchdpatient, []);
+   const setPatient = (p) => {
+    console.log('sahil',p);
+ //   coreContext.setPatient(p);
+    localStorage.setItem('d_patient', JSON.stringify(p));
+}
+   
 
-    //  useEffect(fetchTokenfromApi, [coreContext.idToken.length]);
+    const renderTimeLogs = () => {
+        if (coreContext.AlltimeLogData.length == 0) {
+            return (
+                <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                     <Loader
+                type="Circles"
+                color="#00BFFF"
+                height={100}
+                width={100}
+            /></div>
+              );
+        }
+        if (coreContext.AlltimeLogData.length > 0) {
+            coreContext.patients.map((curr)=>{
+                let patientTimelog = coreContext.AlltimeLogData.filter(app =>
+                    app.UserId == curr.userId);
+                    if(patientTimelog.length > 0){
+                        let totalTimeLog=0;
+                     //   console.log(patientTimelog);
+                        patientTimelog.map((timelog)=>{
+                             totalTimeLog=Moment.duration(timelog.timeAmount).asMinutes()+totalTimeLog;
+                        });
+                        if(totalTimeLog>=0 && totalTimeLog<=60){
+                                zero.push(curr.userId)
+                        }
+                        else if(totalTimeLog>=60 && totalTimeLog<=540){
+                           // setOnetonine(onetonine+1)
+                           nine.push(curr)
+                           //nine=nine+1;
+                            
+                        }
+                        else if(totalTimeLog>=600 && totalTimeLog<=1140){
+                            // setOnetonine(onetonine+1)
+                            nineteen.push(curr)
+                            //nine=nine+1;
+                             
+                         }
+                         else if(totalTimeLog>=1200 && totalTimeLog<=2340){
+                            // setOnetonine(onetonine+1)
+                            thirtynine.push(curr)
+                            //nine=nine+1;
+                             
+                         }
+                         else if(totalTimeLog>=2400 && totalTimeLog<=3540){
+                            // setOnetonine(onetonine+1)
+                            fiftynine.push(curr.userId)
+                            //nine=nine+1;
+                             
+                         }
+                         else if(totalTimeLog>=3600){
+                            // setOnetonine(onetonine+1)
+                            sixty.push(curr.userId)
+                            //nine=nine+1;
+                             
+                         }
+                      
+                    }
+                    else{
+                            inactive.push(curr.userId)
+                    }
+
+            })
+            
+
+         
+              
+        }
+    }
+
+    const renderRemotePatientMonitor = () => {
+       
+        if (coreContext.patientWDevice.length > 0 && coreContext.patients.length > 0) {
+                coreContext.patientWDevice.map((patientData)=>{
+                        let patient = coreContext.patients.filter(p => p.ehrId === patientData.patientId);
+                        if(patient.length >0 ) 
+                        {
+                            patientwdevice.push(patient);
+                        }
+                });
+        }
+    }
 
 
     return (<div className='card' style={{marginLeft:"100px"}}>
@@ -53,16 +164,17 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>Inactive</th>
                     <th style={{ textAlign: 'center' }}>Not Enrolled</th>
                 </tr>
+                {renderTimeLogs()}
                 <tr>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/patients">{coreContext.patients.length}</a> </th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(sixty)}>{sixty.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(fiftynine)}>{fiftynine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(thirtynine)}>{thirtynine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(nineteen)}>{nineteen.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(nine)}>{nine.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients" onClick={() => setPatient(zero)}>{zero.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(inactive)}>{inactive.length}</a></th>
+                    {/* <th style={{ textAlign: 'center' }}><a href="/dpatients">{zeromin}</a></th> */}
                 </tr>
             </table>
         </div>
@@ -80,9 +192,10 @@ const Dashboard = props => {
                     <th style={{ textAlign: 'center' }}>0 Mins</th>
                     <th style={{ textAlign: 'center' }}>Inactive</th>
                 </tr>
+                {renderRemotePatientMonitor()}
                 <tr>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(inactive)}>{patientwdevice.length}</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
