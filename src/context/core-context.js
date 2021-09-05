@@ -2547,7 +2547,19 @@ export const CoreContextProvider = props => {
         let appointmentid = 0;
         let patientid = 0;
 
-        token = '288MZwP3itGLJdEI39FJ1bREEhUl';
+        token = 'YQWa3E7k5xrDCKm2bqREtKbQ9yud';
+
+
+        axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
+        { 
+            headers: {
+            Accept: "application/json, text/plain, */*",
+            // "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+            }
+        }).then(deptResponse => {
+            
+        });
         
         axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
         { 
@@ -2562,7 +2574,7 @@ export const CoreContextProvider = props => {
             const department = deptResponse.data.departments.filter(a => a.departmentid === "1")[0];
 
             if(department !==undefined){
-                alert(department.departmentid);
+                console.log(department.departmentid+'department.departmentid');
                 departmentid =department.departmentid;
                 //Get open Slots.
                 axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/open?practiceid='+practiceid+'&departmentid='+departmentid+'&reasonid=-1',
@@ -2579,7 +2591,7 @@ export const CoreContextProvider = props => {
                                 if(appointmentsResponse.data.appointments.length >0)
                                 {
                                     const appointment = appointmentsResponse.data.appointments[0];    
-                                    alert(appointment.appointmentid);
+                                    console.log(appointment.appointmentid +'appointment.appointmentid');
                                     appointmentid=appointment.appointmentid;
                                     //Create patient.
                                    
@@ -2589,7 +2601,7 @@ export const CoreContextProvider = props => {
                                     params.append('firstname', Tab1data.FirstName);
                                     params.append('lastname', Tab1data.LastName);
                                     params.append('departmentid', departmentid);
-                                    params.append('dob', Tab1data.DateOfBirth);
+                                    params.append('dob', '1/1/1980');
                                     params.append('email', Tab1data.EmailAddress);
                                     //params.append('email', 'ashokkumar79892@gmail.com');
                                     params.append('guarantoremail', Tab1data.EmailAddress);
@@ -2606,19 +2618,19 @@ export const CoreContextProvider = props => {
                                     ).then((patientresponse) => {
 
                                         patientid = patientresponse.data[0].patientid;
-                                        alert(patientid);
-                                        if(patientresponse.data.patientid !==undefined)
+                                        console.log('patientid' + patientid);
+                                        if(patientid !==undefined)
                                         {
                                             // Call book Appt.
 
                                                         const params = new URLSearchParams();
-                                                        params.append('patientid', practiceid);
+                                                        params.append('patientid', patientid);
                                                         params.append('appointmenttypeid', '61');
                                                         params.append('appointmentid', appointmentid);
                                                         params.append('departmentid', departmentid);
                                                         params.append('ignoreschedulablepermission', true);
                                                        
-                                                        axios.post('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/'+ appointmentid, params, {
+                                                        axios.put('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/'+ appointmentid, params, {
                                                     headers: {
                                                         Accept: "application/json, text/plain, */*",
                                                         // "Content-Type": "application/json",
@@ -2628,7 +2640,8 @@ export const CoreContextProvider = props => {
                                                 ).then((bookApptResponse) => {
                                                     if(bookApptResponse!==undefined)
                                                     {
-                                                        alert('you got appt and appt information:' + bookApptResponse.date +"," + appointmentid.appointmentid+","+appointmentid.starttime);
+                                                        let result = bookApptResponse.data[0];
+                                                        alert('you got appt and appt information:' + result.date +"," + result.appointmentid+","+result.starttime);
                                                     }
                                                 });
                                         }
