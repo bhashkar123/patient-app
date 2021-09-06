@@ -2544,128 +2544,40 @@ export const CoreContextProvider = props => {
 
     // Submit intake
     const SubmitIntakeRequest = () =>{
-        let token = localStorage.getItem('app_jwt');
-        let practiceid = '24451';
-        let departmentid = 0;
-        let appointmentid = 0;
-        let patientid = 0;
-
-        token = 'GRXIBwbUKAOVNChfoCyKbE1ev2fP';
-
-
-        axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
-        { 
-            headers: {
-            Accept: "application/json, text/plain, */*",
-            // "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-            }
-        }).then(deptResponse => {
+       
+        const data  = {
+            "firstname": Tab1data.FirstName,
+            "lastname": Tab1data.LastName,
+            "email": Tab1data.EmailAddress,
+            "guarantoremail": Tab1data.EmailAddress,
+            "dob": Tab1data.DateOfBirth,
+            "ssn":  '123456789'
             
-        });
-        
-        axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
-        { 
+        }
+        axios.post(apiUrl+'/athenanet', data, {
             headers: {
-            Accept: "application/json, text/plain, */*",
-            // "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-            }
-        }).then(deptResponse => {
-            
-            //Get department Id
-            const department = deptResponse.data.departments.filter(a => a.departmentid === "1")[0];
-
-            if(department !==undefined){
-                console.log(department.departmentid+'department.departmentid');
-                departmentid =department.departmentid;
-                //Get open Slots.
-                axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/open?practiceid='+practiceid+'&departmentid='+departmentid+'&reasonid=-1',
-                    { 
-                       headers: {
-                                Accept: "application/json, text/plain, */*",
-                                // "Content-Type": "application/json",
-                                Authorization: "Bearer " + token
-                                }
-                        }).then(appointmentsResponse => 
-                            {
-                            //Get department Id
-                                // Choose 1st open slots
-                                if(appointmentsResponse.data.appointments.length >0)
-                                {
-                                    const appointment = appointmentsResponse.data.appointments[0];    
-                                    console.log(appointment.appointmentid +'appointment.appointmentid');
-                                    appointmentid=appointment.appointmentid;
-                                    //Create patient.
-                                   
-
-                                  
-                                    const params = new URLSearchParams();
-                                    params.append('firstname', Tab1data.FirstName);
-                                    params.append('lastname', Tab1data.LastName);
-                                    params.append('departmentid', departmentid);
-                                    params.append('dob', '1/1/1980');
-                                    params.append('email', Tab1data.EmailAddress);
-                                    //params.append('email', 'ashokkumar79892@gmail.com');
-                                    params.append('guarantoremail', Tab1data.EmailAddress);
-                                    params.append('ssn', '123456789');
-
-
-                                    axios.post('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/patients', params, {
-                                        headers: {
-                                            Accept: "application/json, text/plain, */*",
-                                            // "Content-Type": "application/json",
-                                            Authorization: "Bearer " + token
-                                        }
-                                    }
-                                    ).then((patientresponse) => {
-
-                                        patientid = patientresponse.data[0].patientid;
-                                        console.log('patientid' + patientid);
-                                        if(patientid !==undefined)
-                                        {
-                                            // Call book Appt.
-
-                                                        const params = new URLSearchParams();
-                                                        params.append('patientid', patientid);
-                                                        params.append('appointmenttypeid', '61');
-                                                        params.append('appointmentid', appointmentid);
-                                                        params.append('departmentid', departmentid);
-                                                        params.append('ignoreschedulablepermission', true);
-                                                       
-                                                        axios.put('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/appointments/'+ appointmentid, params, {
-                                                    headers: {
-                                                        Accept: "application/json, text/plain, */*",
-                                                        // "Content-Type": "application/json",
-                                                        Authorization: "Bearer " + token
-                                                    }
-                                                }
-                                                ).then((bookApptResponse) => {
-                                                    if(bookApptResponse!==undefined)
-                                                    {
-                                                        const dataSetdevice = [];
-                                                        dataSetdevice.push(bookApptResponse.data[0]);
-                                                        setResult(dataSetdevice);
-                                                        alert('you got appt and appt information:' + result.date +"," + result.appointmentid+","+result.starttime);
-                                                    }
-                                                });
-                                        }
-                                    });
-                                    
-
-                                }
-                                else
-                                {
-                                    alert('no Appointment avaliable');
-                                }
-
-                            });
+                Accept: "application/json, text/plain, */*"
                 
-            
-            //  console.log('messages', response.data.messages);
             }
+        }
+        
+        ).then(deptResponse => {
+
+            let result = deptResponse;
+
+            const dataSetdevice = [];
+            dataSetdevice.push(result);
+            setResult(dataSetdevice);
+            if(result.data.error !==undefined){
+                alert(result.data.error);
+            }else{
+                alert(result.data);
+            }
+            
+            
         });
-    
+
+     
 
     }
 

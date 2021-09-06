@@ -13,7 +13,6 @@ const PHQ = ({handleReduceIndex,tab5}) => {
     const { register, handleSubmit} = useForm();
       const onSubmit = data =>{
         tab5(data);
-        alert('Submit');
       coreContext.SubmitIntakeRequest();
       console.log(coreContext.result)
       
@@ -21,6 +20,7 @@ const PHQ = ({handleReduceIndex,tab5}) => {
       const renderloader=()=>{
         if (coreContext.result.length===0){
           return <div style={{ height: 100, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+            <div>Please wait till process complete, please dont refresh and click.</div>
           <Loader
      type="Circles"
      color="#00BFFF"
