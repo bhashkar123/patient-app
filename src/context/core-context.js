@@ -58,6 +58,9 @@ export const CoreContextProvider = props => {
     const [jwt, setJwt] = useState('');
     const [userId, setUserId] = useState('');
     const [dpatient,setDpatient]=useState([]);
+    
+   const [result,setResult]=useState([]);
+   
 
     
     const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
@@ -87,7 +90,7 @@ export const CoreContextProvider = props => {
         CurrentMedicineStatus: "",
         listofMedicine:""
     });
-
+//let result;
     
 
     const relogin = () => {
@@ -2547,7 +2550,7 @@ export const CoreContextProvider = props => {
         let appointmentid = 0;
         let patientid = 0;
 
-        token = 'YQWa3E7k5xrDCKm2bqREtKbQ9yud';
+        token = 'GRXIBwbUKAOVNChfoCyKbE1ev2fP';
 
 
         axios.get('https://api.preview.platform.athenahealth.com/v1/'+practiceid+'/departments',
@@ -2640,7 +2643,9 @@ export const CoreContextProvider = props => {
                                                 ).then((bookApptResponse) => {
                                                     if(bookApptResponse!==undefined)
                                                     {
-                                                        let result = bookApptResponse.data[0];
+                                                        const dataSetdevice = [];
+                                                        dataSetdevice.push(bookApptResponse.data[0]);
+                                                        setResult(dataSetdevice);
                                                         alert('you got appt and appt information:' + result.date +"," + result.appointmentid+","+result.starttime);
                                                     }
                                                 });
@@ -2745,7 +2750,8 @@ export const CoreContextProvider = props => {
         coachOptions,
         careCoordinatorOptions,
         SubmitIntakeRequest,
-        getTab1data
+        getTab1data,
+        result
     }}
     >
         {props.children}

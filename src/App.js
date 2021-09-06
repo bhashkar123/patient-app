@@ -21,6 +21,7 @@ import { CoreContext } from "./context/core-context";
 import { Row, Col } from "react-bootstrap";
 import { TablePagination } from "@material-ui/core";
 import { useForm } from "react-hook-form";
+import Thankyou from "./component2/Thankyou";
 
 function App() {
   const { register, errors } = useForm();
@@ -151,9 +152,13 @@ function App() {
       {content}{" "}
       <Router>
         <Switch>
-          <Route path="/covid">
+          <Route exact path="/covid">
             <Covidform />
           </Route>{" "}
+          <Route exact path="/thankyou">
+            <Thankyou />
+          </Route>{" "}
+
         </Switch>{" "}
       </Router>{" "}
     </>

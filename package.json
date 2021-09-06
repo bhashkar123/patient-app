@@ -16,6 +16,7 @@
     "bootstrap": "^4.6.0",
     "chart.js": "^3.3.2",
     "g": "^2.0.1",
+    "get-video-id": "^3.4.1",
     "i18next": "^20.3.1",
     "mdb-react-ui-kit": "^1.0.0-beta7",
     "react": "^17.0.2",
@@ -46,6 +47,7 @@
     "react-swipeable-views": "^0.14.0",
     "react-tabs": "^3.2.2",
     "react-timer-hook": "^3.0.3",
+    "react-youtube": "^7.13.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
