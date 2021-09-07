@@ -1,13 +1,19 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import '../App2.css'
 import { useForm } from "react-hook-form";
+import { CoreContext } from '../context/core-context';
+import DatePicker from "react-datepicker";
+import { ArrowRight } from 'react-bootstrap-icons';
+//import "react-datepicker/dist/react-datepicker.css";
+
 
 
 const PatientInfo = ({handleChangeIndex,tab1}) => {
     var curr = new Date();
-    curr.setDate(curr.getDate() + 3);
-    var date = curr.toISOString().substr(0,10);
-   
+   var date= curr.setDate(curr.getDate());
+    //curr.setDate(curr.getDate() + 3);
+   // var date = curr.toISOString().substr(0,10);
+    const coreContext = useContext(CoreContext);
     const [CurrentDate, setCurrentDate] = useState(date);
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
@@ -78,16 +84,17 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
         'Wyoming']
         const addvalue=(CurrentDate,FirstName,LastName,sex,DateOfBirth,PhoneNumber,EmailAddress,Address1,Address2,city,state,zip,CurrentMedicine,listofMedicine)=>{
             if (!FirstName||!FirstName||!LastName||!sex||!DateOfBirth||!PhoneNumber||!EmailAddress||!Address1||!Address2||!city||!state||!zip||!CurrentMedicine){
-                return null           
+                return null  
+                         
             }
             
             else{
             const PatientData={
-                CurrentDate: CurrentDate,
+                CurrentDate: formatDate(CurrentDate),
                 FirstName: FirstName,
                 LastName: LastName,
                 sex: sex,
-                DateOfBirth: DateOfBirth,
+                DateOfBirth: formatDate(DateOfBirth),
                 PhoneNumber: PhoneNumber,
                 EmailAddress: EmailAddress,
                 Address1: Address1,
@@ -99,11 +106,19 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
                 listofMedicine:listofMedicine
             }
             tab1(PatientData);
+            coreContext.getTab1data(PatientData);
             handleChangeIndex();
         }
         }
+        const formatDate=(c)=>{
+           // alert(Date(CurrentDate))
+            var date = new Date(c);
+            return (((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear())
+    
+        }
         const submitPatientInfo=(e)=>{
             setMystyle({display:"block"})
+            
            e.preventDefault();
            addvalue(CurrentDate,FirstName,LastName,sex,DateOfBirth,PhoneNumber,EmailAddress,Address1,Address2,city,state,zip,CurrentMedicine,listofMedicine);
                    }
@@ -117,7 +132,9 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
             <div className="row">
         <div className="col-md-3 mb-3">
     <label htmlFor="exampleFormControlInput1" className="form-label">Date</label>
-    <input type="Date" className="form-control" placeholder="Select Date" value={CurrentDate} name="CurrentDate" onChange={(e)=>setCurrentDate(e.target.value)}/>
+    <DatePicker selected={CurrentDate} className="form-control" placeholderText="select date" onChange={(e) => setCurrentDate(e)}  />
+    
+    {/* <input type="text" className="form-control" placeholder="Select Date" value={CurrentDate} id="datepicker" name="CurrentDate" onChange={(e)=>setCurrentDate(e.target.value)}/> */}
    
 </div>
 </div>
@@ -156,17 +173,22 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
   
     </div>
     <div className="col-md-4">
-        <label  className="labelspace">Date of Birth:</label>
+        
             <div className="form-group">
-                <div className="col-md-10">
-                    <input type="Date" className="form-control input-sm" name="DateOfBirth" value={DateOfBirth} onChange={(e)=>setDateOfBirth(e.target.value)} />
+            <label  className="labelspace mx-3">Date of Birth:</label>
+                <div className="col-md-12">
+                <DatePicker className="form-control input-sm" placeholderText="select date" selected={DateOfBirth} onChange={(e) => setDateOfBirth(e)} style={{
+            height: "50px"
+          }}/>
+               
+                    {/* <input type="Date" className="form-control input-sm" name="DateOfBirth" value={DateOfBirth} onChange={(e)=>setDateOfBirth(e.target.value)} /> */}
   
                 </div>
             </div>
             {(!DateOfBirth)?<div className="error" style={mystyle}>Date of Birth is required.</div>:null}
     </div>
     <div className="col">
-        <label  className="labelspace">Phone:</label>
+        <label  className="labelspace mx-3" >Phone:</label>
             <div className="form-group">
                 <div className="col-md-12">
                     <input type="text" className="form-control input-sm" Placeholder="Phone"name="PhoneNumber" value={PhoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)}/>

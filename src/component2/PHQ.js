@@ -1,13 +1,40 @@
-import React from 'react';
+import React,{useContext, useState,useEffect} from 'react';
 import {useForm} from "react-hook-form"
 import '../App2.css'
+import { CoreContext } from '../context/core-context';
+import Loader from "react-loader-spinner";
+import { useHistory } from "react-router-dom";
 
 const PHQ = ({handleReduceIndex,tab5}) => {
+  let history = useHistory();
+  const [load,setLoad]=useState(false);
     const que=["Little interest or pleasure in doing things","Feeling down, depressed or hopeless","Feeling nervous, anxious or on edge","Not being able to stop or control worrying"]
+    const coreContext = useContext(CoreContext);
     const { register, handleSubmit} = useForm();
-      const onSubmit = data => tab5(data);
+      const onSubmit = data =>{
+        tab5(data);
+      coreContext.SubmitIntakeRequest();
+      console.log(coreContext.result)
       
-      
+      }
+      const renderloader=()=>{
+        if (coreContext.result.length===0){
+          return <div style={{ height: 100, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+            <div>Please wait till process complete, please dont refresh and click.</div>
+          <Loader
+     type="Circles"
+     color="#00BFFF"
+     height={50}
+     width={50}
+  /></div>
+  
+        }
+        if(coreContext.result.length>0){
+          history.push("/thankyou");
+        }
+        
+      } 
+  
     return (
         <div className="container" >
 
@@ -47,11 +74,15 @@ const PHQ = ({handleReduceIndex,tab5}) => {
       
     </tbody>
 </table>
+{(load===true)?renderloader():null}
 <div className="btn-grp">
 <button type="button" className="btn btn-lg btn-primary mt-2" onClick={()=>handleReduceIndex()}>Back</button>
-<button type="submit" className="btn btn-lg btn-primary mt-2 mx-5">Submit</button>
+<button type="submit" className="btn btn-lg btn-primary mt-2 mx-5" onClick={()=>setLoad(true)}>Submit </button>
 </div>
 </form>
+<div>
+  
+</div>
         </div>
 
     )

@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import '../App2.css';
-
+import DatePicker from "react-datepicker";
 const InsuranceInfo = ({handleChangeIndex,handleReduceIndex,tab2}) => {
     const [relation,setRelation]=useState("");
     const [Primaryinsurance,setInsurance]=useState("");
@@ -18,6 +18,12 @@ const InsuranceInfo = ({handleChangeIndex,handleReduceIndex,tab2}) => {
     const [DriversLicense,setDriversLicense]=useState("");
     const [mystyle,setMystyle]=useState({display:"none"})
   const[SecondaryInsurerPolicy,setSecondaryInsurerPolicy]=  useState("");
+  const formatDate=(c)=>{
+    // alert(Date(CurrentDate))
+     var date = new Date(c);
+     return (((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear())
+
+ }
   
         var newrelation;
 
@@ -29,7 +35,7 @@ const InsuranceInfo = ({handleChangeIndex,handleReduceIndex,tab2}) => {
                     PolicyHolderFName:PolicyHolderFName,
                     PolicyHolderLName:PolicyHolderLName,
                     relation:relation,
-                    PolicyDateOfBirth:PolicyDateOfBirth,
+                    PolicyDateOfBirth:formatDate(PolicyDateOfBirth),
                     PrimaryPolicyNumber:PrimaryPolicyNumber,
                     PrimaryMemberID:PrimaryMemberID,
                     Secondaryinsurance:Secondaryinsurance,
@@ -55,7 +61,7 @@ const InsuranceInfo = ({handleChangeIndex,handleReduceIndex,tab2}) => {
                 PolicyHolderFName:PolicyHolderFName,
                 PolicyHolderLName:PolicyHolderLName,
                 relation:relation,
-                PolicyDateOfBirth:PolicyDateOfBirth,
+                PolicyDateOfBirth:formatDate(PolicyDateOfBirth),
                 PrimaryPolicyNumber:PrimaryPolicyNumber,
                 PrimaryMemberID:PrimaryMemberID,
                 Secondaryinsurance:Secondaryinsurance,
@@ -166,12 +172,14 @@ const InsuranceInfo = ({handleChangeIndex,handleReduceIndex,tab2}) => {
     </div>
     <div className="row ">
         <div className="col-md-12 mt-2">
-    <label htmlFor="exampleFormControlInput1" className="form-label">Date of Birth</label>
-    <input type="Date" className="form-control" placeholder="Select Date" name="PolicyHolderDateOfBirth" value={PolicyDateOfBirth} onChange={(e)=>setPolicyDateOfBirth(e.target.value)}/>
+    <label htmlFor="exampleFormControlInput1" className="form-label">Date of Birth</label><br/>
+    
+    {/* <input type="Date" className="form-control" placeholder="Select Date" name="PolicyHolderDateOfBirth" value={PolicyDateOfBirth} onChange={(e)=>setPolicyDateOfBirth(e.target.value)}/> */}
+    <DatePicker selected={PolicyDateOfBirth} className="form-control policyDOB" placeholderText="select date" onChange={(e) => setPolicyDateOfBirth(e)}  />
     {(!relation)?<div className="error" style={mystyle} style={mystyle}>Date Of Birth is required</div>:null}
 </div>
 </div>
-<div className="row">
+<div className="row mt-2">
         <div className="col-md-5 mb-3">
     <label htmlFor="exampleFormControlInput1" className="form-label">Group/MemberID#</label>
     <input type="text" className="form-control" placeholder="Group.." name="PrimaryMemberID" value={PrimaryMemberID} onChange={(e)=>setPrimaryMemberID(e.target.value)}/>

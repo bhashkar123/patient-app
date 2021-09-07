@@ -58,6 +58,9 @@ export const CoreContextProvider = props => {
     const [jwt, setJwt] = useState('');
     const [userId, setUserId] = useState('');
     const [dpatient,setDpatient]=useState([]);
+    
+   const [result,setResult]=useState([]);
+   
 
     
     const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
@@ -71,7 +74,23 @@ export const CoreContextProvider = props => {
     const [bgChartData, setbgChartData] = useState([]);
     const [bpChartData, setbpChartData] = useState([]);
     const [wsChartData, setwsChartData] = useState([]);
-
+    const [Tab1data,setTab1data]=useState({
+        CurrentDate: "",
+        FirstName:"",
+        LastName: "",
+        sex: "",
+        DateOfBirth: "",
+        PhoneNumber: "",
+        EmailAddress: "",
+        Address1: "",
+        Address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        CurrentMedicineStatus: "",
+        listofMedicine:""
+    });
+//let result;
     
 
     const relogin = () => {
@@ -2511,6 +2530,58 @@ export const CoreContextProvider = props => {
 
     }
 
+    const getTab1data=(data)=>{
+        setTab1data(data);
+        
+    }
+    console.log("22:27",Tab1data.FirstName);
+    // if (!Tab1data){
+    //     return null
+    // }else{
+    //     
+    // }
+    
+
+    // Submit intake
+    const SubmitIntakeRequest = () =>{
+       
+        const data  = {
+            "firstname": Tab1data.FirstName,
+            "lastname": Tab1data.LastName,
+            "email": Tab1data.EmailAddress,
+            "guarantoremail": Tab1data.EmailAddress,
+            "dob": Tab1data.DateOfBirth,
+            "ssn":  '123456789'
+            
+        }
+        axios.post(apiUrl+'/athenanet', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*"
+                
+            }
+        }
+        
+        ).then(deptResponse => {
+
+            let result = deptResponse;
+
+            const dataSetdevice = [];
+            dataSetdevice.push(result);
+            setResult(dataSetdevice);
+            if(result.data.error !==undefined){
+                alert(result.data.error);
+            }else{
+                alert(result.data);
+            }
+            
+            
+        });
+
+     
+
+    }
+
+
     return <CoreContext.Provider value={{
         patients,
         bgData,
@@ -2589,7 +2660,10 @@ export const CoreContextProvider = props => {
         resetForm,
         providerOptions,
         coachOptions,
-        careCoordinatorOptions
+        careCoordinatorOptions,
+        SubmitIntakeRequest,
+        getTab1data,
+        result
     }}
     >
         {props.children}
