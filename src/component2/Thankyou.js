@@ -1,11 +1,13 @@
-import React from 'react'
+import React ,{useContext}from 'react'
 import YouTube from 'react-youtube';
 import getVideoId from 'get-video-id';
+import { CoreContext } from '../context/core-context';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
 const Thankyou = () => {
+    const coreContext = useContext(CoreContext);
     const { id } = getVideoId('https://www.youtube.com/watch?v=WYrl74Vg-Ro');
     const opts = {
         height: '390',
@@ -15,10 +17,12 @@ const Thankyou = () => {
           autoplay: 0,
         }
     }
+  //  let sahil=coreContext.result[1].data.error
+    console.log("hankyu",coreContext.result)
     return (
         <>
         <div className="container"style={{color:"rgb(0, 117, 178)" ,marginTop:"10vh",width:"100%"}}>
-            <h1 style={{marginBottom:"2vh"}}><strong>Thank You! For filling Out The COVID-19 Patient Intake Form.</strong></h1>
+            <h1 style={{marginBottom:"2vh"}}><strong>Thank You! For filling Out The COVID-19 Patient Intake Form.{(coreContext.result!==undefined)?coreContext.result[1].data:null}</strong></h1>
             <hr/>
             <center><h3 style={{color:'black' }}> Please follow the Steps below</h3>
             <YouTube videoId={id} opts={opts}  />

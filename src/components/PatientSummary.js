@@ -22,13 +22,14 @@ import { BloodPressure } from './BloodPressure';
 import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { Thresold } from './Thresold';
+
 import Alert from './common/Alert';
 
 
 
 const PatientSummary  = props =>  {
     
-    const [Prompt, setDirty, setPristine] = Alert();
+    
     const coreContext = useContext(CoreContext);
     const [notes, setNotes] = useState('');
     const [date, setDate] = useState('');
@@ -65,7 +66,10 @@ const PatientSummary  = props =>  {
     const [startDT, setstartDT] = useState('');
     const [totalLogtime, settotalLogtime] = useState(0);
 
+    
     const greeting = 'Welcome to React';
+    const [Prompt,setDirty, setPristine] = Alert();
+    
     const fetchCareCoordinator = () => {
         const patientId = props.match.params.patient;
         setPatientId(patientId);
