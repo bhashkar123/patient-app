@@ -2566,12 +2566,14 @@ export const CoreContextProvider = props => {
             let result = deptResponse;
 
             const dataSetdevice = [];
-            dataSetdevice.push(result);
+            dataSetdevice.push("finalid",result);
             setResult(dataSetdevice);
+            console.log("finldaa",result.data)
             if(result.data.error !==undefined){
                 alert(result.data.error);
             }else{
                 alert(result.data);
+                
             }
             
             
