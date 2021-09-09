@@ -2551,7 +2551,8 @@ export const CoreContextProvider = props => {
             "email": Tab1data.EmailAddress,
             "guarantoremail": Tab1data.EmailAddress,
             "dob": Tab1data.DateOfBirth,
-            "ssn":  '123456789'
+            "ssn":  '123456789',
+            "practiceId" :"24451", "deptId": "1"
             
         }
         axios.post(apiUrl+'/athenanet', data, {
