@@ -164,6 +164,8 @@ const BloodPressure = props => {
         editable: false,
         width: 200
       },
+
+     
         {
           field: 'MeasurementDateTime',
           headerName: 'Date Recorded',
@@ -182,11 +184,13 @@ const BloodPressure = props => {
           editable: false
          
         },
+
         {
-          field: 'deviceId',
+          field: 'DeviceId',
           headerName: 'Device Id',
-          editable: false,
-          width: 200
+          width: 200,
+          editable: false
+         
         },
         {
           field: 'readingId',
@@ -235,6 +239,15 @@ const BloodPressure = props => {
         editable: false,
         width: 200
       },
+
+      {
+        field: 'Signalstrength',
+        headerName: 'Signal Strength',
+        type: 'number',
+        editable: false,
+        width: 200
+      },
+
       {
         field: 'Pulse',
         headerName: 'Pulse',
@@ -256,11 +269,13 @@ const BloodPressure = props => {
           editable: false
          
         },
+
         {
-          field: 'deviceId',
+          field: 'DeviceId',
           headerName: 'Device Id',
-          editable: false,
-          width: 200
+          width: 200,
+          editable: false
+         
         },
         {
           field: 'readingId',

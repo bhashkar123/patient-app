@@ -1927,9 +1927,7 @@ export const CoreContextProvider = props => {
                 }
                 if (bp.diastolic !== undefined) {
                     bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
-                }
-                if (bp.battery !== undefined) {
-                    bpdata.battery = bp.battery.n;
+                
                 }
                 if (bp.pulse !== undefined) {
                     bpdata.Pulse = bp.pulse.n;
