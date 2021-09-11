@@ -63,11 +63,11 @@ export const CoreContextProvider = props => {
    
 
     
-    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
-    const [userTable, setuserTable] = useState('UserDetailsDemo');
+    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
+    // const [userTable, setuserTable] = useState('UserDetailsDemo');
 
-    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
-    // const [userTable, setuserTable] = useState('UserDetail');
+    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+    const [userTable, setuserTable] = useState('UserDetail');
     
     ///Chart Data
 
