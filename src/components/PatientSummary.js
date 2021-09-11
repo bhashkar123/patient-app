@@ -22,7 +22,6 @@ import { BloodPressure } from './BloodPressure';
 import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { Thresold } from './Thresold';
-
 import Alert from './common/Alert';
 
 

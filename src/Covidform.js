@@ -134,7 +134,7 @@ const Tab4=(data)=>{
       >
         <Tab label="Patient information" onClick={()=>handleTabs(0)} {...a11yProps(0)} />
         <Tab label="Insurance Information" onClick={()=>handleTabs(1)} {...a11yProps(1)} />
-        <Tab label="Healtha dn Medical history" onClick={()=>handleTabs(2)} {...a11yProps(2)} />
+        <Tab label="Health & Medical history" onClick={()=>handleTabs(2)} {...a11yProps(2)} />
         <Tab label="COVID-19 Questionnaire"onClick={()=>handleTabs(3)} {...a11yProps(3)} />
         <Tab label="PHQ-2 &GAD" onClick={()=>handleTabs(4)} {...a11yProps(4)} />
       </Tabs>

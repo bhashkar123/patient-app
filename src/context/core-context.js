@@ -1927,12 +1927,10 @@ export const CoreContextProvider = props => {
                 }
                 if (bp.diastolic !== undefined) {
                     bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
+                
                 }
                 if (bp.pulse !== undefined) {
-                    bpdata.pulse = bp.pulse.n;
-                }
-                if (bp.battery !== undefined) {
-                    bpdata.battery = bp.battery.n;
+                    bpdata.Pulse = bp.pulse.n;
                 }
                 if (bp.TimeSlots !== undefined) {
                     bpdata.timeSlots = bp.TimeSlots.s;

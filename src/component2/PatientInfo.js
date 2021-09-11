@@ -83,7 +83,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
         'Wisconsin',
         'Wyoming']
         const addvalue=(CurrentDate,FirstName,LastName,sex,DateOfBirth,PhoneNumber,EmailAddress,Address1,Address2,city,state,zip,CurrentMedicine,listofMedicine)=>{
-            if (!FirstName||!FirstName||!LastName||!sex||!DateOfBirth||!PhoneNumber||!EmailAddress||!Address1||!Address2||!city||!state||!zip||!CurrentMedicine){
+            if (!FirstName||!FirstName||!LastName||!sex||!DateOfBirth||!PhoneNumber||!EmailAddress||!Address1||!city||!state||!zip||!CurrentMedicine){
                 return null  
                          
             }
