@@ -9,6 +9,7 @@ import axios from "axios";
 import Sidebar from "react-sidebar";
 import * as Pages from "./components";
 import { DPatients } from "./components/DPatients";
+import { BloodPressureAverage } from "./components/BloodPressureAverage";
 import Covidform from "./Covidform";
 import "./App.css";
 
@@ -95,6 +96,11 @@ function App() {
                     exact
                     path="/bloodpressure"
                     component={Pages.BloodPressure}
+                  />
+                  <Route
+                    exact
+                    path="/bloodpressureaverage"
+                    component={BloodPressureAverage}
                   />
                   <Route
                     exact
