@@ -20,6 +20,19 @@ const Menu = (props) => {
         </React.Fragment>
         return '';
     }
+    const renderAverage = () => {
+
+        const userType = localStorage.getItem("userType");
+        if (userType === 'admin' && userType==="doctor") return <React.Fragment>
+            <NavDropdown title={<div style={{ display: "inline-block" }}><GiCook size={20} /> Average </div>} id="collasible-nav-dropdown">
+                {/* <NavDropdown.Item href="/dashboard"> Dashboard</NavDropdown.Item> */}
+                <NavDropdown.Item href="/bloodpressureaverage"> Blood Pressure</NavDropdown.Item>
+                
+            </NavDropdown>
+            <NavDropdown.Divider />
+        </React.Fragment>
+        return '';
+    }
 
     const renderOrderInformation = () => {
 
@@ -104,6 +117,7 @@ const Menu = (props) => {
             </li>
             <NavDropdown.Divider />
             {renderOrderInformation()}
+            {renderAverage()}
             {renderDeviceInformation()}
         </ul>
 

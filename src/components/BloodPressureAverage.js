@@ -6,6 +6,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
 import IconButton from '@material-ui/core/IconButton';
+import IonRangeSlider from 'react-ion-slider'
 
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
@@ -76,18 +77,112 @@ QuickSearchToolbar.propTypes = {
 };
 
 
-const BloodPressure = props => {
+const BloodPressureAverage = props => {
 
     const coreContext = useContext(CoreContext);
+    const [id,setId]=useState(0)
     const [patientId, setPatientId] = useState('');
     const [userType, setUserType] = useState('');
     const [disablelink, setdisablelink] = useState(false);
     const [searchText, setSearchText] = React.useState("");
+    const [Days, setDays] = useState(30);
+    
     const [rows, setRows] = React.useState(coreContext.bloodpressureData);
+    const setd=(e)=>{
+        console.log(e);
+    }
+
+    let avgData=[];
+    let newrows=coreContext.bloodpressureData.map((curr)=>curr.UserName).filter((item, i, ar) => ar.indexOf(item) === i)
+    console.log(newrows[0])
+    const getSystolic=(value)=>{
+        let averagesys=0;
+        let record=0
+        let today=new Date();
+        let bfr=new Date().setDate(today.getDate()-Days)
+        
+        coreContext.bloodpressureData.map((curr)=>
+        { 
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)){
+            averagesys=averagesys+Number(curr.systolic);
+            record=record+1
+        //    console.log(new Date(curr.CreatedDate), new Date(bfr),new Date(curr.CreatedDate)>new Date(bfr))
+        }
+    }
+         )
+    return averagesys/record;
+
+    }
+    const getDiastolic=(value)=>{
+        let averageDia=0;
+        let record=0
+        let today=new Date();
+        let bfr=new Date().setDate(today.getDate()-Days)
+        
+        coreContext.bloodpressureData.map((curr)=>
+        { 
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)){
+                averageDia=averageDia+Number(curr.diastolic);
+                record=record+1
+        }
+    }
+         )
+    return averageDia/record
+
+    }
+    const getPulse=(value)=>{
+        let averagepulse=0;
+        let record=0
+        let today=new Date();
+        let bfr=new Date().setDate(today.getDate()-Days)
+        
+        coreContext.bloodpressureData.map((curr)=>
+        { 
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)){
+                averagepulse=averagepulse+Number(curr.Pulse);
+                record=record+1
+        }
+    }
+         )
+    return averagepulse/record
+
+    
+}
+
+    newrows.map((user)=>
+        
+        {
+           let avg= {
+               id:avgData.length,
+                UserName:user,
+                systolic:getSystolic(user),
+                diastolic:getDiastolic(user),
+                Pulse:getPulse(user),
+            }
+
+            console.log(avg)
+            avgData.push(avg)
+           // setId(id+1)
+            
+      //  setAvgData([...avgdaData,avg])
+      return avgData
+      //console.log(avgData)
+        })
+        
+       
+
+    
+      //  console.log(rows)
+    
+
+
+
+
+     //   
     const requestSearch = (searchValue) => {
       setSearchText(searchValue);
       const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
-      const filteredRows = coreContext.bloodpressureData.filter((row) => {
+      const filteredRows = avgData.filter((row) => {
         return Object.keys(row).some((field) => {
           return searchRegex.test(row[field].toString());
         });
@@ -99,11 +194,13 @@ const BloodPressure = props => {
 
 
     React.useEffect(() => {
-      setRows(coreContext.bloodpressureData);
-    }, [coreContext.bloodpressureData]);
+      setRows(avgData);
+    }, []);
   
     
-  
+    // coreContext.bloodpressureData.map((curr)=>{
+    //     return console.log(curr)
+    // })
   
     
     const fetchBloodPressure = () => {
@@ -163,59 +260,14 @@ const BloodPressure = props => {
         type: 'number',
         editable: false,
         width: 200
-      },
-
-     
-        {
-          field: 'MeasurementDateTime',
-          headerName: 'Date Recorded',
-          editable: false,
-          type:'dateTime',
-          width: 200,
-          valueFormatter: (params) => {
-              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-               return `${valueFormatted}`;
-             },
-        },
-        {
-          field: 'CreatedDate',
-          headerName: 'Date Received',
-          width: 200,
-          editable: false
-         
-        },
-
-        {
-          field: 'DeviceId',
-          headerName: 'Device Id',
-          width: 200,
-          editable: false
-         
-        },
-        {
-          field: 'readingId',
-          headerName: 'Reading Id',
-          width: 200,
-          editable: false
-         
-        },
-        { 
-          field: "sortDateColumn", 
-          headerName: "Action",
-          width: 300,
-          
-          renderCell: (params) => (
-              <div>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-              <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
-              </div>
-          
-       )}         
+      }         
     ];
 
     const showEditForm = (patient) => {
     }
     const deletePatient = (patient) => {
     }
+
 
     const patientcolumns = [
       { 
@@ -241,60 +293,15 @@ const BloodPressure = props => {
       },
 
       {
-        field: 'Signalstrength',
-        headerName: 'Signal Strength',
-        type: 'number',
-        editable: false,
-        width: 200
-      },
-
-      {
         field: 'Pulse',
         headerName: 'Pulse',
         type: 'number',
         editable: false,
         width: 200
       },
-      {
-          field: 'MeasurementDateTime',
-          headerName: 'Date Recorded',
-          editable: false,
-          type: 'date',
-          width: 200,
-          valueFormatter: (params) => {
-            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-             return `${valueFormatted}`;
-           },
-        },
-        {
-          field: 'CreatedDate',
-          headerName: 'Date Received',
-          width: 200,
-          editable: false
-         
-        },
-
-        {
-          field: 'DeviceId',
-          headerName: 'Device Id',
-          width: 200,
-          editable: false
-         
-        },
-        {
-          field: 'readingId',
-          headerName: 'Reading Id',
-          width: 200,
-          editable: false
-        },
-        { 
-          field: "sortDateColumn", 
-          headerName: "Action"
-         
-        }  
+        
     ];
-
-    const renderBloodPressure = () => {
+        const renderBloodPressure = () => {
       if (coreContext.bloodpressureData.length == 0) {
         return (
             <div style={{ height: 680, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
@@ -319,11 +326,11 @@ const BloodPressure = props => {
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
               components={{ Toolbar: QuickSearchToolbar }}
-                rows={rows}
+                rows={(!searchText)?avgData:rows}
                 columns={dgcolumns}
                 pageSize={10}
-                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
-                sortingOrder={['desc', 'asc']}
+                //sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+                //sortingOrder={['desc', 'asc']}
                 componentsProps={{
                   toolbar: {
                     value: searchText,
@@ -346,6 +353,19 @@ const BloodPressure = props => {
         </button>
       </div>
     <div className="card-body">
+    <div className='row'    >
+            <div className="col-md-12">
+                <div className="card">
+
+                    <h4 className="card-header"> Select Days </h4>
+                    <div className="card-body">
+                        <IonRangeSlider  keyboard={true} onStart='0' onFinish={(e)=>setDays(e.from)} type='single' min={0} max={90} from={Days} to={Days} step={7} grid={true} grid_margin={true}  />
+                        
+                        <h3> Last {Days} days Selected</h3>
+                    </div>
+                </div>
+            </div>
+            </div>
     {renderBloodPressure()}
     </div>
 </div >
@@ -353,4 +373,4 @@ const BloodPressure = props => {
 
 
 
-export { BloodPressure }
+export { BloodPressureAverage }
