@@ -63,11 +63,11 @@ export const CoreContextProvider = props => {
    
 
     
-    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
-    const [userTable, setuserTable] = useState('UserDetailsDemo');
+    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
+    // const [userTable, setuserTable] = useState('UserDetailsDemo');
 
-    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
-    // const [userTable, setuserTable] = useState('UserDetail');
+    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+    const [userTable, setuserTable] = useState('UserDetail');
     
     ///Chart Data
 
@@ -2549,7 +2549,8 @@ export const CoreContextProvider = props => {
             "email": Tab1data.EmailAddress,
             "guarantoremail": Tab1data.EmailAddress,
             "dob": Tab1data.DateOfBirth,
-            "ssn":  '123456789'
+            "ssn":  '123456789',
+            "practiceId" :"24451", "deptId": "1"
             
         }
         axios.post(apiUrl+'/athenanet', data, {
