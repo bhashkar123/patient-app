@@ -83,7 +83,7 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
         'Wisconsin',
         'Wyoming']
         const addvalue=(CurrentDate,FirstName,LastName,sex,DateOfBirth,PhoneNumber,EmailAddress,Address1,Address2,city,state,zip,CurrentMedicine,listofMedicine)=>{
-            if (!FirstName||!FirstName||!LastName||!sex||!DateOfBirth||!PhoneNumber||!EmailAddress||!Address1||!city||!state||!zip||!CurrentMedicine){
+            if (!FirstName||!FirstName||!LastName||!sex||!DateOfBirth||!PhoneNumber||!EmailAddress||!Address1||!Address2||!city||!state||!zip||!CurrentMedicine){
                 return null  
                          
             }
@@ -226,7 +226,8 @@ const PatientInfo = ({handleChangeIndex,tab1}) => {
     
   </div>
   {(!Address1||!zip||!state||!city)?<div className="error" style={mystyle}>AddressLine1,city,state,zip are required</div>:null}
-  
+  {(!Address2)?<div className="error" style={mystyle}>AddressLine2 is required</div>:null}
+
 </div>
 <div className="form-group col-md-5" style={{marginLeft:"-10px"}} >
     <label htmlFor="exampleFormControlSelect1">Are you currently taking any medications? </label>
