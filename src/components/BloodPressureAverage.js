@@ -88,6 +88,9 @@ const BloodPressureAverage = props => {
     const [Days, setDays] = useState(30);
     
     const [rows, setRows] = React.useState(coreContext.bloodpressureData);
+    const setd=(e)=>{
+        console.log(e);
+    }
 
     let avgData=[];
     let newrows=coreContext.bloodpressureData.map((curr)=>curr.UserName).filter((item, i, ar) => ar.indexOf(item) === i)
@@ -290,57 +293,13 @@ const BloodPressureAverage = props => {
       },
 
       {
-        field: 'Signalstrength',
-        headerName: 'Signal Strength',
-        type: 'number',
-        editable: false,
-        width: 200
-      },
-
-      {
         field: 'Pulse',
         headerName: 'Pulse',
         type: 'number',
         editable: false,
         width: 200
       },
-      {
-          field: 'MeasurementDateTime',
-          headerName: 'Date Recorded',
-          editable: false,
-          type: 'date',
-          width: 200,
-          valueFormatter: (params) => {
-            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-             return `${valueFormatted}`;
-           },
-        },
-        {
-          field: 'CreatedDate',
-          headerName: 'Date Received',
-          width: 200,
-          editable: false
-         
-        },
-
-        {
-          field: 'DeviceId',
-          headerName: 'Device Id',
-          width: 200,
-          editable: false
-         
-        },
-        {
-          field: 'readingId',
-          headerName: 'Reading Id',
-          width: 200,
-          editable: false
-        },
-        { 
-          field: "sortDateColumn", 
-          headerName: "Action"
-         
-        }  
+        
     ];
         const renderBloodPressure = () => {
       if (coreContext.bloodpressureData.length == 0) {
@@ -400,8 +359,8 @@ const BloodPressureAverage = props => {
 
                     <h4 className="card-header"> Select Days </h4>
                     <div className="card-body">
-                        <IonRangeSlider  keyboard={true} onStart='0' onFinish={(e)=>setDays(e.to)}  type='double' min={0} max={90} from='0' to={Days} step={7} grid={true} grid_margin={true}  />
-                        {console.log(Days)}
+                        <IonRangeSlider  keyboard={true} onStart='0' onFinish={(e)=>setDays(e.from)} type='single' min={0} max={90} from={Days} to={Days} step={7} grid={true} grid_margin={true}  />
+                        
                         <h3> Last {Days} days Selected</h3>
                     </div>
                 </div>
