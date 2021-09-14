@@ -180,7 +180,7 @@ const Patients = props => {
             renderCell: (params) => (
                 <div style={{  width: '100px' }}  >
                 <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-                <a style={{  marginRight: '5px' }} href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
                 <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a>
                 </div>
             
@@ -223,7 +223,10 @@ const Patients = props => {
     }
    
     
-    return <React.Fragment> <Table striped bordered hover responsive size='sm'>
+    return <React.Fragment>
+        
+        
+         <Table striped bordered hover responsive size='sm'>
         <caption>Patients' List  </caption>
         {renderPatients()}
     </Table>
@@ -257,6 +260,11 @@ const Patients = props => {
                         () =>{ 
                                 coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId);
                                 setShowModal(false);
+                               // window.location.reload ();
+                               
+                               //alert("please wait")
+                               fetchPatients();
+                             //  alert("updated");
                             }
                         } elementType='button' variant='primary' />
                     <br />
@@ -286,6 +294,7 @@ const Patients = props => {
                     <Input blockButton={true} value='Submit' onClick={() => {
                             coreContext.AssignCareTeam( provider, coordinator, coach, patientId);
                             setAssignDrShowModal(false);
+                            fetchPatients();
                         } 
                     }   elementType='button' variant='primary' />
                     <br />
