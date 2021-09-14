@@ -47,7 +47,7 @@ const Menu2 = (props) => {
     const renderAverage = () => {
 
         const userType = localStorage.getItem("userType");
-        if (userType === 'admin' || userType === 'doctor') return <React.Fragment>
+        if (userType === 'admin' && userType === 'doctor') return <React.Fragment>
             <NavDropdown title={<div style={{ display: "inline-block" }}><GiCook size={20} />  </div>} id="collasible-nav-dropdown">
                 {/* <NavDropdown.Item href="/dashboard"> Dashboard</NavDropdown.Item> */}
                 <NavDropdown.Item href="/bloodpressureaverage"> Blood Pressure</NavDropdown.Item>
