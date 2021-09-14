@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Prompt } from "react-router-dom";
-const Alert = (message="hi"
+const Alert = (message="You have unsaved changes, Are you sure you want to leave?"
     ) => {
         const [isDirty, setDirty] = useState(false);
     
@@ -13,7 +13,10 @@ const Alert = (message="hi"
             };
         }, [isDirty]);
     
-        const routerPrompt = <Prompt when={isDirty} message={"sahil"} />;
+        const routerPrompt = <Prompt when={isDirty} message={JSON.stringify({
+            header: "Confirm",
+            content: "You have unsaved changes, Are you sure you want to leave?",
+          })} />;
     
         return [routerPrompt, () => setDirty(true), () => setDirty(false)];
     };

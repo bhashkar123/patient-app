@@ -223,7 +223,10 @@ const Patients = props => {
     }
    
     
-    return <React.Fragment> <Table striped bordered hover responsive size='sm'>
+    return <React.Fragment>
+        
+        
+         <Table striped bordered hover responsive size='sm'>
         <caption>Patients' List  </caption>
         {renderPatients()}
     </Table>
@@ -257,6 +260,11 @@ const Patients = props => {
                         () =>{ 
                                 coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId);
                                 setShowModal(false);
+                               // window.location.reload ();
+                               
+                               //alert("please wait")
+                               fetchPatients();
+                             //  alert("updated");
                             }
                         } elementType='button' variant='primary' />
                     <br />

@@ -37,12 +37,12 @@ function App() {
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
   useEffect(() => {}, [showSidebar]);
-  const [style, setStyle] = useState({ marginLeft: "-85px", width: "80%" });
+  const [style, setStyle] = useState({ marginLeft: "-5px", width: "80%" });
   const changestyle = () => {
-    if (style.marginLeft === "-85px") {
-      setStyle({ marginLeft: "-234px", width: "90%" });
+    if (style.marginLeft === "-5px") {
+      setStyle({ marginLeft: "-160px", width: "90%" });
     } else {
-      setStyle({ marginLeft: "-85px", width: "80%" });
+      setStyle({ marginLeft: "-5px", width: "80%" });
     }
   };
 
