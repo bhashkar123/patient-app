@@ -3,9 +3,11 @@ import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
-
+const Moment = require('moment');
 
 const BloodGlucose = props => {
+  
+  
 
     const coreContext = useContext(CoreContext);
 
@@ -79,14 +81,25 @@ const BloodGlucose = props => {
           field: 'MeasurementDateTime',
           headerName: 'Date Recorded',
           editable: false,
-          width: 200
+          width: 200,
+          type:'dateTime',
+          
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
         },
         {
           field: 'CreatedDate',
           headerName: 'Date Received',
           width: 200,
-          editable: false
-         
+          editable: false,
+          type:'dateTime',
+          
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
         },
           {
             field: 'battery',
@@ -155,13 +168,24 @@ const BloodGlucose = props => {
         field: 'MeasurementDateTime',
         headerName: 'Date Recorded',
         editable: false,
-        width: 200
+        width: 200,
+        type:'dateTime',
+          
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
       },
       {
         field: 'CreatedDate',
         headerName: 'Date Received',
         width: 200,
-        editable: false
+        editable: false,type:'dateTime',
+          
+        valueFormatter: (params) => {
+            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+             return `${valueFormatted}`;
+           },
        
       },
         {
@@ -208,6 +232,7 @@ const BloodGlucose = props => {
                   rows={coreContext.bloodglucoseData}
                   columns={dgcolumns}
                   pageSize={10}
+                  sortingOrder={['desc', 'asc']}
                   sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
                 />
               </div>

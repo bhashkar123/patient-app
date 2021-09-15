@@ -60,12 +60,25 @@ const Weight = (props) => {
             headerName: 'Date Recorded',
             width: 310,
             editable: false,
+            type: 'date',
+          width: 200,
+          valueFormatter: (params) => {
+            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+             return `${valueFormatted}`;
+           },
+            
           },
           {
             field: 'CreatedDate',
             headerName: 'Date Received',
             width: 200,
-            editable: false
+            editable: false,
+            type: 'date',
+          width: 200,
+          valueFormatter: (params) => {
+            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+             return `${valueFormatted}`;
+           },
            
           },
           {
@@ -121,13 +134,25 @@ const Weight = (props) => {
             headerName: 'Date Recorded',
             width: 110,
             editable: false,
-            width: 300
+            width: 300,
+            type: 'date',
+          width: 200,
+          valueFormatter: (params) => {
+            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+             return `${valueFormatted}`;
+           },
           },
           {
             field: 'CreatedDate',
             headerName: 'Date Received',
             width: 200,
-            editable: false
+            editable: false,
+            type: 'date',
+          width: 200,
+          valueFormatter: (params) => {
+            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+             return `${valueFormatted}`;
+           },
            
           },
           {
@@ -177,6 +202,7 @@ const Weight = (props) => {
               <DataGrid
                 rows={coreContext.weightData}
                 columns={dgcolumns}
+                sortingOrder={['desc', 'asc']}
                 pageSize={10}
                 sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
               />
