@@ -10,6 +10,8 @@ import Sidebar from "react-sidebar";
 import * as Pages from "./components";
 import { DPatients } from "./components/DPatients";
 import { BloodPressureAverage } from "./components/BloodPressureAverage";
+import { BloodGlucoseAverage } from "./components/BloodGlucoseAverage";
+
 import Covidform from "./Covidform";
 import "./App.css";
 
@@ -23,6 +25,7 @@ import { Row, Col } from "react-bootstrap";
 import { TablePagination } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
+import { WeightAverage } from "./components/WeightAverage";
 
 function App() {
   const { register, errors } = useForm();
@@ -107,6 +110,18 @@ function App() {
                     path="/bloodglucose"
                     component={Pages.BloodGlucose}
                   />{" "}
+                  <Route
+                    exact
+                    path="/bloodglucoseaverage"
+                    component={BloodGlucoseAverage}
+                  />{" "}
+                  <Route
+                    exact
+                    path="/weightaverage"
+                    component={WeightAverage}
+                  />{" "}
+
+
                   <Route exact path="/weight" component={Pages.Weight} />{" "}
                   <Route exact path="/logout" component={Pages.Logout} />{" "}
                   <Route exact path="/profile" component={Pages.MyProfile} />{" "}
