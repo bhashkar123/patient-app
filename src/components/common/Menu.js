@@ -27,6 +27,8 @@ const Menu = (props) => {
             <NavDropdown title={<div style={{ display: "inline-block" }}><GiCook size={20} /> Average </div>} id="collasible-nav-dropdown">
                 {/* <NavDropdown.Item href="/dashboard"> Dashboard</NavDropdown.Item> */}
                 <NavDropdown.Item href="/bloodpressureaverage"> Blood Pressure</NavDropdown.Item>
+                <NavDropdown.Item href="/bloodglucoseaverage"> Blood Glucose</NavDropdown.Item>
+                <NavDropdown.Item href="/weightaverage"> Weight</NavDropdown.Item>
                 
             </NavDropdown>
             <NavDropdown.Divider />

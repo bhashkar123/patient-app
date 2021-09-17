@@ -612,13 +612,13 @@ export const CoreContextProvider = props => {
                     wtdata.MeasurementDateTime = wt.MeasurementDateTime.s;
                     wtdata.MeasurementDateTime = new Date(wtdata.MeasurementDateTime);
                     wtdata.sortDateColumn =  wt.MeasurementDateTime.s;
-                    wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
+                   // wtdata.MeasurementDateTime =Moment(wtdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm:ss A');
                     
                 }
                 if (wt.CreatedDate !== undefined) {
                     wtdata.CreatedDate = wt.CreatedDate.s;
                     wtdata.CreatedDate = new Date(wtdata.CreatedDate);
-                    wtdata.CreatedDate =Moment(wtdata.CreatedDate).format('MMM-DD-YYYY hh:mm:ss A');
+                    //wtdata.CreatedDate =Moment(wtdata.CreatedDate).format('MMM-DD-YYYY hh:mm:ss A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
@@ -1946,7 +1946,7 @@ export const CoreContextProvider = props => {
                 if (bp.CreatedDate !== undefined) {
                     bpdata.CreatedDate = bp.CreatedDate.s;
                     bpdata.CreatedDate =  new Date(bpdata.CreatedDate);
-                    bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+                    //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
                 }
                
                // bpdata.date_recorded = bp.date_recorded.s;
@@ -2095,12 +2095,12 @@ export const CoreContextProvider = props => {
                     bgdata.MeasurementDateTime =  bg.MeasurementDateTime.s;
                     bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
                     bgdata.sortDateColumn =  bg.MeasurementDateTime.s;
-                    bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+                    //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
                 }
                 if (bg.CreatedDate !== undefined) {
                     bgdata.CreatedDate = bg.CreatedDate.s;
                     bgdata.CreatedDate =  new Date(bgdata.CreatedDate);
-                    bgdata.CreatedDate =Moment(bgdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
+                   // bgdata.CreatedDate =Moment(bgdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
                 }
 
                 if(bg.SK !==undefined){
