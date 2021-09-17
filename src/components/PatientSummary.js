@@ -19,6 +19,9 @@ import { DataGrid } from '@material-ui/data-grid';
 import {Weight} from './Weight';
 import {BloodGlucose} from './BloodGlucose';
 import { BloodPressure } from './BloodPressure';
+import { BloodPressureAverage } from './BloodPressureAverage';
+import { BloodGlucoseAverage } from './BloodGlucoseAverage';
+import {WeightAverage} from './WeightAverage';
 import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { Thresold } from './Thresold';
@@ -534,6 +537,7 @@ const renderThreads = () => {
     }
 
     function doSomething(value) {
+
         console.log("doSomething called by child with value:", value);
       }
 
@@ -631,8 +635,11 @@ const renderThreads = () => {
                                     <Tabs>
                                         <TabList>
                                             <Tab onClick={pause}>Blood Pressure</Tab>
+                                            <Tab onClick={pause}>Blood Pressure Average</Tab>
                                             <Tab onClick={pause}>Blood Glucose</Tab>
+                                            <Tab onClick={pause}>Blood GLucose Average</Tab>
                                             <Tab onClick={pause}>Weight</Tab>
+                                            <Tab onClick={pause}>Weight Average</Tab>
                                             <Tab onClick={pause}>Thresold</Tab>
                                         </TabList>
                                         <TabPanel>
@@ -640,6 +647,13 @@ const renderThreads = () => {
                                              {/* <BloodPressure ></BloodPressure> */}
                                              <BloodPressure doSomething={doSomething} value={1}></BloodPressure>
                                         </div>
+                                           
+
+                                        </TabPanel>
+                                        <TabPanel>
+                                        <div className='card'>
+                                             <BloodPressureAverage/>
+                                             </div>
                                            
 
                                         </TabPanel>
@@ -653,9 +667,25 @@ const renderThreads = () => {
                                         </div>
                                         </TabPanel>
                                         <TabPanel>
+                                        <div className='card'>
+                                             <BloodGlucoseAverage/>
+                                        </div>
+                                           
+
+                                        </TabPanel>
+                                        <TabPanel>
                                         <div className="card-body">
                                             <Weight></Weight>
+                                            
                                         </div>
+                                        </TabPanel>
+                                        <TabPanel>
+                                        <div className='card'>
+                                             
+                                             <WeightAverage/>
+                                        </div>
+                                           
+
                                         </TabPanel>
                                         <TabPanel>
                                         <div className="card-body">
