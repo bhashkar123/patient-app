@@ -42,6 +42,7 @@ const Patients = props => {
     const handleAssignDrModalClose = () => setAssignDrShowModal(false);
     const handleAssignDrModalShow = () => setAssignDrShowModal(true);
     const [showAssignDrModal, setAssignDrShowModal] = useState(false);
+    const [usertype, setuserType] = useState('');
     
 
     
@@ -54,6 +55,7 @@ const Patients = props => {
         const email = localStorage.getItem('app_userEmail');
         coreContext.userDetails(email);
         const userType = localStorage.getItem("userType");
+        setuserType(userType);
         const userId = localStorage.getItem("userId");
         coreContext.fetchPatientListfromApi(userType, userId);
     }
@@ -105,7 +107,7 @@ const Patients = props => {
     }
 
 
-    const columns = [
+    const admincolumns = [
         { 
                 field: "name", 
                 headerName: "Patient Name",
@@ -187,6 +189,88 @@ const Patients = props => {
         )
     }, ];
 
+    const columns = [
+        { 
+                field: "name", 
+                headerName: "Patient Name",
+                width: 200,
+                renderCell: (params) => (
+                <a   href={`/patient-summary/${btoa(params.row.userId)}`}> {params.value} </a>
+            )
+        },
+        {
+          field: 'ProviderName',
+          headerName: 'Provider',
+          editable: false,
+          width: 200
+        },
+        {
+          field: 'CareName',
+          headerName: 'Care',
+          width: 150,
+          editable: false,
+        },
+        {
+            field: 'CoachName',
+            headerName: 'Coach',
+            editable: false,
+            width: 150
+          },
+          {
+            field: 'height',
+            headerName: 'Height',
+            editable: false,
+            type: "number",
+            width: 125
+          },
+          {
+            field: 'bg_reading',
+            headerName: 'Glucose',
+            editable: false,
+            type: "number",
+            width: 130
+          },
+          {
+            field: 'Weight',
+            headerName: 'Weight',
+            type: "number",
+            width: 125,
+            editable: false,
+          },
+          {
+            field: 'diastolic',
+            headerName: 'Diastolic',
+            type: "number",
+            width: 140,
+            editable: false,
+          },
+          {
+            field: 'systolic',
+            headerName: 'Systolic',
+            type: "number",
+            width: 140,
+            editable: false,
+          },
+          {
+            field: 'BMI',
+            headerName: 'BMI',
+            width:175,
+            editable: false,
+          },
+          { 
+            field: "", 
+            headerName: "Action",
+            width: 120,
+            renderCell: (params) => (
+                <div style={{  width: '100px' }}  >
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
+                {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
+                </div>
+            
+        )
+    }, ];
+
     // const useStyles = makeStyles((theme) => (
     //     {
     //         colCell: {
@@ -208,7 +292,19 @@ const Patients = props => {
             /></div>
               );
         }
-        if (coreContext.patients.length > 0) {
+        if (coreContext.patients.length > 0 && usertype ==='admin') {
+            return (
+                <div style={{ height: 680, width: '100%' }}>
+                  <DataGrid 
+                    rows={coreContext.patients}
+                    columns={admincolumns}
+                    pageSize={10}
+                    sortModel={[{ field: 'name', sort: 'asc' }]}
+                  />
+                </div>
+              );
+        }
+        if (coreContext.patients.length > 0 && usertype !=='admin') {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 
