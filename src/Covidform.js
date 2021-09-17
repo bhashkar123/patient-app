@@ -4,15 +4,15 @@ import PatientInfo from './component2/PatientInfo';
 import HealthHistory from './component2/HealthHistory';
 import COVID19 from './component2/COVID19';
 import PHQ from './component2/PHQ';
+import { CoreContext } from  '../src/context/core-context';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import React,{useState} from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { useForm } from "react-hook-form";
+import React,{useContext, useState,useEffect} from 'react';
 import logo from './logo.png'
 import Helmet from 'react-helmet';
 
@@ -69,6 +69,23 @@ const Covidform=()=> {
   const [InsuranceData,SetInsuranceData]=useState();
   const [HealthData,SetHealthData]=useState();
   const [PHQData,SetPHQData]=useState();
+  const coreContext = useContext(CoreContext);
+
+
+  // Clear cache
+  
+  localStorage.setItem('app_isAuth', '');
+  localStorage.setItem('app_jwt', '');
+  localStorage.setItem('app_userId', '');
+  localStorage.setItem('app_userEmail', '');
+  localStorage.setItem('userName', '');
+  localStorage.setItem("userType", '');
+  localStorage.setItem("userId", '');
+  localStorage.setItem("userEmail", '');
+  localStorage.setItem("app_email", '');
+  localStorage.setItem("app_userName", '');
+  localStorage.setItem("patientName", '');
+  localStorage.setItem("app_patient", '');
 
   
   const Tab1=(data)=>{
