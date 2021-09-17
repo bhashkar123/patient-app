@@ -103,7 +103,7 @@ const BloodPressureAverage = props => {
         
         coreContext.bloodpressureData.map((curr)=>
         { 
-            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)){
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr) &&curr.systolic!==undefined){
             averagesys=averagesys+Number(curr.systolic);
             record=record+1
         //    console.log(new Date(curr.CreatedDate), new Date(bfr),new Date(curr.CreatedDate)>new Date(bfr))
@@ -121,7 +121,7 @@ const BloodPressureAverage = props => {
         
         coreContext.bloodpressureData.map((curr)=>
         { 
-            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)){
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)&&curr.diastolic!==undefined){
                 averageDia=averageDia+Number(curr.diastolic);
                 record=record+1
         }
@@ -138,7 +138,7 @@ const BloodPressureAverage = props => {
         
         coreContext.bloodpressureData.map((curr)=>
         { 
-            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)){
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)&&curr.Pulse!==undefined){
                 averagepulse=averagepulse+Number(curr.Pulse);
                 record=record+1
         }

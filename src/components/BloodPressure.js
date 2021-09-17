@@ -181,7 +181,13 @@ const BloodPressure = props => {
           field: 'CreatedDate',
           headerName: 'Date Received',
           width: 200,
-          editable: false
+          editable: false,
+          type:'dateTime',
+          
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
          
         },
 
@@ -270,7 +276,13 @@ const BloodPressure = props => {
           field: 'CreatedDate',
           headerName: 'Date Received',
           width: 200,
-          editable: false
+          editable: false,
+          type:'dateTime',
+          
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
          
         },
 

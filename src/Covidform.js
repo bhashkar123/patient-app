@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Covidform=()=> {
+  
   //console.log(localStorage.getItem("dataSaved"))
   const [value, setValue] = useState(0);
   const [index,setIndex]=useState(0);

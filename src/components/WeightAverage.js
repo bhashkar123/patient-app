@@ -3,18 +3,20 @@ import { CoreContext } from '../context/core-context';
 import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
+import IonRangeSlider from 'react-ion-slider'
 
 
 
 const Moment = require('moment');
 
-const Weight = (props) => {
+const WeightAverage = (props) => {
 
     const coreContext = useContext(CoreContext);
 
     useEffect(coreContext.checkLocalAuth, []);
     const [patientId, setPatientId] = useState('');
     const [userType, setUserType] = useState('');
+    const [Days, setDays] = useState(30);
 
     const fetchWeight = () => {
         let userType = localStorage.getItem("userType");
@@ -55,58 +57,7 @@ const Weight = (props) => {
           editable: false,
           width: 200
         },
-        {
-            field: 'MeasurementDateTime',
-            headerName: 'Date Recorded',
-            width: 310,
-            editable: false,
-            type: 'date',
-          width: 200,
-          valueFormatter: (params) => {
-            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-             return `${valueFormatted}`;
-           },
-            
-          },
-          {
-            field: 'CreatedDate',
-            headerName: 'Date Received',
-            width: 200,
-            editable: false,
-            type: 'date',
-          width: 200,
-          valueFormatter: (params) => {
-            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-             return `${valueFormatted}`;
-           },
-           
-          },
-          {
-            field: 'DeviceId',
-            headerName: 'Device Id',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'readingId',
-            headerName: 'Reading Id',
-            type: 'number',
-            editable: false,
-            width: 200
-          },
-          { 
-            field: "sortDateColumn", 
-            headerName: "Action",
-            width: 300,
-            
-            renderCell: (params) => (
-                <div>  <a href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-                <a href="#" onClick={() => deletePatient(params.row)}>  <Trash /></a>
-                </div>
-            
-             )
-            }         
-
+        
       ];
 
       const showEditForm = (patient) => {
@@ -129,54 +80,65 @@ const Weight = (props) => {
           editable: false,
           width: 200
         },
-        {
-            field: 'MeasurementDateTime',
-            headerName: 'Date Recorded',
-            width: 110,
-            editable: false,
-            width: 300,
-            type: 'date',
-          width: 200,
-          valueFormatter: (params) => {
-            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-             return `${valueFormatted}`;
-           },
-          },
-          {
-            field: 'CreatedDate',
-            headerName: 'Date Received',
-            width: 200,
-            editable: false,
-            type: 'date',
-          width: 200,
-          valueFormatter: (params) => {
-            const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-             return `${valueFormatted}`;
-           },
-           
-          },
-          {
-            field: 'DeviceId',
-            headerName: 'Device Id',
-            editable: false,
-            width: 200
-          },
-          {
-            field: 'readingId',
-            headerName: 'Reading Id',
-            type: 'number',
-            editable: false,
-            width: 200
-          },
-          { 
-            field: "sortDateColumn", 
-            headerName: "Action"
-           
-          }         
-
+        
       ];
       
       //https://material-ui.com/components/data-grid/
+      let avgData=[];
+    let newrows=coreContext.weightData.map((curr)=>curr.UserName).filter((item, i, ar) => ar.indexOf(item) === i)
+    console.log(newrows[0])
+    const getweight=(value)=>{
+        let averageweight=0;
+        let record=0
+        let today=new Date();
+        let bfr=new Date().setDate(today.getDate()-Days)
+        
+        coreContext.weightData.map((curr)=>
+        { 
+            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)&&curr.weight!==undefined){
+                averageweight=averageweight+Number(curr.weight);
+            record=record+1
+        //    console.log(new Date(curr.CreatedDate), new Date(bfr),new Date(curr.CreatedDate)>new Date(bfr))
+        }
+    }
+         )
+    return averageweight/record;
+
+    }
+    
+    newrows.map((user)=>
+        
+        {
+           let avg= {
+               id:avgData.length,
+                UserName:user,
+                weight:getweight(user),
+                }
+
+        //    console.log(avg)
+            avgData.push(avg)
+           // setId(id+1)
+            
+      //  setAvgData([...avgdaData,avg])
+      console.log(avgData)
+      return avgData
+    // console.log(avgData)
+        })
+        
+       
+
+    
+       //console.log(rows)
+    
+
+
+
+
+
+
+
+
+
 
     const renderWeight = () => {
       if (coreContext.weightData.length == 0) {
@@ -200,11 +162,11 @@ const Weight = (props) => {
         return (
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
-                rows={coreContext.weightData}
+                rows={avgData}
                 columns={dgcolumns}
                 sortingOrder={['desc', 'asc']}
                 pageSize={10}
-                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+               // sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
               />
             </div>
           );
@@ -220,6 +182,19 @@ const Weight = (props) => {
         </button>
       </div>
         <div className="card-body">
+        <div className='row'    >
+            <div className="col-md-12">
+                <div className="card">
+
+                    <h4 className="card-header"> Select Days </h4>
+                    <div className="card-body">
+                        <IonRangeSlider  keyboard={true} onStart='1' onFinish={(e)=>setDays(e.from)} type='single' min={0} max={90} from={Days} to={Days} step={7} grid={true} grid_margin={true}  />
+                        
+                        <h3> Last {Days} days Selected</h3>
+                    </div>
+                </div>
+            </div>
+            </div>
         {renderWeight()}
         </div>
     </div >
@@ -227,4 +202,4 @@ const Weight = (props) => {
 
 
 
-export {Weight}
+export {WeightAverage}
