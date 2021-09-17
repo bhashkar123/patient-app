@@ -851,18 +851,18 @@ const renderThreads = () => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         Task Type 
-                                        
+                                        <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
+                                            <option value="SelectTask">Select a Task Type</option>
+                                            <option value="CaseCoordination">Case Coordination</option>
+                                            <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
+                                            <option value="Other">Others...</option>
+                                        </select>
                                         
                                         {console.log("sahil",taskType)}
                                         {(t1==='Other')?
    
     <input type="text" className="form-control mb-2 mr-sm-2" placeholder="Enter other value.." value={taskType}  onChange={(e)=>setTaskType(e.target.value)}/>
-  :<select value={taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
-                                            <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CaseCoordination">Case Coordination</option>
-                                            <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="Other">Others...</option>
-                                        </select>}
+  :null}
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
