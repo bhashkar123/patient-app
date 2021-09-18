@@ -334,7 +334,7 @@ const BloodPressure = props => {
                 rows={rows}
                 columns={dgcolumns}
                 pageSize={10}
-                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+                sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
                 sortingOrder={['desc', 'asc']}
                 componentsProps={{
                   toolbar: {
