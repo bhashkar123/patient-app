@@ -1953,11 +1953,11 @@ export const CoreContextProvider = props => {
 
               
                if(bp.DeviceId !==undefined){
-                bpdata.deviceId = bp.DeviceId.s;
+                bpdata.DeviceId = bp.DeviceId.s;
                }  
  
                if(bp.IMEI !==undefined){
-                bpdata.deviceId = bp.IMEI.s;
+                bpdata.DeviceId = bp.IMEI.s;
                }  
 
                if(bp.SK !==undefined){
