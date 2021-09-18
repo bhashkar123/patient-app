@@ -19,6 +19,9 @@ import { DataGrid } from '@material-ui/data-grid';
 import {Weight} from './Weight';
 import {BloodGlucose} from './BloodGlucose';
 import { BloodPressure } from './BloodPressure';
+import { BloodPressureAverage } from './BloodPressureAverage';
+import { BloodGlucoseAverage } from './BloodGlucoseAverage';
+import {WeightAverage} from './WeightAverage';
 import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { Thresold } from './Thresold';
@@ -41,6 +44,7 @@ const PatientSummary  = props =>  {
     const [bmiMin, setBmiMin] = useState(0);
     const [bmiMax, setBmiMax] = useState(0);
     const [PatientId, setPatientId] = useState("");
+    const [t1,sett1]=useState("");
 
     const [diastolicMin, setDiastolicMin] = useState(0);
     const [diastolicMax, setDiastolicMax] = useState(0);
@@ -534,6 +538,7 @@ const renderThreads = () => {
     }
 
     function doSomething(value) {
+
         console.log("doSomething called by child with value:", value);
       }
 
@@ -631,8 +636,11 @@ const renderThreads = () => {
                                     <Tabs>
                                         <TabList>
                                             <Tab onClick={pause}>Blood Pressure</Tab>
+                                            <Tab onClick={pause}>Blood Pressure Average</Tab>
                                             <Tab onClick={pause}>Blood Glucose</Tab>
+                                            <Tab onClick={pause}>Blood GLucose Average</Tab>
                                             <Tab onClick={pause}>Weight</Tab>
+                                            <Tab onClick={pause}>Weight Average</Tab>
                                             <Tab onClick={pause}>Thresold</Tab>
                                         </TabList>
                                         <TabPanel>
@@ -640,6 +648,13 @@ const renderThreads = () => {
                                              {/* <BloodPressure ></BloodPressure> */}
                                              <BloodPressure doSomething={doSomething} value={1}></BloodPressure>
                                         </div>
+                                           
+
+                                        </TabPanel>
+                                        <TabPanel>
+                                        <div className='card'>
+                                             <BloodPressureAverage/>
+                                             </div>
                                            
 
                                         </TabPanel>
@@ -653,9 +668,25 @@ const renderThreads = () => {
                                         </div>
                                         </TabPanel>
                                         <TabPanel>
+                                        <div className='card'>
+                                             <BloodGlucoseAverage/>
+                                        </div>
+                                           
+
+                                        </TabPanel>
+                                        <TabPanel>
                                         <div className="card-body">
                                             <Weight></Weight>
+                                            
                                         </div>
+                                        </TabPanel>
+                                        <TabPanel>
+                                        <div className='card'>
+                                             
+                                             <WeightAverage/>
+                                        </div>
+                                           
+
                                         </TabPanel>
                                         <TabPanel>
                                         <div className="card-body">
@@ -819,12 +850,19 @@ const renderThreads = () => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="row">
-                                        Task Type
-                                        <select value={taskType} onChange={e => {setTaskType(e.target.value);setDirty();}} className="form-control mb-2 mr-sm-2">
+                                        Task Type 
+                                        <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
                                             <option value="CaseCoordination">Case Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
+                                            <option value="Other">Others...</option>
                                         </select>
+                                        
+                                        {console.log("sahil",taskType)}
+                                        {(t1==='Other')?
+   
+    <input type="text" className="form-control mb-2 mr-sm-2" placeholder="Enter other value.." value={taskType}  onChange={(e)=>setTaskType(e.target.value)}/>
+  :null}
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
@@ -977,7 +1015,7 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("")}} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>

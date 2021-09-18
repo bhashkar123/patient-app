@@ -204,7 +204,7 @@ const Weight = (props) => {
                 columns={dgcolumns}
                 sortingOrder={['desc', 'asc']}
                 pageSize={10}
-                sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+                sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
               />
             </div>
           );

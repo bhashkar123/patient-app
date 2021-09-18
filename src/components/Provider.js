@@ -1,9 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { CoreContext } from '../context/core-context';
+import PropTypes from "prop-types";
+import TextField from "@material-ui/core/TextField";
 import { Modal, Button } from 'react-bootstrap';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import { useForm } from "react-hook-form";
 import Input from './common/Input';
+
 
 import {
     DataGrid,
@@ -13,7 +16,75 @@ import {
   } from "@material-ui/data-grid";
 
 import Link from "@material-ui/core/Link";
+import IconButton from '@material-ui/core/IconButton';
 
+import ClearIcon from '@material-ui/icons/Clear';
+import SearchIcon from '@material-ui/icons/Search';
+import { makeStyles } from '@material-ui/styles';
+import { createTheme } from '@material-ui/core/styles';
+const defaultTheme = createTheme();
+const useStyles = makeStyles(
+  (theme) => ({
+    root: {
+      padding: theme.spacing(0.5, 0.5, 0),
+      justifyContent: 'space-between',
+      display: 'flex',
+      alignItems: 'flex-start',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      [theme.breakpoints.down('xs')]: {
+        width: '100%',
+      },
+      margin: theme.spacing(1, 0.5, 1.5),
+      '& .MuiSvgIcon-root': {
+        marginRight: theme.spacing(0.5),
+      },
+      '& .MuiInput-underline:before': {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      },
+    },
+  }),
+  { defaultTheme },
+);
+
+function escapeRegExp(value) {
+    return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+  }
+  function QuickSearchToolbar(props) {
+    const classes = useStyles();
+    return (
+      <div className={classes.root}>
+        <TextField
+          variant="standard"
+          value={props.value}
+          onChange={props.onChange}
+          placeholder="Search…"
+          InputProps={{
+            startAdornment: <SearchIcon fontSize="small" />,
+            endAdornment: (
+              <IconButton
+                title="Clear"
+                aria-label="Clear"
+                size="small"
+                style={{ visibility: props.value ? 'visible' : 'hidden' }}
+                onClick={props.clearSearch}
+              >
+                <ClearIcon fontSize="small" />
+              </IconButton>
+            ),
+          }}
+        />
+      </div>
+    );
+  }
+  QuickSearchToolbar.propTypes = {
+    clearSearch: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired
+  };
+  
+  
 const Provider = props => {
 
     const coreContext = useContext(CoreContext);
@@ -28,10 +99,25 @@ const Provider = props => {
     const [confirmpassword, setConfirmPassword] = useState('');
     const [patientId, setPatientId] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
+    const [searchText, setSearchText] = React.useState("");
     const handleModalClose = () => setShowModal(false);
     const handleModalShow = () => setShowModal(true);
 
     const [showModal, setShowModal] = useState(false);
+    const [rows, setRows] = React.useState(coreContext.providerData);
+    const requestSearch = (searchValue) => {
+        setSearchText(searchValue);
+        const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
+        const filteredRows = coreContext.providerData.filter((row) => {
+          return Object.keys(row).some((field) => {
+            return searchRegex.test(row[field].toString());
+          });
+        });
+        setRows(filteredRows);
+      };
+      React.useEffect(() => {
+        setRows(coreContext.providerData);
+      }, [coreContext.providerData]);
 
     const editProvider = () => {
 
@@ -110,10 +196,18 @@ const Provider = props => {
         if (coreContext.providerData.length > 0) {
             return (  <div style={{ height: 680, width: '100%' }}>
             <DataGrid
-              rows={coreContext.providerData}
+            components={{ Toolbar: QuickSearchToolbar }}
+              rows={rows}
               columns={columns}
               pageSize={10}
               sortModel={[{ field: 'provider', sort: 'asc' }]}
+              componentsProps={{
+                toolbar: {
+                  value: searchText,
+                  onChange: (event) => requestSearch(event.target.value),
+                  clearSearch: () => requestSearch("")
+                }
+              }}
             />
           </div>
             );

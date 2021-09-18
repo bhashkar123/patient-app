@@ -233,7 +233,7 @@ const BloodGlucose = props => {
                   columns={dgcolumns}
                   pageSize={10}
                   sortingOrder={['desc', 'asc']}
-                  sortModel={[{ field: 'sortDateColumn', sort: 'desc' }]}
+                  sortModel={[{ field: 'MeasurementDateTime', sort: 'desc' }]}
                 />
               </div>
             );
