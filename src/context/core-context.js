@@ -1956,6 +1956,10 @@ export const CoreContextProvider = props => {
                 bpdata.deviceId = bp.DeviceId.s;
                }  
  
+               if(bp.IMEI !==undefined){
+                bpdata.deviceId = bp.IMEI.s;
+               }  
+
                if(bp.SK !==undefined){
                 bpdata.readingId = bp.SK.s.split("_").pop(); 
                }  
