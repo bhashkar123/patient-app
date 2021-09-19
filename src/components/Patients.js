@@ -20,7 +20,9 @@ import Loader from "react-loader-spinner";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiDataGrid-columnHeaderCheckbox": {
-      display: "none"
+      display: "block",
+      pointerEvents:"none",
+      disabled:"disabled"
     }
   }
 }));
