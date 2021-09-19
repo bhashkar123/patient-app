@@ -28,7 +28,8 @@ const Patients = props => {
     const [patientId, setPatientId] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [phone, setPhone] = useState('');
-    const [select, setSelection] = React.useState([]);
+    //const [select, setSelection] = React.useState([]);
+    const [selectionModel, setSelectionModel] = React.useState([]);
     const [height, setHeight] = useState('');
     const [provider, setProvider] = useState('');
     const [coach, setCoach] = useState('');
@@ -86,11 +87,16 @@ const Patients = props => {
 
 
     const showEditForm = (patient) => {
+      {console.log("checking")}
         setName(patient.name);
         setBirthDate(patient.dob);
         setPhone(patient.mobile);
         setPatientId(patient.userId);
         setHeight(patient.height);
+        setProvider(patient.ProviderName)
+        setCoordinator(patient.CareName)
+        setCoach(patient.CoachName)
+
         handleModalShow();
     }
     
@@ -176,20 +182,21 @@ const Patients = props => {
             width:175,
             editable: false,
           },
-          { 
-            field: "", 
-            headerName: "Action",
-            width: 120,
-            renderCell: (params) => (
-                <div style={{  width: '100px' }}  >
-                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-                {/* {console.log("sahil",params.row)} */}
-                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
-                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a>
-                </div>
+    //       { 
+    //         field: "", 
+    //         headerName: "Action",
+    //         width: 120,
+    //         renderCell: (params) => (
+    //             <div style={{  width: '100px' }}  >
+    //             <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+    //             {/* {console.log("sahil",params.row)} */}
+    //             <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
+    //             <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a>
+    //             </div>
             
-        )
-    }, ];
+    //     )
+    // }, 
+  ];
 
     const columns = [
         { 
@@ -259,19 +266,20 @@ const Patients = props => {
             width:175,
             editable: false,
           },
-          { 
-            field: "", 
-            headerName: "Action",
-            width: 120,
-            renderCell: (params) => (
-                <div style={{  width: '100px' }}  >
-                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
-                {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
-                </div>
+          // { 
+          //   field: "", 
+          //   headerName: "Action",
+          //   width: 120,
+    //         renderCell: (params) => (
+    //             <div style={{  width: '100px' }}  >
+    //             <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+    //             <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
+    //             {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
+    //             </div>
             
-        )
-    }, ];
+    //     )
+    // }, 
+  ];
 
     // const useStyles = makeStyles((theme) => (
     //     {
@@ -296,20 +304,24 @@ const Patients = props => {
         }
         if (coreContext.patients.length > 0 && usertype ==='admin') {
             return (
+              <>
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 
                     rows={coreContext.patients}
                     columns={admincolumns}
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
-                    checkboxSelection 
-                    hideFooterPagination 
-                    onSelectionChange={(newSelection) => {
-                        setSelection(newSelection);
-                    }}
-                    selectionModel={select}
-                  />
+                    checkboxSelection={false} 
+        hideFooterPagination
+        onSelectionModelChange={(newSelection) => {
+          setSelectionModel(newSelection.selectionModel);
+         }}
+        selectionModel={selectionModel}
+      />
+      {console.log(coreContext.patients[selectionModel])}
                 </div>
+                {/* <center>{select}sa</center> */}
+                </>
               );
         }
         if (coreContext.patients.length > 0 && usertype !=='admin') {
@@ -319,16 +331,14 @@ const Patients = props => {
                     rows={coreContext.patients}
                     columns={columns}
                     pageSize={10}
-                    checkboxSelection 
-                    NoRowsOverlay
                     sortModel={[{ field: 'name', sort: 'asc' }]}
-                    onSelectionChange={(newSelection) => {
-                      setSelection(newSelection.select);
-                  }}
-                  //selectionModel={select}
-                  
-                  />
-                 
+                    checkboxSelection={false} 
+        hideFooterPagination
+        onSelectionModelChange={(newSelection) => {
+          setSelectionModel(newSelection.selectionModel);
+         }}
+        selectionModel={selectionModel}
+      />
                 </div>
               );
         }
@@ -348,8 +358,21 @@ const Patients = props => {
          <Table striped bordered hover responsive size='sm'>
         <caption>Patients' List  </caption>
         {/* {renderbuttons()} */}
+        {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px' }}  >
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
+                
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></a>
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(coreContext.patients[selectionModel])}>  <Person /></a>
+                </div>: null):((selectionModel.length!==0)? <div style={{  width: '100px' }}  >
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
+                
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></a>
+              
+                </div>: null)}
+                
+       
         {renderPatients()}
-         {console.log("val",select)}
+         {/* {console.log("val",select)} */}
     </Table>
         
         <Modal show={showModal} onHide={handleModalClose} size='lg'>
