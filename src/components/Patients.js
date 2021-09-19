@@ -324,7 +324,7 @@ const Patients = props => {
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
                     checkboxSelection
-        hideFooterPagination
+        
         onSelectionModelChange={(selection) => {
           const newSelectionModel = selection.selectionModel;
   
@@ -357,7 +357,7 @@ const Patients = props => {
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
                     checkboxSelection={false} 
-        hideFooterPagination
+        //hideFooterPagination
         onSelectionModelChange={(selection) => {
           const newSelectionModel = selection.selectionModel;
   
