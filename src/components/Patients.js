@@ -355,7 +355,7 @@ const Patients = props => {
          <Table striped bordered hover responsive size='sm'>
         <caption>Patients' List  </caption>
         {/* {renderbuttons()} */}
-        {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px' }}  >
+        {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px',marginLeft:'20px' }}  >
                 <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
                 
                 <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></a>
