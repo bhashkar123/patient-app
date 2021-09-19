@@ -5,8 +5,10 @@ import { CoreContext } from '../context/core-context';
 import { Table, Pagination, Modal, Button, Form } from 'react-bootstrap';
 import { PencilSquare, Trash, Person } from 'react-bootstrap-icons';
 import { IconName } from "react-icons/bs";
+import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import Input from './common/Input';
+
 import {
     DataGrid,
     GridColDef,
@@ -15,9 +17,17 @@ import {
   } from "@material-ui/data-grid";
 
 import Loader from "react-loader-spinner";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiDataGrid-columnHeaderCheckbox": {
+      display: "none"
+    }
+  }
+}));
 
 
 const Patients = props => {
+  const classes = useStyles();
 
     const { register, handleSubmit, errors } = useForm({
         mode: 'onSubmit',
@@ -302,8 +312,11 @@ const Patients = props => {
         if (coreContext.patients.length > 0 && usertype ==='admin') {
             return (
               <>
+              
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 
+                  className={classes.root}
+                  
                     rows={coreContext.patients}
                     columns={admincolumns}
                     pageSize={10}
@@ -336,15 +349,27 @@ const Patients = props => {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 
+                  className={classes.root}
                     rows={coreContext.patients}
                     columns={columns}
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
                     checkboxSelection={false} 
         hideFooterPagination
-        onSelectionModelChange={(newSelection) => {
-          setSelectionModel(newSelection.selectionModel);
-         }}
+        onSelectionModelChange={(selection) => {
+          const newSelectionModel = selection.selectionModel;
+  
+          if (newSelectionModel.length > 1) {
+            const selectionSet = new Set(selectionModel);
+            const result = newSelectionModel.filter(
+              (s) => !selectionSet.has(s)
+            );
+  
+            setSelectionModel(result);
+          } else {
+            setSelectionModel(newSelectionModel);
+          }
+        }}
         selectionModel={selectionModel}
       />
                 </div>
