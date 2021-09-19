@@ -308,11 +308,22 @@ const Patients = props => {
                     columns={admincolumns}
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
-                    checkboxSelection={false} 
+                    checkboxSelection
         hideFooterPagination
-        onSelectionModelChange={(newSelection) => {
-          setSelectionModel(newSelection.selectionModel);
-         }}
+        onSelectionModelChange={(selection) => {
+          const newSelectionModel = selection.selectionModel;
+  
+          if (newSelectionModel.length > 1) {
+            const selectionSet = new Set(selectionModel);
+            const result = newSelectionModel.filter(
+              (s) => !selectionSet.has(s)
+            );
+  
+            setSelectionModel(result);
+          } else {
+            setSelectionModel(newSelectionModel);
+          }
+        }}
         selectionModel={selectionModel}
       />
       {console.log(coreContext.patients[selectionModel])}
