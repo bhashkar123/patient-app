@@ -93,10 +93,7 @@ const Patients = props => {
         setPhone(patient.mobile);
         setPatientId(patient.userId);
         setHeight(patient.height);
-        setProvider(patient.ProviderName)
-        setCoordinator(patient.CareName)
-        setCoach(patient.CoachName)
-
+       
         handleModalShow();
     }
     
