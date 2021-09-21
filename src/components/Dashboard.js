@@ -10,6 +10,7 @@ import Moment from 'moment'
 
 const Dashboard = props => {
     const [date, setDate] = useState();
+    const [userType, setUserType] = useState('');
     const coreContext = useContext(CoreContext);
     let zero=[];
     const nine=[];
@@ -32,9 +33,41 @@ const Dashboard = props => {
         coreContext.fetchPatientListfromApi('admin');
         coreContext.fetchAllTimeLog();
         coreContext.fetchPatientWithDevice();
+
     }
     useEffect(fetchPatients, []);
+    
+    const fetchWeight = () => {
+        let userType = localStorage.getItem("userType");
+        let patientId = localStorage.getItem("userId");
+        // check page if left side menu.
+        if(window.location.href.substring('weight')> 0)
+        {
 
+        }
+        if(window.location.href.indexOf('patient-summary') >0 )
+        {
+            patientId = localStorage.getItem("ehrId");
+            userType = 'patient';
+            // clear this otherwise will be problem
+            localStorage.removeItem("ehrId");
+        }
+        setUserType(userType);
+      coreContext.fetchWSData(patientId,userType);
+      coreContext.fetchBloodGlucose(patientId,userType);
+      coreContext.fetchBloodPressure(patientId,userType);
+     
+    }
+    useEffect(fetchWeight, [coreContext.weightData.length]);
+
+    console.log("sahilwight",coreContext.weightData)
+    const wd=coreContext.weightData.map((curr)=>curr.userId).filter((item, i, ar) => ar.indexOf(item) === i);
+    const bp=coreContext.bloodpressureData.map((curr)=>curr.userId).filter((item, i, ar) => ar.indexOf(item) === i)
+    const bg=coreContext.bloodglucoseData.map((curr)=>curr.userId).filter((item, i, ar) => ar.indexOf(item) === i)
+    const reading=[...wd,...bp,...bg]
+
+
+    console.log(reading);
     const fetchdpatient=(p)=>{
       coreContext.getdp(p);
       //console.log(coreContext.dpatient)
@@ -131,6 +164,41 @@ const Dashboard = props => {
         }
     }
 
+    const fetchDevice = () => {
+        const patient = JSON.parse(localStorage.getItem('app_patient'));
+        let patientId =  localStorage.getItem("userId");
+        let userType = localStorage.getItem("userType");
+        let userName = localStorage.getItem("userName");
+        if(patient != undefined){
+          if(patient.ehrId !== undefined)
+          {
+            patientId =patient.ehrId;
+            userType = 'patient';
+            userName = patient.name;
+          }
+          
+        }
+       
+        if(patientId !==undefined){
+          if(userType =="admin")
+          {
+            coreContext.fetchPatientListfromApi('admin',null);
+            if(coreContext.patients.length >0)
+            {
+              coreContext.fetchDeviceData(patientId,userName,userType, '' , coreContext.patients);
+            }
+          }
+        }
+     }
+  
+      
+      useEffect(fetchDevice, [coreContext.patients.length]);
+     if (coreContext.deviceData.length>0){
+        var v_devices=coreContext.deviceData.filter((s)=>(s.deviceID!==undefined)?s.deviceID.length>7:null)
+     }
+    
+    console.log("vdevide",v_devices)
+
 
     return (<div className='card' style={{marginLeft:"100px"}}>
         <div className="card-header row">
@@ -154,8 +222,12 @@ const Dashboard = props => {
             <h5><Bezier />  Chronic Care Management</h5>
             <table className='table table-bordered table-sm'>
                 <tr>
+                    {console.log("sahilwight",coreContext.weightData.map((curr)=>curr.userId).filter((item, i, ar) => ar.indexOf(item) === i))}
+                    {console.log("presusure",coreContext.bloodpressureData.map((curr)=>curr.userId).filter((item, i, ar) => ar.indexOf(item) === i))}
+                    {console.log("sahiglucoe",coreContext.bloodglucoseData.map((curr)=>curr.userId).filter((item, i, ar) => ar.indexOf(item) === i))}
                     <th style={{ textAlign: 'center' }}>Patients Enrolled</th>
-                    <th style={{ textAlign: 'center' }}>60+ Mins</th>
+                    <th style={{ textAlign: 'center' }}>60+ Mins</th> 
+
                     <th style={{ textAlign: 'center' }}>40-59 Mins</th>
                     <th style={{ textAlign: 'center' }}>20-39 Mins</th>
                     <th style={{ textAlign: 'center' }}>10-19 Mins</th>
@@ -182,6 +254,7 @@ const Dashboard = props => {
             <h5><GraphUp />  Remote Patient Monitoring</h5>
             <table className='table table-bordered table-sm'>
                 <tr>
+                    {console.log("set",patientwdevice)}
                     <th style={{ textAlign: 'center' }}>Active</th>
                     <th style={{ textAlign: 'center' }}>Patients with Devices</th>
                     <th style={{ textAlign: 'center' }}>Patients taking Readings</th>
@@ -194,10 +267,10 @@ const Dashboard = props => {
                 </tr>
                 {renderRemotePatientMonitor()}
                 <tr>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/dpatients"onClick={() => setPatient(inactive)}>{patientwdevice.length}</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
-                    <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/Patients">{coreContext.patients.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/device-info"onClick={() => setPatient(inactive)}>{patientwdevice.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/bloodpressure">{reading.length}</a></th>
+                    <th style={{ textAlign: 'center' }}><a href="/verifieddevices">{(v_devices!==undefined)?v_devices.length:0}</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>
                     <th style={{ textAlign: 'center' }}><a href="/Patients">2</a></th>

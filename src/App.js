@@ -26,6 +26,7 @@ import { TablePagination } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
+import { Vdeviceinfo } from "./components/Vdevice";
 
 function App() {
   const { register, errors } = useForm();
@@ -143,6 +144,9 @@ function App() {
                   />{" "}
                   <Route exact path="/covid">
                     <Covidform />
+                  </Route>{" "}
+                  <Route exact path="/verifieddevices">
+                    <Vdeviceinfo />
                   </Route>{" "}
                   <Redirect exact from="/login" to="/patients" />
                   <Redirect exact from="/" to="/patients" />
