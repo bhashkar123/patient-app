@@ -885,7 +885,7 @@ const renderThreads = () => {
                                                // onChange={(date) => setDate(date)}
                                                 onChange={(date) => {setDate(date);setDirty();}}
                                                 placeholderText='Enter a date'
-                                                dateFormat='dd/MM/yyyy'
+                                                dateFormat='MM/dd/yyyy'
                                             />
                                         </div>
                                     </div>
