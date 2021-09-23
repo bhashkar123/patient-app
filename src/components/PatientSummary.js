@@ -4,7 +4,7 @@ import axios from 'axios';
 import { CoreContext } from '../context/core-context';
 import { GenderMale, GenderFemale, PencilSquare,  Trash } from 'react-bootstrap-icons';
 import DatePicker from "react-datepicker";
-import { ButtonGroup, Button, Form } from 'react-bootstrap';
+import { ButtonGroup, Button, Form,Modal } from 'react-bootstrap';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -33,6 +33,7 @@ const PatientSummary  = props =>  {
     
     
     const coreContext = useContext(CoreContext);
+    const handleModalClose = () => setShowModal(false);
     const [notes, setNotes] = useState('');
     const [date, setDate] = useState('');
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
@@ -44,6 +45,7 @@ const PatientSummary  = props =>  {
     const [bmiMin, setBmiMin] = useState(0);
     const [bmiMax, setBmiMax] = useState(0);
     const [PatientId, setPatientId] = useState("");
+    const [showModal, setShowModal] = useState(false);
     const [t1,sett1]=useState("");
 
     const [diastolicMin, setDiastolicMin] = useState(0);
@@ -324,6 +326,10 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
                     <td>{tl.timeAmount} </td>
                     <td>{tl.startDT} </td>
                     <td>{tl.endDT} </td>
+
+                    <td>
+                                            <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setShowModal(true)} >  <PencilSquare /></a>
+                                   <a style={{  marginRight: '5px' }} href="#" >  <Trash /></a></td>
                 </tr>
             });
         }
@@ -917,10 +923,15 @@ const renderThreads = () => {
                                     <th>Time Amount</th>
                                     <th>Start Date/Time</th>
                                     <th>End Date/Time</th>
+
+                                    <th>
+                                   Action
+                                    </th>
                                 </tr>
 
                                 <tbody>
                                             {renderTimelogs()}
+                                            
                                         </tbody>
                             </table>
                         </div>
@@ -1042,7 +1053,76 @@ const renderThreads = () => {
                 </div>
             </div>
         </div>
+        
+
         {Prompt}
+
+        <div>
+        
+        <React.Fragment>
+        <Modal show={showModal} onHide={handleModalClose} size='lg'>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit Task Type  </Modal.Title>
+            </Modal.Header  >
+            <Modal.Body>
+            <div className="card">
+                        <h4 className="card-header">
+                            Task Timer
+                        </h4>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="row">
+                                        Task Type 
+                                        <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
+                                            <option value="SelectTask">Select a Task Type</option>
+                                            <option value="CaseCoordination">Case Coordination</option>
+                                            <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
+                                            <option value="Other">Others...</option>
+                                        </select>
+                                        
+                                        {console.log("sahil",taskType)}
+                                        {(t1==='Other')?
+   
+    <input type="text" className="form-control mb-2 mr-sm-2" placeholder="Enter other value.." value={taskType}  onChange={(e)=>setTaskType(e.target.value)}/>
+  :null}
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            Performed By
+                                            {/* {renderTaskTimer()} */}
+                                            <select value={performedBy} onChange={e => {setPerformedBy(e.target.value)}} className="form-control mb-2 mr-sm-2">
+                                                <option value="SelectUser">Select a User</option>
+                                                {tt.map((curr)=>{
+                                                    return <option value={(!curr.name)?curr.provider:curr.name}> {(!curr.name)?curr.provider:curr.name}</option>
+                                                })}
+                                                
+                                               
+                                                
+                                            </select>
+                                        </div>
+                                        <div className="col-md-6">
+                                            Performed On
+                                            <DatePicker className='form-control mt-2'
+                                                selected={date}
+                                               // onChange={(date) => setDate(date)}
+                                                onChange={(date) => {setDate(date)}}
+                                                placeholderText='Enter a date'
+                                                dateFormat='MM/dd/yyyy'
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                            </div>
+                        </div>
+                    </div>
+            </Modal.Body>
+        </Modal>
+
+        
+    </React.Fragment>
+        </div>
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTabs()}</div>
 
     </div>)
