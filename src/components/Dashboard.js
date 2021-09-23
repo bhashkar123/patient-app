@@ -200,7 +200,7 @@ const Dashboard = props => {
     console.log("vdevide",v_devices)
 
 
-    return (<div className='card' style={{marginLeft:"100px"}}>
+    return (<div className='card' >
         <div className="card-header row">
             <div className="col-md-5">
                 <h4>A Pattern Medical Clinic Dashboard</h4>

@@ -41,12 +41,15 @@ function App() {
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
   useEffect(() => {}, [showSidebar]);
-  const [style, setStyle] = useState({ marginLeft: "-5px", width: "80%" });
+  const [style, setStyle] = useState("col-md-10 col-10");
+  const [style1, setStyle1] = useState("col-md-2 col-2");
   const changestyle = () => {
-    if (style.marginLeft === "-5px") {
-      setStyle({ marginLeft: "-160px", width: "90%" });
+    if (sidebar === false) {
+      setStyle("col-md-10 col-10");
+      setStyle1("col-md-2 col-2");
     } else {
-      setStyle({ marginLeft: "-5px", width: "80%" });
+      setStyle("col-md-11 col-11");
+      setStyle1("col-md-1 col-1");
     }
   };
 
@@ -76,11 +79,11 @@ function App() {
                               </button> */}
         {isAuth ? (
           <React.Fragment>
-            <div className="col-md-2">
+            <div className={style1}>
               {" "}
               {sidebar === true ? <Menu /> : <Menu2 />}{" "}
             </div>{" "}
-            <div style={style}>
+            <div  className={style}>
               <Router>
                 <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
