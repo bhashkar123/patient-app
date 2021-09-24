@@ -41,7 +41,7 @@ function App() {
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
   useEffect(() => {}, [showSidebar]);
-  const [style, setStyle] = useState("col-md-10 col-10");
+  const [style, setStyle] = useState("col-md-10 col-10 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-2");
   const changestyle = () => {
     if (sidebar === false) {

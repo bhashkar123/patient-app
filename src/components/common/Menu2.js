@@ -88,9 +88,9 @@ const Menu2 = (props) => {
         return '';
     }
 
-    return (<nav className="navbar sidemenu" variant='light' style={{ backgroundColor: "rgb(1, 41, 113)" }} >
+    return (<nav className="navbar sidemenu " variant='light' style={{ backgroundColor: "rgb(1, 41, 113)",width:"100%" }} >
 
-        <ul className="navbar-nav" style={{  height: "900px" }}>
+        <ul className="navbar-nav " style={{  height: "900px" }}>
 
             {renderDashboard()}
 
