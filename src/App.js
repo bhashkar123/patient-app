@@ -41,15 +41,15 @@ function App() {
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
   useEffect(() => {}, [showSidebar]);
-  const [style, setStyle] = useState("col-md-10 col-10");
-  const [style1, setStyle1] = useState("col-md-2 col-2");
+  const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
+  const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
   const changestyle = () => {
     if (sidebar === false) {
-      setStyle("col-md-10 col-10");
-      setStyle1("col-md-2 col-2");
+      setStyle("col-md-9 col-8 col-sm-8 p-0");
+      setStyle1("col-md-2 col-3 col-sm-3 mr-3");
     } else {
-      setStyle("col-md-11 col-11");
-      setStyle1("col-md-1 col-1");
+      setStyle("col-lg-10 col-md-10 col-9 col-sm-9");
+      setStyle1("col-lg-1 col-md-1 col-2 col-sm-2 mr-1");
     }
   };
 
@@ -83,7 +83,7 @@ function App() {
               {" "}
               {sidebar === true ? <Menu /> : <Menu2 />}{" "}
             </div>{" "}
-            <div  className={style}>
+            <div  className={style} style={{marginLeft:"-20px"}}>
               <Router>
                 <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}

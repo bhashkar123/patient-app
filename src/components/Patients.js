@@ -191,20 +191,20 @@ const Patients = props => {
             width:175,
             editable: false,
           },
-    //       { 
-    //         field: "", 
-    //         headerName: "Action",
-    //         width: 120,
-    //         renderCell: (params) => (
-    //             <div style={{  width: '100px' }}  >
-    //             <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-    //             {/* {console.log("sahil",params.row)} */}
-    //             <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
-    //             <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a>
-    //             </div>
+          { 
+            field: "", 
+            headerName: "Action",
+            width: 120,
+            renderCell: (params) => (
+                <div style={{  width: '100px' }}  >
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+                {/* {console.log("sahil",params.row)} */}
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a>
+                </div>
             
-    //     )
-    // }, 
+        )
+    }, 
   ];
 
     const columns = [
@@ -275,19 +275,19 @@ const Patients = props => {
             width:175,
             editable: false,
           },
-          // { 
-          //   field: "", 
-          //   headerName: "Action",
-          //   width: 120,
-    //         renderCell: (params) => (
-    //             <div style={{  width: '100px' }}  >
-    //             <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
-    //             <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
-    //             {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
-    //             </div>
+          { 
+            field: "", 
+            headerName: "Action",
+            width: 120,
+            renderCell: (params) => (
+                <div style={{  width: '100px' }}  >
+                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(params.row)}>  <PencilSquare /></a>
+                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(params.row);fetchPatients();}}>  <Trash /></a>
+                {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
+                </div>
             
-    //     )
-    // }, 
+        )
+    }, 
   ];
 
     // const useStyles = makeStyles((theme) => (
@@ -323,23 +323,23 @@ const Patients = props => {
                     columns={admincolumns}
                     pageSize={10}
                     sortModel={[{ field: 'name', sort: 'asc' }]}
-                    checkboxSelection
+       //             checkboxSelection
         
-        onSelectionModelChange={(selection) => {
-          const newSelectionModel = selection.selectionModel;
+        // onSelectionModelChange={(selection) => {
+        //   const newSelectionModel = selection.selectionModel;
   
-          if (newSelectionModel.length > 1) {
-            const selectionSet = new Set(selectionModel);
-            const result = newSelectionModel.filter(
-              (s) => !selectionSet.has(s)
-            );
+        //   if (newSelectionModel.length > 1) {
+        //     const selectionSet = new Set(selectionModel);
+        //     const result = newSelectionModel.filter(
+        //       (s) => !selectionSet.has(s)
+        //     );
   
-            setSelectionModel(result);
-          } else {
-            setSelectionModel(newSelectionModel);
-          }
-        }}
-        selectionModel={selectionModel}
+        //     setSelectionModel(result);
+        //   } else {
+        //     setSelectionModel(newSelectionModel);
+        //   }
+        // }}
+        // selectionModel={selectionModel}
       />
       {console.log(coreContext.patients[selectionModel])}
                 </div>
@@ -358,20 +358,20 @@ const Patients = props => {
                     sortModel={[{ field: 'name', sort: 'asc' }]}
                     checkboxSelection={false} 
         //hideFooterPagination
-        onSelectionModelChange={(selection) => {
-          const newSelectionModel = selection.selectionModel;
+        // onSelectionModelChange={(selection) => {
+        //   const newSelectionModel = selection.selectionModel;
   
-          if (newSelectionModel.length > 1) {
-            const selectionSet = new Set(selectionModel);
-            const result = newSelectionModel.filter(
-              (s) => !selectionSet.has(s)
-            );
+        //   if (newSelectionModel.length > 1) {
+        //     const selectionSet = new Set(selectionModel);
+        //     const result = newSelectionModel.filter(
+        //       (s) => !selectionSet.has(s)
+        //     );
   
-            setSelectionModel(result);
-          } else {
-            setSelectionModel(newSelectionModel);
-          }
-        }}
+        //     setSelectionModel(result);
+        //   } else {
+        //     setSelectionModel(newSelectionModel);
+        //   }
+        // }}
         selectionModel={selectionModel}
       />
                 </div>
@@ -393,7 +393,7 @@ const Patients = props => {
          <Table striped bordered hover responsive size='sm'>
         <caption>Patients' List  </caption>
         {/* {renderbuttons()} */}
-        {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px',marginLeft:'20px' }}  >
+        {/* {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px',marginLeft:'20px' }}  >
                 <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
                 
                 <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></a>
@@ -405,7 +405,7 @@ const Patients = props => {
               
                 </div>: null)}
                 
-       
+        */}
         {renderPatients()}
          {/* {console.log("val",select)} */}
     </Table>
