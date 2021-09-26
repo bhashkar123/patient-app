@@ -71,6 +71,8 @@ const PatientSummary  = props =>  {
     const [startDT, setstartDT] = useState('');
     const [totalLogtime, settotalLogtime] = useState(0);
 
+    const [currTimeLog, setCurrentTimeLog] = useState('');
+
     
     const greeting = 'Welcome to React';
     const [Prompt,setDirty, setPristine] = Alert();
@@ -258,7 +260,11 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         setBmiMax(e.to);
     }
 
-
+    const setCurrentTL =(tl) =>{
+        setShowModal(true);
+        //alert(tl.taskType);
+        setCurrentTimeLog(tl);
+    }
 
     const onDiastolicChange = (e) => {
         setDiastolicMin(e.from);
@@ -328,7 +334,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
                     <td>{tl.endDT} </td>
 
                     <td>
-                                            <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setShowModal(true)} >  <PencilSquare /></a>
+                                            <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(tl)} >  <PencilSquare /></a>
                                    <a style={{  marginRight: '5px' }} href="#" >  <Trash /></a></td>
                 </tr>
             });
@@ -861,7 +867,7 @@ const renderThreads = () => {
                                             <option value="SelectTask">Select a Task Type</option>
                                             <option value="CaseCoordination">Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="CaseCoordination">Data Review</option>
+                                            <option value="DataReview">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
@@ -1027,7 +1033,7 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'  onClick={() => {coreContext.AddTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
@@ -1077,8 +1083,9 @@ const renderThreads = () => {
                                         Task Type 
                                         <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CaseCoordination">Case Coordination</option>
+                                            <option value="CaseCoordination">Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
+                                            <option value="DataReview">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
@@ -1113,11 +1120,13 @@ const renderThreads = () => {
                                             />
                                         </div>
                                     </div>
+                                    
                                 </div>
-                                 
                             </div>
                         </div>
+                        <button type='button'  onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>                                  
                     </div>
+                    
             </Modal.Body>
         </Modal>
 

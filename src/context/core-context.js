@@ -740,6 +740,10 @@ export const CoreContextProvider = props => {
                 console.log('p' + index, tl);
                 let tldata = {};
 
+                if (tl.SK) {
+                    tldata.SK = tl.SK.s;
+                }
+
                 if (tl.TaskType) {
                     tldata.taskType = tl.TaskType.s;
                 }
@@ -2431,7 +2435,7 @@ export const CoreContextProvider = props => {
 
     }
 
-    const UpdateTimeLog = (timerLogs, patientId, userName) => {
+    const AddTimeLog = (timerLogs, patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
         const date = new Date();
         
@@ -2469,6 +2473,45 @@ export const CoreContextProvider = props => {
             });
 
         });
+
+        alert('TimeLog has been updated');
+       
+    }
+
+    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, patientId, userName) => {
+        const token = localStorage.getItem('app_jwt');
+
+
+        const data = {
+            "TableName": userTable,
+            "Key": {
+                "PK": { "S": "TIMELOG_READING" },
+                "SK": { "S": timelog.SK}
+            },
+            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn",
+            "ExpressionAttributeValues":{":v_TaskType":{"S":""+taskType+""},
+            ":v_PerformedBy":{"S":""+performedBy+""},
+            ":PerformedOn":{"S": performeddate}
+               }
+        };
+
+       
+
+
+        axios.post(apiUrl+'/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Registered") {
+                console.log(response.data );
+            }
+        });
+
+      
 
         alert('TimeLog has been updated');
        
@@ -2647,6 +2690,7 @@ export const CoreContextProvider = props => {
         fetchTaskTimerUser,
         addCareCoordinator,
         addCoach,
+        AddTimeLog,
         UpdateTimeLog,
         UpdatePatient,
         AssignCareTeam,
