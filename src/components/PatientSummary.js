@@ -322,6 +322,11 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
       ];
       
 
+      const deleteTimeLog = (tl) => {
+        coreContext.DeleteTimeLog(tl);
+    }
+	
+
       const renderTimelogs = () =>{
         if (coreContext.timeLogData.length > 0) {
             return coreContext.timeLogData.map((tl, index) => {
@@ -335,7 +340,9 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
                     <td>
                                             <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(tl)} >  <PencilSquare /></a>
-                                   <a style={{  marginRight: '5px' }} href="#" >  <Trash /></a></td>
+                                            <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteTimeLog(tl)}>  <Trash /></a>
+                                   
+                                   </td>
                 </tr>
             });
         }
