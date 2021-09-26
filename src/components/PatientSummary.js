@@ -35,7 +35,7 @@ const PatientSummary  = props =>  {
     const coreContext = useContext(CoreContext);
     const handleModalClose = () => setShowModal(false);
     const [notes, setNotes] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(new Date());
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState('');
@@ -65,7 +65,7 @@ const PatientSummary  = props =>  {
     const [deviceId, setDeviceId] = useState('');
     const [thData, setThData] = useState([]);
     const [timerLogs, setTimerLog] = useState([]);
-    const [taskType, setTaskType] = useState('');
+    const [taskType, setTaskType] = useState();
     const [performedBy, setPerformedBy] = useState('');
     const [endDT, setendDT] = useState('');
     const [startDT, setstartDT] = useState('');
@@ -111,6 +111,9 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         setUserId(localStorage.getItem("userId"));
         setUserName(localStorage.getItem("userName"));
         setpatientId(patientId);
+        console.log("checking id",userName)
+        setPerformedBy(userName);
+        //setTaskType("Care Coordination")
         //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
         //setPatient(patientData);
@@ -119,16 +122,15 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         coreContext.fetchThresold("PATIENT_" + patientId, userType);
 
         coreContext.fetchTimeLog("PATIENT_" + patientId);
-        console.log("PATIENT_" + patientId)
+        //console.log("PATIENT_" + patientId)
         let totaltime=0
-        console.log("Sahil")
-        console.log("akshy")
+        
         coreContext.timeLogData.map((curr)=>{
             totaltime=totaltime+ Moment.duration(curr.timeAmount).asMinutes()
         })
-        console.log(coreContext.timeLogData)
         
-        console.log("totaltime",totaltime)    
+       
+        
 
         //coreContext.fetchTaskTimerUser();
 
@@ -250,7 +252,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
     const onBGChange = (e) => {
         setBgMin(e.from);
         setBgMax(e.to);
-        console.log(e.from, e.to);
+       // console.log(e.from, e.to);
     }
 
     const onBMIChange = (e) => {
@@ -318,14 +320,17 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
       const renderTimelogs = () =>{
         if (coreContext.timeLogData.length > 0) {
+            
             return coreContext.timeLogData.map((tl, index) => {
                 return <tr>
+                    {/* {console.log("or kuj",coreContext.timeLogData)} */}
                     <td>{tl.taskType} </td>
                     <td>{tl.performedBy} </td>
                     <td>{tl.performedOn} </td>
                     <td>{tl.timeAmount} </td>
                     <td>{tl.startDT} </td>
                     <td>{tl.endDT} </td>
+                    
 
                     <td>
                                             <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setShowModal(true)} >  <PencilSquare /></a>
@@ -494,7 +499,7 @@ const renderThreads = () => {
     const [timelogIdCounter, settimelogIdCounter] = useState(1);
 
     const handleSelect  = (index) => {
-        console.log(index);
+        //console.log(index);
         let _timerLog = {};
         if(index ==7) {
            setstartDT(new Date());
@@ -524,7 +529,7 @@ const renderThreads = () => {
             
            
             //setTimerLog(timerLogs);
-            console.log(index);
+            //console.log(index);
             if(totalLogtime  > 0){
                 settotalLogtime(totalLogtime + seconds);
             }else {
@@ -538,14 +543,14 @@ const renderThreads = () => {
     
     const handleLeaveTab  = (index) => {
         if(index ==7){
-            console.log('leave');
-            console.log(index +'leave');
+           // console.log('leave');
+        //console.log(index +'leave');
         }
     }
 
     function doSomething(value) {
 
-        console.log("doSomething called by child with value:", value);
+        // console.log("doSomething called by child with value:", value);
       }
 
     const renderTabs = () => {
@@ -561,7 +566,7 @@ const renderThreads = () => {
                     <Tab onClick={pause}>Documents</Tab>
                     <Tab onClick={reset}>Task Timer</Tab>
                     {/* <Tab onClick={pause}>Time Logs</Tab> */}
-                    <Tab eventKey={'TimeLog'}>Time Logs</Tab>
+                    <Tab >Time Logs</Tab>
                     <Tab onClick={pause}>Devices</Tab>
                     <Tab onClick={pause}>Portal</Tab>
                 </TabList>
@@ -857,15 +862,16 @@ const renderThreads = () => {
                                 <div className="col-md-6">
                                     <div className="row">
                                         Task Type 
+                                        {/* //  {setTaskType("CarePlanReconciliation")} */}
                                         <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CaseCoordination">Care Coordination</option>
+                                            <option value="CaseCoordination" >Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="CaseCoordination">Data Review</option>
+                                            <option value="Data Review">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
-                                        {console.log("sahil",taskType)}
+                                        {/* {console.log("sahil",taskType)} */}
                                         {(t1==='Other')?
    
     <input type="text" className="form-control mb-2 mr-sm-2" placeholder="Enter other value.." value={taskType}  onChange={(e)=>setTaskType(e.target.value)}/>
@@ -874,6 +880,7 @@ const renderThreads = () => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             Performed By
+                                            
                                             {/* {renderTaskTimer()} */}
                                             <select value={performedBy} onChange={e => {setPerformedBy(e.target.value);setDirty();}} className="form-control mb-2 mr-sm-2">
                                                 <option value="SelectUser">Select a User</option>
@@ -1030,7 +1037,7 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button> 
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
@@ -1085,7 +1092,7 @@ const renderThreads = () => {
                                             <option value="Other">Others...</option>
                                         </select>
                                         
-                                        {console.log("sahil",taskType)}
+                                        {/* {console.log("sahil",taskType)} */}
                                         {(t1==='Other')?
    
     <input type="text" className="form-control mb-2 mr-sm-2" placeholder="Enter other value.." value={taskType}  onChange={(e)=>setTaskType(e.target.value)}/>
@@ -1105,7 +1112,7 @@ const renderThreads = () => {
                                                 
                                             </select>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-12">
                                             Performed On
                                             <DatePicker className='form-control mt-2'
                                                 selected={date}
