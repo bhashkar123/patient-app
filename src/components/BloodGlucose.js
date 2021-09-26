@@ -188,6 +188,13 @@ const BloodGlucose = props => {
            },
        
       },
+      {
+        field: 'DeviceId',
+        headerName: 'Device Id',
+        width: 200,
+        editable: false
+       
+      },
         {
           field: 'reading_id',
           headerName: 'Reading Id',

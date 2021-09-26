@@ -63,11 +63,11 @@ export const CoreContextProvider = props => {
    
 
     
-    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
-    const [userTable, setuserTable] = useState('UserDetailsDemo');
+    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210808220332demo.azurewebsites.net/api');
+    // const [userTable, setuserTable] = useState('UserDetailsDemo');
 
-    // const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
-    // const [userTable, setuserTable] = useState('UserDetail');
+    const [apiUrl, setApiUrl] = useState('https://rpmcrudapis20210725100004.azurewebsites.net/api');
+    const [userTable, setuserTable] = useState('UserDetail');
     
     ///Chart Data
 
@@ -1984,7 +1984,7 @@ export const CoreContextProvider = props => {
 
               
                if(bp.DeviceId !==undefined){
-                bpdata.DeviceId = bp.DeviceId.s;
+                   bpdata.DeviceId = bp.DeviceId.s;
                }  
  
                if(bp.IMEI !==undefined){
@@ -2140,7 +2140,12 @@ export const CoreContextProvider = props => {
 
                 if(bg.SK !==undefined){
                     bgdata.readingId = bg.SK.s.split("_").pop(); 
-                   } 
+                } 
+
+                if(bg.DeviceId !==undefined){
+                    bgdata.DeviceId = bg.DeviceId.s;
+                }  
+  
 
                 dataSetbg.push(bgdata);
             });
