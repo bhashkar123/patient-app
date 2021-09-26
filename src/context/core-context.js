@@ -2506,7 +2506,7 @@ export const CoreContextProvider = props => {
             }
         }
         ).then((response) => {
-            if (response.data === "Registered") {
+            if (response.data === "Updated") {
                 console.log(response.data );
             }
         });
