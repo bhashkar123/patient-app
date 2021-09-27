@@ -101,6 +101,13 @@ const BloodGlucose = props => {
                return `${valueFormatted}`;
              },
         },
+        {
+          field: 'DeviceId',
+          headerName: 'Device Id',
+          width: 200,
+          editable: false
+         
+        },
           {
             field: 'battery',
             headerName: 'Battery',
