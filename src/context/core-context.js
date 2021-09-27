@@ -1193,6 +1193,33 @@ export const CoreContextProvider = props => {
     }
 
 
+    const DeleteTimeLog = (timelog) => {
+        const token = localStorage.getItem('app_jwt');
+
+        const data = {
+            "TableName": userTable,
+            "Key": {
+                "SK": { "S": "TIMELOG_READING"},
+                "SK": { "S": timelog.SK}
+            },
+            "UpdateExpression": "SET ActiveStatus = :v_ActiveStatus",
+            "ExpressionAttributeValues": { ":v_ActiveStatus": { "S": "Deactive" } }
+        };
+
+        axios.post(apiUrl+'/DynamoDbAPIs/updateitem', data, {
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                // "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+            }
+        }
+        ).then((response) => {
+            if (response.data === "Updated") {
+                alert("Patient Deleted Successfully.");
+            }
+        });
+    }
+
     const DeleteCareTeam = (patientId, careTeamType, careTeamTypeMsg) => {
         const token = localStorage.getItem('app_jwt');
 
@@ -1957,7 +1984,7 @@ export const CoreContextProvider = props => {
 
               
                if(bp.DeviceId !==undefined){
-                bpdata.DeviceId = bp.DeviceId.s;
+                   bpdata.DeviceId = bp.DeviceId.s;
                }  
  
                if(bp.IMEI !==undefined){
@@ -2113,7 +2140,12 @@ export const CoreContextProvider = props => {
 
                 if(bg.SK !==undefined){
                     bgdata.readingId = bg.SK.s.split("_").pop(); 
-                   } 
+                } 
+
+                if(bg.DeviceId !==undefined){
+                    bgdata.DeviceId = bg.DeviceId.s;
+                }  
+  
 
                 dataSetbg.push(bgdata);
             });
@@ -2491,7 +2523,7 @@ export const CoreContextProvider = props => {
             "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn",
             "ExpressionAttributeValues":{":v_TaskType":{"S":""+taskType+""},
             ":v_PerformedBy":{"S":""+performedBy+""},
-            ":PerformedOn":{"S": performeddate}
+            ":v_PerformedOn":{"S": performeddate}
                }
         };
 
@@ -2507,13 +2539,10 @@ export const CoreContextProvider = props => {
         }
         ).then((response) => {
             if (response.data === "Updated") {
-                console.log(response.data );
+                alert('TimeLog has been updated');
             }
         });
 
-      
-
-        alert('TimeLog has been updated');
        
     }
 
@@ -2679,6 +2708,7 @@ export const CoreContextProvider = props => {
         addDevice,
         UpdateProfie,
         DeletePatient,
+        DeleteTimeLog,
         DeleteCareTeam ,
         DeleteDeviceData,
         userDetails,

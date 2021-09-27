@@ -101,6 +101,13 @@ const BloodGlucose = props => {
                return `${valueFormatted}`;
              },
         },
+        {
+          field: 'DeviceId',
+          headerName: 'Device Id',
+          width: 200,
+          editable: false
+         
+        },
           {
             field: 'battery',
             headerName: 'Battery',
@@ -186,6 +193,13 @@ const BloodGlucose = props => {
             const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
              return `${valueFormatted}`;
            },
+       
+      },
+      {
+        field: 'DeviceId',
+        headerName: 'Device Id',
+        width: 200,
+        editable: false
        
       },
         {
