@@ -2,6 +2,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { CoreContext } from '../context/core-context';
+import Loader from "react-loader-spinner";
 import { GenderMale, GenderFemale, PencilSquare,  Trash } from 'react-bootstrap-icons';
 import DatePicker from "react-datepicker";
 import { ButtonGroup, Button, Form,Modal } from 'react-bootstrap';
@@ -132,10 +133,9 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
        
         
-
         //coreContext.fetchTaskTimerUser();
 
-        coreContext.fetchDeviceData("PATIENT_" + patientId);
+        coreContext.fetchDeviceData("PATIENT_" + patientId,userName,userType);
         /// setting default value
         if (coreContext.thresoldData.length === 0) {
             let thdata = {};
@@ -382,7 +382,22 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
 
     const renderDeviceData = () => {
-        if (coreContext.deviceData.length > 0) {
+        if (coreContext.deviceData.length === 0){
+            return (
+                <div style={{ height: 100, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                     <Loader
+                type="Circles"
+                color="#00BFFF"
+                height={100}
+                width={100}
+            /></div>
+              );
+
+        }
+
+        if (coreContext.deviceData.length > 0) 
+        {console.log("device cheking",coreContext.deviceData)}
+        {
             return coreContext.deviceData.map((deviceData, index) => {
                 return <tr>
                     <td>{deviceData.DeviceType} </td>
@@ -394,6 +409,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         }
 
     }
+    useEffect(renderDeviceData, [coreContext.deviceData.length]);
 
 const renderThreads = () => {
         if (coreContext.threads.length > 0) {
@@ -417,6 +433,7 @@ const renderThreads = () => {
     }
 
     const renderTopDetails = () => {
+        {console.log("taylor",coreContext.patient)}
         if (coreContext.patient)
             return <div className="row">
                 <div className="col-md-3" style={{ fontWeight: 'bold' }}>{coreContext.patient.name}</div>
@@ -984,6 +1001,7 @@ const renderThreads = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {console.log("checkddata",coreContext.deviceData)}
                                             {renderDeviceData()}
                                         </tbody>
                                     </table>
