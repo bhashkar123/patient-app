@@ -71,6 +71,7 @@ const PatientSummary  = props =>  {
     const [endDT, setendDT] = useState('');
     const [startDT, setstartDT] = useState('');
     const [totalLogtime, settotalLogtime] = useState(0);
+    const [currTimeLog, setCurrentTimeLog] = useState('');
 
     
     const greeting = 'Welcome to React';
@@ -323,6 +324,11 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         coreContext.DeleteTimeLog(tl);
     }
 	
+    const setCurrentTL =(tl) =>{
+        setShowModal(true);
+        //alert(tl.taskType);
+        setCurrentTimeLog(tl);
+    }
 
       const renderTimelogs = () =>{
         if (coreContext.timeLogData.length > 0) {
