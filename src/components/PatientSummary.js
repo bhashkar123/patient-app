@@ -319,6 +319,11 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
       ];
       
 
+      const deleteTimeLog = (tl) => {
+        coreContext.DeleteTimeLog(tl);
+    }
+	
+
       const renderTimelogs = () =>{
         if (coreContext.timeLogData.length > 0) {
             {console.log("ficed",coreContext.timeLogData)}
@@ -334,9 +339,13 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
                     <td>{tl.endDT} </td>
                     
 
-                    <td>
-                                            <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setShowModal(true)} >  <PencilSquare /></a>
-                                   <a style={{  marginRight: '5px' }} href="#" >  <Trash /></a></td>
+                  <td>
+
+                                            <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(tl)} >  <PencilSquare /></a>
+                                            <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteTimeLog(tl)}>  <Trash /></a>
+                                   
+                                   </td>
+
                 </tr>
             });
         }
