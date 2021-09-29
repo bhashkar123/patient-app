@@ -242,7 +242,9 @@ const BloodGlucose = props => {
         //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
           return (
               <div style={{ height: 680, width: '100%' }}>
+               {/* {coreContext.bloodglucoseData} */}
                 <DataGrid
+                
                   rows={coreContext.bloodglucoseData}
                   columns={dgcolumns}
                   pageSize={10}
