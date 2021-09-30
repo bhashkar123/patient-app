@@ -2481,7 +2481,7 @@ export const CoreContextProvider = props => {
                 "TaskType": taskType,
                 "PerformedBy": performedBy,
                 "PerformedOn": performedOn,
-                "TimeAmount": timeAmount,
+                "TimeAmount":  timeAmount.toString(),
                 "StartDT": date,
                 "EndDT": date
             });
