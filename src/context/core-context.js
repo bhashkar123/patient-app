@@ -2467,28 +2467,23 @@ export const CoreContextProvider = props => {
 
     }
 
-    const AddTimeLog = (timerLogs, patientId, userName) => {
+    const AddTimeLog = (taskType, performedBy, performedOn,timeAmount, patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
         const date = new Date();
-        
        
-        if(timerLogs.length ==0 ) return;
-
-        timerLogs.forEach(timelog=>{
-             const data = JSON.stringify({
+        const data = JSON.stringify({
                 "PK": "TIMELOG_READING",
-                "SK": "TIMELOG_READING_"+ timelog.taskType+"_" + timelog.performedBy +"_"+ timelog.performedOn+"_"+ timelog.timeAmount,
+                "SK": "TIMELOG_READING_"+ taskType+"_" + performedBy +"_"+ performedOn+"_"+ timeAmount,
                 "GSI1PK": 'TIMELOG_READING_PATIENT_' + patientId,
                 "GSI1SK": patientId,
                 "CreatedDate": date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
                 "UserName": userName,
-                "TaskType": timelog.taskType,
-                "PerformedBy": timelog.performedBy,
-                "PerformedOn": timelog.performedOn,
-                "TimeAmount": timelog.timeAmount,
-                "StartDT": timelog.startDT,
-                "EndDT": timelog.endDT,
-               
+                "TaskType": taskType,
+                "PerformedBy": performedBy,
+                "PerformedOn": performedOn,
+                "TimeAmount": timeAmount,
+                "StartDT": date,
+                "EndDT": date
             });
     
             axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
@@ -2500,14 +2495,11 @@ export const CoreContextProvider = props => {
             }
             ).then((response) => {
                 if (response.data === "Registered") {
-                   console.log(response.data + timelog);
+                   console.log(response.data );
+                   alert('TimeLog has been added');
                 }
             });
 
-        });
-
-        alert('TimeLog has been updated');
-       
     }
 
     const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, patientId, userName) => {
