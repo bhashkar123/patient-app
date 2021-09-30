@@ -3,11 +3,13 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { CoreContext } from '../context/core-context';
 import { Table, Pagination, Modal, Button, Form } from 'react-bootstrap';
+import DatePicker from "react-datepicker";
 import { PencilSquare, Trash, Person } from 'react-bootstrap-icons';
 import { IconName } from "react-icons/bs";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import Input from './common/Input';
+
 
 import {
     DataGrid,
@@ -17,6 +19,7 @@ import {
   } from "@material-ui/data-grid";
 
 import Loader from "react-loader-spinner";
+const Moment = require('moment');
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiDataGrid-columnHeaderCheckbox": {
@@ -97,15 +100,31 @@ const Patients = props => {
     useEffect(coreContext.checkLocalAuth, []);
     useEffect(fetchPatients, []);
 
-
+    function formatAMPM(date) {
+      var d = new Date(date);
+      //alert(d);
+      
+      var mm = d.getMonth() + 1;
+      var dd = d.getDate();
+      var yy = d.getFullYear();
+      //alert(yy);
+      var strTime = mm + '-' + dd + '-' + yy
+      //alert(strTime);
+      //console.log(strTime);
+      return strTime;
+    }
     const showEditForm = (patient) => {
-      {console.log("checking")}
+      {console.log("checking",patient)}
         setName(patient.name);
         setBirthDate(patient.dob);
         setPhone(patient.mobile);
         setPatientId(patient.userId);
         setHeight(patient.height);
-       
+        setProvider(
+          coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
+          )
+          setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
+       setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
         handleModalShow();
     }
     
@@ -114,6 +133,11 @@ const Patients = props => {
       setBirthDate(patient.dob);
       setPhone(patient.mobile);
       setPatientId(patient.userId);
+      setProvider(
+        coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
+        )
+        setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
+     setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
       handleAssignDrModalShow();
   }
   
@@ -422,14 +446,18 @@ const Patients = props => {
 
                             <Input label='Phone' elementType='text' placeholder='Enter phone' onChange={e => setPhone(e.target.value)} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='phone' value={phone} />
 
-                            <Input label='Date of Birth' elementType='date' placeholder='Enter dob' onChange={e => setBirthDate(e.target.value)} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='dob' value={birthDate} />
-
-                            <Input label='Height (Inch)' elementType='number' minLength={1} maxLength={55} placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={height} required={true} register={register} errors={errors} />
+                            <Input label='Date of Birth' elementType='date' placeholder='Enter dob' onChange={e => setBirthDate(e.target.value)} required={true} register={register} errors={errors} name='dob' value={birthDate}/>
+{console.log(birthDate)}
+{/* <input type="date"/> */}
+//                          <Input label='Height (Inch)' elementType='number' minLength={1} maxLength={55} placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={height} required={true} register={register} errors={errors} />
                         </div>
                         <div className="col-md-6">
-                            <Input label='Provider Name' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
-
-                            <Input label='Care Coordinator' name='care' required={false} register={register} errors={errors} elementType='select' value={coordinator} options={coreContext.careCoordinatorOptions} onChange={e => setCoordinator(e.target.value)} />
+                          {console.log("sssss",provider)}
+                        <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} />
+          
+                            <Input label='Provider' name='provider' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
+                            {/* {console.log(coreContext.careCoordinatorOptions,coreContext.coachOptions)} */}
+                            <Input label='Care Coordinator' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={coordinator} options={coreContext.careCoordinatorOptions} onChange={e => setCoordinator(e.target.value)} />
 
                             <Input label='Coach Name' name='coach' required={false} register={register} errors={errors} elementType='select' value={coach} options={coreContext.coachOptions} onChange={e => setCoach(e.target.value)} />
 
@@ -438,12 +466,12 @@ const Patients = props => {
                     <Input blockButton={true} value='Submit' onClick={
                         () =>{ 
                                 coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId);
+                                fetchPatients();
                                 setShowModal(false);
-                               // window.location.reload ();
+                                fetchPatients();
+                                fetchPatients();
                                
-                               //alert("please wait")
-                               fetchPatients();
-                             //  alert("updated");
+                             //alert("updated");
                             }
                         } elementType='button' variant='primary' />
                     <br />
@@ -462,7 +490,7 @@ const Patients = props => {
                 <Form autoComplete='off' onSubmit={handleSubmit(editPatient)} noValidate>
                     <div >
                         <div >
-                            <Input label='Provider Name' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
+                            <Input label='Provider' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
 
                             <Input label='Care Coordinator' name='care' required={false} register={register} errors={errors} elementType='select' value={coordinator} options={coreContext.careCoordinatorOptions} onChange={e => setCoordinator(e.target.value)} />
 
