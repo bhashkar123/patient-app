@@ -739,7 +739,7 @@ export const CoreContextProvider = props => {
             timelogData.forEach((tl, index) => {
                 console.log('p' + index, tl);
                 let tldata = {};
-
+                tldata.id=index;
                 if (tl.SK) {
                     tldata.SK = tl.SK.s;
                 }
@@ -2472,6 +2472,7 @@ export const CoreContextProvider = props => {
         const date = new Date();
        
         const data = JSON.stringify({
+            "id":timeLogData.length+1,
                 "PK": "TIMELOG_READING",
                 "SK": "TIMELOG_READING_"+ taskType+"_" + performedBy +"_"+ performedOn+"_"+ timeAmount,
                 "GSI1PK": 'TIMELOG_READING_PATIENT_' + patientId,

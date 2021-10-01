@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
+import { makeStyles } from "@material-ui/core/styles";
 import { CoreContext } from '../context/core-context';
 import Loader from "react-loader-spinner";
 import { GenderMale, GenderFemale, PencilSquare,  Trash } from 'react-bootstrap-icons';
@@ -15,7 +16,14 @@ import { useStopwatch } from 'react-timer-hook';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import IonRangeSlider from 'react-ion-slider';
-import { DataGrid } from '@material-ui/data-grid';
+
+
+import {
+    DataGrid,
+    GridColDef,
+    GridApi,
+    GridCellValue
+  } from "@material-ui/data-grid";
 
 import {Weight} from './Weight';
 import {BloodGlucose} from './BloodGlucose';
@@ -27,16 +35,26 @@ import Moment from 'moment';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { Thresold } from './Thresold';
 import Alert from './common/Alert';
+const useStyles = makeStyles((theme) => ({
+    root: {
+      "& .MuiDataGrid-columnHeaderCheckbox": {
+        display: "block",
+        pointerEvents:"none",
+        disabled:"disabled"
+      }
+    }
+  }));
+  
 
 
 
 const PatientSummary  = props =>  {
-    
+    const classes = useStyles();
     
     const coreContext = useContext(CoreContext);
     const handleModalClose = () => setShowModal(false);
     const [notes, setNotes] = useState('');
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState();
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState('');
@@ -278,46 +296,79 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         setWeightMax(e.to);
     }
 
+    const handleUpdate=()=>{
+        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);
+    }
     const columns = [
         { field: 
           'taskType', 
           headerName: 'Task Type', 
-          width: 200 ,  
+          width: 150 ,  
           type: 'string'},
         {
           field: 'performedBy',
           headerName: 'Performed By',
           type: 'number',
           editable: false,
-          width: 200
+          width: 150
         },
         {
             field: 'performedOn',
             headerName: 'Performed On',
-            width: 110,
+            width: 150,
             editable: false,
-            width: 500
+
+            valueFormatter: (params) => {
+                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+                 return `${valueFormatted}`;
+               },
+           
+            //width: 500
           },
           {
             field: 'timeAmount',
             headerName: 'Time Amount',
             editable: false,
             type: Number,
-            width: 200
+            width: 100
           },
           {
             field: 'startDT',
             headerName: 'Start Date',
-            width: 200,
-            editable: false
+            width: 150,
+            editable: false,
+            valueFormatter: (params) => {
+                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+                 return `${valueFormatted}`;
+               },
+           
            
           },
           {
             field: 'endDT',
             headerName: 'End Date',
             editable: false,
-            width: 200
+            width: 150,
+            valueFormatter: (params) => {
+                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+                 return `${valueFormatted}`;
+               },
+           
           },
+          { 
+            field: "", 
+            headerName: "Action",
+            width: 120,
+            renderCell: (params) => (
+                <div style={{  width: '100px' }}  >
+
+<a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(params.row)} >  <PencilSquare /></a>
+<a style={{  marginRight: '5px' }} href="#" onClick={() => deleteTimeLog(params.row)}>  <Trash /></a>
+                                   
+                 </div>
+            
+        )
+    }, 
       ];
       
 
@@ -329,32 +380,36 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         setShowModal(true);
         //alert(tl.taskType);
         setCurrentTimeLog(tl);
+        setPerformedBy(tl.performedBy);
+        setDate(new Date(tl.performedOn));
+        console.log("chjdjjsd",tl.performedOn)
+        setTaskType(tl.taskType)
     }
 
-      const renderTimelogs = () =>{
-        if (coreContext.timeLogData.length > 0) {
-            {console.log("ficed",coreContext.timeLogData)}
-            return coreContext.timeLogData.map((tl, index) => {
+    //   const renderTimelogs = () =>{
+    //     if (coreContext.timeLogData.length > 0) {
+    //         {console.log("ficed",coreContext.timeLogData)}
+    //         return coreContext.timeLogData.map((tl, index) => {
 
-                return <tr>
-                    {/* {console.log("or kuj",coreContext.timeLogData)} */}
-                    <td>{tl.taskType} </td>
-                    <td>{tl.performedBy} </td>
-                    <td>{tl.performedOn} </td>
-                    <td>{tl.timeAmount} </td>
-                    <td>{tl.startDT} </td>
-                    <td>{tl.endDT} </td>
-                   <td>
+    //             return <tr>
+    //                 {/* {console.log("or kuj",coreContext.timeLogData)} */}
+    //                 <td>{tl.taskType} </td>
+    //                 <td>{tl.performedBy} </td>
+    //                 <td>{tl.performedOn} </td>
+    //                 <td>{tl.timeAmount} </td>
+    //                 <td>{tl.startDT} </td>
+    //                 <td>{tl.endDT} </td>
+    //                <td>
 
-                                            <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(tl)} >  <PencilSquare /></a>
-                                            <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteTimeLog(tl)}>  <Trash /></a>
+    //                                         <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(tl)} >  <PencilSquare /></a>
+    //                                         <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteTimeLog(tl)}>  <Trash /></a>
                                    
-                                   </td>
+    //                                </td>
 
-                </tr>
-            });
-        }
-    }  
+    //             </tr>
+    //         });
+    //     }
+    // }  
 
 
     const renderTaskTimer = () =>{
@@ -370,21 +425,35 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
        
      
        
-    // const renderTimelogs = () =>{
-    //     if (timerLogs.length > 0){
-    //       //  timerLogs  = timerLogs.sort((a,b) => new Moment(b.startDT) - new Moment(a.startDT));
-    //       return (
-    //           <div style={{ height: 680, width: '100%' }}>
-    //             <DataGrid
-    //               rows={timerLogs}
-    //               columns={columns}
-    //               pageSize={10}
-    //             />
-    //           </div>
-    //         );
-    //       }
+    const renderTimelogs = () =>{
+
+        if (coreContext.timeLogData.length === 0) {
+            return (
+                <div style={{ height: 500, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                     <Loader
+                type="Circles"
+                color="#00BFFF"
+                height={100}
+                width={100}
+            /></div>
+              );
+        }
+        if (coreContext.timeLogData.length > 0){
+          //  timerLogs  = timerLogs.sort((a,b) => new Moment(b.startDT) - new Moment(a.startDT));
+          return (
+              <div style={{ height: 500, width: '100%' }}>
+                <DataGrid
+                className={classes.root}
+                  rows={coreContext.timeLogData}
+                  columns={columns}
+
+                  pageSize={10}
+                />
+              </div>
+            );
+          }
    
-    // }
+    }
    // const deleteDevice = (patient) => {
      //   alert('Hi how are you');
         //coreContext.DeletePatient(patient.userId)
@@ -541,37 +610,37 @@ const renderThreads = () => {
             setendDT(new Date());
         }
 
-        if(index ==8){
+        if(index ===8){
             pause();//
           
             // after pause then should add in list.
-            _timerLog.id = timelogIdCounter;
-            _timerLog.taskType = taskType;
-            _timerLog.performedBy = performedBy;
-            _timerLog.performedOn = Moment(date).format('MMM-DD-YYYY hh:mm:ss A') ;
-            _timerLog.timeAmount = minutes +":"+ seconds;
-            _timerLog.startDT = Moment(startDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
-            _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
-            _timerLog.username = userName;
+        //     // _timerLog.id = timelogIdCounter;
+        //     // _timerLog.taskType = taskType;
+        //     // _timerLog.performedBy = performedBy;
+        //     // _timerLog.performedOn = Moment(date).format('MMM-DD-YYYY hh:mm:ss A') ;
+        //     // _timerLog.timeAmount = minutes +":"+ seconds;
+        //     // _timerLog.startDT = Moment(startDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
+        //     // _timerLog.endDT = Moment(endDT).format('MMM-DD-YYYY hh:mm:ss A') ; 
+        //     // _timerLog.username = userName;
            
-            if(_timerLog.performedOn !=="Invalid date")
-            {
-                coreContext.timeLogData.push(_timerLog);
-            }
-            //timerLogs.push(_timerLog);
+        //     // if(_timerLog.performedOn !=="Invalid date")
+        //     // {
+        //     //     coreContext.timeLogData.push(_timerLog);
+        //     // }
+        //     // //timerLogs.push(_timerLog);
             
            
-            //setTimerLog(timerLogs);
-            //console.log(index);
-            if(totalLogtime  > 0){
-                settotalLogtime(totalLogtime + seconds);
-            }else {
-                settotalLogtime(seconds);
-            }
-            settimelogIdCounter(timelogIdCounter+1);
+        //     //setTimerLog(timerLogs);
+        //     //console.log(index);
+        //     if(totalLogtime  > 0){
+        //         settotalLogtime(totalLogtime + seconds);
+        //     }else {
+        //         settotalLogtime(seconds);
+        //     }
+        //     settimelogIdCounter(timelogIdCounter+1);
            
         
-        }
+     }
     }
     
     const handleLeaveTab  = (index) => {
@@ -957,27 +1026,14 @@ const renderThreads = () => {
                                     Total Time Logs (min: sec): {totalLogtime}
                                 </div>
                             </div>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    {renderTimelogs()}
+                                </div>
+                            </div>
 
-                            {/* {renderTimelogs()} */}
-                            <table className='table table-bordered table-sm mt-4'>
-                                <tr>
-                                    <th>Task Type</th>
-                                    <th>Performed By</th>
-                                    <th>Performed On</th>
-                                    <th>Time Amount</th>
-                                    <th>Start Date/Time</th>
-                                    <th>End Date/Time</th>
-
-                                    <th>
-                                   Action
-                                    </th>
-                                </tr>
-
-                                <tbody>
-                                            {renderTimelogs()}
-                                            
-                                        </tbody>
-                            </table>
+                            
+                            
                         </div>
                     </div>
                 </TabPanel>
@@ -1072,7 +1128,7 @@ const renderThreads = () => {
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
                                                 {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
-                                                <button type='button' onClick={() => {coreContext.AddTimeLog( taskType, performedBy, date, seconds, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
+                                                <button type='button' onClick={() => {coreContext.AddTimeLog( taskType, performedBy, date, seconds, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
@@ -1165,7 +1221,7 @@ const renderThreads = () => {
                                  
                             </div>
                         </div>
-                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
+                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,patientId, userName );handleUpdate();}} className="btn btn-sm btn-success"> Update Time Log</button>
                     </div>
             </Modal.Body>
         </Modal>
