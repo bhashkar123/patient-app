@@ -144,11 +144,6 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
         coreContext.fetchTimeLog("PATIENT_" + patientId);
         //console.log("PATIENT_" + patientId)
-        let totaltime=0
-        
-        coreContext.timeLogData.map((curr)=>{
-            totaltime=totaltime+ Moment.duration(curr.timeAmount).asMinutes()
-        })
         
 
        
@@ -599,6 +594,9 @@ const renderThreads = () => {
 
     
     const [timelogIdCounter, settimelogIdCounter] = useState(1);
+    const calctime=()=>{
+        console.log("dshkjhfdhsdfh",coreContext.timeLogData)
+    }
 
     const handleSelect  = (index) => {
         console.log("checkindex",index);
@@ -611,7 +609,17 @@ const renderThreads = () => {
         }
 
         if(index ===8){
-            pause();//
+            pause();
+            let totaltime=0
+        
+        coreContext.timeLogData.map((curr)=>{
+            totaltime=totaltime+ Number(curr.timeAmount)
+            console.log("checkkfktime",totaltime)
+            
+        })
+        console.log(coreContext.timeLogData)
+        settotalLogtime(String(Math.floor(totaltime/60))+":"+("0"+String(totaltime%60)).slice(-2))
+        //
           
             // after pause then should add in list.
         //     // _timerLog.id = timelogIdCounter;
@@ -1128,7 +1136,7 @@ const renderThreads = () => {
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
                                                 {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
-                                                <button type='button' onClick={() => {coreContext.AddTimeLog( taskType, performedBy, date, seconds, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
+                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date, minutes*60+seconds, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
