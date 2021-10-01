@@ -320,7 +320,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
             
 
             valueFormatter: (params) => {
-                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm:ss A')
                  return `${valueFormatted}`;
                },
            
@@ -341,7 +341,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
             //headerAlign: 'center',
             editable: false,
             valueFormatter: (params) => {
-                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm:ss A')
                  return `${valueFormatted}`;
                },
            
@@ -354,7 +354,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
             //headerAlign: 'center',
             width: 190,
             valueFormatter: (params) => {
-                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+                const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm:ss A')
                  return `${valueFormatted}`;
                },
            
@@ -610,12 +610,12 @@ const renderThreads = () => {
     const handleSelect  = (index) => {
         console.log("checkindex",index);
         let _timerLog = {};
-        if(index ==7) {
-           setstartDT(new Date());
-        }
-        if(index !=7){
-            setendDT(new Date());
-        }
+        // if(index ==7) {
+        //    setstartDT(new Date());
+        // }
+        // if(index !=7){
+        //     setendDT(new Date());
+        // }
 
         if(index ===8){
             pause();
@@ -1019,10 +1019,11 @@ const renderThreads = () => {
                                                 timeFormat="HH:mm"
                                                 timeIntervals={15}
                                                // onChange={(date) => setDate(date)}
-                                                onChange={(date) => {setDate(date);setDirty();}}
+                                                onChange={(date) => {setDate(date);setDirty();setstartDT(date)}}
                                                 placeholderText='Enter a date'
-                                                dateFormat='MM/dd/yyyy hh:mm aa'
+                                                dateFormat='MM/dd/yyyy hh:mm:ss aa'
                                             />
+                                            {console.log("checkdatebsjfhs",startDT)}
                                         </div>
                                     </div>
                                 </div>
@@ -1145,7 +1146,7 @@ const renderThreads = () => {
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
                                                 {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
-                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date, minutes*60+seconds, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
+                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date, minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
