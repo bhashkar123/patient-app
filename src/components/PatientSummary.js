@@ -1186,7 +1186,7 @@ const renderThreads = () => {
                                         Task Type 
                                         <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CaseCoordination">Case Coordination</option>
+                                            <option value="CareCoordination">Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
                                             <option value="Other">Others...</option>
                                         </select>
