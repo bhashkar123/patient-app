@@ -289,7 +289,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/dashboard"> Dashboard</Nav.Link>
+                    <Nav.Link href="/dashboard"> A PATTERN Plus Dashboard</Nav.Link>
                     
                     <NavDropdown title={<div style={{ display: "inline-block" }}><Envelope /> Mailbox </div>} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/inbox"><BoxArrowRight /> Inbox</NavDropdown.Item>

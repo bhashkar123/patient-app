@@ -68,6 +68,7 @@ const PatientSummary  = props =>  {
     const [timerLogs, setTimerLog] = useState([]);
     const [taskType, setTaskType] = useState();
     const [performedBy, setPerformedBy] = useState('');
+    const [performedOn, setPerformedOn] = useState('');
     const [endDT, setendDT] = useState('');
     const [startDT, setstartDT] = useState('');
     const [totalLogtime, settotalLogtime] = useState(0);
@@ -343,9 +344,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
                     <td>{tl.timeAmount} </td>
                     <td>{tl.startDT} </td>
                     <td>{tl.endDT} </td>
-                    
-
-                  <td>
+                   <td>
 
                                             <a  style={{  marginRight: '5px' }} href="#" onClick={()=>setCurrentTL(tl)} >  <PencilSquare /></a>
                                             <a style={{  marginRight: '5px' }} href="#" onClick={() => deleteTimeLog(tl)}>  <Trash /></a>
@@ -512,7 +511,7 @@ const renderThreads = () => {
                         <MDBCardTitle>Care Team</MDBCardTitle>
                         <MDBCardText>
                             <div>
-                                <b style={{ paddingRight: '10px' }}>Provider Name:</b>{coreContext.patient.ProviderName}
+                                <b style={{ paddingRight: '10px' }}>Provider:</b>{coreContext.patient.ProviderName}
                             </div>
                             <div >
                                 <b style={{ paddingRight: '10px' }}>Care Coordinator:</b>{coreContext.patient.CareName}
@@ -663,12 +662,12 @@ const renderThreads = () => {
                         <div className="card-body">
                             <Tabs>
                                 <TabList>
-                                    <Tab onClick={pause}>Allergies</Tab>
+                                    {/* <Tab onClick={pause}>Allergies</Tab>
                                     <Tab onClick={pause}>Lab Results</Tab>
-                                    <Tab onClick={pause}>Medications</Tab>
+                                    <Tab onClick={pause}>Medications</Tab> */}
                                     <Tab onClick={pause}>Vitals</Tab>
                                 </TabList>
-                                <TabPanel>
+                                {/* <TabPanel>
                                     Allergies
                                 </TabPanel>
                                 <TabPanel>
@@ -676,7 +675,7 @@ const renderThreads = () => {
                                 </TabPanel>
                                 <TabPanel>
                                     Medications
-                                </TabPanel>
+                                </TabPanel> */}
                                 <TabPanel>
                                     <Tabs>
                                         <TabList>
@@ -899,7 +898,7 @@ const renderThreads = () => {
                                         {/* //  {setTaskType("CarePlanReconciliation")} */}
                                         <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CaseCoordination" >Care Coordination</option>
+                                            <option value="CareCoordination" >Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
                                             <option value="Data Review">Data Review</option>
                                             <option value="Other">Others...</option>
@@ -1072,7 +1071,8 @@ const renderThreads = () => {
                                                 <button id="startTimer" className="btn btn-sm btn-success" onClick={start}>Start</button>
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
-                                                <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button> 
+                                                {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
+                                                <button type='button' onClick={() => {coreContext.AddTimeLog( taskType, performedBy, date, seconds, patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
@@ -1165,6 +1165,7 @@ const renderThreads = () => {
                                  
                             </div>
                         </div>
+                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,patientId, userName );setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>
                     </div>
             </Modal.Body>
         </Modal>
