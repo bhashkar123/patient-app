@@ -298,20 +298,26 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         { field: 
           'taskType', 
           headerName: 'Task Type', 
-          width: 150 ,  
-          type: 'string'},
+          width: 190 ,  
+          type: 'string',
+          //headerAlign: 'center'
+        
+        },
         {
           field: 'performedBy',
           headerName: 'Performed By',
           type: 'number',
           editable: false,
-          width: 150
+          width: 190,
+          //headerAlign: 'center'
         },
         {
             field: 'performedOn',
             headerName: 'Performed On',
-            width: 150,
+            width: 190,
+            //headerAlign: 'center',
             editable: false,
+            
 
             valueFormatter: (params) => {
                 const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
@@ -325,12 +331,14 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
             headerName: 'Time Amount',
             editable: false,
             type: Number,
-            width: 100
+            width: 100,
+            //headerAlign: 'center'
           },
           {
             field: 'startDT',
             headerName: 'Start Date',
-            width: 150,
+            width: 190,
+            //headerAlign: 'center',
             editable: false,
             valueFormatter: (params) => {
                 const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
@@ -343,7 +351,8 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
             field: 'endDT',
             headerName: 'End Date',
             editable: false,
-            width: 150,
+            //headerAlign: 'center',
+            width: 190,
             valueFormatter: (params) => {
                 const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
                  return `${valueFormatted}`;
@@ -1188,6 +1197,7 @@ const renderThreads = () => {
                                             <option value="SelectTask">Select a Task Type</option>
                                             <option value="CareCoordination">Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
+                                            <option value="Data Review">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
