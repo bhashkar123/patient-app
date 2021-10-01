@@ -511,7 +511,7 @@ const renderThreads = () => {
                         <MDBCardTitle>Care Team</MDBCardTitle>
                         <MDBCardText>
                             <div>
-                                <b style={{ paddingRight: '10px' }}>Provider Name:</b>{coreContext.patient.ProviderName}
+                                <b style={{ paddingRight: '10px' }}>Provider:</b>{coreContext.patient.ProviderName}
                             </div>
                             <div >
                                 <b style={{ paddingRight: '10px' }}>Care Coordinator:</b>{coreContext.patient.CareName}
@@ -662,12 +662,12 @@ const renderThreads = () => {
                         <div className="card-body">
                             <Tabs>
                                 <TabList>
-                                    <Tab onClick={pause}>Allergies</Tab>
+                                    {/* <Tab onClick={pause}>Allergies</Tab>
                                     <Tab onClick={pause}>Lab Results</Tab>
-                                    <Tab onClick={pause}>Medications</Tab>
+                                    <Tab onClick={pause}>Medications</Tab> */}
                                     <Tab onClick={pause}>Vitals</Tab>
                                 </TabList>
-                                <TabPanel>
+                                {/* <TabPanel>
                                     Allergies
                                 </TabPanel>
                                 <TabPanel>
@@ -675,7 +675,7 @@ const renderThreads = () => {
                                 </TabPanel>
                                 <TabPanel>
                                     Medications
-                                </TabPanel>
+                                </TabPanel> */}
                                 <TabPanel>
                                     <Tabs>
                                         <TabList>

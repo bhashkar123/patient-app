@@ -119,7 +119,7 @@ const Menu = (props) => {
             </li>
             <NavDropdown.Divider />
             {renderOrderInformation()}
-            {renderAverage()}
+            {/* {renderAverage()} */}
             {renderDeviceInformation()}
         </ul>
 

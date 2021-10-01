@@ -340,7 +340,7 @@ export const CoreContextProvider = props => {
                     patient.mobile = p.ContactNo.s;
                 }
                 if (p.DOB !== undefined) {
-                    patient.dob = p.DOB.s;
+                    patient.dob = Moment(p.DOB.s).format('MMM-DD-YYYY');
                 }
                 if (p.DoctorName !== undefined) {
                     patient.ProviderName = p.DoctorName.s;
