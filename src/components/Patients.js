@@ -449,11 +449,11 @@ const Patients = props => {
                             <Input label='Date of Birth' elementType='date' placeholder='Enter dob' onChange={e => setBirthDate(e.target.value)} required={true} register={register} errors={errors} name='dob' value={birthDate}/>
 {console.log(birthDate)}
 {/* <input type="date"/> */}
-//                          <Input label='Height (Inch)' elementType='number' minLength={1} maxLength={55} placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={height} required={true} register={register} errors={errors} />
+                         <Input label='Height (Inch)' elementType='number' minLength={1} maxLength={55} placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={height} required={true} register={register} errors={errors} />
                         </div>
                         <div className="col-md-6">
                           {console.log("sssss",provider)}
-                        <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} />
+                        {/* <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} /> */}
           
                             <Input label='Provider' name='provider' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
                             {/* {console.log(coreContext.careCoordinatorOptions,coreContext.coachOptions)} */}

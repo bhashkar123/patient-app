@@ -739,7 +739,7 @@ export const CoreContextProvider = props => {
             timelogData.forEach((tl, index) => {
                 console.log('p' + index, tl);
                 let tldata = {};
-
+                tldata.id=index;
                 if (tl.SK) {
                     tldata.SK = tl.SK.s;
                 }
@@ -2467,11 +2467,15 @@ export const CoreContextProvider = props => {
 
     }
 
-    const AddTimeLog = (taskType, performedBy, performedOn,timeAmount, patientId, userName) => {
+    const AddTimeLog = (taskType, performedBy, performedOn,timeAmount, startdate,patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
-        const date = new Date();
+        console.log("dhhgdfsghfsfs",startdate)
+        const date = new Date(startdate);
+        const end=new Date(startdate);
+        end.setSeconds(end.getSeconds() + timeAmount);
        
         const data = JSON.stringify({
+            "id":timeLogData.length+1,
                 "PK": "TIMELOG_READING",
                 "SK": "TIMELOG_READING_"+ taskType+"_" + performedBy +"_"+ performedOn+"_"+ timeAmount,
                 "GSI1PK": 'TIMELOG_READING_PATIENT_' + patientId,
@@ -2483,7 +2487,7 @@ export const CoreContextProvider = props => {
                 "PerformedOn": performedOn,
                 "TimeAmount":  timeAmount.toString(),
                 "StartDT": date,
-                "EndDT": date
+                "EndDT": end
             });
     
             axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
