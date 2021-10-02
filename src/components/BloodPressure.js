@@ -224,13 +224,6 @@ const BloodPressure = props => {
     }
 
     const patientcolumns = [
-      { 
-        field: 'UserName', 
-        headerName: 'Patient Name', 
-        width: 200 ,  
-        type: 'string',
-        
-      },
       {
         field: 'systolic',
         headerName: 'Systolic',
