@@ -67,12 +67,12 @@ const WeightAverage = (props) => {
 
 
       const patientcolumns = [
-        { field: 
-          'UserName', 
-          headerName: 'Patient Name', 
-          width: 200 ,  
-          type: 'string',
-        },
+        // { field: 
+        //   'UserName', 
+        //   headerName: 'Patient Name', 
+        //   width: 200 ,  
+        //   type: 'string',
+        // },
         {
           field: 'weight',
           headerName: 'Weight',

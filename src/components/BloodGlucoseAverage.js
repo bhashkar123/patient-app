@@ -175,29 +175,29 @@ const BloodGlucoseAverage = props => {
       }
 
     const patientcolumns = [
-      { 
-        field: 'UserName', 
-        headerName: 'Patient Name', 
-        width: 200 ,  
-        type: 'string',
-        renderCell: (params) => (
-          <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
-        )
-      },
-      {
-        field: 'reading',
-        headerName: 'Reading',
-        type: 'number',
-        editable: false,
-        width: 200
-      },
-      {
-        field: 'bloodglucosemmol',
-        headerName: 'Blood Glucose (mmol)',
-        type: 'number',
-        editable: false,
-        width: 200
-      },
+      // { 
+      //   field: 'UserName', 
+      //   headerName: 'Patient Name', 
+      //   width: 200 ,  
+      //   type: 'string',
+      //   renderCell: (params) => (
+      //     <a  href={`/patient-summary/${btoa(params.row.userId)}`}> {params.row.UserName} </a>
+      //   )
+      // },
+      // {
+      //   field: 'reading',
+      //   headerName: 'Reading',
+      //   type: 'number',
+      //   editable: false,
+      //   width: 200
+      // },
+      // {
+      //   field: 'bloodglucosemmol',
+      //   headerName: 'Blood Glucose (mmol)',
+      //   type: 'number',
+      //   editable: false,
+      //   width: 200
+      // },
       {
         field: 'bloodglucosemgdl',
         headerName: 'Blood Glucose (mgdl)',

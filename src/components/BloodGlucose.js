@@ -50,6 +50,18 @@ const BloodGlucose = props => {
           )
         },
         {
+          field: 'MeasurementDateTime',
+          headerName: 'Date Recorded',
+          editable: false,
+          width: 200,
+          type:'dateTime',
+          
+          valueFormatter: (params) => {
+              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
+               return `${valueFormatted}`;
+             },
+        },
+        {
           field: 'bloodglucosemmol',
           headerName: 'Blood Glucose (mmol)',
           type: 'number',
@@ -70,18 +82,7 @@ const BloodGlucose = props => {
           editable: false,
           width: 200
         },
-        {
-          field: 'MeasurementDateTime',
-          headerName: 'Date Recorded',
-          editable: false,
-          width: 200,
-          type:'dateTime',
-          
-          valueFormatter: (params) => {
-              const valueFormatted = Moment(params.value).format('MM-DD-YYYY hh:mm A')
-               return `${valueFormatted}`;
-             },
-        },
+        
         {
           field: 'CreatedDate',
           headerName: 'Date Received',

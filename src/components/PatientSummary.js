@@ -771,7 +771,7 @@ const renderThreads = () => {
                                             <Tab onClick={pause}>Blood GLucose Average</Tab>
                                             <Tab onClick={pause}>Weight</Tab>
                                             <Tab onClick={pause}>Weight Average</Tab>
-                                            <Tab onClick={pause}>Thresold</Tab>
+                                            <Tab onClick={pause}>Threshold</Tab>
                                         </TabList>
                                         <TabPanel>
                                         <div className='card'>
@@ -891,7 +891,7 @@ const renderThreads = () => {
                                 </TabPanel>
                             </Tabs>
                             <br /> <br />
-                            <Button className="mr-4" size="sm" variant="danger">New Allergy</Button>   <input type="checkbox" />  Patient has no allergies.
+                            {/* {/* {/* <Button className="mr-4" size="sm" variant="danger">New Allergy</Button>   <input type="checkbox" />  Patient has no allergies.
                             <table className='table table-bordered table-sm mt-4'>
                                 <th>Allergy</th>
                                 <th>Category</th>
@@ -900,9 +900,9 @@ const renderThreads = () => {
                                 <th>Critical</th>
                                 <th>Date Identified</th>
                                 <th>Actions</th>
-                            </table>
+                            </table> */}
                         </div>
-                    </div>
+                    </div> 
                 </TabPanel>
                 <TabPanel>
                     <div className="card">
