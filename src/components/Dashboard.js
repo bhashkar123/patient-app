@@ -100,9 +100,9 @@ const Dashboard = props => {
                     app.UserId == curr.userId);
                     if(patientTimelog.length > 0){
                         let totalTimeLog=0;
-                     //   console.log(patientTimelog);
+                        console.log("checktimedata",patientTimelog);
                         patientTimelog.map((timelog)=>{
-                             totalTimeLog=Moment.duration(timelog.timeAmount).asMinutes()+totalTimeLog;
+                             totalTimeLog=Number(timelog.timeAmount)+totalTimeLog;
                         });
                         if(totalTimeLog>=0 && totalTimeLog<=60){
                                 zero.push(curr.userId)
@@ -137,11 +137,12 @@ const Dashboard = props => {
                             //nine=nine+1;
                              
                          }
-                      
+                         console.log(totalTimeLog)
                     }
                     else{
                             inactive.push(curr.userId)
                     }
+                    
 
             })
             
