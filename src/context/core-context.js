@@ -1363,7 +1363,7 @@ export const CoreContextProvider = props => {
     }
 
 
-    const Registration = (name, email, phone, password, dob) => {
+    const Registration = (name, email, phone, password, dob, pcm, pp) => {
         const token = localStorage.getItem('app_jwt');
         const date = new Date();
         const id = date.getTime();

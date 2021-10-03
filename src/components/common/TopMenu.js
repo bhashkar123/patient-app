@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Navbar, Nav, NavDropdown, Button, Modal, Form, Row, Col, FormControl } from 'react-bootstrap';
 import { Envelope, ChatLeftText, BoxArrowLeft,FileMedicalFill,FileMedical, PencilSquare, Gear, People, 
     PersonLinesFill,Speedometer,Speedometer2, PersonPlusFill, BoxArrowRight, Telephone, PersonFill,SuitHeartFill,ThermometerHigh,Weight } from 'react-bootstrap-icons';
@@ -7,7 +7,8 @@ import { Envelope, ChatLeftText, BoxArrowLeft,FileMedicalFill,FileMedical, Penci
 import { CoreContext } from '../../context/core-context';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { ImMenu } from "react-icons/im";
-
+import Input from './Input';
+import { useForm } from "react-hook-form";
 
 
 
@@ -57,15 +58,22 @@ const TopMenu = ({changestyle,showSidebar}) => {
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([coreContext.patients]);
     const [patientName, setPatientName] = useState('');
-
-  
+    
+    const { register, handleSubmit, errors } = useForm({
+        mode: 'onSubmit',
+        reValidateMode: 'onBlur',
+    });
 
     const onChange = (event, { newValue }) => {
         setValue(newValue.name);
         setMobilePhone(newValue.mobile_phone);
     };
 
+    const fetchProviders = () => {
+        coreContext.fetchProviders();
+    }
 
+    useEffect(fetchProviders, []);
 
     // const fetchPatients = () => {
     //     coreContext.fetchPatients();
@@ -97,7 +105,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
         if (!gender) { alert('Choose gender...'); return; }
         if (!email) { alert('Enter email...'); return; }
 
-        coreContext.Registration(firstName, email, mobilePhone, lastName);
+        coreContext.Registration(firstName, email, mobilePhone, lastName,birthDate, pcm, pp);
         handleClose();
         // axios.post('add-patient', { firstName, lastName, birthDate, gender, language, ehrId, isccm, isrpm, pcm, pp, homePhone, mobilePhone, workPhone, preferred, phoneNotes, email, hasMobile, sendSms, street, zip, city, state, pos, raf }).then(response => {
         //     const status = response.data.status;
@@ -436,7 +444,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                             <Form.Control onChange={e => setLanguage(e.target.value)} value={language} size="sm" as="select">
                                 <option value=""></option>
                                 <option value='English'>English</option>
-                                <option value='Hindi'>Hindi</option>
+                                {/* <option value='Hindi'>Hindi</option> */}
                             </Form.Control>
                         </Form.Group>
                     </Col>
@@ -451,7 +459,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                 </Row>
                 <Row>
                     <Col>
-                        Eligible for Program
+                     Enrolled in Program
                     </Col>
                     <Col>
                         <Form.Check
@@ -480,13 +488,18 @@ const TopMenu = ({changestyle,showSidebar}) => {
                 </Row>
                 <Row style={{ marginTop: 20 }}>
                     <Col>
-                        <h6>Provider and Care Team</h6>
+                        <h6>Care Team</h6>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <Form.Group>
-                            <Form.Label>Primary Care Manager</Form.Label>
+                    <form>
+                    <Form.Label>Care Coordinator</Form.Label>
+                        <Input  name='coordinator' required={false} register={register}  value={pcm} elementType='select'  options={coreContext.careCoordinatorOptions}  onChange={e => setPcm(e.target.value)} />
+
+                    </form>
+                        {/* <Form.Group>
+                            <Form.Label>Care Coordinator</Form.Label>
                             <Form.Control size="sm" as="select" onChange={e => setPcm(e.target.value)} value={pcm}>
                                 <option value=""></option>
                                 <option value="Dykes, Kami">Dykes, Kami</option>
@@ -494,18 +507,20 @@ const TopMenu = ({changestyle,showSidebar}) => {
                                 <option value="Ortiz, Lisa">Ortiz, Lisa</option>
 
                             </Form.Control>
-                        </Form.Group>
+                        </Form.Group> */}
                     </Col>
                     <Col>
-                        <Form.Group>
-                            <Form.Label>Primary Physician</Form.Label>
-                            <Form.Control size="sm" as="select" onChange={e => setPp(e.target.value)} value={pp}>
-                                <option value=""></option>
-                                <option value="Dykes, Kami">Dykes, Kami</option>
-                                <option value="Ortiz, Lisa">Ortiz, Lisa</option>
-                                <option value="Woxb dZk">Woxb dZk</option>
+                    <form>
+                    <Form.Label>Provider</Form.Label>
+                        <Input  name='provider' required={false} register={register}  value={pp} elementType='select'  options={coreContext.providerOptions}  onChange={e => setPp(e.target.value)} />
+
+                    </form>
+                        {/* <Form.Group>
+                            <Form.Label>Providers</Form.Label>
+                            <Form.Control size="sm" as="select" onChange={e => setPp(e.target.value)} value={pp} options={coreContext.providerOptions} >
+                            
                             </Form.Control>
-                        </Form.Group>
+                        </Form.Group> */}
                     </Col>
                 </Row>
                 <Row style={{ marginTop: 20 }}>
@@ -561,7 +576,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                             <Form.Control size="sm" type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
                         </Form.Group>
                     </Col>
-                    <Col md='2'>
+                    {/* <Col md='2'>
                         <Form.Check
                             type='checkbox'
                             label='Has Mobile'
@@ -569,7 +584,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                             value={hasMobile}
                         />
 
-                    </Col>
+                    </Col> */}
                     <Col md='2'>
                         <Form.Check
                             type='checkbox'
@@ -582,7 +597,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                 <Row>
                     <Col>
                         <Form.Group>
-                            <Form.Label>Street</Form.Label>
+                            <Form.Label>Mailing address</Form.Label>
                             <Form.Control size="sm" type="text" placeholder="Enter Street Location" onChange={e => setStreet(e.target.value)} value={street} />
                         </Form.Group>
                     </Col>
@@ -607,12 +622,12 @@ const TopMenu = ({changestyle,showSidebar}) => {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Row style={{ marginTop: 20 }}>
+                {/* <Row style={{ marginTop: 20 }}>
                     <Col>
                         <h6>Additional</h6>
                     </Col>
-                </Row>
-                <Row>
+                </Row> */}
+                {/* <Row>
                     <Col>
                         <Form.Group>
                             <Form.Label>POS</Form.Label>
@@ -634,7 +649,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                             <Form.Control size="sm" type="text" placeholder="Enter RAF" onChange={e => setRaf(e.target.value)} value={raf} />
                         </Form.Group>
                     </Col>
-                </Row>
+                </Row> */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
