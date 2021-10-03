@@ -73,7 +73,13 @@ const TopMenu = ({changestyle,showSidebar}) => {
         coreContext.fetchProviders();
     }
 
+    const fetchCareCoordinator = () => {
+        coreContext.fetchCareCoordinator();
+    }
+
     useEffect(fetchProviders, []);
+
+    useEffect(fetchCareCoordinator, []);
 
     // const fetchPatients = () => {
     //     coreContext.fetchPatients();
