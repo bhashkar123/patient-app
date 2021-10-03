@@ -915,10 +915,12 @@ export const CoreContextProvider = props => {
     const UpdateProfie = (userName, email, phone, dob, height, weight, bmi) => {
         const userid = localStorage.getItem("userId");
         const token = localStorage.getItem('app_jwt');
+        let userType = localStorage.getItem("userType");
+        if(userType ==='') userType = 'patient'
         const data = {
             "TableName": userTable,
             "Key": {
-                "PK": { "S": "patient" },
+                "PK": { "S": userType },
                 "SK": { "S": userid }
             },
             "UpdateExpression": "SET ProfileImage = :v_ProfileImage ,UserName = :v_UserName , ContactNo = :v_ContactNo , DOB =:v_DOB , Height=:v_Height , weight=:v_weight ,UserTimeZone = :v_TimeZone,BMI= :v_BMI",
