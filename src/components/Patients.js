@@ -371,7 +371,7 @@ const Patients = props => {
                 </>
               );
         }
-        if (coreContext.patients.length > 0 && usertype !=='admin') {
+        if (coreContext.patients.length > 0 && usertype !=='admin' && coreContext.patients.name!==undefined) {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 
@@ -400,6 +400,12 @@ const Patients = props => {
       />
                 </div>
               );
+        }
+        else{
+          return(
+          <div style={{ height: 60, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+              <h1>No data Found</h1>
+              </div>)
         }
     }
     // const renderbuttons=()=>{

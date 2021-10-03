@@ -321,12 +321,18 @@ export const CoreContextProvider = props => {
             // setJwt(response.data);
             //  console.log(response.data);
             const patients = response.data;
+           // console.log("i need to check the patient",patients.length)
             const ps = [];
+            if (patients.length===0){
+                ps.push("No data found")
+            }
+            console.log("i need to check the patient",ps)
 
             patients.forEach((p , index) => {
                 let patient = {};
 
                 patient.id =index;
+                console.log("i need to check the patient",patient)
                 if (p.UserId !== undefined) {
                     patient.userId = p.UserId.n;
                 }
