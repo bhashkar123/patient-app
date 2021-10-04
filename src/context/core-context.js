@@ -588,6 +588,9 @@ export const CoreContextProvider = props => {
         ).then((response) => {
             const weightData = response.data;
             const dataSetwt = [];
+            if (weightData.length===0){
+                dataSetwt.push("no data found")
+            }
 
 
             weightData.forEach((wt, index) => {
@@ -1582,6 +1585,9 @@ export const CoreContextProvider = props => {
             const deviceData = response.data;
             const dataSetdevice = [];
             let deviceType = '';
+            if (deviceData.length===0){
+                dataSetdevice.push("no device found")
+            }
 
             //    console.log('deviceData', deviceData);
             deviceData.forEach((p, index) => {
@@ -1944,6 +1950,9 @@ export const CoreContextProvider = props => {
         ).then((response) => {
             const bloodpressureData = response.data;
             const dataSetbp = [];
+            if(bloodpressureData.length===0){
+                dataSetbp.push("No Data Found")
+            }
 
 
             bloodpressureData.forEach((bp, index) => {
@@ -2099,6 +2108,9 @@ export const CoreContextProvider = props => {
         ).then((response) => {
             const bloodglucoseData = response.data;
             const dataSetbg = [];
+            if (bloodglucoseData.length===0){
+                dataSetbg.push("No Data Found")
+            }
 
 
             bloodglucoseData.forEach((bg, index) => {

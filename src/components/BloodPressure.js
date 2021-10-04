@@ -316,7 +316,7 @@ const BloodPressure = props => {
         dgcolumns = patientcolumns;
      }
      
-     if (coreContext.bloodpressureData.length > 0) {
+     if (coreContext.bloodpressureData.length > 0 && coreContext.bloodpressureData[0].UserName!==undefined) {
       
 
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
@@ -339,6 +339,12 @@ const BloodPressure = props => {
               />
             </div>
           );
+     }
+     else{
+      return(
+        <div style={{ height: 60, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+            <h1>No data Found</h1>
+            </div>)
      }
         
     }

@@ -217,7 +217,7 @@ const BloodGlucose = props => {
       if(userType === 'patient'){
          dgcolumns = patientcolumns;
       }
-      if (coreContext.bloodglucoseData.length > 0) {
+      if (coreContext.bloodglucoseData.length > 0 && coreContext.bloodglucoseData[0].UserName!==undefined) {
         //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
           return (
               <div style={{ height: 680, width: '100%' }}>
@@ -232,6 +232,12 @@ const BloodGlucose = props => {
                 />
               </div>
             );
+       }
+       else{
+        return(
+          <div style={{ height: 60, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+              <h1>No data Found</h1>
+              </div>)
        }
     }
 
