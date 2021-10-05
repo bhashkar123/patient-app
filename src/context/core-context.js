@@ -1374,12 +1374,12 @@ export const CoreContextProvider = props => {
     }
 
 
-    const Registration = (name, email, phone, password, dob, pcm, pp) => {
+    const Registration = (username, firstname, middleName,lastname, email, phone, password, dob, pcm, pp) => {
         const token = localStorage.getItem('app_jwt');
         const date = new Date();
         const id = date.getTime();
         const data = {
-            "Username": email,
+            "Username": username,
             "Email": email,
             "Password": password
         };
@@ -1398,12 +1398,15 @@ export const CoreContextProvider = props => {
                     "PK": "patient",
                     "SK": "PATIENT_" + id, //"doctor",
                     "UserId": id,
-                    "UserName": name ,
+                    "UserName": username ,
                     "Email": email,
                     "ContactNo": phone,
                     "DOB": dob,
                     "UserType": "patient",
                     "CreatedDate": date,
+                    "FirstName" : firstname,
+                    "MiddleName" : middleName,
+                    "LastName": lastname,
                     "ActiveStatus": "Active"
 
                 });
