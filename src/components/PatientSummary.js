@@ -676,7 +676,7 @@ const renderThreads = () => {
         if (coreContext.patient)
             return <Tabs  onSelect={index => handleSelect(index)} onMouseLeave={index => handleLeaveTab(index)}>
                 <TabList>
-                    <Tab onClick={pause}>Conditions</Tab>
+                    {/* <Tab onClick={pause}>Conditions</Tab> */}
                     <Tab onClick={pause}>Programs</Tab>
                     <Tab onClick={pause}>Assesments</Tab>
                     <Tab onClick={pause}>Clinical Data</Tab>
@@ -690,7 +690,7 @@ const renderThreads = () => {
                     <Tab onClick={pause}>Portal</Tab>
                 </TabList>
 
-                <TabPanel>
+                {/* <TabPanel>
                     <div className="card">
                         <h4 className="card-header">
                             Condition
@@ -706,7 +706,7 @@ const renderThreads = () => {
                             </table>
                         </div>
                     </div>
-                </TabPanel>
+                </TabPanel> */}
                 <TabPanel>
                     <div className="card">
                         <h4 className="card-header">
@@ -751,7 +751,7 @@ const renderThreads = () => {
                                     {/* <Tab onClick={pause}>Allergies</Tab>
                                     <Tab onClick={pause}>Lab Results</Tab>
                                     <Tab onClick={pause}>Medications</Tab> */}
-                                    <Tab onClick={pause}>Vitals</Tab>
+                                    {/* <Tab onClick={pause}>Vitals</Tab> */}
                                 </TabList>
                                 {/* <TabPanel>
                                     Allergies

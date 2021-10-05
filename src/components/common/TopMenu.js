@@ -26,8 +26,11 @@ const TopMenu = ({changestyle,showSidebar}) => {
     const handleMessageModalShow = () => setShowMessageModal(true);
 
     const [message, setMessage] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [userName, setuserName] = useState('');
+    const [pwd, setpwd] = useState('');
+    const [firstName, setfirstName] = useState('');
+    const [middleName, setmiddleName] = useState('');
+    const [lastName, setlastName] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [gender, setGender] = useState('');
     const [language, setLanguage] = useState('');
@@ -103,26 +106,19 @@ const TopMenu = ({changestyle,showSidebar}) => {
     }
 
     const onCreatePatientSubmit = () => {
-        if (!firstName) {
+        if (!userName) {
             alert('Enter user name...'); return;
-        } if (!lastName) {
+        } if (!pwd) {
             alert('Enter password...'); return;
         } if (!birthDate) { alert('Enter date of birth...'); return; }
         if (!gender) { alert('Choose gender...'); return; }
+        if (!firstName) { alert('Enter First Name .'); return; }
+        if (!lastName) { alert('Enter Last Name .'); return; }
         if (!email) { alert('Enter email...'); return; }
 
-        coreContext.Registration(firstName, email, mobilePhone, lastName,birthDate, pcm, pp);
+        coreContext.Registration(userName,firstName, middleName, lastName, email, mobilePhone, pwd,birthDate, pcm, pp);
         handleClose();
-        // axios.post('add-patient', { firstName, lastName, birthDate, gender, language, ehrId, isccm, isrpm, pcm, pp, homePhone, mobilePhone, workPhone, preferred, phoneNotes, email, hasMobile, sendSms, street, zip, city, state, pos, raf }).then(response => {
-        //     const status = response.data.status;
-        //     if (status.trim() === 'success') {
-        //         console.log(response.data.patient);
-        //         const url = 'patient-summary/' + response.data.patient;
-        //         window.location.assign(url);
-        //     } else {
-        //         alert('Error creating patient....');
-        //     }
-        // })
+      
     }
 
     const onSendMessage = () => {
@@ -343,11 +339,11 @@ const TopMenu = ({changestyle,showSidebar}) => {
                 <Modal.Title>Verification Code</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Enter the verification code sent on your Email ID {firstName}</p>
+                <p>Enter the verification code sent on your Email ID {userName}</p>
                 <input type="text" className='form-control' value={verificationCode} onChange={e => setVerificationCode(e.target.value)} />
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={() => coreContext.verifyProviderVerificationCode(verificationCode, firstName)}>
+                <Button variant="primary" onClick={() => coreContext.verifyProviderVerificationCode(verificationCode, userName)}>
                     Submit
                 </Button>
                 <Button variant="secondary" onClick={coreContext.handleProviderModalClose}>
@@ -418,12 +414,39 @@ const TopMenu = ({changestyle,showSidebar}) => {
                     <Col>
                         <Form.Group>
                             <Form.Label>User Name*</Form.Label>
-                            <Form.Control size="sm" type="text" onChange={e => setFirstName(e.target.value)} value={firstName} placeholder="Enter user name" />
+                            <Form.Control size="sm" type="text" onChange={e => setuserName(e.target.value)} value={userName} placeholder="Enter user name" />
                         </Form.Group>
-                    </Col>  <Col>
+                    </Col>  
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control size="sm" type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
+                        </Form.Group>
+                    </Col>
+                    <Col>
                         <Form.Group>
                             <Form.Label>Password*</Form.Label>
-                            <Form.Control size="sm" type="password" onChange={e => setLastName(e.target.value)} value={lastName} placeholder="Enter Password" />
+                            <Form.Control size="sm" type="password" onChange={e => setpwd(e.target.value)} value={pwd} placeholder="Enter Password" />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>First Name*</Form.Label>
+                            <Form.Control size="sm" type="text" onChange={e => setfirstName(e.target.value)} value={firstName} placeholder="Enter First name" />
+                        </Form.Group>
+                    </Col> 
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Middle Name</Form.Label>
+                            <Form.Control size="sm" type="text" onChange={e => setmiddleName(e.target.value)} value={middleName} placeholder="Enter Middle name" />
+                        </Form.Group>
+                    </Col> 
+                     <Col>
+                        <Form.Group>
+                            <Form.Label>Last Name*</Form.Label>
+                            <Form.Control size="sm" type="password" onChange={e => setlastName(e.target.value)} value={lastName} placeholder="Enter Last Name" />
                         </Form.Group>
                     </Col>
                 </Row>
@@ -450,6 +473,8 @@ const TopMenu = ({changestyle,showSidebar}) => {
                             <Form.Control onChange={e => setLanguage(e.target.value)} value={language} size="sm" as="select">
                                 <option value=""></option>
                                 <option value='English'>English</option>
+                                <option value='Spanish'>Spanish</option>
+                                
                                 {/* <option value='Hindi'>Hindi</option> */}
                             </Form.Control>
                         </Form.Group>
@@ -576,12 +601,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md='8'>
-                        <Form.Group>
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control size="sm" type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
-                        </Form.Group>
-                    </Col>
+                   
                     {/* <Col md='2'>
                         <Form.Check
                             type='checkbox'
