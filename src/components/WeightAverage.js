@@ -157,7 +157,7 @@ const WeightAverage = (props) => {
          dgcolumns = patientcolumns;
       }
       
-        if (coreContext.weightData.length > 0){
+        if (coreContext.weightData.length > 0 && coreContext.weightData[0].UserName!==undefined){
         //  coreContext.weightData  = coreContext.weightData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
         return (
             <div style={{ height: 680, width: '100%' }}>
@@ -171,6 +171,12 @@ const WeightAverage = (props) => {
             </div>
           );
         }
+        else{
+          return(
+            <div style={{ height: 60, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                <h1>No data Found</h1>
+                </div>)
+         }
        
     }
 

@@ -335,7 +335,7 @@ const Patients = props => {
             /></div>
               );
         }
-        if (coreContext.patients.length > 0 && usertype ==='admin') {
+        if (coreContext.patients.length > 0 && usertype ==='admin'&& coreContext.patients[0].name!==undefined) {
             return (
               <>
               
@@ -371,7 +371,7 @@ const Patients = props => {
                 </>
               );
         }
-        if (coreContext.patients.length > 0 && usertype !=='admin' && coreContext.patients.name!==undefined) {
+        if (coreContext.patients.length > 0 && usertype !=='admin' && coreContext.patients[0].name!==undefined) {
             return (
                 <div style={{ height: 680, width: '100%' }}>
                   <DataGrid 

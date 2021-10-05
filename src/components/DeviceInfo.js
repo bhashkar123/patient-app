@@ -71,7 +71,7 @@ const Deviceinfo = props => {
         /></div>
           );
     }
-        if (coreContext.deviceData.length > 0){
+        if (coreContext.deviceData.length > 0 && coreContext.deviceData[0].username!==undefined){
         return (
             <div style={{ height: 680, width: '100%' }}>
               <DataGrid
@@ -82,6 +82,12 @@ const Deviceinfo = props => {
               />
             </div>
           );
+        }
+        else{
+          return(
+            <div style={{ height: 60, width: '100%',display: 'flex',  justifyContent:'center', marginTop: '10px', alignItems:'center' }}>
+                <h1>No data Found</h1>
+                </div>)
         }
        
     }
