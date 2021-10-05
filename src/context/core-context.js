@@ -273,7 +273,7 @@ export const CoreContextProvider = props => {
                 }
             }
         }
-        
+
         if (usertype === "doctor") {
             data = {
                 "TableName": userTable,
@@ -425,6 +425,17 @@ export const CoreContextProvider = props => {
                     patient.ActiveStatus = p.ActiveStatus.s;
                 }
 
+                if (p.FirstName !== undefined) {
+                    patient.FirstName = p.FirstName.s;
+                }
+
+                if (p.LastName !== undefined) {
+                    patient.LastName = p.LastName.s;
+                }
+
+                if(patient.FirstName !==undefined && patient.LastName){
+                        patient.name = patient.FirstName + "," + patient.LastName;
+                }
                 // if (patient.userId !== undefined && patient.name) {
                 //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
                 // }
