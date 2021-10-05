@@ -133,11 +133,27 @@ const Patients = props => {
       setBirthDate(patient.dob);
       setPhone(patient.mobile);
       setPatientId(patient.userId);
-      setProvider(
-        coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
-        )
-        setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
-     setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
+      if(patient.ProviderName ===undefined) {
+        patient.ProviderName='Select Provider';
+        setProvider('');
+      }else{
+        setProvider(coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value)
+      }
+
+      if(patient.CareName ===undefined) {
+        patient.CareName='Select Coordinator';
+        setCoordinator('');
+      }else
+      {
+        setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value);
+      }
+
+    if(patient.CoachName ===undefined){
+      patient.CoachName='Select Coach';
+      setCoach('');
+      } else{
+      setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value);
+      }
       handleAssignDrModalShow();
   }
   
