@@ -91,7 +91,7 @@ const Patients = props => {
     }
 
     useEffect(fetchCareCoordinator, []);
-    useEffect(fetchPatients, [coreContext.patients.length]);
+    
    
 
     const fetchCoach = () => {
@@ -160,7 +160,15 @@ const Patients = props => {
       handleAssignDrModalShow();
   }
   
-    
+  const onToggleChangeActiveUsers = (event) => {
+     setChecked(event.target.checked);
+     let isactiveusrs =event.target.checked;
+     let userId = localStorage.getItem("userId");
+     if(isactiveusrs)coreContext.fetchPatientListfromApi(usertype, userId,isactiveusrs);
+  }
+
+  useEffect(fetchPatients, [coreContext.patients.length]);
+  
     const deletePatient = (patient) => {
         coreContext.DeletePatient(patient.userId)
     }
@@ -457,7 +465,8 @@ const Patients = props => {
         <caption>Patients' List <span className="float-right mr-5">Active<Switch
         color="primary"
       checked={checked}
-      onChange={(event)=>setChecked(event.target.checked)}
+      //onChange={(event)=>setChecked(event.target.checked)}
+      onChange={onToggleChangeActiveUsers}
       // inputProps={{ 'aria-label': 'controlled' }}
     />All</span> </caption>
         
