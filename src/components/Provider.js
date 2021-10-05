@@ -178,6 +178,12 @@ const Provider = props => {
     }, 
 ];
 
+    const onEmailChangedHandler = (e) => {
+      setEmail(e.target.value);
+      setName(e.target.value);
+    }
+
+
     const showEditForm = (patient) => {
          setName(patient.provider);
          setPhone(patient.phone);
@@ -218,13 +224,12 @@ const Provider = props => {
         <h4 className="card-header">PROVIDER INFORMATION</h4>
         <div className="card-body">
             <form class="form-inline">
-
-                <input type="text" value={name} onChange={e => setName(e.target.value)} class="form-control mb-2 mr-sm-2" placeholder="Enter name" />
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} class="form-control mb-2 mr-sm-2" placeholder="Enter email" />
+                <input type="email" value={email} onChange={onEmailChangedHandler} class="form-control mb-2 mr-sm-2" placeholder="Enter email" />
                 <input type="text" value={phone} onChange={e => setPhone(e.target.value)} class="form-control mb-2 mr-sm-2" placeholder="Enter phone" />
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)} class="form-control mb-2 mr-sm-2" placeholder="Enter password" />
                 <input type="password" value={confirmpassword} onChange={e => setConfirmPassword(e.target.value)} class="form-control mb-2 mr-sm-2" placeholder="Confirm Enter password" />
-
+                <input type="text" readOnly= {true} value={name}  class="form-control mb-2 mr-sm-2" placeholder="Enter User Name" />
+              
                 <button type="button" class="btn btn-primary mb-2" onClick={() => coreContext.addProvider(name, email, phone, password)}>Add Provider</button>
             </form>
         </div>

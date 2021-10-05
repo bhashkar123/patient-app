@@ -26,7 +26,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
     const handleMessageModalShow = () => setShowMessageModal(true);
 
     const [message, setMessage] = useState('');
-    const [userName, setuserName] = useState('');
+    const [userName, setUserName] = useState('');
     const [pwd, setpwd] = useState('');
     const [firstName, setfirstName] = useState('');
     const [middleName, setmiddleName] = useState('');
@@ -78,6 +78,11 @@ const TopMenu = ({changestyle,showSidebar}) => {
 
     const fetchCareCoordinator = () => {
         coreContext.fetchCareCoordinator();
+    }
+
+    const onEmailChangedHandler = (e) => {
+        setEmail(e.target.value);
+        setUserName(e.target.value);
     }
 
     useEffect(fetchProviders, []);
@@ -413,14 +418,8 @@ const TopMenu = ({changestyle,showSidebar}) => {
                 <Row>
                     <Col>
                         <Form.Group>
-                            <Form.Label>User Name*</Form.Label>
-                            <Form.Control size="sm" type="text" onChange={e => setuserName(e.target.value)} value={userName} placeholder="Enter user name" />
-                        </Form.Group>
-                    </Col>  
-                    <Col>
-                        <Form.Group>
                             <Form.Label>Email</Form.Label>
-                            <Form.Control size="sm" type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} value={email} />
+                            <Form.Control size="sm" type="email" placeholder="Email" onChange={onEmailChangedHandler} value={email} />
                         </Form.Group>
                     </Col>
                     <Col>
@@ -429,6 +428,12 @@ const TopMenu = ({changestyle,showSidebar}) => {
                             <Form.Control size="sm" type="password" onChange={e => setpwd(e.target.value)} value={pwd} placeholder="Enter Password" />
                         </Form.Group>
                     </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>User Name*</Form.Label>
+                            <Form.Control size="sm" readOnly= {true}  type="text"  value={userName} placeholder="Enter user name" />
+                        </Form.Group>
+                    </Col>  
                 </Row>
                 <Row>
                     <Col>

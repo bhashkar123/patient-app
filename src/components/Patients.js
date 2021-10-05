@@ -91,7 +91,7 @@ const Patients = props => {
     }
 
     useEffect(fetchCareCoordinator, []);
-    useEffect(fetchPatients, [coreContext.patients.length]);
+    
    
 
     const fetchCoach = () => {
@@ -136,15 +136,39 @@ const Patients = props => {
       setBirthDate(patient.dob);
       setPhone(patient.mobile);
       setPatientId(patient.userId);
-      setProvider(
-        coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
-        )
-        setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
-     setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
+      if(patient.ProviderName ===undefined) {
+        patient.ProviderName='Select Provider';
+        setProvider('');
+      }else{
+        setProvider(coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value)
+      }
+
+      if(patient.CareName ===undefined) {
+        patient.CareName='Select Coordinator';
+        setCoordinator('');
+      }else
+      {
+        setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value);
+      }
+
+    if(patient.CoachName ===undefined){
+      patient.CoachName='Select Coach';
+      setCoach('');
+      } else{
+      setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value);
+      }
       handleAssignDrModalShow();
   }
   
-    
+  const onToggleChangeActiveUsers = (event) => {
+     setChecked(event.target.checked);
+     let isactiveusrs =event.target.checked;
+     let userId = localStorage.getItem("userId");
+     if(isactiveusrs)coreContext.fetchPatientListfromApi(usertype, userId,isactiveusrs);
+  }
+
+  useEffect(fetchPatients, [coreContext.patients.length]);
+  
     const deletePatient = (patient) => {
         coreContext.DeletePatient(patient.userId)
     }
@@ -192,32 +216,39 @@ const Patients = props => {
             width: 130
           },
           {
-            field: 'Weight',
-            headerName: 'Weight',
-            type: "number",
-            width: 125,
+            field: 'ActiveStatus',
+            headerName: 'ActiveStatus',
             editable: false,
+            type: "string",
+            width: 130
           },
-          {
-            field: 'diastolic',
-            headerName: 'Diastolic',
-            type: "number",
-            width: 140,
-            editable: false,
-          },
-          {
-            field: 'systolic',
-            headerName: 'Systolic',
-            type: "number",
-            width: 140,
-            editable: false,
-          },
-          {
-            field: 'BMI',
-            headerName: 'BMI',
-            width:175,
-            editable: false,
-          },
+          // {
+          //   field: 'Weight',
+          //   headerName: 'Weight',
+          //   type: "number",
+          //   width: 125,
+          //   editable: false,
+          // },
+          // {
+          //   field: 'diastolic',
+          //   headerName: 'Diastolic',
+          //   type: "number",
+          //   width: 140,
+          //   editable: false,
+          // },
+          // {
+          //   field: 'systolic',
+          //   headerName: 'Systolic',
+          //   type: "number",
+          //   width: 140,
+          //   editable: false,
+          // },
+          // {
+          //   field: 'BMI',
+          //   headerName: 'BMI',
+          //   width:175,
+          //   editable: false,
+          // },
           { 
             field: "", 
             headerName: "Action",
@@ -276,26 +307,33 @@ const Patients = props => {
             width: 130
           },
           {
-            field: 'Weight',
-            headerName: 'Weight',
-            type: "number",
-            width: 125,
+            field: 'ActiveStatus',
+            headerName: 'ActiveStatus',
             editable: false,
+            type: "string",
+            width: 130
           },
-          {
-            field: 'diastolic',
-            headerName: 'Diastolic',
-            type: "number",
-            width: 140,
-            editable: false,
-          },
-          {
-            field: 'systolic',
-            headerName: 'Systolic',
-            type: "number",
-            width: 140,
-            editable: false,
-          },
+          // {
+          //   field: 'Weight',
+          //   headerName: 'Weight',
+          //   type: "number",
+          //   width: 125,
+          //   editable: false,
+          // },
+          // {
+          //   field: 'diastolic',
+          //   headerName: 'Diastolic',
+          //   type: "number",
+          //   width: 140,
+          //   editable: false,
+          // },
+          // {
+          //   field: 'systolic',
+          //   headerName: 'Systolic',
+          //   type: "number",
+          //   width: 140,
+          //   editable: false,
+          // },
           {
             field: 'BMI',
             headerName: 'BMI',
@@ -427,7 +465,8 @@ const Patients = props => {
         <caption>Patients' List <span className="float-right mr-5">Active<Switch
         color="primary"
       checked={checked}
-      onChange={(event)=>setChecked(event.target.checked)}
+      //onChange={(event)=>setChecked(event.target.checked)}
+      onChange={onToggleChangeActiveUsers}
       // inputProps={{ 'aria-label': 'controlled' }}
     />All</span> </caption>
         

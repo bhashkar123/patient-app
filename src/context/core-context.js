@@ -242,6 +242,7 @@ export const CoreContextProvider = props => {
         })
 
     }
+
     const getdp=(d)=>{
         const token = localStorage.getItem('app_jwt');
 
@@ -250,19 +251,29 @@ export const CoreContextProvider = props => {
     }
     console.log(dpatient)
     // capture from patient List page.
-    const fetchPatientListfromApi  = async (usertype, userId) => {
+    const fetchPatientListfromApi  = async (usertype, userId, AllActive) => {
         const token = localStorage.getItem('app_jwt');
        
         let data = "";
 
         if (usertype === "admin") {
-            data = {
-                "TableName": userTable,
-                "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
-                "FilterExpression":"ActiveStatus = :v_status",
-                "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"},":v_status":{"S":"Active"}}
+           
+            if(AllActive){
+                data = {
+                    "TableName": userTable,
+                    "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
+                    "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"}}
+                }
+            }else{
+                data = {
+                    "TableName": userTable,
+                    "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
+                    "FilterExpression":"ActiveStatus = :v_status",
+                    "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"},":v_status":{"S":"Active"}}
+                }
             }
         }
+        
         if (usertype === "doctor") {
             data = {
                 "TableName": userTable,
@@ -410,6 +421,9 @@ export const CoreContextProvider = props => {
                
                 }
                 
+                if (p.ActiveStatus !== undefined) {
+                    patient.ActiveStatus = p.ActiveStatus.s;
+                }
 
                 // if (patient.userId !== undefined && patient.name) {
                 //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
@@ -1322,7 +1336,7 @@ export const CoreContextProvider = props => {
         const date = new Date();
         const id = date.getTime();
         const data = {
-            "Username": email,
+            "UserName": email,
             "Email": email,
             "Password": password
         };
