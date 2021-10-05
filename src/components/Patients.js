@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { CoreContext } from '../context/core-context';
 import { Table, Pagination, Modal, Button, Form } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
@@ -9,6 +9,8 @@ import { IconName } from "react-icons/bs";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import Input from './common/Input';
+import * as React from 'react';
+import Switch from '@material-ui/core/Switch';
 
 
 import {
@@ -52,6 +54,7 @@ const Patients = props => {
     const [message, setMessage] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [actionPatients, setActionPatients] = useState([]);
+    const [checked, setChecked] = useState(false);
 
     const handleModalClose = () => setShowModal(false);
     const handleModalShow = () => setShowModal(true);
@@ -421,7 +424,13 @@ const Patients = props => {
         
         
          <Table striped bordered hover responsive size='sm'>
-        <caption>Patients' List  </caption>
+        <caption>Patients' List <span className="float-right mr-5">Active<Switch
+        color="primary"
+      checked={checked}
+      onChange={(event)=>setChecked(event.target.checked)}
+      // inputProps={{ 'aria-label': 'controlled' }}
+    />All</span> </caption>
+        
         {/* {renderbuttons()} */}
         {/* {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px',marginLeft:'20px' }}  >
                 <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
