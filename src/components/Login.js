@@ -50,7 +50,7 @@ const Login = (props) => {
         <div className="card-body">
         
         <Form autoComplete='off' onSubmit={handleSubmit(login)} noValidate>
-                                <Input label='Email' elementType='text' minLength={5} maxLength={55} placeholder='Enter user name' onChange={onEmailChangedHandler} name='email' required={true} register={register} errors={errors} />
+                                <Input label='Email' elementType='text' minLength={5} maxLength={55} placeholder='Enter Email' onChange={onEmailChangedHandler} name='email' required={true} register={register} errors={errors} />
                                 <Input label='Password' elementType='password' placeholder='Enter Password' onChange={onPasswordChangedHandler} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='password' />
                                 <Input blockButton={true} value='Log In' elementType='button' variant='primary' />
                                 <br />

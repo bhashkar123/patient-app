@@ -23,6 +23,7 @@ const SignUp = (props) => {
 
     const onEmailChangedHandler = (e) => {
         setEmail(e.target.value);
+        setUserName(e.target.value);
     }
 
     const onUserNameChangedHandler = (e) => {
@@ -83,7 +84,7 @@ const SignUp = (props) => {
                         <div className="card-title mx-auto"><h3><Badge variant="success">Sign Up</Badge></h3></div>
                         <div className="card-body">
                             <Form autoComplete='off' onSubmit={handleSubmit(registerUser)} noValidate>
-                                <Input label='User Name' elementType='text' minLength={5} maxLength={55} placeholder='Enter user name' onChange={onUserNameChangedHandler} name='userName' required={true} register={register} errors={errors} />
+                                <Input label='User Name'  elementType='text' minLength={5} maxLength={55} placeholder='Enter user name'  name='userName' required={true} register={register} errors={errors} />
 
                                 <Input label='Phone' elementType='text' placeholder='Enter phone' onChange={onPhoneChangedHandler} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='phone' />
 

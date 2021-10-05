@@ -242,6 +242,7 @@ export const CoreContextProvider = props => {
         })
 
     }
+
     const getdp=(d)=>{
         const token = localStorage.getItem('app_jwt');
 
@@ -1322,7 +1323,7 @@ export const CoreContextProvider = props => {
         const date = new Date();
         const id = date.getTime();
         const data = {
-            "Username": email,
+            "UserName": email,
             "Email": email,
             "Password": password
         };
