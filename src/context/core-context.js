@@ -263,6 +263,11 @@ export const CoreContextProvider = props => {
                 "FilterExpression":"ActiveStatus = :v_status",
                 "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"},":v_status":{"S":"Active"}}
             }
+            // data = {
+            //     "TableName": userTable,
+            //     "KeyConditionExpression":"PK = :v_PK AND begins_with(SK, :v_SK)",
+            //     "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":"PATIENT_"}}
+            // }
         }
         if (usertype === "doctor") {
             data = {
@@ -411,6 +416,9 @@ export const CoreContextProvider = props => {
                
                 }
                 
+                if (p.ActiveStatus !== undefined) {
+                    patient.ActiveStatus = p.ActiveStatus.s;
+                }
 
                 // if (patient.userId !== undefined && patient.name) {
                 //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
