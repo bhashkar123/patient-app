@@ -346,6 +346,9 @@ export const CoreContextProvider = props => {
                 let patient = {};
 
                 patient.id =index;
+
+                patient.mobilePhone ='';
+
                 console.log("i need to check the patient",patient)
                 if (p.UserId !== undefined) {
                     patient.userId = p.UserId.n;
@@ -437,8 +440,37 @@ export const CoreContextProvider = props => {
                 }
 
                 if(patient.firstName !==undefined && patient.lastName){
-                        patient.name = patient.firstName + "," + patient.lastName;
+                        patient.name = patient.lastName + ","+"  " + patient.firstName;
                 }
+
+                if (p.Gender !== undefined) {
+                    patient.gender = p.Gender.s;
+                }
+
+                if (p.Lang !== undefined) {
+                    patient.language = p.Lang.s;
+                }
+
+                if (p.Street !== undefined) {
+                    patient.street = p.Street.s;
+                }
+
+                if (p.City !== undefined) {
+                    patient.city = p.City.s;
+                }
+
+                if (p.Zip !== undefined) {
+                    patient.zip = p.Zip.s;
+                }
+
+                if (p.WorkPhone !== undefined) {
+                    patient.workPhone = p.WorkPhone.s;
+                }
+
+                if (p.MobilePhone !== undefined) {
+                    patient.mobilePhone = p.MobilePhone.s;
+                }
+
                 // if (patient.userId !== undefined && patient.name) {
                 //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
                 // }
@@ -1007,15 +1039,14 @@ export const CoreContextProvider = props => {
         coachvalue.value ="";
        
 
+        if(coordinator =="") coordinator = ccvalue.value;
+        if(provider =="") provider = providervalue.value;
+        if(coach =="") coach = coachvalue.value;
+
         let providername = fetchNameFromId(provider, providerOptions);
         let carecoordinatorname = fetchNameFromId(coordinator, careCoordinatorOptions);
         let coachname = fetchNameFromId(coach, coachOptions);
        
-        if(providername.value=="")  providername.value = providername.name;
-        if(carecoordinatorname.value=="")  carecoordinatorname.value = carecoordinatorname.name;
-        if(coachname.value=="")  coachname.value = coachname.name;
-     
-
         let gendervalue = "Male";
         if(gender === 1) gendervalue ="Female";
         if(gender === 0) gendervalue ="Male";
@@ -1031,9 +1062,9 @@ export const CoreContextProvider = props => {
                 "SK": { "S": "PATIENT_" +patientId }
             },
             "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB,"+
-            "Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName"+
-            "Gender = :v_Gender, Language = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street" +
-            "Zip = :v_Zip, City = :v_City, State = :v_State" ,
+            "Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName,"+
+            "Gender = :v_Gender, Lang = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street," +
+            "Zip = :v_Zip, City = :v_City, St = :v_State" ,
             "ExpressionAttributeValues":{":v_GSI1SK":{"S":""+providername.value+""},
             ":v_GSI1PK":{"S":"patient"},
             ":v_firstname":{"S": fname},
@@ -1459,13 +1490,13 @@ export const CoreContextProvider = props => {
                     "LastName": lastname,
                     "ActiveStatus": "Active",
                     "Gender": gender,
-                    "Language": language,
+                    "Lang": language,
                     "WorkPhone": workPhone,
                     "MobilePhone": mobilePhone,
                     "Street": street,
                     "Zip": zip,
                     "City": city,
-                    "State": state
+                    "St": state
                 });
 
                 axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {

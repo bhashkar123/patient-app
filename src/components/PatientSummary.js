@@ -1046,7 +1046,7 @@ const renderThreads = () => {
                                             {console.log("checkdatebsjfhs",startDT)}
                                         </div>
                                         <div className="col-md-12">
-                                        <label for="appt">Enter Manual Time:</label>
+                                        <label for="appt">Enter Total Time:</label>
                                         <input className="form-control mb-2 mr-sm-2" type="time" min='00:00:00' max='23:59:59'  value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
                                             </div>
                                     </div>
@@ -1263,7 +1263,7 @@ const renderThreads = () => {
                                             {console.log("checkdatebsjfhs",startDT)}
                                         </div>
                                         <div className="col-md-12">
-                                        <label for="appt">Enter Manual Time:</label>
+                                        <label for="appt">Enter Total Time:</label>
                                         <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
                                             </div>
                                     </div>
