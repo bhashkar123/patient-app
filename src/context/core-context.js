@@ -2520,11 +2520,12 @@ export const CoreContextProvider = props => {
 
     }
 
-    const AddTimeLog = (taskType, performedBy, performedOn,timeAmount, startdate,patientId, userName) => {
+    const AddTimeLog = (taskType, performedBy,performedOn,timeAmount, startdate,patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
-        console.log("dhhgdfsghfsfs",startdate)
+        console.log("chek the value of time log",timeAmount)
         const date = new Date(startdate);
         const end=new Date(startdate);
+        //alert(timeAmount)
         end.setSeconds(end.getSeconds() + timeAmount);
        
         const data = JSON.stringify({
@@ -2559,7 +2560,7 @@ export const CoreContextProvider = props => {
 
     }
 
-    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, patientId, userName) => {
+    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate,time, patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
 
 
@@ -2569,11 +2570,12 @@ export const CoreContextProvider = props => {
                 "PK": { "S": "TIMELOG_READING" },
                 "SK": { "S": timelog.SK}
             },
-            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn",
+            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn, TimeAmount = :v_TimeAmount",
             "ExpressionAttributeValues":{":v_TaskType":{"S":""+taskType+""},
             ":v_PerformedBy":{"S":""+performedBy+""},
-            ":v_PerformedOn":{"S": performeddate}
-               }
+            ":v_PerformedOn":{"S": performeddate},
+            ":v_TimeAmount":{"S":""+time+""}  
+            }
         };
 
        

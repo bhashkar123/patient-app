@@ -66,6 +66,7 @@ const PatientSummary  = props =>  {
     const [PatientId, setPatientId] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [t1,sett1]=useState("");
+    
 
     const [diastolicMin, setDiastolicMin] = useState(0);
     const [diastolicMax, setDiastolicMax] = useState(0);
@@ -91,7 +92,8 @@ const PatientSummary  = props =>  {
     const [startDT, setstartDT] = useState('');
     const [totalLogtime, settotalLogtime] = useState(0);
     const [currTimeLog, setCurrentTimeLog] = useState('');
-
+    const [timevalue,settimevalue]=useState('');
+    const [efforts,setEfforts]=useState(0);
     
     const greeting = 'Welcome to React';
     const [Prompt,setDirty, setPristine] = Alert();
@@ -292,7 +294,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
     }
 
     const handleUpdate=()=>{
-        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);
+        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);
     }
     const columns = [
         { field: 
@@ -331,7 +333,11 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
             headerName: 'Time Amount',
             editable: false,
             type: Number,
-            width: 100,
+            width: 200,
+            valueFormatter: (params) => {
+                const valueFormatted =converter(params.value);
+                 return `${valueFormatted}`;
+               },
             //headerAlign: 'center'
           },
           {
@@ -384,11 +390,22 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         setShowModal(true);
         //alert(tl.taskType);
         setCurrentTimeLog(tl);
+     setTaskType(tl.taskType)
         setPerformedBy(tl.performedBy);
         setDate(new Date(tl.performedOn));
         console.log("chjdjjsd",tl.performedOn)
-        setTaskType(tl.taskType)
+        //setTaskType(tl.taskType)
+        //alert(converter(3660))
+        settimevalue(converter(tl.timeAmount));
     }
+    const converter=(sec)=>{
+        let h=Math.floor(sec/3600)
+        let m=Math.floor((sec%3600)/60)
+        let s=Math.floor(sec%60)
+        return ('0' + String(h)).slice(-2)+":"+('0' + String(m)).slice(-2)+":"+('0' + String(s)).slice(-2)
+
+    }
+    
 
     //   const renderTimelogs = () =>{
     //     if (coreContext.timeLogData.length > 0) {
@@ -672,7 +689,10 @@ const renderThreads = () => {
         // console.log("doSomething called by child with value:", value);
       }
 
+      
+
     const renderTabs = () => {
+        
         if (coreContext.patient)
             return <Tabs  onSelect={index => handleSelect(index)} onMouseLeave={index => handleLeaveTab(index)}>
                 <TabList>
@@ -986,7 +1006,7 @@ const renderThreads = () => {
                                             <option value="SelectTask">Select a Task Type</option>
                                             <option value="CareCoordination" >Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="Data Review">Data Review</option>
+                                            <option value="DataReview">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
@@ -1012,7 +1032,7 @@ const renderThreads = () => {
                                             </select>
                                         </div>
                                         <div className="col-md-12">
-                                            Performed On
+                                            Performed On<br/>
                                             <DatePicker className='form-control mt-2'
                                                 selected={date}
                                                 showTimeSelect
@@ -1025,6 +1045,10 @@ const renderThreads = () => {
                                             />
                                             {console.log("checkdatebsjfhs",startDT)}
                                         </div>
+                                        <div className="col-md-12">
+                                        <label for="appt">Enter Manual Time:</label>
+                                        <input className="form-control mb-2 mr-sm-2" type="time" min='00:00:00' max='23:59:59'  value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
+                                            </div>
                                     </div>
                                 </div>
                                  
@@ -1146,7 +1170,7 @@ const renderThreads = () => {
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
                                                 {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
-                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date, minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Add Time Log</button>
+                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date, (timevalue!=="")?Number(timevalue.slice(0,2))*3600+Number(timevalue.slice(3,5))*60+Number(timevalue.slice(6,8)):minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");settimevalue("")}} className="btn btn-sm btn-success"> Add Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
@@ -1191,14 +1215,15 @@ const renderThreads = () => {
                         </h4>
                         <div className="card-body">
                             <div className="row">
-                                <div className="col-md-6">
+                            <div className="col-md-6">
                                     <div className="row">
                                         Task Type 
+                                        {/* //  {setTaskType("CarePlanReconciliation")} */}
                                         <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CareCoordination">Care Coordination</option>
+                                            <option value="CareCoordination" >Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="Data Review">Data Review</option>
+                                            <option value="DataReview">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
@@ -1211,8 +1236,9 @@ const renderThreads = () => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             Performed By
+                                            
                                             {/* {renderTaskTimer()} */}
-                                            <select value={performedBy} onChange={e => {setPerformedBy(e.target.value)}} className="form-control mb-2 mr-sm-2">
+                                            <select value={performedBy} onChange={e => {setPerformedBy(e.target.value);setDirty();}} className="form-control mb-2 mr-sm-2">
                                                 <option value="SelectUser">Select a User</option>
                                                 {tt.map((curr)=>{
                                                     return <option value={(!curr.name)?curr.provider:curr.name}> {(!curr.name)?curr.provider:curr.name}</option>
@@ -1223,24 +1249,29 @@ const renderThreads = () => {
                                             </select>
                                         </div>
                                         <div className="col-md-12">
-                                            Performed On
+                                            Performed On<br/>
                                             <DatePicker className='form-control mt-2'
                                                 selected={date}
                                                 showTimeSelect
                                                 timeFormat="HH:mm"
                                                 timeIntervals={15}
                                                // onChange={(date) => setDate(date)}
-                                                onChange={(date) => {setDate(date)}}
+                                                onChange={(date) => {setDate(date);setDirty();setstartDT(date)}}
                                                 placeholderText='Enter a date'
-                                                dateFormat='MM/dd/yyyy hh:mm aa'
+                                                dateFormat='MM/dd/yyyy hh:mm:ss aa'
                                             />
+                                            {console.log("checkdatebsjfhs",startDT)}
                                         </div>
+                                        <div className="col-md-12">
+                                        <label for="appt">Enter Manual Time:</label>
+                                        <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
+                                            </div>
                                     </div>
                                 </div>
                                  
                             </div>
                         </div>
-                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,patientId, userName );handleUpdate();}} className="btn btn-sm btn-success"> Update Time Log</button>
+                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,Number(timevalue.slice(0,2))*3600+Number(timevalue.slice(3,5))*60+Number(timevalue.slice(6,8)),patientId, userName );handleUpdate();}} className="btn btn-sm btn-success"> Update Time Log</button>
                     </div>
             </Modal.Body>
         </Modal>
