@@ -41,7 +41,8 @@ const Patients = props => {
         reValidateMode: 'onBlur',
     });
 
-    const [name, setName] = useState('');
+    const [fname, setFName] = useState('');
+    const [lname, setLName] = useState('');
     const [patientId, setPatientId] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [phone, setPhone] = useState('');
@@ -118,21 +119,44 @@ const Patients = props => {
     }
     const showEditForm = (patient) => {
       {console.log("checking",patient)}
-        setName(patient.name);
+        setFName(patient.firstName);
+        setLName(patient.lastName);
         setBirthDate(patient.dob);
         setPhone(patient.mobile);
         setPatientId(patient.userId);
         setHeight(patient.height);
-        setProvider(
-          coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
-          )
-          setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
-       setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
+        if(patient.ProviderName ===undefined) {
+        patient.ProviderName='Select Provider';
+        setProvider('');
+      }else{
+        setProvider(coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value)
+      }
+
+      if(patient.CareName ===undefined) {
+        patient.CareName='Select Coordinator';
+        setCoordinator('');
+      }else
+      {
+        setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value);
+      }
+
+    if(patient.CoachName ===undefined){
+      patient.CoachName='Select Coach';
+      setCoach('');
+      } else{
+      setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value);
+      }
+      //   setProvider(
+      //     coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
+      //     )
+      //     setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
+      //  setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
         handleModalShow();
     }
     
     const showAssignDoctor = (patient) => {
-      setName(patient.name);
+      setFName(patient.firstName);
+      setLName(patient.lastName);
       setBirthDate(patient.dob);
       setPhone(patient.mobile);
       setPatientId(patient.userId);
@@ -168,7 +192,7 @@ const Patients = props => {
   }
 
   useEffect(fetchPatients, [coreContext.patients.length]);
-  
+
     const deletePatient = (patient) => {
         coreContext.DeletePatient(patient.userId)
     }
@@ -496,7 +520,7 @@ const Patients = props => {
                 <Form autoComplete='off' onSubmit={handleSubmit(editPatient)} noValidate>
                     <div className="row">
                         <div className="col-md-6">
-                            <Input label='Name' elementType='text' minLength={5} maxLength={55} placeholder='Enter name' onChange={e => setName(e.target.value)} name='name' value={name} required={true} register={register} errors={errors} />
+                            <Input label='First Name' elementType='text' minLength={5} maxLength={55} placeholder='Enter First Name' onChange={e => setFName(e.target.value)} name='name' value={fname} required={true} register={register} errors={errors} />
 
                             <Input label='Phone' elementType='text' placeholder='Enter phone' onChange={e => setPhone(e.target.value)} required={true} minLength={5} maxLength={55} register={register} errors={errors} name='phone' value={phone} />
 
@@ -509,6 +533,8 @@ const Patients = props => {
                           {console.log("sssss",provider)}
                         {/* <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} /> */}
           
+                              <Input label='Last Name' elementType='text' minLength={5} maxLength={55} placeholder='Enter Last Name' onChange={e => setLName(e.target.value)} name='name' value={lname} required={true} register={register} errors={errors} />
+
                             <Input label='Provider' name='provider' required={false} register={register} errors={errors} elementType='select' value={provider} options={coreContext.providerOptions} onChange={e => setProvider(e.target.value)} />
                             {/* {console.log(coreContext.careCoordinatorOptions,coreContext.coachOptions)} */}
                             <Input label='Care Coordinator' name='coordinator' required={false} register={register} errors={errors} elementType='select' value={coordinator} options={coreContext.careCoordinatorOptions} onChange={e => setCoordinator(e.target.value)} />
@@ -519,7 +545,7 @@ const Patients = props => {
                     </div>
                     <Input blockButton={true} value='Submit' onClick={
                         () =>{ 
-                                coreContext.UpdatePatient(name, phone, birthDate, height, provider, coordinator, coach, patientId);
+                                coreContext.UpdatePatient(fname, lname, phone, birthDate, height, provider, coordinator, coach, patientId);
                                 fetchPatients();
                                 setShowModal(false);
                                 fetchPatients();

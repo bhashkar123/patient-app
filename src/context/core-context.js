@@ -273,7 +273,7 @@ export const CoreContextProvider = props => {
                 }
             }
         }
-        
+
         if (usertype === "doctor") {
             data = {
                 "TableName": userTable,
@@ -425,6 +425,17 @@ export const CoreContextProvider = props => {
                     patient.ActiveStatus = p.ActiveStatus.s;
                 }
 
+                if (p.FirstName !== undefined) {
+                    patient.firstName = p.FirstName.s;
+                }
+
+                if (p.LastName !== undefined) {
+                    patient.lastName = p.LastName.s;
+                }
+
+                if(patient.firstName !==undefined && patient.lastName){
+                        patient.name = patient.firstName + "," + patient.lastName;
+                }
                 // if (patient.userId !== undefined && patient.name) {
                 //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
                 // }
@@ -981,8 +992,8 @@ export const CoreContextProvider = props => {
         return ent[0];
     }
 
-    const UpdatePatient = (name, phone, birthDate, height, provider, coordinator, coach, patientId) => {
-        console.log(name);
+    const UpdatePatient = (fname,lname, phone, birthDate, height, provider, coordinator, coach, patientId) => {
+        console.log(fname);
         const token = localStorage.getItem('app_jwt');
 
         var  providervalue = providerOptions.filter(p=>p.name=='Select Provider')[0];
@@ -1007,10 +1018,11 @@ export const CoreContextProvider = props => {
                 "PK": { "S": "patient" },
                 "SK": { "S": "PATIENT_" +patientId }
             },
-            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, UserName = :v_username, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
+            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
             "ExpressionAttributeValues":{":v_GSI1SK":{"S":""+providername.value+""},
             ":v_GSI1PK":{"S":"patient"},
-            ":v_username":{"S": name},
+            ":v_firstname":{"S": fname},
+            ":v_lastname":{"S": lname},
             ":v_mobile":{"S":phone},
             ":v_DOB":{"S":"" + birthDate + ""},
             ":v_Height":{"S":"" + height + ""},
@@ -1038,7 +1050,8 @@ export const CoreContextProvider = props => {
                 let patinet = patients.filter(p=>p.userId == patientId)[0];
                 if(patinet ==undefined) return;
                 patinet.height = height;
-                patinet.name = name;
+                patinet.firstname = fname;
+                patinet.lastname = lname;
                 patinet.phone = phone;
                 patinet.birthDate = birthDate;
                 patinet.phone = phone;
@@ -1639,7 +1652,10 @@ export const CoreContextProvider = props => {
             });
 
            
-            setdeviceData(dataSetdevice);
+            if(dataSetdevice[0] !== 'no device found')
+            {
+                setdeviceData(dataSetdevice);
+            }
 
             
             if(type =='Weight'){
