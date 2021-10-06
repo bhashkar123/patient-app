@@ -2570,11 +2570,12 @@ export const CoreContextProvider = props => {
                 "PK": { "S": "TIMELOG_READING" },
                 "SK": { "S": timelog.SK}
             },
-            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn",
+            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn, TimeAmount = :v_TimeAmount",
             "ExpressionAttributeValues":{":v_TaskType":{"S":""+taskType+""},
             ":v_PerformedBy":{"S":""+performedBy+""},
-            ":v_PerformedOn":{"S": performeddate}
-               }
+            ":v_PerformedOn":{"S": performeddate},
+            ":v_TimeAmount":{"S":""+time+""}  
+            }
         };
 
        
