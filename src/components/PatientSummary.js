@@ -390,10 +390,11 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         setShowModal(true);
         //alert(tl.taskType);
         setCurrentTimeLog(tl);
+     setTaskType(tl.taskType)
         setPerformedBy(tl.performedBy);
         setDate(new Date(tl.performedOn));
         console.log("chjdjjsd",tl.performedOn)
-        setTaskType(tl.taskType)
+        //setTaskType(tl.taskType)
         //alert(converter(3660))
         settimevalue(converter(tl.timeAmount));
     }
@@ -1005,7 +1006,7 @@ const renderThreads = () => {
                                             <option value="SelectTask">Select a Task Type</option>
                                             <option value="CareCoordination" >Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="Data Review">Data Review</option>
+                                            <option value="DataReview">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
@@ -1214,14 +1215,15 @@ const renderThreads = () => {
                         </h4>
                         <div className="card-body">
                             <div className="row">
-                                <div className="col-md-6">
+                            <div className="col-md-6">
                                     <div className="row">
                                         Task Type 
+                                        {/* //  {setTaskType("CarePlanReconciliation")} */}
                                         <select value={(t1==='Other')?t1:taskType} onChange={e => {setTaskType(e.target.value);setDirty();sett1(e.target.value);}} className="form-control mb-2 mr-sm-2">
                                             <option value="SelectTask">Select a Task Type</option>
-                                            <option value="CareCoordination">Care Coordination</option>
+                                            <option value="CareCoordination" >Care Coordination</option>
                                             <option value="CarePlanReconciliation">Care Plan Reconciliation</option>
-                                            <option value="Data Review">Data Review</option>
+                                            <option value="DataReview">Data Review</option>
                                             <option value="Other">Others...</option>
                                         </select>
                                         
@@ -1234,8 +1236,9 @@ const renderThreads = () => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             Performed By
+                                            
                                             {/* {renderTaskTimer()} */}
-                                            <select value={performedBy} onChange={e => {setPerformedBy(e.target.value)}} className="form-control mb-2 mr-sm-2">
+                                            <select value={performedBy} onChange={e => {setPerformedBy(e.target.value);setDirty();}} className="form-control mb-2 mr-sm-2">
                                                 <option value="SelectUser">Select a User</option>
                                                 {tt.map((curr)=>{
                                                     return <option value={(!curr.name)?curr.provider:curr.name}> {(!curr.name)?curr.provider:curr.name}</option>
@@ -1246,24 +1249,23 @@ const renderThreads = () => {
                                             </select>
                                         </div>
                                         <div className="col-md-12">
-                                            Performed On
+                                            Performed On<br/>
                                             <DatePicker className='form-control mt-2'
                                                 selected={date}
                                                 showTimeSelect
                                                 timeFormat="HH:mm"
                                                 timeIntervals={15}
                                                // onChange={(date) => setDate(date)}
-                                                onChange={(date) => {setDate(date)}}
+                                                onChange={(date) => {setDate(date);setDirty();setstartDT(date)}}
                                                 placeholderText='Enter a date'
-                                                dateFormat='MM/dd/yyyy hh:mm aa'
+                                                dateFormat='MM/dd/yyyy hh:mm:ss aa'
                                             />
+                                            {console.log("checkdatebsjfhs",startDT)}
                                         </div>
                                         <div className="col-md-12">
                                         <label for="appt">Enter Manual Time:</label>
                                         <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
                                             </div>
-                                        
-                                    
                                     </div>
                                 </div>
                                  
