@@ -294,7 +294,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
     }
 
     const handleUpdate=()=>{
-        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);
+        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);
     }
     const columns = [
         { field: 
@@ -1047,7 +1047,7 @@ const renderThreads = () => {
                                         </div>
                                         <div className="col-md-12">
                                         <label for="appt">Enter Manual Time:</label>
-                                        <input className="form-control mb-2 mr-sm-2" type="time"   value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
+                                        <input className="form-control mb-2 mr-sm-2" type="time" min='00:00:00' max='23:59:59'  value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
                                             </div>
                                     </div>
                                 </div>
