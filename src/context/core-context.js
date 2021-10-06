@@ -2504,11 +2504,12 @@ export const CoreContextProvider = props => {
 
     }
 
-    const AddTimeLog = (taskType, performedBy, performedOn,timeAmount, startdate,patientId, userName) => {
+    const AddTimeLog = (taskType, performedBy,performedOn,timeAmount, startdate,patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
-        console.log("dhhgdfsghfsfs",startdate)
+        console.log("chek the value of time log",timeAmount)
         const date = new Date(startdate);
         const end=new Date(startdate);
+        //alert(timeAmount)
         end.setSeconds(end.getSeconds() + timeAmount);
        
         const data = JSON.stringify({
@@ -2543,7 +2544,7 @@ export const CoreContextProvider = props => {
 
     }
 
-    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, patientId, userName) => {
+    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate,time, patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
 
 
