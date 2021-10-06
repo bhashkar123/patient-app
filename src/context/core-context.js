@@ -1652,7 +1652,10 @@ export const CoreContextProvider = props => {
             });
 
            
-            setdeviceData(dataSetdevice);
+            if(dataSetdevice[0] !== 'no device found')
+            {
+                setdeviceData(dataSetdevice);
+            }
 
             
             if(type =='Weight'){
