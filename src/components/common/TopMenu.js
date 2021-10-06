@@ -121,7 +121,7 @@ const TopMenu = ({changestyle,showSidebar}) => {
         if (!lastName) { alert('Enter Last Name .'); return; }
         if (!email) { alert('Enter email...'); return; }
 
-        coreContext.Registration(userName,firstName, middleName, lastName, email, mobilePhone, pwd,birthDate, pcm, pp);
+        coreContext.Registration(userName,firstName, middleName, lastName, email, mobilePhone, pwd,birthDate,gender, language, workPhone, mobilePhone, street, zip, city, state, pcm, pp);
         handleClose();
       
     }

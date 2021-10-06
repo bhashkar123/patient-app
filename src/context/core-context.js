@@ -40,6 +40,9 @@ export const CoreContextProvider = props => {
     const [patient, setPatient] = useState({});
     const [threads, setThreads] = useState([]);
     const [inbox, setInbox] = useState([]);
+    const [genderOptions, setgenderOptions] = useState([{name:'Male', value:0}, {name:'Female', value:1}]);
+    const [languageOptions, setLanguage] = useState([{name:'English', value:0}, {name:'Spanish', value:1}]);
+
     const [outbox, setOutbox] = useState([]);
 
     const [showProviderModal, setShowProviderModal] = useState(false);
@@ -992,7 +995,7 @@ export const CoreContextProvider = props => {
         return ent[0];
     }
 
-    const UpdatePatient = (fname,lname, phone, birthDate, height, provider, coordinator, coach, patientId) => {
+    const UpdatePatient = (fname,lname, phone, birthDate, height, provider, coordinator, coach, patientId, gender, language, workPhone,mobilePhone,street,zip,city,state) => {
         console.log(fname);
         const token = localStorage.getItem('app_jwt');
 
@@ -1012,13 +1015,25 @@ export const CoreContextProvider = props => {
         if(carecoordinatorname.value=="")  carecoordinatorname.value = carecoordinatorname.name;
         if(coachname.value=="")  coachname.value = coachname.name;
      
+
+        let gendervalue = "Male";
+        if(gender === 1) gendervalue ="Female";
+        if(gender === 0) gendervalue ="Male";
+
+        let languagevalue = "English";
+        if(language === 0) languagevalue ="English";
+        if(language === 1) languagevalue ="Spanish";
+
         const data = {
             "TableName": userTable,
             "Key": {
                 "PK": { "S": "patient" },
                 "SK": { "S": "PATIENT_" +patientId }
             },
-            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB, Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName",
+            "UpdateExpression":"SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB,"+
+            "Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName"+
+            "Gender = :v_Gender, Language = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street" +
+            "Zip = :v_Zip, City = :v_City, State = :v_State" ,
             "ExpressionAttributeValues":{":v_GSI1SK":{"S":""+providername.value+""},
             ":v_GSI1PK":{"S":"patient"},
             ":v_firstname":{"S": fname},
@@ -1029,7 +1044,15 @@ export const CoreContextProvider = props => {
             ":v_CarecoordinatorId":{"S":"" + carecoordinatorname.value + ""},
             ":v_CoachId":{"S": "" + coachname.value + ""},
             ":v_CarecoordinatorName":{"S": "" + carecoordinatorname.name + ""},
-            ":v_CoachName":{"S": "" + coachname.name + ""}
+            ":v_CoachName":{"S": "" + coachname.name + ""},
+            ":v_Gender":{"S": "" + gendervalue + ""},
+            ":v_Language":{"S": "" + languagevalue + ""},
+            ":v_WorkPhone":{"S": "" + workPhone + ""},
+            ":v_MobilePhone":{"S": "" + mobilePhone + ""},
+            ":v_Street":{"S": "" + street + ""},
+            ":v_Zip":{"S": "" + zip + ""},
+            ":v_City":{"S": "" + city + ""},
+            ":v_State":{"S": "" + state + ""}
 
            }
      };
@@ -1401,7 +1424,7 @@ export const CoreContextProvider = props => {
     }
 
 
-    const Registration = (username, firstname, middleName,lastname, email, phone, password, dob, pcm, pp) => {
+    const Registration = (username, firstname, middleName,lastname, email, phone, password, dob, gender, language, workPhone,mobilePhone,street,zip,city,state, pcm, pp) => {
         const token = localStorage.getItem('app_jwt');
         const date = new Date();
         const id = date.getTime();
@@ -1434,8 +1457,15 @@ export const CoreContextProvider = props => {
                     "FirstName" : firstname,
                     "MiddleName" : middleName,
                     "LastName": lastname,
-                    "ActiveStatus": "Active"
-
+                    "ActiveStatus": "Active",
+                    "Gender": gender,
+                    "Language": language,
+                    "WorkPhone": workPhone,
+                    "MobilePhone": mobilePhone,
+                    "Street": street,
+                    "Zip": zip,
+                    "City": city,
+                    "State": state
                 });
 
                 axios.post(apiUrl+'/DynamoDbAPIs/putitem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
@@ -2520,12 +2550,11 @@ export const CoreContextProvider = props => {
 
     }
 
-    const AddTimeLog = (taskType, performedBy,performedOn,timeAmount, startdate,patientId, userName) => {
+    const AddTimeLog = (taskType, performedBy, performedOn,timeAmount, startdate,patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
-        console.log("chek the value of time log",timeAmount)
+        console.log("dhhgdfsghfsfs",startdate)
         const date = new Date(startdate);
         const end=new Date(startdate);
-        //alert(timeAmount)
         end.setSeconds(end.getSeconds() + timeAmount);
        
         const data = JSON.stringify({
@@ -2560,7 +2589,7 @@ export const CoreContextProvider = props => {
 
     }
 
-    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate,time, patientId, userName) => {
+    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
 
 
@@ -2570,12 +2599,11 @@ export const CoreContextProvider = props => {
                 "PK": { "S": "TIMELOG_READING" },
                 "SK": { "S": timelog.SK}
             },
-            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn, TimeAmount = :v_TimeAmount",
+            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn",
             "ExpressionAttributeValues":{":v_TaskType":{"S":""+taskType+""},
             ":v_PerformedBy":{"S":""+performedBy+""},
-            ":v_PerformedOn":{"S": performeddate},
-            ":v_TimeAmount":{"S":""+time+""}  
-            }
+            ":v_PerformedOn":{"S": performeddate}
+               }
         };
 
        
@@ -2793,7 +2821,9 @@ export const CoreContextProvider = props => {
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,
-        result
+        result,
+        genderOptions,
+        languageOptions
     }}
     >
         {props.children}

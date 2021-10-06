@@ -64,9 +64,15 @@ const Patients = props => {
     const handleAssignDrModalShow = () => setAssignDrShowModal(true);
     const [showAssignDrModal, setAssignDrShowModal] = useState(false);
     const [usertype, setuserType] = useState('');
-    
+    const [gender, setGender] = useState('');
+    const [language, setLanguage] = useState('');
+    const [workPhone, setWorkPhone] = useState('');
+    const [mobilePhone, setMobilePhone] = useState('');
+    const [street, setStreet] = useState('');
+    const [zip, setZip] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
 
-    
     const editPatient = () => {
 
     }
@@ -125,6 +131,18 @@ const Patients = props => {
         setPhone(patient.mobile);
         setPatientId(patient.userId);
         setHeight(patient.height);
+
+        setGender(patient.gender);
+        setLanguage(patient.language);
+        setWorkPhone(patient.workPhone);
+        setMobilePhone(patient.mobilePhone);
+        setStreet(patient.street);
+        setZip(patient.zip);
+        setCity(patient.city);
+        setState(patient.state);
+
+
+
         if(patient.ProviderName ===undefined) {
         patient.ProviderName='Select Provider';
         setProvider('');
@@ -528,6 +546,15 @@ const Patients = props => {
 {console.log(birthDate)}
 {/* <input type="date"/> */}
                          <Input label='Height (Inch)' elementType='number' minLength={1} maxLength={55} placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={height} required={true} register={register} errors={errors} />
+
+                         <Input label='Gender' name='gender' required={true} register={register} errors={errors} elementType='select' value={gender} options={coreContext.genderOptions} onChange={e => setGender(e.target.value)} />
+
+                         <Input label='Mobile Phone' name='mobilePhone' required={true} register={register} errors={errors} elementType='text' value={mobilePhone}  onChange={e => setMobilePhone(e.target.value)} />
+
+                         <Input label='Mailing address' name='street' required={false} register={register} errors={errors} elementType='text' value={street}  onChange={e => setStreet(e.target.value)} />
+
+                         <Input label='City' name='city' required={false} register={register} errors={errors} elementType='text' value={city}  onChange={e => setCity(e.target.value)} />
+
                         </div>
                         <div className="col-md-6">
                           {console.log("sssss",provider)}
@@ -541,11 +568,19 @@ const Patients = props => {
 
                             <Input label='Coach Name' name='coach' required={false} register={register} errors={errors} elementType='select' value={coach} options={coreContext.coachOptions} onChange={e => setCoach(e.target.value)} />
 
+                            <Input label='Language' name='language' required={true} register={register} errors={errors} elementType='select' value={language} options={coreContext.languageOptions} onChange={e => setLanguage(e.target.value)} />
+
+                            <Input label='Work Phone' name='workPhone' required={true} register={register} errors={errors} elementType='text' value={workPhone}  onChange={e => setWorkPhone(e.target.value)} />
+
+                            <Input label='Zip Code' name='zip' required={false} register={register} errors={errors} elementType='text' value={zip}  onChange={e => setZip(e.target.value)} />
+
+                         <Input label='State' name='State' required={false} register={register} errors={errors} elementType='text' value={state}  onChange={e => setState(e.target.value)} />
+
                         </div>
                     </div>
                     <Input blockButton={true} value='Submit' onClick={
                         () =>{ 
-                                coreContext.UpdatePatient(fname, lname, phone, birthDate, height, provider, coordinator, coach, patientId);
+                                coreContext.UpdatePatient(fname, lname, phone, birthDate, height, provider, coordinator, coach, patientId , gender, language, workPhone,mobilePhone,street,zip,city,state);
                                 fetchPatients();
                                 setShowModal(false);
                                 fetchPatients();
