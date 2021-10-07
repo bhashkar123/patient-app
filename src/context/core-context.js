@@ -1292,7 +1292,7 @@ export const CoreContextProvider = props => {
         const data = {
             "TableName": userTable,
             "Key": {
-                "SK": { "S": "TIMELOG_READING"},
+                "PK": { "S": "TIMELOG_READING"},
                 "SK": { "S": timelog.SK}
             },
             "UpdateExpression": "SET ActiveStatus = :v_ActiveStatus",
