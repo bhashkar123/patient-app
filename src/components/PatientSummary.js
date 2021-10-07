@@ -54,7 +54,7 @@ const PatientSummary  = props =>  {
     const coreContext = useContext(CoreContext);
     const handleModalClose = () => setShowModal(false);
     const [notes, setNotes] = useState('');
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(new Date());
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState('');
@@ -89,7 +89,7 @@ const PatientSummary  = props =>  {
     const [performedBy, setPerformedBy] = useState('');
     const [performedOn, setPerformedOn] = useState('');
     const [endDT, setendDT] = useState('');
-    const [startDT, setstartDT] = useState('');
+    const [startDT, setstartDT] = useState(date);
     const [totalLogtime, settotalLogtime] = useState(0);
     const [currTimeLog, setCurrentTimeLog] = useState('');
     const [timevalue,settimevalue]=useState('');
