@@ -387,7 +387,9 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
       const deleteTimeLog = (tl) => {
         coreContext.DeleteTimeLog(tl);
-        coreContext.fetchTimeLog();
+        coreContext.fetchTimeLog("PATIENT_" + patientId);
+        renderTimelogs();
+        fetchtotaltime();
     }
 	
     const setCurrentTL =(tl) =>{
@@ -481,6 +483,8 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
           }
    
     }
+    
+        useEffect(renderTimelogs, [coreContext.timeLogData.length]);
    // const deleteDevice = (patient) => {
      //   alert('Hi how are you');
         //coreContext.DeletePatient(patient.userId)
@@ -577,15 +581,16 @@ const renderThreads = () => {
                 <div className="col-md-3">  <a href='#'>Collapse All</a></div>
             </div>
     }
+    
     const fetchtotaltime = ()=>{
         let totaltime=0
         coreContext.timeLogData.map((curr)=>{
             totaltime=totaltime+ Number(curr.timeAmount)
-            console.log("checkkfktime",totaltime)
+            
             
         })
         //console.log(coreContext.timeLogData)
-        settotalLogtime(String(Math.floor(totaltime/60))+":"+("0"+String(totaltime%60)).slice(-2))
+        return String(Math.floor(totaltime/60))+":"+("0"+String(totaltime%60)).slice(-2)
     }
     useEffect(() => {
         fetchtotaltime()
@@ -654,11 +659,12 @@ const renderThreads = () => {
         if(index ==7) {
     //       setstartDT(new Date());
     fetchtotaltime();
-    coreContext.fetchTimeLog();
+    coreContext.fetchTimeLog("PATIENT_" + patientId);
      }
         if(index !=7){
            fetchtotaltime();
-           coreContext.fetchTimeLog();
+           //coreContext.fetchTimeLog();
+           {console.log("checking the time log data is o",coreContext.timeLogData)}
         }
 
         if(index ===8){
@@ -1147,7 +1153,7 @@ const renderThreads = () => {
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-12">
-                                    Total Time Logs (min: sec): {totalLogtime}
+                                    Total Time Logs (min: sec): {fetchtotaltime()}
                                 </div>
                             </div>
                             <div className="row">
