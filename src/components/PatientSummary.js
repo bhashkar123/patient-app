@@ -54,7 +54,7 @@ const PatientSummary  = props =>  {
     const coreContext = useContext(CoreContext);
     const handleModalClose = () => setShowModal(false);
     const [notes, setNotes] = useState('');
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(new Date());
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState('');
@@ -89,7 +89,7 @@ const PatientSummary  = props =>  {
     const [performedBy, setPerformedBy] = useState('');
     const [performedOn, setPerformedOn] = useState('');
     const [endDT, setendDT] = useState('');
-    const [startDT, setstartDT] = useState('');
+    const [startDT, setstartDT] = useState(date);
     const [totalLogtime, settotalLogtime] = useState(0);
     const [currTimeLog, setCurrentTimeLog] = useState('');
     const [timevalue,settimevalue]=useState('');
@@ -1230,7 +1230,7 @@ const renderThreads = () => {
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
                                                 {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
-                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date,(tlvalue!=="00:00:00")?tlvalueseconds:minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");settimevalue("");setTlValue("00:00:00");}} className="btn btn-sm btn-success"> Add Time Log</button>
+                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date,(tlvalue!=="00:00:00")?tlvalueseconds:minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate(new Date());sett1("");settimevalue("");setTlValue("00:00:00");}} className="btn btn-sm btn-success"> Add Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
