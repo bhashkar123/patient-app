@@ -54,7 +54,7 @@ const PatientSummary  = props =>  {
     const coreContext = useContext(CoreContext);
     const handleModalClose = () => setShowModal(false);
     const [notes, setNotes] = useState('');
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(new Date());
     const [showNotesTextBox, setShowNotesTextBox] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState('');
@@ -89,7 +89,7 @@ const PatientSummary  = props =>  {
     const [performedBy, setPerformedBy] = useState('');
     const [performedOn, setPerformedOn] = useState('');
     const [endDT, setendDT] = useState('');
-    const [startDT, setstartDT] = useState('');
+    const [startDT, setstartDT] = useState(date);
     const [totalLogtime, settotalLogtime] = useState(0);
     const [currTimeLog, setCurrentTimeLog] = useState('');
     const [timevalue,settimevalue]=useState('');
@@ -294,7 +294,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
     }
 
     const handleUpdate=()=>{
-        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);
+        setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");setShowModal(false);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setTlValue("00:00:00");
     }
     const columns = [
         { field: 
@@ -396,6 +396,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         console.log("chjdjjsd",tl.performedOn)
         //setTaskType(tl.taskType)
         //alert(converter(3660))
+        setTlValue(converter(tl.timeAmount));
         settimevalue(converter(tl.timeAmount));
     }
     const converter=(sec)=>{
@@ -677,6 +678,64 @@ const renderThreads = () => {
      }
     }
     
+    // const TimeInput = () => {
+        const [tlvalue, setTlValue] = React.useState("00:00:00");
+      
+        const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
+        const onChange = (event) => {
+            setTlValue(event.target.value);
+        };
+      
+        const onBlur = (event) => {
+          const value = event.target.value;
+          const seconds = Math.max(0, getSecondsFromHHMMSS(value));
+      
+
+         // alert('total second'+ seconds);
+          setTlvalueseconds(seconds);
+          const time = toHHMMSS(seconds);
+          setTlValue(time);
+          //alert(time);
+
+          //alert(timevalue +'timevalue');
+        };
+      
+        const getSecondsFromHHMMSS = (value) => {
+          const [str1, str2, str3] = value.split(":");
+      
+          const val1 = Number(str1);
+          const val2 = Number(str2);
+          const val3 = Number(str3);
+      
+          if (!isNaN(val1) && isNaN(val2) && isNaN(val3)) {
+            return val1;
+          }
+      
+          if (!isNaN(val1) && !isNaN(val2) && isNaN(val3)) {
+            return val1 * 60 + val2;
+          }
+      
+          if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3)) {
+            return val1 * 60 * 60 + val2 * 60 + val3;
+          }
+      
+          return 0;
+        };
+      
+        const toHHMMSS = (secs) => {
+          const secNum = parseInt(secs.toString(), 10);
+          const hours = Math.floor(secNum / 3600);
+          const minutes = Math.floor(secNum / 60) % 60;
+          const seconds = secNum % 60;
+      
+          return [hours, minutes, seconds]
+            .map((val) => (val < 10 ? `0${val}` : val))
+            .filter((val, index) => val !== "00" || index > 0)
+            .join(":")
+            .replace(/^0/, "");
+        };
+
+        
     const handleLeaveTab  = (index) => {
         if(index ==7){
            // console.log('leave');
@@ -1045,9 +1104,10 @@ const renderThreads = () => {
                                             />
                                             {console.log("checkdatebsjfhs",startDT)}
                                         </div>
-                                        <div className="col-md-12">
+                                        <div className="col-md-6">
                                         <label for="appt">Enter Total Time:</label>
-                                        <input className="form-control mb-2 mr-sm-2" type="time" min='00:00:00' max='23:59:59'  value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
+                                        <input className="form-control mb-2 mr-sm-2" type="text" onChange={onChange} onBlur={onBlur} value={tlvalue} />
+                                        {/* <input className="form-control mb-2 mr-sm-2" type="time" min='00:00:00' max='23:59:59'  value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/> */}
                                             </div>
                                     </div>
                                 </div>
@@ -1170,7 +1230,7 @@ const renderThreads = () => {
                                                 <button id="pauseTimer" className="btn btn-sm btn-warning" onClick={pause}>Pause</button>
                                                 <button id="resetTimer" className="btn btn-sm btn-danger" onClick={reset}>Reset</button>
                                                 {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
-                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date, (timevalue!=="")?Number(timevalue.slice(0,2))*3600+Number(timevalue.slice(3,5))*60+Number(timevalue.slice(6,8)):minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");settimevalue("")}} className="btn btn-sm btn-success"> Add Time Log</button>
+                                                <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date,(tlvalue!=="00:00:00")?tlvalueseconds:minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate(new Date());sett1("");settimevalue("");setTlValue("00:00:00");}} className="btn btn-sm btn-success"> Add Time Log</button>
                                             </div>
                                            
         <div onClick={() => setShowNotesTextBox(false)} className="card-header">{renderTopDetails()}</div>
@@ -1262,16 +1322,17 @@ const renderThreads = () => {
                                             />
                                             {console.log("checkdatebsjfhs",startDT)}
                                         </div>
-                                        <div className="col-md-12">
+                                        <div className="col-md-6">
                                         <label for="appt">Enter Total Time:</label>
-                                        <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/>
+                                        <input className="form-control mb-2 mr-sm-2" type="text" onChange={onChange} onBlur={onBlur} value={tlvalue} />
+                                        {/* <input className="form-control mb-2 mr-sm-2" type="time" value={timevalue} onChange={(e)=>{settimevalue(e.target.value);}} step="1"/> */}
                                             </div>
                                     </div>
                                 </div>
                                  
                             </div>
                         </div>
-                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,Number(timevalue.slice(0,2))*3600+Number(timevalue.slice(3,5))*60+Number(timevalue.slice(6,8)),patientId, userName );handleUpdate();}} className="btn btn-sm btn-success"> Update Time Log</button>
+                        <button type='button' onClick={() => {coreContext.UpdateTimeLog(currTimeLog, taskType, performedBy, date,tlvalueseconds,patientId, userName );handleUpdate();}} className="btn btn-sm btn-success"> Update Time Log</button>
                     </div>
             </Modal.Body>
         </Modal>

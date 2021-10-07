@@ -786,10 +786,11 @@ export const CoreContextProvider = props => {
         data = {
             "TableName": userTable,
 	                "KeyConditionExpression": "PK = :v_PK",
-                    "FilterExpression":  "GSI1PK = :v_GSI1PK",
+                    "FilterExpression":  "GSI1PK = :v_GSI1PK AND ActiveStatus = :v_status",
                     "ExpressionAttributeValues": {
                             ":v_PK": { "S": "TIMELOG_READING" },
-                            ":v_GSI1PK": { "S": "TIMELOG_READING_"+userid }
+                            ":v_GSI1PK": { "S": "TIMELOG_READING_"+userid },
+                            ":v_status":{"S":"Active"}
             }
         }
         axios.post(apiUrl+'/DynamoDbAPIs/getitem', data, {
@@ -1291,7 +1292,7 @@ export const CoreContextProvider = props => {
         const data = {
             "TableName": userTable,
             "Key": {
-                "SK": { "S": "TIMELOG_READING"},
+                "PK": { "S": "TIMELOG_READING"},
                 "SK": { "S": timelog.SK}
             },
             "UpdateExpression": "SET ActiveStatus = :v_ActiveStatus",
@@ -2601,7 +2602,8 @@ export const CoreContextProvider = props => {
                 "PerformedOn": performedOn,
                 "TimeAmount":  timeAmount.toString(),
                 "StartDT": date,
-                "EndDT": end
+                "EndDT": end,
+                "ActiveStatus": "Active"
             });
     
             axios.post(apiUrl+'/DynamoDbAPIs/PutItem?jsonData=' + data + '&tableName='+userTable+'&actionType=register', {
@@ -2620,7 +2622,7 @@ export const CoreContextProvider = props => {
 
     }
 
-    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, patientId, userName) => {
+    const UpdateTimeLog = (timelog, taskType, performedBy, performeddate, time,patientId, userName) => {
         const token = localStorage.getItem('app_jwt');
 
 
@@ -2630,10 +2632,11 @@ export const CoreContextProvider = props => {
                 "PK": { "S": "TIMELOG_READING" },
                 "SK": { "S": timelog.SK}
             },
-            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn",
+            "UpdateExpression":"SET TaskType = :v_TaskType, PerformedBy = :v_PerformedBy, PerformedOn = :v_PerformedOn, TimeAmount = :v_TimeAmount",
             "ExpressionAttributeValues":{":v_TaskType":{"S":""+taskType+""},
             ":v_PerformedBy":{"S":""+performedBy+""},
-            ":v_PerformedOn":{"S": performeddate}
+            ":v_PerformedOn":{"S": performeddate},
+            ":v_TimeAmount":{"S":""+time+""}
                }
         };
 
