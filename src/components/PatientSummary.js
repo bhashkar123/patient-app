@@ -654,9 +654,11 @@ const renderThreads = () => {
         if(index ==7) {
     //       setstartDT(new Date());
     fetchtotaltime();
+    coreContext.fetchTimeLog();
      }
         if(index !=7){
            fetchtotaltime();
+           coreContext.fetchTimeLog();
         }
 
         if(index ===8){
