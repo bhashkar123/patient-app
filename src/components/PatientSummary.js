@@ -66,6 +66,9 @@ const PatientSummary  = props =>  {
     const [PatientId, setPatientId] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [t1,sett1]=useState("");
+    const [tlvalue, setTlValue] = React.useState("00:00:00");
+      
+        const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
     
 
     const [diastolicMin, setDiastolicMin] = useState(0);
@@ -384,6 +387,7 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
 
       const deleteTimeLog = (tl) => {
         coreContext.DeleteTimeLog(tl);
+        coreContext.fetchTimeLog();
     }
 	
     const setCurrentTL =(tl) =>{
@@ -397,7 +401,8 @@ const tt=[...coreContext.providerData,...coreContext.ccData,...coreContext.coach
         //setTaskType(tl.taskType)
         //alert(converter(3660))
         setTlValue(converter(tl.timeAmount));
-        settimevalue(converter(tl.timeAmount));
+        
+        settimevalue(Math.max(0, getSecondsFromHHMMSS(tl.timeAmount)));
     }
     const converter=(sec)=>{
         let h=Math.floor(sec/3600)
@@ -572,6 +577,24 @@ const renderThreads = () => {
                 <div className="col-md-3">  <a href='#'>Collapse All</a></div>
             </div>
     }
+    const fetchtotaltime = ()=>{
+        let totaltime=0
+        coreContext.timeLogData.map((curr)=>{
+            totaltime=totaltime+ Number(curr.timeAmount)
+            console.log("checkkfktime",totaltime)
+            
+        })
+        //console.log(coreContext.timeLogData)
+        settotalLogtime(String(Math.floor(totaltime/60))+":"+("0"+String(totaltime%60)).slice(-2))
+    }
+    useEffect(() => {
+        fetchtotaltime()
+        
+    }, [tlvalueseconds]);
+    useEffect(() => {
+        fetchtotaltime()
+        
+    }, []);
 
     const renderPatientinformation = () => {
         if (coreContext.patients.length >0 ){
@@ -628,25 +651,17 @@ const renderThreads = () => {
     const handleSelect  = (index) => {
         console.log("checkindex",index);
         let _timerLog = {};
-        // if(index ==7) {
-        //    setstartDT(new Date());
-        // }
-        // if(index !=7){
-        //     setendDT(new Date());
-        // }
+        if(index ==7) {
+    //       setstartDT(new Date());
+    fetchtotaltime();
+     }
+        if(index !=7){
+           fetchtotaltime();
+        }
 
         if(index ===8){
             pause();
-            let totaltime=0
-        
-        coreContext.timeLogData.map((curr)=>{
-            totaltime=totaltime+ Number(curr.timeAmount)
-            console.log("checkkfktime",totaltime)
             
-        })
-        console.log(coreContext.timeLogData)
-        settotalLogtime(String(Math.floor(totaltime/60))+":"+("0"+String(totaltime%60)).slice(-2))
-        //
           
             // after pause then should add in list.
         //     // _timerLog.id = timelogIdCounter;
@@ -679,9 +694,9 @@ const renderThreads = () => {
     }
     
     // const TimeInput = () => {
-        const [tlvalue, setTlValue] = React.useState("00:00:00");
+       // const [tlvalue, setTlValue] = React.useState("00:00:00");
       
-        const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
+        // const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
         const onChange = (event) => {
             setTlValue(event.target.value);
         };
