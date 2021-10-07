@@ -1308,7 +1308,7 @@ export const CoreContextProvider = props => {
         }
         ).then((response) => {
             if (response.data === "Updated") {
-                alert("Patient Deleted Successfully.");
+                alert("1 Entry of TimeLog Deleted Successfully.");
             }
         });
     }
