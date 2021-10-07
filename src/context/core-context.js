@@ -2589,6 +2589,22 @@ export const CoreContextProvider = props => {
         const end=new Date(startdate);
         end.setSeconds(end.getSeconds() + timeAmount);
        
+        if(performedOn == '' || performedOn == null){
+            alert('please enter performedOn');
+            return;
+        }
+
+        if(taskType == null ||taskType == '' ){
+            alert('please enter taskType');
+            return;
+        }
+
+        if(performedBy == null){
+            alert('please enter performedBy');
+            return;
+        }
+
+
         const data = JSON.stringify({
             "id":timeLogData.length+1,
                 "PK": "TIMELOG_READING",
