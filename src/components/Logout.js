@@ -1,18 +1,16 @@
-import React, { useEffect, useContext } from 'react';
-import { CoreContext } from '../context/core-context';
+import React, { useEffect, useContext } from "react";
+import { CoreContext } from "../context/core-context";
 
-const Logout = props => {
-    const coreContext = useContext(CoreContext);
+const Logout = (props) => {
+  const coreContext = useContext(CoreContext);
 
-    const signOut = () => {
+  const signOut = () => {
+    coreContext.relogin();
+  };
 
-        coreContext.relogin();
-    }
+  useEffect(signOut, []);
 
-    useEffect(signOut, []);
+  return <div>Please wait ...</div>;
+};
 
-    return (<div>Please wait ...</div>);
-
-}
-
-export { Logout }
+export { Logout };
