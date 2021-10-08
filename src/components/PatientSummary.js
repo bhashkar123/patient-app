@@ -869,11 +869,8 @@ const PatientSummary = (props) => {
           <TabList>
             {/* <Tab onClick={pause}>Conditions</Tab> */}
             <Tab onClick={pause}>Programs</Tab>
-            <Tab onClick={pause}>Assesments</Tab>
             <Tab onClick={pause}>Clinical Data</Tab>
             <Tab onClick={pause}>Billing</Tab>
-            <Tab onClick={pause}>Alerts</Tab>
-            <Tab onClick={pause}>Documents</Tab>
             <Tab onClick={reset}>Task Timer</Tab>
             {/* <Tab onClick={pause}>Time Logs</Tab> */}
             <Tab>Time Logs</Tab>
@@ -919,14 +916,7 @@ const PatientSummary = (props) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel>
-            <div className="card">
-              <h4 className="card-header">Assesments</h4>
-              <div className="card-body">
-                This patient does not yet have any assessments.
-              </div>
-            </div>
-          </TabPanel>
+          
           <TabPanel>
             <div className="card">
               <h4 className="card-header">Clinical Data</h4>
@@ -1104,43 +1094,8 @@ const PatientSummary = (props) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel>
-            <div className="card">
-              <h4 className="card-header">Alert</h4>
-              <div className="card-body">
-                Date Range <br />
-                <input type="text" className="form-control" placeholder="" />
-                <br />
-                <br />
-                <table className="table table-bordered table-sm mt-4">
-                  <th>Priority</th>
-                  <th>Title</th>
-                  <th>Date</th>
-                  <th>View</th>
-                </table>
-              </div>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="card">
-              <h4 className="card-header">Document</h4>
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-3">Document Type</div>
-                  <div className="col-md-3">Date Range</div>
-                  <div className="col-md-3">Search</div>
-                  <div className="col-md-3">Upload File</div>
-                </div>
-                <br /> <br />
-                <table className="table table-bordered table-sm mt-4">
-                  <th>Document Type</th>
-                  <th>Document Description</th>
-                  <th>Document Date</th>
-                  <th>Actions</th>
-                </table>
-              </div>
-            </div>
-          </TabPanel>
+          
+          
 
           <TabPanel>
             <div className="card">
