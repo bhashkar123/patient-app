@@ -108,7 +108,9 @@ const Login = (props) => {
             <br />
             <center>
               <a href="sign-up"> Don't have an account ? Signup now </a>{" "}
+
             </center>
+            <center>Please Contact A Pattern Plus @ 888</center>
           </Form>
         </div>
       </div>
