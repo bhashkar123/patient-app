@@ -278,17 +278,28 @@ export const CoreContextProvider = (props) => {
     }
 
     if (usertype === "doctor") {
-      data = {
-        TableName: userTable,
-        IndexName: "Patient-Doctor-Device-Index",
-        KeyConditionExpression: "GSI1PK = :v_PK AND GSI1SK =  :v_SK",
-        FilterExpression: "ActiveStatus = :v_status",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "patient" },
-          ":v_SK": { S: userId },
-          ":v_status": { S: "Active" },
-        },
-      };
+      if (AllActive) {
+        data = {
+          TableName: userTable,
+          KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+          ExpressionAttributeValues: {
+            ":v_PK": { S: "patient" },
+            ":v_SK": { S: "PATIENT_" },
+          },
+        };
+      } else {
+        data = {
+          TableName: userTable,
+          IndexName: "Patient-Doctor-Device-Index",
+          KeyConditionExpression: "GSI1PK = :v_PK AND GSI1SK =  :v_SK",
+          FilterExpression: "ActiveStatus = :v_status",
+          ExpressionAttributeValues: {
+            ":v_PK": { S: "patient" },
+            ":v_SK": { S: userId },
+            ":v_status": { S: "Active" },
+          },
+        };
+      }
     }
 
     if (usertype === "carecoordinator") {

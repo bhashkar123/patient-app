@@ -869,11 +869,11 @@ const PatientSummary = (props) => {
           <TabList>
             {/* <Tab onClick={pause}>Conditions</Tab> */}
             <Tab onClick={pause}>Programs</Tab>
-            <Tab onClick={pause}>Assesments</Tab>
+            {/* <Tab onClick={pause}>Assesments</Tab> */}
             <Tab onClick={pause}>Clinical Data</Tab>
             <Tab onClick={pause}>Billing</Tab>
-            <Tab onClick={pause}>Alerts</Tab>
-            <Tab onClick={pause}>Documents</Tab>
+            {/* <Tab onClick={pause}>Alerts</Tab> */}
+            {/* <Tab onClick={pause}>Documents</Tab> */}
             <Tab onClick={reset}>Task Timer</Tab>
             {/* <Tab onClick={pause}>Time Logs</Tab> */}
             <Tab>Time Logs</Tab>
@@ -919,14 +919,14 @@ const PatientSummary = (props) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <div className="card">
               <h4 className="card-header">Assesments</h4>
               <div className="card-body">
                 This patient does not yet have any assessments.
               </div>
             </div>
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel>
             <div className="card">
               <h4 className="card-header">Clinical Data</h4>
@@ -1104,7 +1104,7 @@ const PatientSummary = (props) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel>
+          {/* <TabPanel>
             <div className="card">
               <h4 className="card-header">Alert</h4>
               <div className="card-body">
@@ -1120,8 +1120,8 @@ const PatientSummary = (props) => {
                 </table>
               </div>
             </div>
-          </TabPanel>
-          <TabPanel>
+          </TabPanel> */}
+          {/* <TabPanel>
             <div className="card">
               <h4 className="card-header">Document</h4>
               <div className="card-body">
@@ -1140,7 +1140,7 @@ const PatientSummary = (props) => {
                 </table>
               </div>
             </div>
-          </TabPanel>
+          </TabPanel> */}
 
           <TabPanel>
             <div className="card">

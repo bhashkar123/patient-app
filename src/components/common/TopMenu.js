@@ -611,7 +611,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Email</Form.Label>
+                  <Form.Label>Email*</Form.Label>
                   <Form.Control
                     size="sm"
                     type="email"
@@ -635,7 +635,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>User Name*</Form.Label>
+                  <Form.Label>User Name</Form.Label>
                   <Form.Control
                     size="sm"
                     readOnly={true}
