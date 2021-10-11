@@ -80,7 +80,12 @@ const Patients = (props) => {
     const userType = localStorage.getItem("userType");
     setuserType(userType);
     const userId = localStorage.getItem("userId");
-    coreContext.fetchPatientListfromApi(userType, userId);
+    if(checked){
+      coreContext.fetchPatientListfromApi(userType, userId,checked);
+    }else{
+      coreContext.fetchPatientListfromApi(userType, userId);
+    }
+    
   };
 
   const fetchProviders = () => {
@@ -222,11 +227,13 @@ const Patients = (props) => {
     setChecked(event.target.checked);
     let isactiveusrs = event.target.checked;
     let userId = localStorage.getItem("userId");
+    const userType = localStorage.getItem("userType");
     if (isactiveusrs)
-      coreContext.fetchPatientListfromApi(usertype, userId, isactiveusrs);
+      coreContext.fetchPatientListfromApi(userType, userId, isactiveusrs);
   };
 
   useEffect(fetchPatients, [coreContext.patients.length]);
+  useEffect(fetchPatients, [checked]);
 
   const deletePatient = (patient) => {
     coreContext.DeletePatient(patient.userId);
