@@ -374,7 +374,7 @@ export const CoreContextProvider = (props) => {
 
           patient.mobilePhone = "";
 
-          console.log("i need to check the patient", patient);
+          //console.log("i need to check the patient", patient);
           if (p.UserId !== undefined) {
             patient.userId = p.UserId.n;
           }
@@ -1843,28 +1843,49 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchProviders = () => {
+  const fetchProviders = (isactive) => {
     const token = localStorage.getItem("app_jwt");
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      FilterExpression: "ActiveStatus = :v_status",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "doctor" },
-        ":v_SK": { S: "DOCTOR_" },
-        ":v_status": { S: "Active" },
-      },
+    let data = "";
+    if (!isactive) {
+      data = {
+        TableName: userTable,
+        ProjectionExpression: "PK,SK,UserName,Email,ContactNo,ActiveStatus",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "doctor" },
+          ":v_SK": { S: "DOCTOR_" },
+          ":v_status": { S: "Active" },
+        },
 
-      // "ExpressionAttributeValues": {
-      //     ":v_PK": { "S": "doctor" },
-      //     ":v_SK": { "S": "DOCTOR_" },
-      //     ":v_status": { "S": "Active" }
-      // }
-    };
+        // "ExpressionAttributeValues": {
+        //     ":v_PK": { "S": "doctor" },
+        //     ":v_SK": { "S": "DOCTOR_" },
+        //     ":v_status": { "S": "Active" }
+        // }
+      };
+    } else {
+      data = {
+        TableName: userTable,
+        ProjectionExpression: "PK,SK,UserName,Email,ContactNo,ActiveStatus",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        //FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "doctor" },
+          ":v_SK": { S: "DOCTOR_" },
+          //":v_status": { S: "Active" },
+        },
+
+        // "ExpressionAttributeValues": {
+        //     ":v_PK": { "S": "doctor" },
+        //     ":v_SK": { "S": "DOCTOR_" },
+        //     ":v_status": { "S": "Active" }
+        // }
+      };
+    }
 
     axios
       .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
@@ -1876,7 +1897,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const providerData = response.data;
-        console.log(response.data);
+        console.log("dsjdsjsdjfjsfs", response.data);
         const dataSetdoctor = [];
         const pOptions = [{ value: "", name: "Select Provider" }];
 
@@ -1887,6 +1908,9 @@ export const CoreContextProvider = (props) => {
           providerdata.provider = p.UserName.s;
           providerdata.email = p.Email.s;
           providerdata.phone = p.ContactNo.s;
+          if (p.ActiveStatus !== undefined) {
+            providerdata.ActiveStatus = p.ActiveStatus.s;
+          }
 
           if (p.SK !== undefined) {
             providerdata.doctor_id = p.SK.s;
@@ -2829,6 +2853,7 @@ export const CoreContextProvider = (props) => {
           if (p.DeviceType != undefined) {
             devicedata.DeviceType = p.DeviceType.s;
           }
+
           if (p.GSI1PK != undefined) {
             devicedata.patientId = p.GSI1PK.s;
             if (patients.length > 0) {
