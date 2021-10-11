@@ -1852,6 +1852,7 @@ export const CoreContextProvider = (props) => {
     if (!isactive) {
       data = {
         TableName: userTable,
+        ProjectionExpression: "PK,SK,UserName,Email,ContactNo,ActiveStatus",
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
         FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
@@ -1869,6 +1870,7 @@ export const CoreContextProvider = (props) => {
     } else {
       data = {
         TableName: userTable,
+        ProjectionExpression: "PK,SK,UserName,Email,ContactNo,ActiveStatus",
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
         //FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
