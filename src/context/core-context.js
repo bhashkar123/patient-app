@@ -1848,11 +1848,10 @@ export const CoreContextProvider = (props) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    let data="";
-    if(!isactive){
-       data = {
+    let data = "";
+    if (!isactive) {
+      data = {
         TableName: userTable,
-        ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
         FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
@@ -1860,19 +1859,16 @@ export const CoreContextProvider = (props) => {
           ":v_SK": { S: "DOCTOR_" },
           ":v_status": { S: "Active" },
         },
-  
+
         // "ExpressionAttributeValues": {
         //     ":v_PK": { "S": "doctor" },
         //     ":v_SK": { "S": "DOCTOR_" },
         //     ":v_status": { "S": "Active" }
         // }
       };
-
-    }
-    else{
+    } else {
       data = {
         TableName: userTable,
-        ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
         //FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
@@ -1880,7 +1876,7 @@ export const CoreContextProvider = (props) => {
           ":v_SK": { S: "DOCTOR_" },
           //":v_status": { S: "Active" },
         },
-  
+
         // "ExpressionAttributeValues": {
         //     ":v_PK": { "S": "doctor" },
         //     ":v_SK": { "S": "DOCTOR_" },
@@ -1899,7 +1895,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const providerData = response.data;
-        console.log("dsjdsjsdjfjsfs",response.data);
+        console.log("dsjdsjsdjfjsfs", response.data);
         const dataSetdoctor = [];
         const pOptions = [{ value: "", name: "Select Provider" }];
 
@@ -2855,7 +2851,7 @@ export const CoreContextProvider = (props) => {
           if (p.DeviceType != undefined) {
             devicedata.DeviceType = p.DeviceType.s;
           }
-          
+
           if (p.GSI1PK != undefined) {
             devicedata.patientId = p.GSI1PK.s;
             if (patients.length > 0) {
