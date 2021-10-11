@@ -374,7 +374,7 @@ export const CoreContextProvider = (props) => {
 
           patient.mobilePhone = "";
 
-          console.log("i need to check the patient", patient);
+          //console.log("i need to check the patient", patient);
           if (p.UserId !== undefined) {
             patient.userId = p.UserId.n;
           }
@@ -1899,7 +1899,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const providerData = response.data;
-        console.log(response.data);
+        console.log("dsjdsjsdjfjsfs",response.data);
         const dataSetdoctor = [];
         const pOptions = [{ value: "", name: "Select Provider" }];
 
@@ -1910,6 +1910,9 @@ export const CoreContextProvider = (props) => {
           providerdata.provider = p.UserName.s;
           providerdata.email = p.Email.s;
           providerdata.phone = p.ContactNo.s;
+          if (p.ActiveStatus !== undefined) {
+            providerdata.ActiveStatus = p.ActiveStatus.s;
+          }
 
           if (p.SK !== undefined) {
             providerdata.doctor_id = p.SK.s;
@@ -2852,6 +2855,7 @@ export const CoreContextProvider = (props) => {
           if (p.DeviceType != undefined) {
             devicedata.DeviceType = p.DeviceType.s;
           }
+          
           if (p.GSI1PK != undefined) {
             devicedata.patientId = p.GSI1PK.s;
             if (patients.length > 0) {
