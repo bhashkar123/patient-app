@@ -1843,28 +1843,51 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchProviders = () => {
+  const fetchProviders = (isactive) => {
     const token = localStorage.getItem("app_jwt");
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const data = {
-      TableName: userTable,
-      ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
-      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
-      FilterExpression: "ActiveStatus = :v_status",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "doctor" },
-        ":v_SK": { S: "DOCTOR_" },
-        ":v_status": { S: "Active" },
-      },
+    let data="";
+    if(!isactive){
+       data = {
+        TableName: userTable,
+        ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "doctor" },
+          ":v_SK": { S: "DOCTOR_" },
+          ":v_status": { S: "Active" },
+        },
+  
+        // "ExpressionAttributeValues": {
+        //     ":v_PK": { "S": "doctor" },
+        //     ":v_SK": { "S": "DOCTOR_" },
+        //     ":v_status": { "S": "Active" }
+        // }
+      };
 
-      // "ExpressionAttributeValues": {
-      //     ":v_PK": { "S": "doctor" },
-      //     ":v_SK": { "S": "DOCTOR_" },
-      //     ":v_status": { "S": "Active" }
-      // }
-    };
+    }
+    else{
+      data = {
+        TableName: userTable,
+        ProjectionExpression: "PK,SK,UserName,Email,ContactNo",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        //FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "doctor" },
+          ":v_SK": { S: "DOCTOR_" },
+          //":v_status": { S: "Active" },
+        },
+  
+        // "ExpressionAttributeValues": {
+        //     ":v_PK": { "S": "doctor" },
+        //     ":v_SK": { "S": "DOCTOR_" },
+        //     ":v_status": { "S": "Active" }
+        // }
+      };
+    }
 
     axios
       .post(apiUrl + "/DynamoDbAPIs/getitem", data, {

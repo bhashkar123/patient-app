@@ -6,6 +6,7 @@ import { Modal, Button } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import { useForm } from "react-hook-form";
 import Input from "./common/Input";
+import Switch from "@material-ui/core/Switch";
 
 import {
   DataGrid,
@@ -88,6 +89,7 @@ const Provider = (props) => {
   useEffect(coreContext.checkLocalAuth, []);
 
   const [name, setName] = useState("");
+  const [checked, setChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -125,7 +127,7 @@ const Provider = (props) => {
   const fetchProviders = () => {
     const patientId = props.match.params.patient;
     setPatientId(patientId);
-    coreContext.fetchProviders();
+    coreContext.fetchProviders(checked);
   };
 
   const resetForm = () => {
@@ -139,7 +141,15 @@ const Provider = (props) => {
   useEffect(resetForm, [coreContext.resetForm]);
 
   useEffect(fetchProviders, [coreContext.providerData.length]);
-
+{console.log("checking the date",coreContext.providerData)}
+const onToggleChangeActiveUsers = (event) => {
+  setChecked(event.target.checked);
+  let isactiveusrs = event.target.checked;
+  
+  if (isactiveusrs)
+    coreContext.fetchProviders(isactiveusrs);
+};
+useEffect(fetchProviders, [checked]);
   const columns = [
     {
       field: "provider",
@@ -157,6 +167,13 @@ const Provider = (props) => {
       headerName: "Phone",
       width: 200,
       editable: false,
+    },
+    {
+      field: "ActiveStatus",
+      headerName: "ActiveStatus",
+      editable: false,
+      type: "string",
+      width: 130,
     },
     {
       field: "",
@@ -270,6 +287,17 @@ const Provider = (props) => {
             Add Provider
           </button>
         </form>
+        <span className="float-right mr-5">
+            Active
+            <Switch
+              color="primary"
+              checked={checked}
+              //onChange={(event)=>setChecked(event.target.checked)}
+              onChange={onToggleChangeActiveUsers}
+              // inputProps={{ 'aria-label': 'controlled' }}
+            />
+            All
+          </span>
       </div>
       <div className="card-body">
         <table className="table table-bordered table-hover table-sm">
