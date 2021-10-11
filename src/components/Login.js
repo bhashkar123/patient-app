@@ -107,7 +107,11 @@ const Login = (props) => {
             </center>
             <br />
             <center>
-              <a href="sign-up"> Don't have an account ? Signup now </a>{" "}
+              <span>
+                {" "}
+                Don't have an account ? Please Contact A Pattern Medical Clinic
+                (423) 455-2711{" "}
+              </span>{" "}
             </center>
           </Form>
         </div>
