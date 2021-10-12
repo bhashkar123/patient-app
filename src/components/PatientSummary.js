@@ -108,9 +108,9 @@ const PatientSummary = (props) => {
   const greeting = "Welcome to React";
   const [Prompt, setDirty, setPristine] = Alert();
 
-  const [provider, setProvider] = useState("");
-  const [coach, setCoach] = useState("");
-  const [coordinator, setCoordinator] = useState("");
+  let [provider, setProvider] = useState("");
+  let [coach, setCoach] = useState("");
+  let [coordinator, setCoordinator] = useState("");
 
   const fetchCareCoordinator = () => {
     const patientId = props.match.params.patient;
@@ -603,33 +603,33 @@ const PatientSummary = (props) => {
       coreContext.patient.ProviderName = "Select Provider";
       setProvider("");
     } else {
-      setProvider(
-        coreContext.providerOptions.filter((name) =>
-          name.name.includes(coreContext.patient.ProviderName)
-        )[0].value
-      );
+      provider = coreContext.providerOptions.filter((name) =>
+        name.name.includes(coreContext.patient.ProviderName)
+      )[0].value;
+      console.log(provider);
+      setProvider(provider);
     }
 
     if (coreContext.patient.CareName === undefined) {
       coreContext.patient.CareName = "Select Coordinator";
       setCoordinator("");
     } else {
-      setCoordinator(
-        coreContext.careCoordinatorOptions.filter((name) =>
-          name.name.includes(coreContext.patient.CareName)
-        )[0].value
-      );
+      coordinator = coreContext.careCoordinatorOptions.filter((name) =>
+        name.name.includes(coreContext.patient.CareName)
+      )[0].value;
+      console.log(coordinator);
+      setCoordinator(coordinator);
     }
 
     if (coreContext.patient.CoachName === undefined) {
       coreContext.patient.CoachName = "Select Coach";
       setCoach("");
     } else {
-      setCoach(
-        coreContext.coachOptions.filter((name) =>
-          name.name.includes(coreContext.patient.CoachName)
-        )[0].value
-      );
+      coach = coreContext.coachOptions.filter((name) =>
+        name.name.includes(coreContext.patient.CoachName)
+      )[0].value;
+      console.log(coach);
+      setCoach(coach);
     }
 
     coreContext.UpdatePatient(
@@ -638,9 +638,9 @@ const PatientSummary = (props) => {
       coreContext.patient.mobile,
       coreContext.patient.dob,
       coreContext.patient.height,
-      coreContext.patient.provider,
-      coreContext.patient.coordinator,
-      coreContext.patient.coach,
+      provider,
+      coordinator,
+      coach,
       coreContext.patient.patientId,
       coreContext.patient.gender,
       coreContext.patient.language,
@@ -704,7 +704,7 @@ const PatientSummary = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Enter notes"
-                value={notes}
+                value={coreContext.patient.notes}
                 onChange={(e) => setNotes(e.target.value)}
               />
             ) : (

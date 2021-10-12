@@ -80,12 +80,11 @@ const Patients = (props) => {
     const userType = localStorage.getItem("userType");
     setuserType(userType);
     const userId = localStorage.getItem("userId");
-    if(checked){
-      coreContext.fetchPatientListfromApi(userType, userId,checked);
-    }else{
+    if (checked) {
+      coreContext.fetchPatientListfromApi(userType, userId, checked);
+    } else {
       coreContext.fetchPatientListfromApi(userType, userId);
     }
-    
   };
 
   const fetchProviders = () => {
@@ -147,8 +146,8 @@ const Patients = (props) => {
       setProvider("");
     } else {
       setProvider(
-        coreContext.providerOptions.filter(
-          (name) => name.name === patient.ProviderName
+        coreContext.providerOptions.filter((name) =>
+          name.name.includes(patient.ProviderName)
         )[0].value
       );
     }
@@ -158,8 +157,8 @@ const Patients = (props) => {
       setCoordinator("");
     } else {
       setCoordinator(
-        coreContext.careCoordinatorOptions.filter(
-          (name) => name.name === patient.CareName
+        coreContext.careCoordinatorOptions.filter((name) =>
+          name.name.includes(patient.CareName)
         )[0].value
       );
     }
@@ -169,16 +168,12 @@ const Patients = (props) => {
       setCoach("");
     } else {
       setCoach(
-        coreContext.coachOptions.filter(
-          (name) => name.name === patient.CoachName
+        coreContext.coachOptions.filter((name) =>
+          name.name.includes(patient.CoachName)
         )[0].value
       );
     }
-    //   setProvider(
-    //     coreContext.providerOptions.filter((name)=>name.name===patient.ProviderName)[0].value
-    //     )
-    //     setCoordinator(coreContext.careCoordinatorOptions.filter((name)=>name.name===patient.CareName)[0].value)
-    //  setCoach(coreContext.coachOptions.filter((name)=>name.name===patient.CoachName)[0].value)
+
     handleModalShow();
   };
 
