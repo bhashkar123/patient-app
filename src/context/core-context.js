@@ -257,6 +257,8 @@ export const CoreContextProvider = (props) => {
       if (AllActive) {
         data = {
           TableName: userTable,
+          ProjectionExpression:
+            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
           KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
           ExpressionAttributeValues: {
             ":v_PK": { S: "patient" },
@@ -266,6 +268,8 @@ export const CoreContextProvider = (props) => {
       } else {
         data = {
           TableName: userTable,
+          ProjectionExpression:
+            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
           KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
           FilterExpression: "ActiveStatus = :v_status",
           ExpressionAttributeValues: {
@@ -281,6 +285,8 @@ export const CoreContextProvider = (props) => {
       if (AllActive) {
         data = {
           TableName: userTable,
+          ProjectionExpression:
+            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
           KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
           ExpressionAttributeValues: {
             ":v_PK": { S: "patient" },
@@ -305,6 +311,8 @@ export const CoreContextProvider = (props) => {
     if (usertype === "carecoordinator") {
       data = {
         TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
         KeyConditionExpression: "PK = :v_PK ",
         FilterExpression:
           "ActiveStatus = :v_status AND CarecoordinatorId = :v_CarecoordinatorId",
@@ -318,6 +326,8 @@ export const CoreContextProvider = (props) => {
     if (usertype === "coach") {
       data = {
         TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
         KeyConditionExpression: "PK = :v_PK ",
         FilterExpression: "ActiveStatus = :v_status AND CoachId = :v_CoachId",
         ExpressionAttributeValues: {
@@ -338,6 +348,8 @@ export const CoreContextProvider = (props) => {
     if (usertype === "patient") {
       data = {
         TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
         FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
@@ -1066,7 +1078,8 @@ export const CoreContextProvider = (props) => {
     street,
     zip,
     city,
-    state
+    state,
+    note
   ) => {
     console.log(fname);
     const token = localStorage.getItem("app_jwt");
@@ -1111,7 +1124,7 @@ export const CoreContextProvider = (props) => {
         "SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB," +
         "Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName," +
         "Gender = :v_Gender, Lang = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street," +
-        "Zip = :v_Zip, City = :v_City, St = :v_State",
+        "Zip = :v_Zip, City = :v_City, St = :v_State,Note = :v_Note",
       ExpressionAttributeValues: {
         ":v_GSI1SK": { S: "" + providername.value + "" },
         ":v_GSI1PK": { S: "patient" },
@@ -1132,6 +1145,7 @@ export const CoreContextProvider = (props) => {
         ":v_Zip": { S: "" + zip + "" },
         ":v_City": { S: "" + city + "" },
         ":v_State": { S: "" + state + "" },
+        ":v_Note": { S: "" + note + "" },
       },
     };
 
