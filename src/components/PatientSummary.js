@@ -641,7 +641,7 @@ const PatientSummary = (props) => {
       provider,
       coordinator,
       coach,
-      coreContext.patient.patientId,
+      coreContext.patient.userId,
       coreContext.patient.gender,
       coreContext.patient.language,
       coreContext.patient.workPhone,
@@ -702,9 +702,8 @@ const PatientSummary = (props) => {
             {showNotesTextBox ? (
               <input
                 type="text"
-                className="form-control"
                 placeholder="Enter notes"
-                value={coreContext.patient.notes}
+                value={notes}
                 onChange={(e) => setNotes(e.target.value)}
               />
             ) : (

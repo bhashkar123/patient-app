@@ -480,6 +480,12 @@ export const CoreContextProvider = (props) => {
             patient.lastName = p.LastName.s;
           }
 
+          // if firstname and lastname undefined then take name from name and put it.
+          if (patient.name !== undefined) {
+            patient.lastName = patient.name.split(",")[0];
+            patient.firstName = patient.name.split(",")[1];
+          }
+
           if (patient.firstName !== undefined && patient.lastName) {
             patient.name = patient.lastName + "," + "  " + patient.firstName;
           }
@@ -490,30 +496,44 @@ export const CoreContextProvider = (props) => {
 
           if (p.Lang !== undefined) {
             patient.language = p.Lang.s;
+          } else {
+            patient.language = "";
           }
 
           if (p.Street !== undefined) {
             patient.street = p.Street.s;
+          } else {
+            patient.street = "";
           }
 
           if (p.City !== undefined) {
             patient.city = p.City.s;
+          } else {
+            patient.city = "";
           }
 
           if (p.Zip !== undefined) {
             patient.zip = p.Zip.s;
+          } else {
+            patient.zip = "";
           }
 
           if (p.WorkPhone !== undefined) {
             patient.workPhone = p.WorkPhone.s;
+          } else {
+            patient.workPhone = "";
           }
 
           if (p.MobilePhone !== undefined) {
             patient.mobilePhone = p.MobilePhone.s;
+          } else {
+            patient.mobilePhone = "";
           }
 
           if (p.Notes !== undefined) {
             patient.notes = p.Notes.s;
+          } else {
+            patient.notes = "";
           }
 
           // if (patient.userId !== undefined && patient.name) {
