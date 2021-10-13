@@ -1198,6 +1198,7 @@ export const CoreContextProvider = (props) => {
           patinet.provider = provider;
           patinet.coordinator = coordinator;
           patinet.coach = coach;
+          patient.notes=note;
           // updating object
         } else {
           alert("Patient data did not Update  Successfully.");
