@@ -261,7 +261,8 @@ const PatientSummary = (props) => {
 
   useEffect(fetchPatient, [coreContext.thresoldData.length]);
 
-  useEffect(fetchPatient, [coreContext.patient.notes]);
+  // useEffect(fetchPatient, [coreContext.patient.notes]);
+  useEffect(()=>setNotes(coreContext.patient.notes), [coreContext.patient.notes]);
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
