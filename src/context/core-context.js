@@ -2160,6 +2160,8 @@ export const CoreContextProvider = (props) => {
     if (usertype === "patient") {
       data = {
         TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         IndexName: "Patient-Doctor-Device-Index",
         FilterExpression: "ActiveStatus <> :v_ActiveStatus",
         KeyConditionExpression: "GSI1PK = :v_PK",
@@ -2173,6 +2175,8 @@ export const CoreContextProvider = (props) => {
     if (usertype === "doctor") {
       data = {
         TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
           "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
@@ -2187,6 +2191,8 @@ export const CoreContextProvider = (props) => {
     if (usertype === "admin") {
       data = {
         TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression: "ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
@@ -2264,7 +2270,10 @@ export const CoreContextProvider = (props) => {
           if (bp.SK !== undefined) {
             bpdata.readingId = bp.SK.s.split("_").pop();
           }
-          bpdata.actionTaken = bp.ActionTaken.s;
+
+          if (bp.ActionTaken !== undefined) {
+            bpdata.actionTaken = bp.ActionTaken.s;
+          }
 
           dataSetbp.push(bpdata);
         });
