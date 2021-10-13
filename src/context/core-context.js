@@ -258,7 +258,7 @@ export const CoreContextProvider = (props) => {
         data = {
           TableName: userTable,
           ProjectionExpression:
-            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
+            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus, Notes",
           KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
           ExpressionAttributeValues: {
             ":v_PK": { S: "patient" },
@@ -269,7 +269,7 @@ export const CoreContextProvider = (props) => {
         data = {
           TableName: userTable,
           ProjectionExpression:
-            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus",
+            "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes",
           KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
           FilterExpression: "ActiveStatus = :v_status",
           ExpressionAttributeValues: {
@@ -532,6 +532,7 @@ export const CoreContextProvider = (props) => {
 
           if (p.Notes !== undefined) {
             patient.notes = p.Notes.s;
+            console.log("Notes" + p.Notes.s);
           } else {
             patient.notes = "";
           }
@@ -1103,7 +1104,7 @@ export const CoreContextProvider = (props) => {
     zip,
     city,
     state,
-    note
+    notes
   ) => {
     console.log(fname);
     const token = localStorage.getItem("app_jwt");
@@ -1169,7 +1170,7 @@ export const CoreContextProvider = (props) => {
         ":v_Zip": { S: "" + zip + "" },
         ":v_City": { S: "" + city + "" },
         ":v_State": { S: "" + state + "" },
-        ":v_Notes": { S: "" + note + "" },
+        ":v_Notes": { S: "" + notes + "" },
       },
     };
 
@@ -1198,7 +1199,7 @@ export const CoreContextProvider = (props) => {
           patinet.provider = provider;
           patinet.coordinator = coordinator;
           patinet.coach = coach;
-          patient.notes=note;
+          patient.notes = notes;
           // updating object
         } else {
           alert("Patient data did not Update  Successfully.");

@@ -261,6 +261,8 @@ const PatientSummary = (props) => {
 
   useEffect(fetchPatient, [coreContext.thresoldData.length]);
 
+  useEffect(fetchPatient, [coreContext.patient.notes]);
+
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
   //useEffect(fetchPatient, [coreContext.patient]);
@@ -698,17 +700,16 @@ const PatientSummary = (props) => {
     if (coreContext.patient)
       return (
         <div className="card">
-          <div className="card-body" >
+          <div className="card-body">
             {" "}
             <label for="exampleFormControlTextarea1">Notes for Patient</label>
-              <textarea 
+            <textarea
               class="form-control"
               rows="3"
-                placeholder="Enter notes"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            {" "}
+              placeholder="Enter notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />{" "}
           </div>
         </div>
       );
