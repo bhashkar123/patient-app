@@ -148,6 +148,7 @@ const PatientSummary = (props) => {
     setpatientId(patientId);
     console.log("checking id", userName);
     setPerformedBy(userName);
+    setNotes(coreContext.patient.notes);
     //setTaskType("Care Coordination")
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
@@ -650,7 +651,7 @@ const PatientSummary = (props) => {
       coreContext.patient.zip,
       coreContext.patient.city,
       coreContext.patient.state,
-      coreContext.patient.notes
+      notes
     );
   };
 
@@ -696,19 +697,18 @@ const PatientSummary = (props) => {
   const renderAddNotes = () => {
     if (coreContext.patient)
       return (
-        <div className="card" style={{ backgroundColor: "#b8b133" }}>
-          <div className="card-body" onClick={() => setShowNotesTextBox(true)}>
+        <div className="card">
+          <div className="card-body" >
             {" "}
-            {showNotesTextBox ? (
-              <input
-                type="text"
+            <label for="exampleFormControlTextarea1">Notes for Patient</label>
+              <textarea 
+              class="form-control"
+              rows="3"
                 placeholder="Enter notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
               />
-            ) : (
-              "Click here to add some notes for the patient"
-            )}{" "}
+            {" "}
           </div>
         </div>
       );
