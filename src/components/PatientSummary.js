@@ -262,7 +262,10 @@ const PatientSummary = (props) => {
   useEffect(fetchPatient, [coreContext.thresoldData.length]);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
-  useEffect(()=>setNotes(coreContext.patient.notes), [coreContext.patient.notes]);
+  useEffect(
+    () => setNotes(coreContext.patient.notes),
+    [coreContext.patient.notes]
+  );
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
@@ -1502,8 +1505,7 @@ const PatientSummary = (props) => {
           Reset
         </button>
         <button
-          style={{ marginLeft: 600, backgroundColor: blue }}
-          id="resetTimer"
+          style={{ marginLeft: "20%", backgroundColor: blue }}
           className="btn btn-sm btn-primary-update"
           onClick={() => {
             UpdatePatient();
