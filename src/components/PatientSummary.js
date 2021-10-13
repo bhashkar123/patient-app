@@ -45,6 +45,7 @@ import Moment from "moment";
 import context from "react-bootstrap/esm/AccordionContext";
 import { Thresold } from "./Thresold";
 import Alert from "./common/Alert";
+import { blue } from "@material-ui/core/colors";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiDataGrid-columnHeaderCheckbox": {
@@ -106,6 +107,10 @@ const PatientSummary = (props) => {
 
   const greeting = "Welcome to React";
   const [Prompt, setDirty, setPristine] = Alert();
+
+  let [provider, setProvider] = useState("");
+  let [coach, setCoach] = useState("");
+  let [coordinator, setCoordinator] = useState("");
 
   const fetchCareCoordinator = () => {
     const patientId = props.match.params.patient;
@@ -593,6 +598,62 @@ const PatientSummary = (props) => {
       .catch(() => alert("Message Sending failed"));
   };
 
+  const UpdatePatient = () => {
+    if (coreContext.patient.ProviderName === undefined) {
+      coreContext.patient.ProviderName = "Select Provider";
+      setProvider("");
+    } else {
+      provider = coreContext.providerOptions.filter((name) =>
+        name.name.includes(coreContext.patient.ProviderName)
+      )[0].value;
+      console.log(provider);
+      setProvider(provider);
+    }
+
+    if (coreContext.patient.CareName === undefined) {
+      coreContext.patient.CareName = "Select Coordinator";
+      setCoordinator("");
+    } else {
+      coordinator = coreContext.careCoordinatorOptions.filter((name) =>
+        name.name.includes(coreContext.patient.CareName)
+      )[0].value;
+      console.log(coordinator);
+      setCoordinator(coordinator);
+    }
+
+    if (coreContext.patient.CoachName === undefined) {
+      coreContext.patient.CoachName = "Select Coach";
+      setCoach("");
+    } else {
+      coach = coreContext.coachOptions.filter((name) =>
+        name.name.includes(coreContext.patient.CoachName)
+      )[0].value;
+      console.log(coach);
+      setCoach(coach);
+    }
+
+    coreContext.UpdatePatient(
+      coreContext.patient.firstName,
+      coreContext.patient.lastName,
+      coreContext.patient.mobile,
+      coreContext.patient.dob,
+      coreContext.patient.height,
+      provider,
+      coordinator,
+      coach,
+      coreContext.patient.userId,
+      coreContext.patient.gender,
+      coreContext.patient.language,
+      coreContext.patient.workPhone,
+      coreContext.patient.mobilePhone,
+      coreContext.patient.street,
+      coreContext.patient.zip,
+      coreContext.patient.city,
+      coreContext.patient.state,
+      coreContext.patient.notes
+    );
+  };
+
   const renderTopDetails = () => {
     {
       console.log("taylor", coreContext.patient);
@@ -641,7 +702,6 @@ const PatientSummary = (props) => {
             {showNotesTextBox ? (
               <input
                 type="text"
-                className="form-control"
                 placeholder="Enter notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -1412,7 +1472,7 @@ const PatientSummary = (props) => {
         className="btn btn-primary mb-2 float-right"
         style={{ backgroundColor: "transparent" }}
         id="stopwatch">
-        <span className="min-time">
+        <span className="min-time" style={{ marginLeft: 550 }}>
           <span className="time-txt">min</span>
           <span className="time-num">{minutes}</span>
         </span>
@@ -1439,10 +1499,32 @@ const PatientSummary = (props) => {
           onClick={reset}>
           Reset
         </button>
+        <button
+          style={{ marginLeft: 600, backgroundColor: blue }}
+          id="resetTimer"
+          className="btn btn-sm btn-primary-update"
+          onClick={() => {
+            UpdatePatient();
+          }}>
+          Update Patient
+        </button>
+
         {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
 
         {/* <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date,(tlvalue!=="00:00:00")?tlvalueseconds:minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");settimevalue("");setTlValue("00:00:00");}} className="btn btn-sm btn-success"> Add Time Log</button> */}
       </div>
+
+      {/* <div
+        className="btn btn-primary mb-2 float-right"
+        style={{ backgroundColor: "transparent" }}>
+        <button
+          style={{ marginRight: 12 }}
+          id="resetTimer"
+          className="btn btn-sm btn-danger"
+          onClick={reset}>
+          Reset
+        </button>
+      </div> */}
 
       <div onClick={() => setShowNotesTextBox(false)} className="card-header">
         {renderTopDetails()}
