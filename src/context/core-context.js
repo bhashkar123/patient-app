@@ -385,6 +385,7 @@ export const CoreContextProvider = (props) => {
           patient.id = index;
 
           patient.mobilePhone = "";
+          patient.workPhone = "";
 
           //console.log("i need to check the patient", patient);
           if (p.UserId !== undefined) {
