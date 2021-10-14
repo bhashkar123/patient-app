@@ -623,7 +623,7 @@ const Patients = (props) => {
             <div className="row">
               <div className="col-md-6">
                 <Input
-                  label="First Name"
+                  label="First Name*"
                   elementType="text"
                   minLength={5}
                   maxLength={55}
@@ -637,7 +637,7 @@ const Patients = (props) => {
                 />
 
                 <Input
-                  label="Phone"
+                  label="Phone*"
                   elementType="text"
                   placeholder="Enter phone"
                   onChange={(e) => setPhone(e.target.value)}
@@ -651,7 +651,7 @@ const Patients = (props) => {
                 />
 
                 <Input
-                  label="Date of Birth"
+                  label="Date of Birth*"
                   elementType="date"
                   placeholder="Enter dob"
                   onChange={(e) => setBirthDate(e.target.value)}
@@ -664,7 +664,7 @@ const Patients = (props) => {
                 {console.log(birthDate)}
                 {/* <input type="date"/> */}
                 <Input
-                  label="Height (Inch)"
+                  label="Height (Inch)*"
                   elementType="number"
                   minLength={1}
                   maxLength={55}
@@ -678,7 +678,7 @@ const Patients = (props) => {
                 />
 
                 <Input
-                  label="Gender"
+                  label="Gender*"
                   name="gender"
                   required={true}
                   register={register}
@@ -690,7 +690,7 @@ const Patients = (props) => {
                 />
 
                 <Input
-                  label="Mobile Phone"
+                  label="Mobile Phone*"
                   name="mobilePhone"
                   required={true}
                   register={register}
@@ -727,7 +727,7 @@ const Patients = (props) => {
                 {/* <Input label='Height (Inch)' placeholder='Enter height' onChange={e => setHeight(e.target.value)} name='height' value={provider} required={true} register={register} errors={errors} /> */}
 
                 <Input
-                  label="Last Name"
+                  label="Last Name*"
                   elementType="text"
                   minLength={5}
                   maxLength={55}
@@ -777,7 +777,7 @@ const Patients = (props) => {
                 />
 
                 <Input
-                  label="Language"
+                  label="Language*"
                   name="language"
                   required={true}
                   register={register}
@@ -791,7 +791,7 @@ const Patients = (props) => {
                 <Input
                   label="Work Phone"
                   name="workPhone"
-                  required={true}
+                  required={false}
                   register={register}
                   errors={errors}
                   elementType="text"

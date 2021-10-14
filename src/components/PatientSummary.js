@@ -714,6 +714,18 @@ const PatientSummary = (props) => {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />{" "}
+            <button
+              style={{
+                marginTop: "5px",
+                width: "10%",
+                backgroundColor: blue,
+              }}
+              className="btn btn-sm btn-primary-update float-right"
+              onClick={() => {
+                UpdatePatient();
+              }}>
+              Save Note
+            </button>
           </div>
         </div>
       );
@@ -1504,15 +1516,6 @@ const PatientSummary = (props) => {
           onClick={reset}>
           Reset
         </button>
-        <button
-          style={{ marginLeft: "20%", backgroundColor: blue }}
-          className="btn btn-sm btn-primary-update"
-          onClick={() => {
-            UpdatePatient();
-          }}>
-          Update Patient
-        </button>
-
         {/* <button type='button'eventKey={'TimeLog'}  onClick={() => {coreContext.UpdateTimeLog( coreContext.timeLogData, patientId, userName );handleSelect(8);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");}} className="btn btn-sm btn-success"> Update Time Log</button>  */}
 
         {/* <button type='button' onClick={() => {pause();coreContext.AddTimeLog( taskType, performedBy, date,(tlvalue!=="00:00:00")?tlvalueseconds:minutes*60+seconds,startDT, patientId, userName );coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);coreContext.fetchTimeLog("PATIENT_" + patientId);setPristine();setPerformedBy("");setTaskType("");setDate("");sett1("");settimevalue("");setTlValue("00:00:00");}} className="btn btn-sm btn-success"> Add Time Log</button> */}
