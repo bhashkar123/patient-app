@@ -487,8 +487,8 @@ export const CoreContextProvider = (props) => {
             patient.firstName = patient.name.split(",")[1];
           }
 
-          if (patient.firstName !== undefined && patient.lastName) {
-            patient.name = patient.lastName + "," + "  " + patient.firstName;
+          if (p.FirstName !== undefined && p.LastName !== undefined) {
+            patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
           }
 
           if (p.Gender !== undefined) {
@@ -1152,7 +1152,8 @@ export const CoreContextProvider = (props) => {
         "Gender = :v_Gender, Lang = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street," +
         "Zip = :v_Zip, City = :v_City, St = :v_State, Notes = :v_Notes",
       ExpressionAttributeValues: {
-        ":v_GSI1SK": { S: "" + providername.value + "" },
+        ":v_ProviderId": { S: "" + providername.value + "" },
+        ":v_ProviderName": { S: "" + providername.name + "" },
         ":v_GSI1PK": { S: "patient" },
         ":v_firstname": { S: fname },
         ":v_lastname": { S: lname },
