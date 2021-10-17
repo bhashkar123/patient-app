@@ -126,8 +126,8 @@ const Patients = (props) => {
       console.log("checking", patient);
     }
     if (patient.name !== undefined) {
-      patient.lastName = patient.name.split(",")[0];
-      patient.firstName = patient.name.split(",")[1];
+      patient.lastName = patient.name.split(",")[0].trim();
+      patient.firstName = patient.name.split(",")[1].trim();
     }
     setFName(patient.firstName);
     setLName(patient.lastName);
