@@ -1005,11 +1005,12 @@ export const CoreContextProvider = (props) => {
     const token = localStorage.getItem("app_jwt");
 
     let _type = "";
-    if (type == "BG") _type = "Blood Glucose";
-    if (type == "SYSTOLIC") _type = "SYSTOLIC";
-    if (type == "DIASTOLIC") _type = "DIASTOLIC";
-    if (type == "BMI") _type = "BMI";
-    if (type == "WS") _type = "Weight";
+    if (type.toString().toUpperCase().trim() == "BG") _type = "Blood Glucose";
+    if (type.toString().toUpperCase().trim() == "SYSTOLIC") _type = "SYSTOLIC";
+    if (type.toString().toUpperCase().trim() == "DIASTOLIC")
+      _type = "DIASTOLIC";
+    if (type.toString().toUpperCase().trim() == "BMI") _type = "BMI";
+    if (type.toString().toUpperCase().trim() == "WS") _type = "Weight";
     const data = {
       TableName: userTable,
       Key: {
