@@ -75,6 +75,8 @@ const PatientSummary = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [t1, sett1] = useState("");
   const [tlvalue, setTlValue] = React.useState("00:00:00");
+  const [from, setfrom] = useState(new Date());
+  const [to, setto] = useState(new Date());
 
   const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
 
@@ -83,6 +85,7 @@ const PatientSummary = (props) => {
 
   const [systolicMin, setSystolicMin] = useState(0);
   const [systolicMax, setSystolicMax] = useState(0);
+  const myst={backgroundColor:"#34a0ca ",marginRight:"20px",width:"50px"};
 
   const [weightMin, setWeightMin] = useState(0);
   const [weightMax, setWeightMax] = useState(0);
@@ -266,6 +269,97 @@ const PatientSummary = (props) => {
     () => setNotes(coreContext.patient.notes),
     [coreContext.patient.notes]
   );
+
+  const renderDates=()=>{
+    return(
+      <>
+      <div className="col-sm-12">
+        <label>From:</label>
+      <DatePicker
+      selected={from}
+        onChange={(e)=>setfrom(e)}
+        value={from}
+      />
+        <label className="ml-3">To:</label>
+      <DatePicker
+      selected={to}
+        onChange={(e)=>setto(e)}
+        value={to}
+      />
+      </div>
+      </>
+    )
+  }
+  const fetchbp=()=>{
+    coreContext.fetchBloodPressure(localStorage.getItem("ehrId"), "patient");
+  }
+  useEffect(fetchbp, [coreContext.bloodpressureData.length]);
+  const getbpdata=()=>{
+    if (coreContext.bloodpressureData.length == 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
+    if (
+      coreContext.bloodpressureData.length > 0 &&
+      coreContext.bloodpressureData[0].UserName !== undefined
+    ) {
+      let finaldata=coreContext.bloodpressureData.filter((date)=>date.CreatedDate>=from && date.CreatedDate<=to)
+      {console.log(finaldata)}
+      let Systolic=[];
+      let diastolic=[];
+      finaldata.map((curr)=>{
+        Systolic.push(Number(curr.systolic));
+        diastolic.push(Number(curr.diastolic));
+      })
+      let avgsys=Systolic.reduce((a, b) => a + b, 0)/finaldata.length;
+      let avgdia=diastolic.reduce((a, b) => a + b, 0)/finaldata.length;
+      return(<>
+      
+
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Total Readings</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{finaldata.length}</div>
+</div>           
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Reading per day</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Systolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{parseFloat(avgsys).toFixed(2)}</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Diastolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{parseFloat(avgdia).toFixed(2)}</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Lowest Systolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{Math.min(...Systolic)}</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Highest Diastolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{Math.max(...diastolic)}</div>
+</div>
+
+      </>)
+      
+    }
+    else{
+      return(<h1>no data found</h1>)
+    }
+
+}
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
@@ -1027,6 +1121,7 @@ const PatientSummary = (props) => {
                   <TabPanel>
                     <Tabs>
                       <TabList>
+                      <Tab onClick={pause}>Blood Pressure Thing</Tab>
                         <Tab onClick={pause}>Blood Pressure</Tab>
                         <Tab onClick={pause}>Blood Pressure Average</Tab>
                         <Tab onClick={pause}>Blood Glucose</Tab>
@@ -1035,6 +1130,37 @@ const PatientSummary = (props) => {
                         <Tab onClick={pause}>Weight Average</Tab>
                         <Tab onClick={pause}>Threshold</Tab>
                       </TabList>
+                      <TabPanel>
+                        {/* <div className="card"> */}
+                        {renderDates()}
+                        {getbpdata()}
+                        {/* <div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Total Readings</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>           
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Reading per day</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Systolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Diastolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Lowest Systolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Highest Diastolic</div>
+  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+</div>
+ */}
+
+                              </TabPanel>
                       <TabPanel>
                         <div className="card">
                           {/* <BloodPressure ></BloodPressure> */}
