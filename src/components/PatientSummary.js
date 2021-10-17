@@ -610,33 +610,33 @@ const PatientSummary = (props) => {
       coreContext.patient.ProviderName = "Select Provider";
       setProvider("");
     } else {
-      provider = coreContext.providerOptions.filter((name) =>
+      let result = coreContext.providerOptions.filter((name) =>
         name.name.includes(coreContext.patient.ProviderName)
-      )[0].value;
-      console.log(provider);
-      setProvider(provider);
+      );
+      if (result.length > 0) setProvider(result[0].value);
+      else setProvider("");
     }
 
     if (coreContext.patient.CareName === undefined) {
       coreContext.patient.CareName = "Select Coordinator";
       setCoordinator("");
     } else {
-      coordinator = coreContext.careCoordinatorOptions.filter((name) =>
+      let result = coreContext.careCoordinatorOptions.filter((name) =>
         name.name.includes(coreContext.patient.CareName)
-      )[0].value;
-      console.log(coordinator);
-      setCoordinator(coordinator);
+      );
+      if (result.length > 0) setCoordinator(result[0].value);
+      else setCoordinator("");
     }
 
     if (coreContext.patient.CoachName === undefined) {
       coreContext.patient.CoachName = "Select Coach";
       setCoach("");
     } else {
-      coach = coreContext.coachOptions.filter((name) =>
+      let result = coreContext.coachOptions.filter((name) =>
         name.name.includes(coreContext.patient.CoachName)
-      )[0].value;
-      console.log(coach);
-      setCoach(coach);
+      );
+      if (result.length > 0) setCoach(result[0].value);
+      else setCoach("");
     }
 
     coreContext.UpdatePatient(

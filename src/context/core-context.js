@@ -487,8 +487,8 @@ export const CoreContextProvider = (props) => {
             patient.firstName = patient.name.split(",")[1];
           }
 
-          if (patient.firstName !== undefined && patient.lastName) {
-            patient.name = patient.lastName + "," + "  " + patient.firstName;
+          if (p.FirstName !== undefined && p.LastName !== undefined) {
+            patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
           }
 
           if (p.Gender !== undefined) {
@@ -1005,11 +1005,12 @@ export const CoreContextProvider = (props) => {
     const token = localStorage.getItem("app_jwt");
 
     let _type = "";
-    if (type == "BG") _type = "Blood Glucose";
-    if (type == "SYSTOLIC") _type = "SYSTOLIC";
-    if (type == "DIASTOLIC") _type = "DIASTOLIC";
-    if (type == "BMI") _type = "BMI";
-    if (type == "WS") _type = "Weight";
+    if (type.toString().toUpperCase().trim() == "BG") _type = "Blood Glucose";
+    if (type.toString().toUpperCase().trim() == "SYSTOLIC") _type = "SYSTOLIC";
+    if (type.toString().toUpperCase().trim() == "DIASTOLIC")
+      _type = "DIASTOLIC";
+    if (type.toString().toUpperCase().trim() == "BMI") _type = "BMI";
+    if (type.toString().toUpperCase().trim() == "WS") _type = "Weight";
     const data = {
       TableName: userTable,
       Key: {
@@ -1140,6 +1141,9 @@ export const CoreContextProvider = (props) => {
     if (language === 0) languagevalue = "English";
     if (language === 1) languagevalue = "Spanish";
 
+    if (fname === undefined) fname = "";
+    if (lname === undefined) lname = "";
+
     const data = {
       TableName: userTable,
       Key: {
@@ -1147,13 +1151,13 @@ export const CoreContextProvider = (props) => {
         SK: { S: "PATIENT_" + patientId },
       },
       UpdateExpression:
-        "SET GSI1SK = :v_GSI1SK, GSI1PK = :v_GSI1PK, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB," +
+        "SET DoctorId = :v_ProviderId, DoctorName = :v_ProviderName, FirstName = :v_firstname,LastName = :v_lastname, ContactNo = :v_mobile, DOB = :v_DOB," +
         "Height = :v_Height,CarecoordinatorName = :v_CarecoordinatorName, CarecoordinatorId = :v_CarecoordinatorId,CoachId = :v_CoachId,Coach = :v_CoachName," +
         "Gender = :v_Gender, Lang = :v_Language, WorkPhone = :v_WorkPhone, MobilePhone = :v_MobilePhone, Street = :v_Street," +
         "Zip = :v_Zip, City = :v_City, St = :v_State, Notes = :v_Notes",
       ExpressionAttributeValues: {
-        ":v_GSI1SK": { S: "" + providername.value + "" },
-        ":v_GSI1PK": { S: "patient" },
+        ":v_ProviderId": { S: "" + providername.value + "" },
+        ":v_ProviderName": { S: "" + providername.name + "" },
         ":v_firstname": { S: fname },
         ":v_lastname": { S: lname },
         ":v_mobile": { S: phone },

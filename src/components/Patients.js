@@ -125,6 +125,10 @@ const Patients = (props) => {
     {
       console.log("checking", patient);
     }
+    if (patient.name !== undefined) {
+      patient.lastName = patient.name.split(",")[0].trim();
+      patient.firstName = patient.name.split(",")[1].trim();
+    }
     setFName(patient.firstName);
     setLName(patient.lastName);
     setBirthDate(patient.dob);
@@ -625,8 +629,6 @@ const Patients = (props) => {
                 <Input
                   label="First Name*"
                   elementType="text"
-                  minLength={5}
-                  maxLength={55}
                   placeholder="Enter First Name"
                   onChange={(e) => setFName(e.target.value)}
                   name="name"
@@ -643,7 +645,7 @@ const Patients = (props) => {
                   onChange={(e) => setPhone(e.target.value)}
                   required={true}
                   minLength={5}
-                  maxLength={55}
+                  maxLength={10}
                   register={register}
                   errors={errors}
                   name="phone"
@@ -729,8 +731,6 @@ const Patients = (props) => {
                 <Input
                   label="Last Name*"
                   elementType="text"
-                  minLength={5}
-                  maxLength={55}
                   placeholder="Enter Last Name"
                   onChange={(e) => setLName(e.target.value)}
                   name="name"

@@ -36,11 +36,12 @@ const Thresold = (props) => {
     let patientId = localStorage.getItem("userId");
     // check page if left side menu.
     setdisableChart(true);
-    console.log("why",userType)
+    console.log("why", userType);
     if (window.location.href.substring("bloodpressure") > 0) {
     }
     if (window.location.href.indexOf("patient-summary") > 0) {
       patientId = localStorage.getItem("ehrId");
+      setPatientId(patientId);
       //userType = "patient";
       // clear this otherwise will be problem
       localStorage.removeItem("ehrId");
@@ -194,34 +195,33 @@ const Thresold = (props) => {
       <div className="row">
         <div className="col-md-6">
           <div className="card">
-            
             <h4 className="card-header">
               {" "}
               {thData[0] ? thData[0].Element_value : "Blood Glucose"} (mg / dl){" "}
               <span>
-              {userType === "doctor" ||
-              userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patient.userId,
-                      "bg",
-                      bgMax,
-                      bgMin,
-                      userType
-                    )
-                  }
-                  className="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span>
+                {userType === "doctor" ||
+                userType === "admin" ||
+                userType === "provider" ? (
+                  <button
+                    type="button"
+                    style={{ width: "190px" }}
+                    onClick={() =>
+                      coreContext.UpdateThreshold(
+                        "ADMIN_" + patientId,
+                        "bg",
+                        bgMax,
+                        bgMin,
+                        userType
+                      )
+                    }
+                    className="btn btn-primary mb-2 float-right">
+                    {" "}
+                    Update
+                  </button>
+                ) : (
+                  ""
+                )}
+              </span>
             </h4>
             <div className="card-body">
               <IonRangeSlider
@@ -245,32 +245,34 @@ const Thresold = (props) => {
 
         <div className="col-md-6">
           <div className="card">
-            
-            <h4 className="card-header"> BMI (kg / m2) 
-            <span>
-              {userType === "doctor" ||
-              userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patient.userId,
-                      "bmi",
-                      bmiMax,
-                      bmiMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span></h4>
+            <h4 className="card-header">
+              {" "}
+              BMI (kg / m2)
+              <span>
+                {userType === "doctor" ||
+                userType === "admin" ||
+                userType === "provider" ? (
+                  <button
+                    type="button"
+                    style={{ width: "190px" }}
+                    onClick={() =>
+                      coreContext.UpdateThreshold(
+                        "ADMIN_" + patient.userId,
+                        "bmi",
+                        bmiMax,
+                        bmiMin,
+                        userType
+                      )
+                    }
+                    class="btn btn-primary mb-2 float-right">
+                    {" "}
+                    Update
+                  </button>
+                ) : (
+                  ""
+                )}
+              </span>
+            </h4>
             <div className="card-body">
               <IonRangeSlider
                 disable={disableChart}
@@ -292,32 +294,34 @@ const Thresold = (props) => {
 
         <div className="col-md-6">
           <div className="card">
-            
-            <h4 className="card-header"> Diastolic (mmHg) 
-            <span>
-              {userType === "doctor" ||
-              userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patient.userId,
-                      "Diastolic",
-                      diastolicMax,
-                      diastolicMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span></h4>
+            <h4 className="card-header">
+              {" "}
+              Diastolic (mmHg)
+              <span>
+                {userType === "doctor" ||
+                userType === "admin" ||
+                userType === "provider" ? (
+                  <button
+                    type="button"
+                    style={{ width: "190px" }}
+                    onClick={() =>
+                      coreContext.UpdateThreshold(
+                        "ADMIN_" + patient.userId,
+                        "Diastolic",
+                        diastolicMax,
+                        diastolicMin,
+                        userType
+                      )
+                    }
+                    class="btn btn-primary mb-2 float-right">
+                    {" "}
+                    Update
+                  </button>
+                ) : (
+                  ""
+                )}
+              </span>
+            </h4>
             <div className="card-body">
               <IonRangeSlider
                 disable={disableChart}
@@ -339,32 +343,34 @@ const Thresold = (props) => {
 
         <div className="col-md-6">
           <div className="card">
-                        <h4 className="card-header"> Systolic (mmHg)
-                        <span>
-              {userType === "doctor" ||
-              userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patient.userId,
-                      "Systolic",
-                      systolicMax,
-                      systolicMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}
-            </span>
- </h4>
+            <h4 className="card-header">
+              {" "}
+              Systolic (mmHg)
+              <span>
+                {userType === "doctor" ||
+                userType === "admin" ||
+                userType === "provider" ? (
+                  <button
+                    type="button"
+                    style={{ width: "190px" }}
+                    onClick={() =>
+                      coreContext.UpdateThreshold(
+                        "ADMIN_" + patient.userId,
+                        "Systolic",
+                        systolicMax,
+                        systolicMin,
+                        userType
+                      )
+                    }
+                    class="btn btn-primary mb-2 float-right">
+                    {" "}
+                    Update
+                  </button>
+                ) : (
+                  ""
+                )}
+              </span>
+            </h4>
             <div className="card-body">
               <IonRangeSlider
                 disable={disableChart}
@@ -386,33 +392,35 @@ const Thresold = (props) => {
 
         <div className="col-md-6">
           <div className="card">
-            
-            <h4 className="card-header"> Weight (lb)
-            <span>
-              {console.log(userType)}
-              {userType === "doctor" ||
-              userType === "admin" ||
-              userType === "provider" ? (
-                <button
-                  type="button"
-                  style={{ width: "190px" }}
-                  onClick={() =>
-                    coreContext.UpdateThreshold(
-                      "ADMIN_" + patient.userId,
-                      "Weight",
-                      weightMax,
-                      weightMin,
-                      userType
-                    )
-                  }
-                  class="btn btn-primary mb-2 float-right">
-                  {" "}
-                  Update
-                </button>
-              ) : (
-                ""
-              )}{" "}
-            </span> </h4>
+            <h4 className="card-header">
+              {" "}
+              Weight (lb)
+              <span>
+                {console.log(userType)}
+                {userType === "doctor" ||
+                userType === "admin" ||
+                userType === "provider" ? (
+                  <button
+                    type="button"
+                    style={{ width: "190px" }}
+                    onClick={() =>
+                      coreContext.UpdateThreshold(
+                        "ADMIN_" + patient.userId,
+                        "Weight",
+                        weightMax,
+                        weightMin,
+                        userType
+                      )
+                    }
+                    class="btn btn-primary mb-2 float-right">
+                    {" "}
+                    Update
+                  </button>
+                ) : (
+                  ""
+                )}{" "}
+              </span>{" "}
+            </h4>
             <div className="card-body">
               <IonRangeSlider
                 disable={disableChart}
