@@ -127,7 +127,44 @@ ul {
 .webkit-datetime-edit-ampm-field{
   display: none;
 }
-
+.finaldashboard{
+  height:40px;
+  background:#34a0ca;
+  color:#fff;
+  position:relative;
+  width:200px;
+  text-align:center;
+  
+}
+.finaldashboard:after{
+  content:"";
+  position:absolute;
+  height:0;
+  width:0;
+  left:100%;
+  top:0;
+  border:20px solid transparent;
+  border-left: 20px solid #34a0ca;
+}
+.finaldashboard1{
+  height:40px;
+  background:orange;
+  color:#fff;
+  position:relative;
+  width:200px;
+  text-align:center;
+  
+}
+.finaldashboard1:after{
+  content:"";
+  position:absolute;
+  height:0;
+  width:0;
+  left:100%;
+  top:0;
+  border:20px solid transparent;
+  border-left: 20px solid orange;
+}
 .timer-input {
   background-color: lightgrey;
   height: 40px;

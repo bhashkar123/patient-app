@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
+import "../App.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { CoreContext } from "../context/core-context";
 import Loader from "react-loader-spinner";
@@ -86,6 +87,9 @@ const PatientSummary = (props) => {
   const [systolicMin, setSystolicMin] = useState(0);
   const [systolicMax, setSystolicMax] = useState(0);
   const myst={backgroundColor:"#34a0ca ",marginRight:"20px",width:"50px"};
+  const myst1={backgroundColor:"#34a0ca ",marginRight:"350px",marginBottom:"9px",width:"130px"};
+  const myst2={backgroundColor:"orange",marginRight:"350px",marginBottom:"9px",width:"130px"};
+  const myst3={backgroundColor:"orange",marginRight:"20px",width:"50px"};
 
   const [weightMin, setWeightMin] = useState(0);
   const [weightMax, setWeightMax] = useState(0);
@@ -324,32 +328,34 @@ const PatientSummary = (props) => {
       })
       let avgsys=Systolic.reduce((a, b) => a + b, 0)/finaldata.length;
       let avgdia=diastolic.reduce((a, b) => a + b, 0)/finaldata.length;
+      let daydfrnc=Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+console.log("dfrnc",)
       return(<>
       
 
 <div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Total Readings</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{finaldata.length}</div>
+  <div className="p-2 flex-fill finaldashboard1 mb-1 text-light" style={myst3}> Total Readings</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst2}>{finaldata.length}</div>
 </div>           
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Reading per day</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.round(finaldata.length/daydfrnc * 10) / 10}</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Systolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{parseFloat(avgsys).toFixed(2)}</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{parseFloat(avgsys).toFixed(2)}mmHG</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Diastolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{parseFloat(avgdia).toFixed(2)}</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{parseFloat(avgdia).toFixed(2)}mmHG</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Lowest Systolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{Math.min(...Systolic)}</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.min(...Systolic)}mmHG</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Highest Diastolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>{Math.max(...diastolic)}</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.max(...diastolic)}mmHG</div>
 </div>
 
       </>)
@@ -1121,8 +1127,8 @@ const PatientSummary = (props) => {
                   <TabPanel>
                     <Tabs>
                       <TabList>
-                      <Tab onClick={pause}>Blood Pressure Thing</Tab>
-                        <Tab onClick={pause}>Blood Pressure</Tab>
+                      <Tab onClick={pause}>Blood Pressure</Tab>
+                        {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
                         <Tab onClick={pause}>Blood Pressure Average</Tab>
                         <Tab onClick={pause}>Blood Glucose</Tab>
                         <Tab onClick={pause}>Blood GLucose Average</Tab>
@@ -1132,43 +1138,27 @@ const PatientSummary = (props) => {
                       </TabList>
                       <TabPanel>
                         {/* <div className="card"> */}
-                        {renderDates()}
+                        <Tabs>
+                        <TabList>
+                        <Tab onClick={pause}>Dashboard</Tab>
+                        <Tab onClick={pause}>LogBook</Tab>
+                        <Tab onClick={pause}>Charts</Tab>
+                        
+                      </TabList>
+                      <TabPanel>
+                      {renderDates()}
                         {getbpdata()}
-                        {/* <div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Total Readings</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
-</div>           
-<div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Reading per day</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
-</div>
-<div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Systolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
-</div>
-<div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Diastolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
-</div>
-<div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Lowest Systolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
-</div>
-<div className="d-flex">
-  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Highest Diastolic</div>
-  <div className="p-2 flex-fill  ml-2 text-light " style={myst}>Flex item</div>
-</div>
- */}
+                        </TabPanel>
+                        <TabPanel>
+                          <h1>shil</h1>
+                        </TabPanel>
+                        <TabPanel>
+
+                        </TabPanel>
+                        </Tabs>
 
                               </TabPanel>
-                      <TabPanel>
-                        <div className="card">
-                          {/* <BloodPressure ></BloodPressure> */}
-                          <BloodPressure
-                            doSomething={doSomething}
-                            value={1}></BloodPressure>
-                        </div>
-                      </TabPanel>
+                      
                       <TabPanel>
                         <div className="card">
                           <BloodPressureAverage />
