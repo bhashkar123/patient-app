@@ -1140,6 +1140,9 @@ export const CoreContextProvider = (props) => {
     if (language === 0) languagevalue = "English";
     if (language === 1) languagevalue = "Spanish";
 
+    if (fname === undefined) fname = "";
+    if (lname === undefined) lname = "";
+
     const data = {
       TableName: userTable,
       Key: {
