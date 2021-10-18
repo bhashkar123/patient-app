@@ -130,7 +130,7 @@ const Dashboard = (props) => {
             sixty.push(curr.userId);
             //nine=nine+1;
           }
-          console.log(totalTimeLog);
+          console.log("check time log",totalTimeLog);
         } else {
           inactive.push(curr.userId);
         }

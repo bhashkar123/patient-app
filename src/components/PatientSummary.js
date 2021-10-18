@@ -5,6 +5,8 @@ import "../App.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { CoreContext } from "../context/core-context";
 import Loader from "react-loader-spinner";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
 import {
   GenderMale,
   GenderFemale,
@@ -78,7 +80,43 @@ const PatientSummary = (props) => {
   const [tlvalue, setTlValue] = React.useState("00:00:00");
   const [from, setfrom] = useState(new Date());
   const [to, setto] = useState(new Date());
-
+  const [slider, setslider] = useState(30);
+  const [Days, setDays] = useState();
+  const marks = [
+    {
+      value: 0,
+      label: "Today"
+    },
+    {
+      value: 15,
+      label: "Yesterday"
+    },
+    {
+      value: 30,
+      label: "Last 7 days"
+    },
+    {
+      value: 45,
+      label: "Last 30 days"
+    },
+    {
+      value: 60,
+      label: "Last 60 days"
+    },
+    {
+      value: 75,
+      label: "Last 90 days"
+    },
+    {
+      value: 100,
+      label: "custom"
+    }
+  ];
+  
+  
+  function valueLabelFormat(value) {
+    return marks.findIndex((mark) => mark.value === value) + 1;
+  }
   const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
 
   const [diastolicMin, setDiastolicMin] = useState(0);
@@ -281,13 +319,13 @@ const PatientSummary = (props) => {
         <label>From:</label>
       <DatePicker
       selected={from}
-        onChange={(e)=>setfrom(e)}
+        onChange={(e)=>{setfrom(e);setslider(100)}}
         value={from}
       />
         <label className="ml-3">To:</label>
       <DatePicker
       selected={to}
-        onChange={(e)=>setto(e)}
+        onChange={(e)=>{setto(e);setslider(100)}}
         value={to}
       />
       </div>
@@ -298,6 +336,27 @@ const PatientSummary = (props) => {
     coreContext.fetchBloodPressure(localStorage.getItem("ehrId"), "patient");
   }
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
+  const renderslider =()=>{
+    return(
+      <>
+<Box className="col-12">
+      <Slider
+        aria-label="Restricted values"
+      
+        step={null}
+        //valueLabelDisplay="auto"
+        marks={marks}
+        value={slider}
+        onChange={(e)=>{setslider(e.target.value);setfrom(new Date());setto(new Date())}}
+      />
+      {console.log("check slider value",slider)}
+    </Box>
+
+
+      </>
+
+    )
+  }
   const getbpdata=()=>{
     if (coreContext.bloodpressureData.length == 0) {
       return (
@@ -318,7 +377,47 @@ const PatientSummary = (props) => {
       coreContext.bloodpressureData.length > 0 &&
       coreContext.bloodpressureData[0].UserName !== undefined
     ) {
-      let finaldata=coreContext.bloodpressureData.filter((date)=>date.CreatedDate>=from && date.CreatedDate<=to)
+      if (to.getDate()!==from.getDate()){
+        
+        var finaldata=coreContext.bloodpressureData.filter((date)=>date.CreatedDate>=from && date.CreatedDate<=to);
+
+        
+      }
+      else{
+        var SliderDays;
+        if (slider===0){
+          SliderDays=0;
+
+        }
+        if (slider===15){
+          SliderDays=1;
+
+        }
+        if (slider===30){
+          SliderDays=7;
+
+        }
+        if (slider===45){
+          SliderDays=30;
+
+        }if (slider===60){
+          SliderDays=60;
+
+        }if (slider===75){
+          SliderDays=90;
+
+        }
+        if (slider===100){
+          SliderDays= Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24))
+
+        }
+        let today = new Date();
+    let bfr = new Date().setDate(today.getDate() - SliderDays);
+          console.log("checkdate",new Date(bfr))
+        
+        var finaldata=coreContext.bloodpressureData.filter((date)=>date.CreatedDate>=new Date(bfr))
+      }
+      
       {console.log(finaldata)}
       let Systolic=[];
       let diastolic=[];
@@ -328,7 +427,16 @@ const PatientSummary = (props) => {
       })
       let avgsys=Systolic.reduce((a, b) => a + b, 0)/finaldata.length;
       let avgdia=diastolic.reduce((a, b) => a + b, 0)/finaldata.length;
-      let daydfrnc=Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+
+      let daydfrnc;
+      if(slider===100){
+        
+        daydfrnc=Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+        console.log("cehckday dfn",daydfrnc)
+      }
+      else{
+        daydfrnc=SliderDays;
+      }
 console.log("dfrnc",)
       return(<>
       
@@ -1146,7 +1254,9 @@ console.log("dfrnc",)
                         
                       </TabList>
                       <TabPanel>
+                      
                       {renderDates()}
+                      {renderslider()}
                         {getbpdata()}
                         </TabPanel>
                         <TabPanel>
@@ -1446,6 +1556,7 @@ console.log("dfrnc",)
                             setDate(date);
                             setDirty();
                             setstartDT(date);
+
                           }}
                           placeholderText="Enter a date"
                           dateFormat="MM/dd/yyyy hh:mm:ss aa"
