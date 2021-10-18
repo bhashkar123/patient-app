@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
+import "../App.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { CoreContext } from "../context/core-context";
 import Loader from "react-loader-spinner";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
 import {
   GenderMale,
   GenderFemale,
@@ -75,7 +78,45 @@ const PatientSummary = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [t1, sett1] = useState("");
   const [tlvalue, setTlValue] = React.useState("00:00:00");
-
+  const [from, setfrom] = useState(new Date());
+  const [to, setto] = useState(new Date());
+  const [slider, setslider] = useState(30);
+  const [Days, setDays] = useState();
+  const marks = [
+    {
+      value: 0,
+      label: "Today"
+    },
+    {
+      value: 15,
+      label: "Yesterday"
+    },
+    {
+      value: 30,
+      label: "Last 7 days"
+    },
+    {
+      value: 45,
+      label: "Last 30 days"
+    },
+    {
+      value: 60,
+      label: "Last 60 days"
+    },
+    {
+      value: 75,
+      label: "Last 90 days"
+    },
+    {
+      value: 100,
+      label: "custom"
+    }
+  ];
+  
+  
+  function valueLabelFormat(value) {
+    return marks.findIndex((mark) => mark.value === value) + 1;
+  }
   const [tlvalueseconds, setTlvalueseconds] = React.useState("00:00:00");
 
   const [diastolicMin, setDiastolicMin] = useState(0);
@@ -83,6 +124,10 @@ const PatientSummary = (props) => {
 
   const [systolicMin, setSystolicMin] = useState(0);
   const [systolicMax, setSystolicMax] = useState(0);
+  const myst={backgroundColor:"#34a0ca ",marginRight:"20px",width:"50px"};
+  const myst1={backgroundColor:"#34a0ca ",marginRight:"350px",marginBottom:"9px",width:"130px"};
+  const myst2={backgroundColor:"orange",marginRight:"350px",marginBottom:"9px",width:"130px"};
+  const myst3={backgroundColor:"orange",marginRight:"20px",width:"50px"};
 
   const [weightMin, setWeightMin] = useState(0);
   const [weightMax, setWeightMax] = useState(0);
@@ -266,6 +311,169 @@ const PatientSummary = (props) => {
     () => setNotes(coreContext.patient.notes),
     [coreContext.patient.notes]
   );
+
+  const renderDates=()=>{
+    return(
+      <>
+      <div className="col-sm-12">
+        <label>From:</label>
+      <DatePicker
+      selected={from}
+        onChange={(e)=>{setfrom(e);setslider(100)}}
+        value={from}
+      />
+        <label className="ml-3">To:</label>
+      <DatePicker
+      selected={to}
+        onChange={(e)=>{setto(e);setslider(100)}}
+        value={to}
+      />
+      </div>
+      </>
+    )
+  }
+  const fetchbp=()=>{
+    coreContext.fetchBloodPressure(localStorage.getItem("ehrId"), "patient");
+  }
+  useEffect(fetchbp, [coreContext.bloodpressureData.length]);
+  const renderslider =()=>{
+    return(
+      <>
+<Box className="col-12">
+      <Slider
+        aria-label="Restricted values"
+      
+        step={null}
+        //valueLabelDisplay="auto"
+        marks={marks}
+        value={slider}
+        onChange={(e)=>{setslider(e.target.value);setfrom(new Date());setto(new Date())}}
+      />
+      {console.log("check slider value",slider)}
+    </Box>
+
+
+      </>
+
+    )
+  }
+  const getbpdata=()=>{
+    if (coreContext.bloodpressureData.length == 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
+    if (
+      coreContext.bloodpressureData.length > 0 &&
+      coreContext.bloodpressureData[0].UserName !== undefined
+    ) {
+      if (to.getDate()!==from.getDate()){
+        
+        var finaldata=coreContext.bloodpressureData.filter((date)=>date.CreatedDate>=from && date.CreatedDate<=to);
+
+        
+      }
+      else{
+        var SliderDays;
+        if (slider===0){
+          SliderDays=0;
+
+        }
+        if (slider===15){
+          SliderDays=1;
+
+        }
+        if (slider===30){
+          SliderDays=7;
+
+        }
+        if (slider===45){
+          SliderDays=30;
+
+        }if (slider===60){
+          SliderDays=60;
+
+        }if (slider===75){
+          SliderDays=90;
+
+        }
+        if (slider===100){
+          SliderDays= Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24))
+
+        }
+        let today = new Date();
+    let bfr = new Date().setDate(today.getDate() - SliderDays);
+          console.log("checkdate",new Date(bfr))
+        
+        var finaldata=coreContext.bloodpressureData.filter((date)=>date.CreatedDate>=new Date(bfr))
+      }
+      
+      {console.log(finaldata)}
+      let Systolic=[];
+      let diastolic=[];
+      finaldata.map((curr)=>{
+        Systolic.push(Number(curr.systolic));
+        diastolic.push(Number(curr.diastolic));
+      })
+      let avgsys=Systolic.reduce((a, b) => a + b, 0)/finaldata.length;
+      let avgdia=diastolic.reduce((a, b) => a + b, 0)/finaldata.length;
+
+      let daydfrnc;
+      if(slider===100){
+        
+        daydfrnc=Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+        console.log("cehckday dfn",daydfrnc)
+      }
+      else{
+        daydfrnc=SliderDays;
+      }
+console.log("dfrnc",)
+      return(<>
+      
+
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard1 mb-1 text-light" style={myst3}> Total Readings</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst2}>{finaldata.length}</div>
+</div>           
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Reading per day</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.round(finaldata.length/daydfrnc * 10) / 10}</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Systolic</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{parseFloat(avgsys).toFixed(2)}mmHG</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Diastolic</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{parseFloat(avgdia).toFixed(2)}mmHG</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Lowest Systolic</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.min(...Systolic)}mmHG</div>
+</div>
+<div className="d-flex">
+  <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Highest Diastolic</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.max(...diastolic)}mmHG</div>
+</div>
+
+      </>)
+      
+    }
+    else{
+      return(<h1>no data found</h1>)
+    }
+
+}
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
@@ -1027,7 +1235,8 @@ const PatientSummary = (props) => {
                   <TabPanel>
                     <Tabs>
                       <TabList>
-                        <Tab onClick={pause}>Blood Pressure</Tab>
+                      <Tab onClick={pause}>Blood Pressure</Tab>
+                        {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
                         <Tab onClick={pause}>Blood Pressure Average</Tab>
                         <Tab onClick={pause}>Blood Glucose</Tab>
                         <Tab onClick={pause}>Blood GLucose Average</Tab>
@@ -1036,13 +1245,30 @@ const PatientSummary = (props) => {
                         <Tab onClick={pause}>Threshold</Tab>
                       </TabList>
                       <TabPanel>
-                        <div className="card">
-                          {/* <BloodPressure ></BloodPressure> */}
-                          <BloodPressure
-                            doSomething={doSomething}
-                            value={1}></BloodPressure>
-                        </div>
-                      </TabPanel>
+                        {/* <div className="card"> */}
+                        <Tabs>
+                        <TabList>
+                        <Tab onClick={pause}>Dashboard</Tab>
+                        <Tab onClick={pause}>LogBook</Tab>
+                        <Tab onClick={pause}>Charts</Tab>
+                        
+                      </TabList>
+                      <TabPanel>
+                      
+                      {renderDates()}
+                      {renderslider()}
+                        {getbpdata()}
+                        </TabPanel>
+                        <TabPanel>
+                          <h1>shil</h1>
+                        </TabPanel>
+                        <TabPanel>
+
+                        </TabPanel>
+                        </Tabs>
+
+                              </TabPanel>
+                      
                       <TabPanel>
                         <div className="card">
                           <BloodPressureAverage />
@@ -1330,6 +1556,7 @@ const PatientSummary = (props) => {
                             setDate(date);
                             setDirty();
                             setstartDT(date);
+
                           }}
                           placeholderText="Enter a date"
                           dateFormat="MM/dd/yyyy hh:mm:ss aa"
