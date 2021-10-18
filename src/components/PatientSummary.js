@@ -1237,7 +1237,7 @@ console.log("dfrnc",)
                       <TabList>
                       <Tab onClick={pause}>Blood Pressure</Tab>
                         {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
-                        <Tab onClick={pause}>Blood Pressure Average</Tab>
+                        {/* <Tab onClick={pause}>Blood Pressure Average</Tab> */}
                         <Tab onClick={pause}>Blood Glucose</Tab>
                         <Tab onClick={pause}>Blood GLucose Average</Tab>
                         <Tab onClick={pause}>Weight</Tab>
@@ -1269,11 +1269,11 @@ console.log("dfrnc",)
 
                               </TabPanel>
                       
-                      <TabPanel>
+                      {/* <TabPanel>
                         <div className="card">
                           <BloodPressureAverage />
                         </div>
-                      </TabPanel>
+                      </TabPanel> */}
                       <TabPanel>
                         <div className="card">
                           <BloodGlucose></BloodGlucose>
