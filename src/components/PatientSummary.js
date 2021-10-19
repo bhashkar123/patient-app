@@ -7,6 +7,8 @@ import { CoreContext } from "../context/core-context";
 import Loader from "react-loader-spinner";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import { Bar } from "react-chartjs-2";
+
 import {
   GenderMale,
   GenderFemale,
@@ -177,6 +179,35 @@ const PatientSummary = (props) => {
   };
 
   useEffect(fetchCoach, []);
+
+  const labels =[1,2,3,4,5];
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'My First Dataset',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+      ],
+      borderWidth: 1
+    },
+    ]
+  };
 
   const tt = [
     ...coreContext.providerData,
@@ -447,23 +478,23 @@ console.log("dfrnc",)
 </div>           
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Reading per day</div>
-  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.round(finaldata.length/daydfrnc * 10) / 10}</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.round(Math.round(finaldata.length/daydfrnc * 10) / 10)}</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Systolic</div>
-  <div className="p-2 flex  ml-2 text-light " style={myst1}>{parseFloat(avgsys).toFixed(2)}mmHG</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.round(avgsys)} mm HG</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Average Diastolic</div>
-  <div className="p-2 flex  ml-2 text-light " style={myst1}>{parseFloat(avgdia).toFixed(2)}mmHG</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.round(avgdia)} mm HG</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Lowest Systolic</div>
-  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.min(...Systolic)}mmHG</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.min(...Systolic)} mm HG</div>
 </div>
 <div className="d-flex">
   <div className="p-2 flex-fill finaldashboard mb-1 text-light" style={myst}> Highest Diastolic</div>
-  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.max(...diastolic)}mmHG</div>
+  <div className="p-2 flex  ml-2 text-light " style={myst1}>{Math.max(...diastolic)} mm HG</div>
 </div>
 
       </>)
