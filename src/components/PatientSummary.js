@@ -431,6 +431,7 @@ const PatientSummary = (props) => {
       let diastolic=[];
       let labels=[];
       let pulse=[];
+      let dates=[];
       finaldata.map((curr)=>{
         Systolic.push(Number(curr.systolic));
         diastolic.push(Number(curr.diastolic));
@@ -438,7 +439,19 @@ const PatientSummary = (props) => {
           "MM-DD-YYYY hh:mm A"
         ));
         pulse.push(curr.Pulse);
+        dates.push(Moment(curr.CreatedDate).format(
+          "MM-DD-YYYY"
+        ))
       })
+      let uniquedates=dates.filter(function(item, pos){
+        return dates.indexOf(item)== pos; 
+      })
+      let sorteddates=uniquedates.sort(function(a,b){
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b)-new Date(a);
+      })
+      console.log(dates,uniquedates,sorteddates)
       let avgsys=Systolic.reduce((a, b) => a + b, 0)/finaldata.length;
       let avgdia=diastolic.reduce((a, b) => a + b, 0)/finaldata.length;
 
@@ -446,12 +459,65 @@ const PatientSummary = (props) => {
       if(slider===100){
         
         daydfrnc=Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
-        console.log("cehckday dfn",daydfrnc)
+        //console.log("cehckday dfn",daydfrnc)
       }
       else{
         daydfrnc=SliderDays;
       }
-console.log("dfrnc",)
+      
+//console.log("dfrnc",)
+if (index===3){
+  return (
+    <>
+    <table className="table table-bordered" >
+  <thead>
+    <tr style={{backgroundColor:"#656565",color:"white"}}>
+      
+      <th scope="col">Date</th>
+      <th scope="col">Blood Pressure(mmHG)</th>
+      <th scope="col">Pulse(bpm)</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+    {sorteddates.map((curr)=>{
+      
+      return (<>
+       <tr className="text-dark" style={{backgroundColor:"#a3a3a6"}} scope="row">
+         
+        <td colSpan="3">{curr}</td>
+        
+        </tr>
+        {finaldata.filter((item)=>Moment(item.CreatedDate).format(
+        "MM-DD-YYYY"
+      )===curr
+      ).map(curr1=>{
+          return(
+            <>
+              <tr scope="row">
+         <td>{Moment(curr1.CreatedDate).format(
+          "hh:mm A"
+        )}</td>
+        <td>{curr1.systolic}/{curr1.diastolic}</td>
+         <td >{curr1.Pulse}</td>
+
+         
+         </tr>
+            </>
+          )
+        
+        })}
+      </>)
+        
+      
+    })}
+    
+  </tbody>
+</table>
+    </>
+    
+  )
+}
 if (index===2){
   //var labels =[1,2,3,4,5];
   const data = {
@@ -523,6 +589,8 @@ if (index===1){
     }
 
 }
+
+
 const renderBloodGlucose = (index) => {
   if (coreContext.bloodglucoseData.length == 0) {
     return (
@@ -544,6 +612,7 @@ const renderBloodGlucose = (index) => {
     coreContext.bloodglucoseData.length > 0 &&
     coreContext.bloodglucoseData[0].UserName !== undefined
   ) {
+
 
     if (to.getDate()!==from.getDate()){
         
@@ -1491,7 +1560,9 @@ if (index===1){
                         {getbpdata(1)}
                         </TabPanel>
                         <TabPanel>
-                          <h1>shil</h1>
+                        {renderDates()}
+                      {renderslider()}
+                        {getbpdata(3)}
                         </TabPanel>
                         <TabPanel>
                         {renderDates()}
