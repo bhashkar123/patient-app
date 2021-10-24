@@ -705,9 +705,21 @@ const PatientSummary = (props) => {
       let bgbefore = [];
       let bgafter = [];
       let labels = [];
+      let cdate = [];
+      let uniquedates=[];
+      let sorteddates=[];
       finalbgdata.map((curr) => {
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
+        cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
+        uniquedates = cdate.filter(function (item, pos) {
+          return cdate.indexOf(item) == pos;
+        });
+        sorteddates = uniquedates.sort(function (a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b) - new Date(a);
+        });
         if (curr.meal === "Before Meal") {
           bgbefore.push(curr.bloodglucosemgdl);
         }
@@ -770,6 +782,124 @@ const PatientSummary = (props) => {
                 },
               }}
             />
+          </>
+        );
+      }
+      if (index === 3) {
+        return (
+          <>
+            <table className="table table-bordered">
+              <thead>
+                <tr style={{ backgroundColor: "#656565", color: "white" }}>
+                  <th scope="col"></th>
+                  <th scope="col" colspan='2'><h6>Morning</h6> 12AM to 10AM</th>
+                  <th scope="col" colspan='2'><h6>Afternoon</h6> 10AM to 3PM</th>
+                  <th scope="col" colspan='2'><h6>Evening</h6> 3PM to 9PM</th>
+                  <th scope="col" colspan='2'><h6>Night</h6> 9PM to 12AM</th>
+                </tr>
+                <tr>
+                  <td>Date</td>
+                  
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+
+                  </tr>
+              </thead>
+              <tbody>
+
+              {sorteddates.map((curr) => {
+                const filtereddarta=finalbgdata
+                .filter(
+                  (item) =>
+                    Moment(item.CreatedDate).format("MM-DD-YYYY") ===
+                    curr
+                );
+                console.log("check bg",
+                filtereddarta )
+                let dataBMAM={morningbm:"",morningam:"",noonbm:"",noonam:"",eveningbm:"",eveningam:"",nightbm:"",nightam:""}
+                  filtereddarta.map((curr)=>{
+                    if(Number(Moment(curr.CreatedDate).format("HH"))<10){
+                      if(curr.meal==="Before Meal"){
+                      dataBMAM.morningbm=curr.bloodglucosemgdl
+                    }
+                    else{
+                      dataBMAM.morningam=curr.bloodglucosemgdl
+                    }
+                  }
+                    if(Number(Moment(curr.CreatedDate).format("HH"))>10 && Number(Moment(curr.CreatedDate).format("HH"))<15){
+                      if(curr.meal==="Before Meal"){
+                      dataBMAM.noonbm=curr.bloodglucosemgdl
+                    }
+                    else{
+                      dataBMAM.noonam=curr.bloodglucosemgdl
+                    }
+                  }
+                    if(Number(Moment(curr.CreatedDate).format("HH"))>15 && Number(Moment(curr.CreatedDate).format("HH"))<21){
+                      if(curr.meal==="Before Meal"){
+                      dataBMAM.eveningbm=curr.bloodglucosemgdl
+                    }
+                    else{
+                      dataBMAM.eveningam=curr.bloodglucosemgdl
+                    }
+                  }
+                    if(Number(Moment(curr.CreatedDate).format("HH"))>=21){
+                      if(curr.meal==="Before Meal"){
+                      dataBMAM.nightbm=curr.bloodglucosemgdl
+                    }
+                    else{
+                      dataBMAM.nightam=curr.bloodglucosemgdl
+                    }
+                  }
+                  })
+                  console.log("check ovject vakue",dataBMAM)
+                  return (
+                    <>
+                   <tr>
+                  <td rowspan="2">{curr}</td>
+                  <td >{dataBMAM.morningbm}</td>
+                  <td >{dataBMAM.morningam}</td>
+                  <td >{dataBMAM.noonbm}</td>
+                  <td >{dataBMAM.noonam}</td>
+                  <td >{dataBMAM.eveningbm}</td>
+                  <td >{dataBMAM.eveningam}</td>
+                  <td >{dataBMAM.nightbm}</td>
+                  <td >{dataBMAM.nightam}</td>
+                  </tr>
+                  <tr>
+                  
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  </tr>
+                  
+                    </>
+                    
+                  );
+                })}
+
+                {/* <tr>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td >sahil</td>
+                  <td>sahil</td>
+                    </tr> */}
+                </tbody>
+            </table>
           </>
         );
       }
@@ -1673,7 +1803,10 @@ const PatientSummary = (props) => {
                             {renderslider()}
                             {renderBloodGlucose(1)}
                           </TabPanel>
-                          <TabPanel></TabPanel>
+                          <TabPanel>
+                          {renderDates()}
+                            {renderslider()}
+                            {renderBloodGlucose(3)}</TabPanel>
                           <TabPanel>
                             {renderDates()}
                             {renderslider()}
