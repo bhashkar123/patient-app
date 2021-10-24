@@ -1002,6 +1002,40 @@ export const CoreContextProvider = (props) => {
   };
 
   const UpdateThreshold = (patient, type, high, low, userType) => {
+    // fetch Threshold.
+    const token = localStorage.getItem("app_jwt");
+
+    let data = "";
+    data = {
+      TableName: userTable,
+      ProjectionExpression: "PK,SK,Low,High,TElements",
+      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "THRESHOLDRANGE_ADMIN" },
+        ":v_SK": { S: userid },
+      },
+    };
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        const thresholdData = response.data;
+        if (thresholdData.length > 0) {
+          UpdateTh(patient, type, high, low, userType);
+        } else {
+          AddThreshold(patient, type, high, low, userType);
+        }
+      });
+    //Update
+  };
+
+  const UpdateTh = (patient, type, high, low, userType) => {
     const token = localStorage.getItem("app_jwt");
 
     let _type = "";
