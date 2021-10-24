@@ -323,7 +323,7 @@ const PatientSummary = (props) => {
     }
   };
 
-  useEffect(fetchPatient, [coreContext.thresoldData.length]);
+  useEffect(fetchPatient, [coreContext.patient.length]);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
   useEffect(
@@ -706,8 +706,8 @@ const PatientSummary = (props) => {
       let bgafter = [];
       let labels = [];
       let cdate = [];
-      let uniquedates=[];
-      let sorteddates=[];
+      let uniquedates = [];
+      let sorteddates = [];
       finalbgdata.map((curr) => {
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
@@ -792,99 +792,110 @@ const PatientSummary = (props) => {
               <thead>
                 <tr style={{ backgroundColor: "#656565", color: "white" }}>
                   <th scope="col"></th>
-                  <th scope="col" colspan='2'><h6>Morning</h6> 12AM to 10AM</th>
-                  <th scope="col" colspan='2'><h6>Afternoon</h6> 10AM to 3PM</th>
-                  <th scope="col" colspan='2'><h6>Evening</h6> 3PM to 9PM</th>
-                  <th scope="col" colspan='2'><h6>Night</h6> 9PM to 12AM</th>
+                  <th scope="col" colspan="2">
+                    <h6>Morning</h6> 12AM to 10AM
+                  </th>
+                  <th scope="col" colspan="2">
+                    <h6>Afternoon</h6> 10AM to 3PM
+                  </th>
+                  <th scope="col" colspan="2">
+                    <h6>Evening</h6> 3PM to 9PM
+                  </th>
+                  <th scope="col" colspan="2">
+                    <h6>Night</h6> 9PM to 12AM
+                  </th>
                 </tr>
                 <tr>
                   <td>Date</td>
-                  
-                  <td>Before Meal</td>
-                  <td>After Meal</td>
-                  <td>Before Meal</td>
-                  <td>After Meal</td>
-                  <td>Before Meal</td>
-                  <td>After Meal</td>
-                  <td>Before Meal</td>
-                  <td>After Meal</td>
 
-                  </tr>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                  <td>Before Meal</td>
+                  <td>After Meal</td>
+                </tr>
               </thead>
               <tbody>
-
-              {sorteddates.map((curr) => {
-                const filtereddarta=finalbgdata
-                .filter(
-                  (item) =>
-                    Moment(item.CreatedDate).format("MM-DD-YYYY") ===
-                    curr
-                );
-                console.log("check bg",
-                filtereddarta )
-                let dataBMAM={morningbm:"",morningam:"",noonbm:"",noonam:"",eveningbm:"",eveningam:"",nightbm:"",nightam:""}
-                  filtereddarta.map((curr)=>{
-                    if(Number(Moment(curr.CreatedDate).format("HH"))<10){
-                      if(curr.meal==="Before Meal"){
-                      dataBMAM.morningbm=curr.bloodglucosemgdl
+                {sorteddates.map((curr) => {
+                  const filtereddarta = finalbgdata.filter(
+                    (item) =>
+                      Moment(item.CreatedDate).format("MM-DD-YYYY") === curr
+                  );
+                  console.log("check bg", filtereddarta);
+                  let dataBMAM = {
+                    morningbm: "",
+                    morningam: "",
+                    noonbm: "",
+                    noonam: "",
+                    eveningbm: "",
+                    eveningam: "",
+                    nightbm: "",
+                    nightam: "",
+                  };
+                  filtereddarta.map((curr) => {
+                    if (Number(Moment(curr.CreatedDate).format("HH")) < 10) {
+                      if (curr.meal === "Before Meal") {
+                        dataBMAM.morningbm = curr.bloodglucosemgdl;
+                      } else {
+                        dataBMAM.morningam = curr.bloodglucosemgdl;
+                      }
                     }
-                    else{
-                      dataBMAM.morningam=curr.bloodglucosemgdl
+                    if (
+                      Number(Moment(curr.CreatedDate).format("HH")) > 10 &&
+                      Number(Moment(curr.CreatedDate).format("HH")) < 15
+                    ) {
+                      if (curr.meal === "Before Meal") {
+                        dataBMAM.noonbm = curr.bloodglucosemgdl;
+                      } else {
+                        dataBMAM.noonam = curr.bloodglucosemgdl;
+                      }
                     }
-                  }
-                    if(Number(Moment(curr.CreatedDate).format("HH"))>10 && Number(Moment(curr.CreatedDate).format("HH"))<15){
-                      if(curr.meal==="Before Meal"){
-                      dataBMAM.noonbm=curr.bloodglucosemgdl
+                    if (
+                      Number(Moment(curr.CreatedDate).format("HH")) > 15 &&
+                      Number(Moment(curr.CreatedDate).format("HH")) < 21
+                    ) {
+                      if (curr.meal === "Before Meal") {
+                        dataBMAM.eveningbm = curr.bloodglucosemgdl;
+                      } else {
+                        dataBMAM.eveningam = curr.bloodglucosemgdl;
+                      }
                     }
-                    else{
-                      dataBMAM.noonam=curr.bloodglucosemgdl
+                    if (Number(Moment(curr.CreatedDate).format("HH")) >= 21) {
+                      if (curr.meal === "Before Meal") {
+                        dataBMAM.nightbm = curr.bloodglucosemgdl;
+                      } else {
+                        dataBMAM.nightam = curr.bloodglucosemgdl;
+                      }
                     }
-                  }
-                    if(Number(Moment(curr.CreatedDate).format("HH"))>15 && Number(Moment(curr.CreatedDate).format("HH"))<21){
-                      if(curr.meal==="Before Meal"){
-                      dataBMAM.eveningbm=curr.bloodglucosemgdl
-                    }
-                    else{
-                      dataBMAM.eveningam=curr.bloodglucosemgdl
-                    }
-                  }
-                    if(Number(Moment(curr.CreatedDate).format("HH"))>=21){
-                      if(curr.meal==="Before Meal"){
-                      dataBMAM.nightbm=curr.bloodglucosemgdl
-                    }
-                    else{
-                      dataBMAM.nightam=curr.bloodglucosemgdl
-                    }
-                  }
-                  })
-                  console.log("check ovject vakue",dataBMAM)
+                  });
+                  console.log("check ovject vakue", dataBMAM);
                   return (
                     <>
-                   <tr>
-                  <td rowspan="2">{curr}</td>
-                  <td >{dataBMAM.morningbm}</td>
-                  <td >{dataBMAM.morningam}</td>
-                  <td >{dataBMAM.noonbm}</td>
-                  <td >{dataBMAM.noonam}</td>
-                  <td >{dataBMAM.eveningbm}</td>
-                  <td >{dataBMAM.eveningam}</td>
-                  <td >{dataBMAM.nightbm}</td>
-                  <td >{dataBMAM.nightam}</td>
-                  </tr>
-                  <tr>
-                  
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
-                  </tr>
-                  
+                      <tr>
+                        <td rowspan="2">{curr}</td>
+                        <td>{dataBMAM.morningbm}</td>
+                        <td>{dataBMAM.morningam}</td>
+                        <td>{dataBMAM.noonbm}</td>
+                        <td>{dataBMAM.noonam}</td>
+                        <td>{dataBMAM.eveningbm}</td>
+                        <td>{dataBMAM.eveningam}</td>
+                        <td>{dataBMAM.nightbm}</td>
+                        <td>{dataBMAM.nightam}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
                     </>
-                    
                   );
                 })}
 
@@ -898,7 +909,7 @@ const PatientSummary = (props) => {
                   <td >sahil</td>
                   <td>sahil</td>
                     </tr> */}
-                </tbody>
+              </tbody>
             </table>
           </>
         );
@@ -1804,9 +1815,10 @@ const PatientSummary = (props) => {
                             {renderBloodGlucose(1)}
                           </TabPanel>
                           <TabPanel>
-                          {renderDates()}
+                            {renderDates()}
                             {renderslider()}
-                            {renderBloodGlucose(3)}</TabPanel>
+                            {renderBloodGlucose(3)}
+                          </TabPanel>
                           <TabPanel>
                             {renderDates()}
                             {renderslider()}
