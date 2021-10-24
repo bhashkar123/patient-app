@@ -257,7 +257,7 @@ const Thresold = (props) => {
                     style={{ width: "190px" }}
                     onClick={() =>
                       coreContext.UpdateThreshold(
-                        "ADMIN_" + patient.userId,
+                        "ADMIN_" + patientId,
                         "bmi",
                         bmiMax,
                         bmiMin,
@@ -306,7 +306,7 @@ const Thresold = (props) => {
                     style={{ width: "190px" }}
                     onClick={() =>
                       coreContext.UpdateThreshold(
-                        "ADMIN_" + patient.userId,
+                        "ADMIN_" + patientId,
                         "Diastolic",
                         diastolicMax,
                         diastolicMin,
@@ -355,7 +355,7 @@ const Thresold = (props) => {
                     style={{ width: "190px" }}
                     onClick={() =>
                       coreContext.UpdateThreshold(
-                        "ADMIN_" + patient.userId,
+                        "ADMIN_" + patientId,
                         "Systolic",
                         systolicMax,
                         systolicMin,
@@ -405,7 +405,7 @@ const Thresold = (props) => {
                     style={{ width: "190px" }}
                     onClick={() =>
                       coreContext.UpdateThreshold(
-                        "ADMIN_" + patient.userId,
+                        "ADMIN_" + patientId,
                         "Weight",
                         weightMax,
                         weightMin,

@@ -1012,7 +1012,7 @@ export const CoreContextProvider = (props) => {
       KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
       ExpressionAttributeValues: {
         ":v_PK": { S: "THRESHOLDRANGE_ADMIN" },
-        ":v_SK": { S: userid },
+        ":v_SK": { S: patient },
       },
     };
 
