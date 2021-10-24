@@ -1038,7 +1038,7 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Updated") {
           alert("Threshold Update Successfully.");
         } else {
-          AddThreshold(patient, type, high, low, userType);
+          alert("Threshold did not Update.");
         }
       });
   };
