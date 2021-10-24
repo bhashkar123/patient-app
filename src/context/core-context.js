@@ -1037,6 +1037,43 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         if (response.data === "Updated") {
           alert("Threshold Update Successfully.");
+        } else {
+          AddThreshold(patient, type, high, low, userType);
+        }
+      });
+  };
+
+  const AddThreshold = (patient, type, high, low, userType) => {
+    const token = localStorage.getItem("app_jwt");
+
+    let _type = "";
+    if (type.toString().toUpperCase().trim() == "BG") _type = "Blood Glucose";
+    if (type.toString().toUpperCase().trim() == "SYSTOLIC") _type = "SYSTOLIC";
+    if (type.toString().toUpperCase().trim() == "DIASTOLIC")
+      _type = "DIASTOLIC";
+    if (type.toString().toUpperCase().trim() == "BMI") _type = "BMI";
+    if (type.toString().toUpperCase().trim() == "WS") _type = "Weight";
+
+    const data = {
+      PK: "THRESHOLDRANGE_ADMIN",
+      SK: patient + "_" + type,
+      Low: low,
+      High: high,
+      TElements: _type,
+    };
+
+    axios
+      .post(apiUrl + "/register", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        if (response.data === "Updated") {
+          alert("Threshold Update Successfully.");
+        } else {
         }
       });
   };
