@@ -405,8 +405,8 @@ const PatientSummary = (props) => {
               setfrom(new Date());
               //alert(new Date(new Date().setDate(from.getDate() -slider)));
               //alert(new Date())
-              setto(new Date())
-              //setto(new Date(new Date().setDate(new Date().getDate() -fetchsliderdays(slider))));
+              //setto(new Date())
+              
               
             }}
           />
@@ -415,6 +415,10 @@ const PatientSummary = (props) => {
       </>
     );
   };
+  useEffect(()=>{
+    setfrom(new Date(new Date().setDate(new Date().getDate() -fetchsliderdays())));
+  },[slider])
+  
   const getbpdata = (index) => {
     if (coreContext.bloodpressureData.length == 0) {
       return (
@@ -696,7 +700,7 @@ const PatientSummary = (props) => {
       coreContext.bloodglucoseData.length > 0 &&
       coreContext.bloodglucoseData[0].UserName !== undefined
     ) {
-      if (to.getDate() !== from.getDate()) {
+      if (slider===100) {
         var finalbgdata = coreContext.bloodglucoseData.filter(
           (date) => date.CreatedDate >= from && date.CreatedDate <= to
         );
