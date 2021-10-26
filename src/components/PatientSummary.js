@@ -365,6 +365,31 @@ const PatientSummary = (props) => {
   };
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
   useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
+  const fetchsliderdays =()=>{
+    var SliderDays;
+        if (slider === 0) {
+          SliderDays = 0;
+        }
+        if (slider === 15) {
+          SliderDays = 1;
+        }
+        if (slider === 30) {
+          SliderDays = 7;
+        }
+        if (slider === 45) {
+          SliderDays = 30;
+        }
+        if (slider === 60) {
+          SliderDays = 60;
+        }
+        if (slider === 75) {
+          SliderDays = 90;
+        }
+        if (slider === 100) {
+          SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+        }
+        return SliderDays;
+  }
   const renderslider = () => {
     return (
       <>
@@ -378,7 +403,11 @@ const PatientSummary = (props) => {
             onChange={(e) => {
               setslider(e.target.value);
               setfrom(new Date());
-              setto(new Date());
+              //alert(new Date(new Date().setDate(from.getDate() -slider)));
+              //alert(new Date())
+              setto(new Date())
+              //setto(new Date(new Date().setDate(new Date().getDate() -fetchsliderdays(slider))));
+              
             }}
           />
           {console.log("check slider value", slider)}
@@ -411,6 +440,7 @@ const PatientSummary = (props) => {
           (date) => date.CreatedDate >= from && date.CreatedDate <= to
         );
       } else {
+        
         var SliderDays;
         if (slider === 0) {
           SliderDays = 0;
@@ -834,13 +864,23 @@ const PatientSummary = (props) => {
                     eveningam: "",
                     nightbm: "",
                     nightam: "",
+                    morningbmtime:"",
+                    morningamtime: "",
+                    noonbmtime: "",
+                    noonamtime: "",
+                    eveningbmtime: "",
+                    eveningamtime: "",
+                    nightbmtime: "",
+                    nightamtime: "",
                   };
                   filtereddarta.map((curr) => {
                     if (Number(Moment(curr.CreatedDate).format("HH")) < 10) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.morningbm = curr.bloodglucosemgdl;
+                        dataBMAM.morningbmtime=Moment(curr.CreatedDate).format("HH:MM A")
                       } else {
                         dataBMAM.morningam = curr.bloodglucosemgdl;
+                        dataBMAM.morningamtime=Moment(curr.CreatedDate).format("HH:MM A")
                       }
                     }
                     if (
@@ -849,25 +889,32 @@ const PatientSummary = (props) => {
                     ) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.noonbm = curr.bloodglucosemgdl;
+                        dataBMAM.noonbmtime=Moment(curr.CreatedDate).format("HH:MM A")
                       } else {
                         dataBMAM.noonam = curr.bloodglucosemgdl;
+                        dataBMAM.noonamtime=Moment(curr.CreatedDate).format("HH:MM A")
                       }
                     }
                     if (
                       Number(Moment(curr.CreatedDate).format("HH")) > 15 &&
                       Number(Moment(curr.CreatedDate).format("HH")) < 21
+
                     ) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.eveningbm = curr.bloodglucosemgdl;
+                        dataBMAM.eveningbmtime=Moment(curr.CreatedDate).format("HH:MM A")
                       } else {
                         dataBMAM.eveningam = curr.bloodglucosemgdl;
+                        dataBMAM.eveningamtime=Moment(curr.CreatedDate).format("HH:MM A")
                       }
                     }
                     if (Number(Moment(curr.CreatedDate).format("HH")) >= 21) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.nightbm = curr.bloodglucosemgdl;
+                        dataBMAM.nightbmtime=Moment(curr.CreatedDate).format("HH:MM A")
                       } else {
                         dataBMAM.nightam = curr.bloodglucosemgdl;
+                        dataBMAM.nightamtime=Moment(curr.CreatedDate).format("HH:MM A")
                       }
                     }
                   });
@@ -876,14 +923,14 @@ const PatientSummary = (props) => {
                     <>
                       <tr>
                         <td rowspan="2">{curr}</td>
-                        <td>{dataBMAM.morningbm}</td>
-                        <td>{dataBMAM.morningam}</td>
-                        <td>{dataBMAM.noonbm}</td>
-                        <td>{dataBMAM.noonam}</td>
-                        <td>{dataBMAM.eveningbm}</td>
-                        <td>{dataBMAM.eveningam}</td>
-                        <td>{dataBMAM.nightbm}</td>
-                        <td>{dataBMAM.nightam}</td>
+                        <td style={{backgroundColor:(dataBMAM.morningbm<150 &&dataBMAM.morningbm!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.morningbm!==""&&dataBMAM.morningbm>150)?"#f6a683":"grey"}}><p>{dataBMAM.morningbm}<br/>{dataBMAM.morningbmtime}</p></td>
+                        <td style={{backgroundColor:(dataBMAM.morningam<150 &&dataBMAM.morningam!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.morningam!==""&&dataBMAM.morningam>150)?"#f6a683":"grey"}}>{dataBMAM.morningam}<br/>{dataBMAM.noonamtime}</td>
+                        <td style={{backgroundColor:(dataBMAM.noonbm<150 &&dataBMAM.noonbm!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.noonbm!==""&&dataBMAM.noonbm>150)?"#f6a683":"grey"}}>{dataBMAM.noonbm}<br/>{dataBMAM.noonbmtime}</td>
+                        <td style={{backgroundColor:(dataBMAM.noonam<150 &&dataBMAM.noonam!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.noonam!==""&&dataBMAM.noonam>150)?"#f6a683":"grey"}}>{dataBMAM.noonam}<br/>{dataBMAM.noonamtime}</td>
+                        <td style={{backgroundColor:(dataBMAM.eveningbm<150 &&dataBMAM.eveningbm!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.eveningbm!==""&&dataBMAM.eveningbm>150)?"#f6a683":"grey"}}>{dataBMAM.eveningbm}<br/>{dataBMAM.eveningbmtime}</td>
+                        <td style={{backgroundColor:(dataBMAM.eveningam<150 &&dataBMAM.eveningam!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.eveningam!==""&&dataBMAM.eveningam>150)?"#f6a683":"grey"}}>{dataBMAM.eveningam}<br/>{dataBMAM.eveningamtime}</td>
+                        <td style={{backgroundColor:(dataBMAM.nightbm<150 &&dataBMAM.nightbm!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.nightbm!==""&&dataBMAM.nightbm>150)?"#f6a683":"grey"}}>{dataBMAM.nightbm}<br/>{dataBMAM.nightbmtime}</td>
+                        <td style={{backgroundColor:(dataBMAM.nightam<150 &&dataBMAM.nightam!=="")?"rgba(0, 255, 0, 0.15)":(dataBMAM.nightam!==""&&dataBMAM.nightam>150)?"#f6a683":"grey"}}>{dataBMAM.nightam}<br/>{dataBMAM.nightamtime}</td>
                       </tr>
                       <tr>
                         <td></td>
