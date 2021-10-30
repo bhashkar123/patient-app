@@ -84,6 +84,7 @@ const PatientSummary = (props) => {
   const [to, setto] = useState(new Date());
   const [slider, setslider] = useState(30);
   const [Days, setDays] = useState();
+  const [tddata,settddata]=useState([]);
   const marks = [
     {
       value: 0,
@@ -210,7 +211,7 @@ const PatientSummary = (props) => {
     setUserId(localStorage.getItem("userId"));
     setUserName(localStorage.getItem("userName"));
     setpatientId(patientId);
-    console.log("checking id", userName);
+    
     setPerformedBy(userName);
     setNotes(coreContext.patient.notes);
     //setTaskType("Care Coordination")
@@ -363,8 +364,12 @@ const PatientSummary = (props) => {
   const fetchbg = () => {
     coreContext.fetchBloodGlucose(localStorage.getItem("ehrId"), "patient");
   };
+  const fetchTd=()=>{
+    coreContext.fetchThresold(localStorage.getItem("ehrId"), "patient");
+  }
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
   useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
+  useEffect(fetchTd, [coreContext.thresoldData.length]);
   const fetchsliderdays =()=>{
     var SliderDays;
         if (slider === 0) {
@@ -390,6 +395,7 @@ const PatientSummary = (props) => {
         }
         return SliderDays;
   }
+console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
   const renderslider = () => {
     return (
       <>
@@ -410,7 +416,7 @@ const PatientSummary = (props) => {
               
             }}
           />
-          {console.log("check slider value", slider)}
+          {/* {console.log("check slider value", slider)} */}
         </Box>
       </>
     );
@@ -469,7 +475,8 @@ const PatientSummary = (props) => {
         }
         let today = new Date();
         let bfr = new Date().setDate(today.getDate() - SliderDays);
-        console.log("checkdate", new Date(bfr));
+        
+
 
         var finaldata = coreContext.bloodpressureData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
@@ -477,7 +484,7 @@ const PatientSummary = (props) => {
       }
 
       {
-        console.log(finaldata);
+        
       }
       let Systolic = [];
       let diastolic = [];
@@ -499,19 +506,19 @@ const PatientSummary = (props) => {
         // to get a value that is either negative, positive, or zero.
         return new Date(b) - new Date(a);
       });
-      console.log(dates, uniquedates, sorteddates);
+      
       let avgsys = Systolic.reduce((a, b) => a + b, 0) / finaldata.length;
       let avgdia = diastolic.reduce((a, b) => a + b, 0) / finaldata.length;
 
       let daydfrnc;
       if (slider === 100) {
         daydfrnc = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
-        //console.log("cehckday dfn",daydfrnc)
+        
       } else {
         daydfrnc = SliderDays;
       }
 
-      //console.log("dfrnc",)
+      
       if (index === 3) {
         return (
           <>
@@ -729,7 +736,7 @@ const PatientSummary = (props) => {
         }
         let today = new Date();
         let bfr = new Date().setDate(today.getDate() - SliderDays);
-        console.log("checkdate", new Date(bfr));
+        
 
         var finalbgdata = coreContext.bloodglucoseData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
@@ -739,6 +746,7 @@ const PatientSummary = (props) => {
       let bgbefore = [];
       let bgafter = [];
       let labels = [];
+      let thrshold=[];
       let cdate = [];
       let uniquedates = [];
       let sorteddates = [];
@@ -746,6 +754,7 @@ const PatientSummary = (props) => {
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
+        thrshold.push("150")
         uniquedates = cdate.filter(function (item, pos) {
           return cdate.indexOf(item) == pos;
         });
@@ -765,7 +774,7 @@ const PatientSummary = (props) => {
       let daydfrnc;
       if (slider === 100) {
         daydfrnc = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
-        console.log("cehckday dfn", daydfrnc);
+        
       } else {
         daydfrnc = SliderDays;
       }
@@ -785,6 +794,13 @@ const PatientSummary = (props) => {
               data: bgafter,
               backgroundColor: ["green"],
               //borderColor:["white"],
+            },
+            {
+              label: "Threshold",
+              data: thrshold,
+              backgroundColor: ["red"],
+              borderColor:["red"],
+              borderWidth:3,
             },
             // {
             //   label: 'Pulse',
@@ -858,7 +874,7 @@ const PatientSummary = (props) => {
                     (item) =>
                       Moment(item.CreatedDate).format("MM-DD-YYYY") === curr
                   );
-                  console.log("check bg", filtereddarta);
+                  
                   let dataBMAM = {
                     morningbm: "",
                     morningam: "",
@@ -922,7 +938,7 @@ const PatientSummary = (props) => {
                       }
                     }
                   });
-                  console.log("check ovject vakue", dataBMAM);
+                  
                   return (
                     <>
                       <tr>
@@ -969,7 +985,7 @@ const PatientSummary = (props) => {
         return (
           <div style={{ height: 680, width: "100%" }}>
             {/* {coreContext.bloodglucoseData} */}
-            {console.log(coreContext.bloodglucoseData)}
+            
 
             <div className="d-flex">
               <div
@@ -1066,7 +1082,7 @@ const PatientSummary = (props) => {
   const onBGChange = (e) => {
     setBgMin(e.from);
     setBgMax(e.to);
-    // console.log(e.from, e.to);
+    
   };
 
   const onBMIChange = (e) => {
@@ -1208,7 +1224,7 @@ const PatientSummary = (props) => {
     setTaskType(tl.taskType);
     setPerformedBy(tl.performedBy);
     setDate(new Date(tl.performedOn));
-    console.log("chjdjjsd", tl.performedOn);
+    
     //setTaskType(tl.taskType)
     //alert(converter(3660))
     setTlValue(converter(tl.timeAmount));
@@ -1325,7 +1341,7 @@ const PatientSummary = (props) => {
     }
 
     if (coreContext.deviceData.length > 0) {
-      console.log("device cheking", coreContext.deviceData);
+      
     }
     {
       return coreContext.deviceData.map((deviceData, index) => {
@@ -1449,7 +1465,7 @@ const PatientSummary = (props) => {
 
   const renderTopDetails = () => {
     {
-      console.log("taylor", coreContext.patient);
+      
     }
     if (coreContext.patient)
       return (
@@ -1607,11 +1623,11 @@ const PatientSummary = (props) => {
 
   const [timelogIdCounter, settimelogIdCounter] = useState(1);
   const calctime = () => {
-    console.log("dshkjhfdhsdfh", coreContext.timeLogData);
+    
   };
 
   const handleSelect = (index) => {
-    console.log("checkindex", index);
+    
     let _timerLog = {};
     if (index == 7) {
       //       setstartDT(new Date());
@@ -1622,7 +1638,7 @@ const PatientSummary = (props) => {
       fetchtotaltime();
       //coreContext.fetchTimeLog();
       {
-        console.log("checking the time log data is o", coreContext.timeLogData);
+        
       }
     }
 
@@ -1714,8 +1730,7 @@ const PatientSummary = (props) => {
 
   const handleLeaveTab = (index) => {
     if (index == 7) {
-      // console.log('leave');
-      //console.log(index +'leave');
+      
     }
   };
 
@@ -1817,7 +1832,7 @@ const PatientSummary = (props) => {
                         {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
                         {/* <Tab onClick={pause}>Blood Pressure Average</Tab> */}
                         <Tab onClick={pause}>Blood Glucose</Tab>
-                        <Tab onClick={pause}>Blood GLucose Average</Tab>
+                        {/* <Tab onClick={pause}>Blood GLucose Average</Tab> */}
                         <Tab onClick={pause}>Weight</Tab>
                         <Tab onClick={pause}>Weight Average</Tab>
                         <Tab onClick={pause}>Threshold</Tab>
@@ -1864,6 +1879,7 @@ const PatientSummary = (props) => {
                             {renderDates()}
                             {renderslider()}
                             {renderBloodGlucose(1)}
+                            
                           </TabPanel>
                           <TabPanel>
                             {renderDates()}
@@ -1883,11 +1899,11 @@ const PatientSummary = (props) => {
                                         </div> */}
                         {/* </div> */}
                       </TabPanel>
-                      <TabPanel>
+                      {/* <TabPanel>
                         <div className="card">
                           <BloodGlucoseAverage />
                         </div>
-                      </TabPanel>
+                      </TabPanel> */}
                       <TabPanel>
                         <div className="card-body">
                           <Weight></Weight>
@@ -2160,7 +2176,7 @@ const PatientSummary = (props) => {
                           placeholderText="Enter a date"
                           dateFormat="MM/dd/yyyy hh:mm:ss aa"
                         />
-                        {console.log("checkdatebsjfhs", startDT)}
+                        
                       </div>
                       <div className="col-md-6">
                         <label for="appt">Enter Total Time:</label>
@@ -2236,7 +2252,7 @@ const PatientSummary = (props) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {console.log("checkddata", coreContext.deviceData)}
+                        
                         {renderDeviceData()}
                       </tbody>
                     </table>
@@ -2493,7 +2509,7 @@ const PatientSummary = (props) => {
                             placeholderText="Enter a date"
                             dateFormat="MM/dd/yyyy hh:mm:ss aa"
                           />
-                          {console.log("checkdatebsjfhs", startDT)}
+                          
                         </div>
                         <div className="col-md-6">
                           <label for="appt">Enter Total Time:</label>

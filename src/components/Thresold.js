@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { CoreContext } from "../context/core-context";
 import IonRangeSlider from "react-ion-slider";
+import Loader from "react-loader-spinner";
 
 const Thresold = (props) => {
   const coreContext = useContext(CoreContext);
@@ -41,18 +42,19 @@ const Thresold = (props) => {
     }
     if (window.location.href.indexOf("patient-summary") > 0) {
       patientId = localStorage.getItem("ehrId");
+      alert(patientId)
       setPatientId(patientId);
-      //userType = "patient";
+     // userType = "patient";
       // clear this otherwise will be problem
-      localStorage.removeItem("ehrId");
+      //localStorage.removeItem("ehrId");
       setdisableChart(false);
     }
 
-    setUserType(userType);
+  setUserType(userType);
     coreContext.fetchThresold(patientId, userType);
-    //  setThData(coreContext.thresoldData);
+     setThData(coreContext.thresoldData);
 
-    /// setting default value
+    // setting default value
     if (coreContext.thresoldData.length === 0) {
       let thdata = {};
       const thDatas = [];
@@ -85,8 +87,10 @@ const Thresold = (props) => {
       thdata.weight_high = 10;
       thDatas.push(thdata);
       setThData(thDatas);
+      console.log("check threshold value",coreContext.thresoldData)
     } else {
       setThData(coreContext.thresoldData);
+      console.log("check threshold value",coreContext.thresoldData)
 
       var bgdata = coreContext.thresoldData.filter(
         (a) => a.Element_value === "Blood Glucose"
@@ -103,7 +107,7 @@ const Thresold = (props) => {
       var bpdata = coreContext.thresoldData.filter(
         (a) => a.Element_value === "BMI"
       );
-
+{console.log("chevffgg",coreContext.thresoldData)}
       if (bpdata.length > 0) {
         setBmiMin(bpdata[0].bmi_low);
         setBmiMax(bpdata[0].bmi_high);
@@ -175,7 +179,7 @@ const Thresold = (props) => {
     setWeightMax(e.to);
   };
 
-  const UpdateThreshold = () => {
+  const UpdateThreshold = () => {   
     console.log(
       bgMin,
       bgMax,
@@ -189,6 +193,29 @@ const Thresold = (props) => {
       weightMax
     );
   };
+  const renderslider=()=>{
+    if(coreContext.thresoldData.length===0){
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>)
+    }
+  
+    if(coreContext.thresoldData.length>0){
+      return(
+        <h1>{coreContext.thresoldData[0].bg_high}</h1>
+      )
+    }
+
+  }
 
   return (
     <React.Fragment>
@@ -205,14 +232,14 @@ const Thresold = (props) => {
                   <button
                     type="button"
                     style={{ width: "190px" }}
-                    onClick={() =>
+                    onClick={() =>{
                       coreContext.UpdateThreshold(
-                        "ADMIN_" + patientId,
+                        patientId,
                         "bg",
                         bgMax,
                         bgMin,
                         userType
-                      )
+                      );alert("onClick")}
                     }
                     className="btn btn-primary mb-2 float-right">
                     {" "}
@@ -441,6 +468,10 @@ const Thresold = (props) => {
         </div>
       </div>
     </React.Fragment>
+
+    // <>
+    // {renderslider()}
+    // </>
   );
 };
 

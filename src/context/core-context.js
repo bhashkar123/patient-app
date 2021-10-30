@@ -765,7 +765,7 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchThresold = (userid, usertype) => {
+  const fetchThresold =  (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
 
     let data = "";
@@ -779,7 +779,7 @@ export const CoreContextProvider = (props) => {
       },
     };
 
-    axios
+      axios
       .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -789,10 +789,14 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const thresholdData = response.data;
-        console.log("threshod data", response.data);
+        console.log("threshod datacheckin cre", thresholdData.length);
         const dataSetthresold = [];
-
-        thresholdData.forEach((th, index) => {
+        if(thresholdData.length===0){
+          dataSetthresold.push("no data found")
+          console.log("threshod datacheckin cre", dataSetthresold);
+        }
+        
+        else{thresholdData.forEach((th, index) => {
           console.log("p" + index, th);
           let thdata = {};
 
@@ -825,10 +829,12 @@ export const CoreContextProvider = (props) => {
 
           dataSetthresold.push(thdata);
         });
+}
 
+        
         setThresoldData(dataSetthresold);
 
-        console.log("thresolddata", dataSetthresold);
+        console.log("thresolddata111111", dataSetthresold);
       });
   };
 
@@ -1915,7 +1921,7 @@ export const CoreContextProvider = (props) => {
 
         //    console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
-          console.log("p" + index, p);
+          
           let devicedata = {};
           devicedata.id = index;
 
