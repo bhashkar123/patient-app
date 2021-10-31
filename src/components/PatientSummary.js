@@ -220,7 +220,7 @@ const PatientSummary = (props) => {
     //setPatient(patientData);
     coreContext.fetchPatientListfromApi("patient", patientId);
 
-    coreContext.fetchThresold("ADMIN_PATIENT_" + patientId, userType);
+    //coreContext.fetchThresold("ADMIN_PATIENT_" + patientId, userType);
 
     coreContext.fetchTimeLog("PATIENT_" + patientId);
     //console.log("PATIENT_" + patientId)
@@ -229,99 +229,99 @@ const PatientSummary = (props) => {
 
     coreContext.fetchDeviceData("PATIENT_" + patientId, userName, userType);
     /// setting default value
-    if (coreContext.thresoldData.length === 0) {
-      let thdata = {};
-      const thDatas = [];
-      thdata.Element_value = "Blood Glucose";
-      thdata.bg_low = 0;
-      thdata.bg_high = 0;
-      thDatas.push(thdata);
+    // if (coreContext.thresoldData.length === 0) {
+    //   let thdata = {};
+    //   const thDatas = [];
+    //   thdata.Element_value = "Blood Glucose";
+    //   thdata.bg_low = 0;
+    //   thdata.bg_high = 0;
+    //   thDatas.push(thdata);
 
-      thdata = {};
-      thdata.Element_value = "BMI";
-      thdata.bmi_low = 0;
-      thdata.bmi_high = 0;
-      thDatas.push(thdata);
+    //   thdata = {};
+    //   thdata.Element_value = "BMI";
+    //   thdata.bmi_low = 0;
+    //   thdata.bmi_high = 0;
+    //   thDatas.push(thdata);
 
-      thdata = {};
-      thdata.Element_value = "Diastolic";
-      thdata.diastolic_low = 0;
-      thdata.diastolic_high = 0;
-      thDatas.push(thdata);
+    //   thdata = {};
+    //   thdata.Element_value = "Diastolic";
+    //   thdata.diastolic_low = 0;
+    //   thdata.diastolic_high = 0;
+    //   thDatas.push(thdata);
 
-      thdata = {};
-      thdata.Element_value = "Systolic";
-      thdata.systolic_high = 0;
-      thdata.systolic_low = 0;
-      thDatas.push(thdata);
+    //   thdata = {};
+    //   thdata.Element_value = "Systolic";
+    //   thdata.systolic_high = 0;
+    //   thdata.systolic_low = 0;
+    //   thDatas.push(thdata);
 
-      thdata = {};
-      thdata.Element_value = "Weight";
-      thdata.weight_low = 0;
-      thdata.weight_high = 10;
-      thDatas.push(thdata);
-      setThData(thDatas);
-    } else {
-      setThData(coreContext.thresoldData);
+    //   thdata = {};
+    //   thdata.Element_value = "Weight";
+    //   thdata.weight_low = 0;
+    //   thdata.weight_high = 10;
+    //   thDatas.push(thdata);
+    //   setThData(thDatas);
+    // } else {
+    //   setThData(coreContext.thresoldData);
 
-      var bgdata = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "Blood Glucose"
-      );
+    //   var bgdata = coreContext.thresoldData.filter(
+    //     (a) => a.Element_value === "Blood Glucose"
+    //   );
 
-      if (bgdata.length > 0) {
-        setBgMin(bgdata[0].bg_low);
-        setBgMax(bgdata[0].bg_high);
-      } else {
-        setBgMin(0);
-        setBgMax(0);
-      }
+    //   if (bgdata.length > 0) {
+    //     setBgMin(bgdata[0].bg_low);
+    //     setBgMax(bgdata[0].bg_high);
+    //   } else {
+    //     setBgMin(0);
+    //     setBgMax(0);
+    //   }
 
-      var bpdata = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "BMI"
-      );
-      if (bpdata.length > 0) {
-        setBmiMin(bpdata[0].bmi_low);
-        setBmiMax(bpdata[0].bmi_high);
-      } else {
-        setBmiMin(0);
-        setBmiMax(0);
-      }
+    //   var bpdata = coreContext.thresoldData.filter(
+    //     (a) => a.Element_value === "BMI"
+    //   );
+    //   if (bpdata.length > 0) {
+    //     setBmiMin(bpdata[0].bmi_low);
+    //     setBmiMax(bpdata[0].bmi_high);
+    //   } else {
+    //     setBmiMin(0);
+    //     setBmiMax(0);
+    //   }
 
-      var dialostic = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "DIASTOLIC"
-      );
+    //   var dialostic = coreContext.thresoldData.filter(
+    //     (a) => a.Element_value === "DIASTOLIC"
+    //   );
 
-      if (dialostic.length > 0) {
-        setDiastolicMin(dialostic[0].diastolic_low);
-        setDiastolicMax(dialostic[0].diastolic_high);
-      } else {
-        setDiastolicMin(0);
-        setDiastolicMax(0);
-      }
+    //   if (dialostic.length > 0) {
+    //     setDiastolicMin(dialostic[0].diastolic_low);
+    //     setDiastolicMax(dialostic[0].diastolic_high);
+    //   } else {
+    //     setDiastolicMin(0);
+    //     setDiastolicMax(0);
+    //   }
 
-      var systolic = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "SYSTOLIC"
-      );
-      if (systolic.length > 0) {
-        setSystolicMin(systolic[0].systolic_low);
-        setSystolicMax(systolic[0].systolic_high);
-      } else {
-        setSystolicMin(0);
-        setSystolicMax(0);
-      }
+    //   var systolic = coreContext.thresoldData.filter(
+    //     (a) => a.Element_value === "SYSTOLIC"
+    //   );
+    //   if (systolic.length > 0) {
+    //     setSystolicMin(systolic[0].systolic_low);
+    //     setSystolicMax(systolic[0].systolic_high);
+    //   } else {
+    //     setSystolicMin(0);
+    //     setSystolicMax(0);
+    //   }
 
-      var weight = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "Weight"
-      );
+    //   var weight = coreContext.thresoldData.filter(
+    //     (a) => a.Element_value === "Weight"
+    //   );
 
-      if (weight.length > 0) {
-        setWeightMin(weight[0].weight_low);
-        setWeightMax(weight[0].weight_high);
-      } else {
-        setWeightMin(0);
-        setWeightMax(0);
-      }
-    }
+    //   if (weight.length > 0) {
+    //     setWeightMin(weight[0].weight_low);
+    //     setWeightMax(weight[0].weight_high);
+    //   } else {
+    //     setWeightMin(0);
+    //     setWeightMax(0);
+    //   }
+    // }
   };
 
   useEffect(fetchPatient, [coreContext.patient.length]);
@@ -331,7 +331,23 @@ const PatientSummary = (props) => {
     () => setNotes(coreContext.patient.notes),
     [coreContext.patient.notes]
   );
+const checkthresoldvalue=()=>{
 
+if(coreContext.thresoldData.length===0){
+  return "90";
+}
+else{
+  console.log("functionvalue",coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
+return String(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
+}
+  }
+  const tvalue=checkthresoldvalue();
+  //alert(tvalue)
+  //alert(alert(checkthresoldvalue()))
+  //alert(checkthresoldvalue())
+  
+
+  console.log("sahil",coreContext.thresoldData)
   const renderDates = () => {
     return (
       <>
@@ -365,7 +381,7 @@ const PatientSummary = (props) => {
     coreContext.fetchBloodGlucose(localStorage.getItem("ehrId"), "patient");
   };
   const fetchTd=()=>{
-    coreContext.fetchThresold(localStorage.getItem("ehrId"), "patient");
+    coreContext.fetchThresold("ADMIN_"+localStorage.getItem("ehrId"), "patient");
   }
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
   useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
@@ -754,7 +770,7 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
-        thrshold.push("150")
+        thrshold.push(tvalue)
         uniquedates = cdate.filter(function (item, pos) {
           return cdate.indexOf(item) == pos;
         });

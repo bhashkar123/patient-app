@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext,useMemo, useEffect } from "react";
 import { CoreContext } from "../context/core-context";
 import IonRangeSlider from "react-ion-slider";
 import Loader from "react-loader-spinner";
@@ -42,16 +42,21 @@ const Thresold = (props) => {
     }
     if (window.location.href.indexOf("patient-summary") > 0) {
       patientId = localStorage.getItem("ehrId");
-      alert(patientId);
+      console.log(patientId)
+      //alert(patientId);
+      
       setPatientId(patientId);
       // userType = "patient";
       // clear this otherwise will be problem
       //localStorage.removeItem("ehrId");
       setdisableChart(false);
     }
-
+    console.log()
+    var finalId="ADMIN_"+patientId
     setUserType(userType);
-    coreContext.fetchThresold(patientId, userType);
+   coreContext.fetchThresold(finalId, userType);
+   //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
+    
     setThData(coreContext.thresoldData);
 
     // setting default value
@@ -155,7 +160,7 @@ const Thresold = (props) => {
     }
   };
 
-  useEffect(fetchThresold, [coreContext.thresoldData.length]);
+  useEffect(fetchThresold, []);
 
   const onBGChange = (e) => {
     setBgMin(e.from);
@@ -224,7 +229,7 @@ const Thresold = (props) => {
           <div className="card">
             <h4 className="card-header">
               {" "}
-              {thData[0] ? thData[0].Element_value : "Blood Glucose"} (mg / dl){" "}
+              Blood Glucose (mg / dl){" "}
               <span>
                 {userType === "doctor" ||
                 userType === "admin" ||
