@@ -1092,19 +1092,19 @@ export const CoreContextProvider = (props) => {
     if (type.toString().toUpperCase().trim() == "BMI") _type = "BMI";
     if (type.toString().toUpperCase().trim() == "WS") _type = "Weight";
 
-    const data = {
+    const data = JSON.stringify({
       PK: "THRESHOLDRANGE_ADMIN",
       SK: patient + "_" + type,
-      Low: low.toString(),
-      High: high.toString(),
+      Low: low,
+      High: high,
       TElements: _type,
-    };
+    });
 
     axios
       .post(
         apiUrl +
           "/DynamoDbAPIs/putitem?jsonData=" +
-          data.toString() +
+          data +
           "&tableName=" +
           userTable +
           "&actionType=register",
