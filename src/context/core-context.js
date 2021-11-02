@@ -789,46 +789,50 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const thresholdData = response.data;
-        console.log("threshod data", response.data);
+        console.log("threshod datacheckin cre", thresholdData.length);
         const dataSetthresold = [];
+        if (thresholdData.length === 0) {
+          dataSetthresold.push("no data found");
+          console.log("threshod datacheckin cre", dataSetthresold);
+        } else {
+          thresholdData.forEach((th, index) => {
+            console.log("p" + index, th);
+            let thdata = {};
 
-        thresholdData.forEach((th, index) => {
-          console.log("p" + index, th);
-          let thdata = {};
+            if (th.TElements) {
+              thdata.Element_value = th.TElements.s;
+            }
+            if (th.Low) {
+              th.Low_value = th.Low.s;
+            }
+            if (th.High) {
+              th.High_value = th.High.s;
+            }
 
-          if (th.TElements) {
-            thdata.Element_value = th.TElements.s;
-          }
-          if (th.Low) {
-            th.Low_value = th.Low.s;
-          }
-          if (th.High) {
-            th.High_value = th.High.s;
-          }
+            if (thdata.Element_value === "Blood Glucose") {
+              thdata.bg_low = th.Low_value;
+              thdata.bg_high = th.High_value;
+            } else if (thdata.Element_value === "SYSTOLIC") {
+              thdata.systolic_low = th.Low_value;
+              thdata.systolic_high = th.High_value;
+            } else if (thdata.Element_value === "DIASTOLIC") {
+              thdata.diastolic_low = th.Low_value;
+              thdata.diastolic_high = th.High_value;
+            } else if (thdata.Element_value === "BMI") {
+              thdata.bmi_low = th.Low_value;
+              thdata.bmi_high = th.High_value;
+            } else if (thdata.Element_value === "Weight") {
+              thdata.weight_low = th.Low_value;
+              thdata.weight_high = th.High_value;
+            }
 
-          if (thdata.Element_value === "Blood Glucose") {
-            thdata.bg_low = th.Low_value;
-            thdata.bg_high = th.High_value;
-          } else if (thdata.Element_value === "SYSTOLIC") {
-            thdata.systolic_low = th.Low_value;
-            thdata.systolic_high = th.High_value;
-          } else if (thdata.Element_value === "DIASTOLIC") {
-            thdata.diastolic_low = th.Low_value;
-            thdata.diastolic_high = th.High_value;
-          } else if (thdata.Element_value === "BMI") {
-            thdata.bmi_low = th.Low_value;
-            thdata.bmi_high = th.High_value;
-          } else if (thdata.Element_value === "Weight") {
-            thdata.weight_low = th.Low_value;
-            thdata.weight_high = th.High_value;
-          }
-
-          dataSetthresold.push(thdata);
-        });
+            dataSetthresold.push(thdata);
+          });
+        }
 
         setThresoldData(dataSetthresold);
 
-        console.log("thresolddata", dataSetthresold);
+        console.log("thresolddata111111", dataSetthresold);
       });
   };
 
@@ -1088,24 +1092,32 @@ export const CoreContextProvider = (props) => {
     if (type.toString().toUpperCase().trim() == "BMI") _type = "BMI";
     if (type.toString().toUpperCase().trim() == "WS") _type = "Weight";
 
-    const data = {
+    const data = JSON.stringify({
       PK: "THRESHOLDRANGE_ADMIN",
       SK: patient + "_" + type,
       Low: low,
       High: high,
       TElements: _type,
-    };
+    });
 
     axios
-      .post(apiUrl + "/register", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
+      .post(
+        apiUrl +
+          "/DynamoDbAPIs/putitem?jsonData=" +
+          data +
+          "&tableName=" +
+          userTable +
+          "&actionType=register",
+        {
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            // "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
       .then((response) => {
-        if (response.data === "Updated") {
+        if (response.data === "Registered") {
           alert("Threshold Update Successfully.");
         } else {
         }
@@ -1915,7 +1927,6 @@ export const CoreContextProvider = (props) => {
 
         //    console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
-          console.log("p" + index, p);
           let devicedata = {};
           devicedata.id = index;
 
