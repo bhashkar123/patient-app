@@ -1278,7 +1278,8 @@ const PatientSummary = (props) => {
             marginTop: "10px",
             alignItems: "center",
           }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          <h6>No data Found</h6>
+          {/* <Loader type="Circles" color="#00BFFF" height={100} width={100} /> */}
         </div>
       );
     }
@@ -1318,8 +1319,9 @@ const PatientSummary = (props) => {
             justifyContent: "center",
             marginTop: "10px",
             alignItems: "center",
-          }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        }}>
+          <h6>no data found</h6>
+          {/* <Loader type="Circles" color="#00BFFF" height={100} width={100} /> */}
         </div>
       );
     }
