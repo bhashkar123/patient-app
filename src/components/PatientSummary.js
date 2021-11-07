@@ -934,6 +934,20 @@ console.log("finaldaata",finaldata)
                     
                   }],
                   
+                },
+                plugins: {
+                  autocolors: false,
+                  annotation: {
+                    annotations: {
+                      line1: {
+                        type: 'line',
+                        yMin: 60,
+                        yMax: 60,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 2,
+                      }
+                    }
+                  }
                 }
                               
               }}
