@@ -191,33 +191,30 @@ const Patients = (props) => {
       patient.ProviderName = "Select Provider";
       setProvider("");
     } else {
-      setProvider(
-        coreContext.providerOptions.filter(
-          (name) => name.name === patient.ProviderName
-        )[0].value
+      let _provider = coreContext.providerOptions.filter(
+        (name) => name.name === patient.ProviderName
       );
+      if (_provider.length > 0) setProvider(_provider[0].value);
     }
 
     if (patient.CareName === undefined) {
       patient.CareName = "Select Coordinator";
       setCoordinator("");
     } else {
-      setCoordinator(
-        coreContext.careCoordinatorOptions.filter(
-          (name) => name.name === patient.CareName
-        )[0].value
+      let _coordinator = coreContext.careCoordinatorOptions.filter(
+        (name) => name.name === patient.CareName
       );
+      if (_coordinator.length > 0) setCoordinator(_coordinator[0].value);
     }
 
     if (patient.CoachName === undefined) {
       patient.CoachName = "Select Coach";
       setCoach("");
     } else {
-      setCoach(
-        coreContext.coachOptions.filter(
-          (name) => name.name === patient.CoachName
-        )[0].value
+      let _coach = coreContext.coachOptions.filter(
+        (name) => name.name === patient.CoachName
       );
+      if (_coach.length > 0) setCoach(_coach[0].value);
     }
     handleAssignDrModalShow();
   };
