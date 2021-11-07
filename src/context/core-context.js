@@ -975,12 +975,12 @@ export const CoreContextProvider = (props) => {
       alert("please select device");
       return;
     }
-    
+
     if (deviceId == "" || deviceId == null) {
       alert("please enter device id");
       return;
     }
-    
+
     const data = JSON.stringify({
       PK: "patient",
       SK: SK1,
@@ -1333,11 +1333,10 @@ export const CoreContextProvider = (props) => {
       },
     };
 
-    // if(provider.value == null || provider.value == "")
-    // {
-    //   alert("Please select provider.");
-    //   return;
-    // }
+    if (providername.value === "") {
+      alert("Please select provider.");
+      return;
+    }
 
     axios
       .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
