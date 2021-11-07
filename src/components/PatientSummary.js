@@ -1310,7 +1310,8 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
             marginTop: "10px",
             alignItems: "center",
           }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          <h6>No data Found</h6>
+          {/* <Loader type="Circles" color="#00BFFF" height={100} width={100} /> */}
         </div>
       );
     }
@@ -1350,8 +1351,9 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
             justifyContent: "center",
             marginTop: "10px",
             alignItems: "center",
-          }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        }}>
+          <h6>no data found</h6>
+          {/* <Loader type="Circles" color="#00BFFF" height={100} width={100} /> */}
         </div>
       );
     }
