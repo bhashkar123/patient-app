@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
 
+
 import {
   GenderMale,
   GenderFemale,
@@ -85,6 +86,7 @@ const PatientSummary = (props) => {
   const [slider, setslider] = useState(30);
   const [Days, setDays] = useState();
   const [tddata,settddata]=useState([]);
+  
   const marks = [
     {
       value: 0,
@@ -498,7 +500,7 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
           (date) => date.CreatedDate >= new Date(bfr)
         );
       }
-
+console.log("finaldaata",finaldata)
       {
         
       }
@@ -514,6 +516,8 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
         pulse.push(curr.Pulse);
         dates.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
       });
+      
+      
       let uniquedates = dates.filter(function (item, pos) {
         return dates.indexOf(item) == pos;
       });
@@ -585,31 +589,61 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
           </>
         );
       }
+      console.log("hfh sort date",labels.sort(function(a,b){
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b) - new Date(a);
+      }))
       if (index === 2) {
         //var labels =[1,2,3,4,5];
         const data = {
-          labels: labels,
+          labels: labels.sort(function(a,b){
+            
+            return new Date(b) - new Date(a);
+          }),
 
           datasets: [
             {
               label: "Systolic",
               data: Systolic,
+              fill:false,
               backgroundColor: ["Blue"],
+              borderColor:["Blue"],
+              pointRadius: 10,
+              pointStyle:"triangle",
+              pointBackgroundColor:"blue",
+
+              tension:0
               //borderColor:["white"],
             },
             {
               label: "Diastolic",
               data: diastolic,
+              fill:false,
               backgroundColor: ["green"],
+              borderColor:["green"],
+              radius:10,
+              pointBackgroundColor:"green",
+              //pointRadius: 8,
+              pointStyle:"square",
+              tension:0
               //borderColor:["white"],
             },
             {
               label: "Pulse",
               data: pulse,
+              fill:false,
               backgroundColor: ["orange"],
+              borderColor:["orange"],
+              pointStyle: 'rectRot',
+              pointBackgroundColor:"orange",
+               pointRadius: 10,
+               tension:0
+               
               //borderColor:["white"],
             },
           ],
+          
         };
 
         return (
@@ -619,7 +653,15 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
               style={{ height: "34px" }}>
               <h6>Reading By Dates</h6>
             </nav>
-            <Line data={data} />
+            <Line data={data}  options={{
+            tooltips : {
+              mode : 'index'
+            },
+            legend:{
+              display:true,
+              position:'right'
+            }
+          }}/>
           </>
         );
       }
@@ -797,26 +839,42 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
       if (index === 2) {
         //var labels =[1,2,3,4,5];
         const data = {
-          labels: labels,
+          labels: labels.sort(function(a,b){
+            
+            return new Date(b) - new Date(a);
+          }),
 
           datasets: [
             {
               label: "Before Meal",
               data: bgbefore,
               backgroundColor: ["Blue"],
+              borderColor:["Blue"],
+              fill:false,
+              pointRadius: 10,
+              pointStyle:"triangle",
+              pointBackgroundColor:"blue",
             },
             {
               label: "After Meal",
               data: bgafter,
+              fill:false,
               backgroundColor: ["green"],
-              //borderColor:["white"],
+              borderColor:["green"],
+              pointRadius: 10,
+              pointStyle:"square",
+              pointBackgroundColor:"green",
             },
             {
               label: "Threshold",
               data: thrshold,
+              pointRadius:      0,
+              //pointBackgroundColor:"white",
+              
               backgroundColor: ["red"],
               borderColor:["red"],
-              borderWidth:3,
+              fill:false,
+              borderWidth:6,
             },
             // {
             //   label: 'Pulse',
@@ -826,6 +884,7 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
             // }
           ],
         };
+        const filterarray=[]
 
         return (
           <>
@@ -837,15 +896,60 @@ console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
             <Line
               data={data}
               options={{
-                title: {
-                  display: true,
-                  text: "Largest Cities In ",
-                  fontSize: 25,
+                tooltips : {
+                  mode : 'index'
                 },
-                legend: {
-                  display: true,
-                  position: "right",
+                
+                legend:{
+                  display:true,
+                  position:'right'
                 },
+               
+                responsive: true,
+                scales: {
+                  xAxes: [{
+                    id: 'x',
+                    //type: 'time',
+                    display: true,
+                    title: {
+                      display: true,
+                      text: 'Date'
+                    },
+                    
+                    ticks: {
+                      // Include a dollar sign in the ticks
+                      callback: function(value, index, values) {
+                        
+                        if (filterarray.includes(Moment(value). format('YYYY-MM-DD'))!==true){
+                          filterarray.push(Moment(value). format('YYYY-MM-DD'))
+                        }
+                        else{
+                          filterarray.push("0")
+                        }
+                          return  filterarray[index]!=="0"?Moment(value). format('MM-DD'):"";
+                      }
+                  }
+                      
+                      
+                    
+                  }],
+                  
+                },
+                plugins: {
+                  autocolors: false,
+                  annotation: {
+                    annotations: {
+                      line1: {
+                        type: 'line',
+                        yMin: 60,
+                        yMax: 60,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 2,
+                      }
+                    }
+                  }
+                }
+                              
               }}
             />
           </>
