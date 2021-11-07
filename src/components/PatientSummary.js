@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
 
+
 import {
   GenderMale,
   GenderFemale,
@@ -85,6 +86,7 @@ const PatientSummary = (props) => {
   const [slider, setslider] = useState(30);
   const [Days, setDays] = useState();
   const [tddata,settddata]=useState([]);
+  
   const marks = [
     {
       value: 0,
@@ -882,6 +884,7 @@ console.log("finaldaata",finaldata)
             // }
           ],
         };
+        const filterarray=[]
 
         return (
           <>
@@ -896,10 +899,43 @@ console.log("finaldaata",finaldata)
                 tooltips : {
                   mode : 'index'
                 },
+                
                 legend:{
                   display:true,
                   position:'right'
+                },
+               
+                responsive: true,
+                scales: {
+                  xAxes: [{
+                    id: 'x',
+                    //type: 'time',
+                    display: true,
+                    title: {
+                      display: true,
+                      text: 'Date'
+                    },
+                    
+                    ticks: {
+                      // Include a dollar sign in the ticks
+                      callback: function(value, index, values) {
+                        
+                        if (filterarray.includes(Moment(value). format('YYYY-MM-DD'))!==true){
+                          filterarray.push(Moment(value). format('YYYY-MM-DD'))
+                        }
+                        else{
+                          filterarray.push("0")
+                        }
+                          return  filterarray[index]!=="0"?Moment(value). format('MM-DD'):"";
+                      }
+                  }
+                      
+                      
+                    
+                  }],
+                  
                 }
+                              
               }}
             />
           </>
