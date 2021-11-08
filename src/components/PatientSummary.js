@@ -86,6 +86,7 @@ const PatientSummary = (props) => {
   const [slider, setslider] = useState(30);
   const [Days, setDays] = useState();
   const [tddata,settddata]=useState([]);
+  const [pointcolor,setpointcolor]=useState([]);
   
   const marks = [
     {
@@ -343,7 +344,20 @@ else{
 return String(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
 }
   }
+
+  const checkthresoldMinvalue=()=>{
+
+    if(coreContext.thresoldData.length===0){
+      return "20";
+    }
+    else{
+      console.log("functionvalue",coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
+    return String(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_low)
+    }
+  }
+
   const tvalue=checkthresoldvalue();
+  const tMinvalue=checkthresoldMinvalue();
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
   //alert(checkthresoldvalue())
@@ -599,7 +613,7 @@ console.log("finaldaata",finaldata)
         const data = {
           labels: labels.sort(function(a,b){
             
-            return new Date(b) - new Date(a);
+            return new Date(a) - new Date(b);
           }),
 
           datasets: [
@@ -805,14 +819,17 @@ console.log("finaldaata",finaldata)
       let bgafter = [];
       let labels = [];
       let thrshold=[];
+      let thresholdmin=[];
       let cdate = [];
       let uniquedates = [];
       let sorteddates = [];
+      let pcolorb=[];
       finalbgdata.map((curr) => {
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
         thrshold.push(tvalue)
+        thresholdmin.push(tMinvalue);
         uniquedates = cdate.filter(function (item, pos) {
           return cdate.indexOf(item) == pos;
         });
@@ -823,6 +840,15 @@ console.log("finaldaata",finaldata)
         });
         if (curr.meal === "Before Meal") {
           bgbefore.push(curr.bloodglucosemgdl);
+          if(Number(curr.bloodglucosemgdl)<Number(tvalue)&&Number(curr.bloodglucosemgdl)>Number(tMinvalue)){
+            pcolorb.push("green")
+          }else if((Number(curr.bloodglucosemgdl)>Number(tvalue)))
+          {
+            pcolorb.push("red")
+          }
+          else{
+            pcolorb.push("blue")
+          }
         }
         if (curr.meal === "After Meal") {
           bgafter.push(curr.bloodglucosemgdl);
@@ -841,7 +867,7 @@ console.log("finaldaata",finaldata)
         const data = {
           labels: labels.sort(function(a,b){
             
-            return new Date(b) - new Date(a);
+            return new Date(a) - new Date(b);
           }),
 
           datasets: [
@@ -853,20 +879,20 @@ console.log("finaldaata",finaldata)
               fill:false,
               pointRadius: 10,
               pointStyle:"triangle",
-              pointBackgroundColor:"blue",
+              pointBackgroundColor:pcolorb,
             },
             {
               label: "After Meal",
               data: bgafter,
               fill:false,
-              backgroundColor: ["green"],
-              borderColor:["green"],
+              backgroundColor: ["orange"],
+              borderColor:["orange"],
               pointRadius: 10,
               pointStyle:"square",
-              pointBackgroundColor:"green",
+              pointBackgroundColor:"orange",
             },
             {
-              label: "Threshold",
+              label: "Max Value",
               data: thrshold,
               pointRadius:      0,
               //pointBackgroundColor:"white",
@@ -875,7 +901,27 @@ console.log("finaldaata",finaldata)
               borderColor:["red"],
               fill:false,
               borderWidth:6,
-            },
+            },{
+              label: "Min Value",
+              data: thresholdmin,
+              pointRadius:      0,
+              //pointBackgroundColor:"white",
+              
+              backgroundColor: ["#036bfc"],
+              borderColor:["#036bfc"],
+              fill:false,
+              borderWidth:3,
+            },{
+              label:"In range Boundaries",
+              backgroundColor: ["green"],
+            },{
+              label:"Above range Boundaries",
+              backgroundColor: ["red"],
+            }
+            ,{
+              label:"Below range Boundaries",
+              backgroundColor: ["Blue"],
+            }
             // {
             //   label: 'Pulse',
             //   data: pulse,
@@ -901,8 +947,9 @@ console.log("finaldaata",finaldata)
                 },
                 
                 legend:{
+                  
                   display:true,
-                  position:'right'
+                  position:'bottom'
                 },
                
                 responsive: true,
