@@ -599,7 +599,7 @@ console.log("finaldaata",finaldata)
         const data = {
           labels: labels.sort(function(a,b){
             
-            return new Date(b) - new Date(a);
+            return new Date(a) - new Date(b);
           }),
 
           datasets: [
@@ -841,7 +841,7 @@ console.log("finaldaata",finaldata)
         const data = {
           labels: labels.sort(function(a,b){
             
-            return new Date(b) - new Date(a);
+            return new Date(a) - new Date(b);
           }),
 
           datasets: [
