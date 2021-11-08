@@ -970,6 +970,17 @@ export const CoreContextProvider = (props) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const SK1 = "DEVICE_" + deviceType + "_" + deviceId;
+
+    if (deviceType == "" || deviceType == null) {
+      alert("please select device");
+      return;
+    }
+
+    if (deviceId == "" || deviceId == null) {
+      alert("please enter device id");
+      return;
+    }
+
     const data = JSON.stringify({
       PK: "patient",
       SK: SK1,
@@ -1321,6 +1332,11 @@ export const CoreContextProvider = (props) => {
         ":v_CoachId": { S: coachname.value },
       },
     };
+
+    if (providername.value === "") {
+      alert("Please select provider.");
+      return;
+    }
 
     axios
       .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
@@ -2854,7 +2870,7 @@ export const CoreContextProvider = (props) => {
       return;
     }
 
-    if (performedBy == null) {
+    if (performedBy == null || performedBy == "") {
       alert("please enter performedBy");
       return;
     }
