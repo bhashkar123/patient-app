@@ -911,6 +911,16 @@ console.log("finaldaata",finaldata)
               borderColor:["#036bfc"],
               fill:false,
               borderWidth:3,
+            },{
+              label:"In range Boundaries",
+              backgroundColor: ["green"],
+            },{
+              label:"Above range Boundaries",
+              backgroundColor: ["red"],
+            }
+            ,{
+              label:"Below range Boundaries",
+              backgroundColor: ["Blue"],
             }
             // {
             //   label: 'Pulse',
@@ -937,8 +947,9 @@ console.log("finaldaata",finaldata)
                 },
                 
                 legend:{
+                  
                   display:true,
-                  position:'right'
+                  position:'bottom'
                 },
                
                 responsive: true,
