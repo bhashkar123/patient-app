@@ -40,6 +40,7 @@ const Thresold = (props) => {
 
     if (userType === "admin") {
       setdisableChart(false);
+      coreContext.fetchThresold("ADMIN_" + patientId, "Admin");
     } else if (userType === "patient") {
       setdisableChart(true);
     }
