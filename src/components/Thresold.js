@@ -1,4 +1,4 @@
-import React, { useState, useContext,useMemo, useEffect } from "react";
+import React, { useState, useContext, useMemo, useEffect } from "react";
 import { CoreContext } from "../context/core-context";
 import IonRangeSlider from "react-ion-slider";
 import Loader from "react-loader-spinner";
@@ -36,32 +36,33 @@ const Thresold = (props) => {
     let userType = localStorage.getItem("userType");
     let patientId = localStorage.getItem("userId");
     // check page if left side menu.
+    setPatientId(patientId);
 
-    if(userType==="admin"){
-      setdisableChart(false)
-    }else if(userType==="patient"){
-      setdisableChart(true)
+    if (userType === "admin") {
+      setdisableChart(false);
+    } else if (userType === "patient") {
+      setdisableChart(true);
     }
-    console.log("why", userType,patientId);
+    console.log("why", userType, patientId);
     if (window.location.href.substring("bloodpressure") > 0) {
     }
     if (window.location.href.indexOf("patient-summary") > 0) {
       patientId = localStorage.getItem("ehrId");
-      console.log(patientId)
+      console.log(patientId);
       //alert(patientId);
-      
+
       setPatientId(patientId);
       // userType = "patient";
       // clear this otherwise will be problem
       //localStorage.removeItem("ehrId");
       setdisableChart(false);
     }
-    console.log()
-    var finalId="ADMIN_"+patientId
+    console.log();
+    var finalId = "ADMIN_" + patientId;
     setUserType(userType);
-   coreContext.fetchThresold(finalId, userType);
-   //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
-    
+    coreContext.fetchThresold(finalId, userType);
+    //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
+
     setThData(coreContext.thresoldData);
 
     // setting default value
@@ -250,7 +251,7 @@ const Thresold = (props) => {
                         bgMin,
                         userType
                       );
-                      alert("onClick");
+                      // alert("onClick");
                     }}
                     className="btn btn-primary mb-2 float-right">
                     {" "}
