@@ -7,6 +7,9 @@ import { Bezier, Bezier2, Cash, GraphUp } from "react-bootstrap-icons";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
 import Moment from "moment";
+import { Widget } from 'react-chat-widget';
+
+import 'react-chat-widget/lib/styles.css';
 
 const Dashboard = (props) => {
   const [date, setDate] = useState();
@@ -191,12 +194,19 @@ const Dashboard = (props) => {
   }
 
   console.log("vdevide", v_devices);
+  const handleNewUserMessage = (newMessage) => {
+    console.log(`New message incoming! ${newMessage}`);
+    // Now send the message throught the backend API
+  };
 
   return (
     <div className="card">
       <div className="card-header row">
         <div className="col-md-5">
           <h4>A Pattern Medical Clinic Dashboard</h4>
+          {/* <Widget
+        handleNewUserMessage={handleNewUserMessage}
+      /> */}
         </div>
         {/* <div className="col-md-4">
                 <DatePicker

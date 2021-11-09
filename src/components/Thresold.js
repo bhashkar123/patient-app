@@ -36,8 +36,13 @@ const Thresold = (props) => {
     let userType = localStorage.getItem("userType");
     let patientId = localStorage.getItem("userId");
     // check page if left side menu.
-    setdisableChart(true);
-    console.log("why", userType);
+
+    if(userType==="admin"){
+      setdisableChart(false)
+    }else if(userType==="patient"){
+      setdisableChart(true)
+    }
+    console.log("why", userType,patientId);
     if (window.location.href.substring("bloodpressure") > 0) {
     }
     if (window.location.href.indexOf("patient-summary") > 0) {
