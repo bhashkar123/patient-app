@@ -8,6 +8,9 @@ import Loader from "react-loader-spinner";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
+import { Widget } from 'react-chat-widget';
+
+import 'react-chat-widget/lib/styles.css';
 
 import {
   GenderMale,
@@ -2843,6 +2846,7 @@ const PatientSummary = (props) => {
       </div>
       <div onClick={() => setShowNotesTextBox(false)} className="card-header">
         {renderTabs()}
+        {/* <Widget /> */}
       </div>
     </div>
   );
