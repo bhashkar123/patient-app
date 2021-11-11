@@ -38,9 +38,9 @@ const Thresold = (props) => {
     // check page if left side menu.
     setPatientId(patientId);
 
-    if (userType === "admin") {
+    if (userType === "admin" && window.location.href.indexOf("patient-summary") === 0) {
       setdisableChart(false);
-      coreContext.fetchThresold("ADMIN_" + patientId, "Admin");
+      coreContext.fetchThresold("ADMIN_" + patientId, userType);
     } else if (userType === "patient") {
       setdisableChart(true);
     }
@@ -57,14 +57,17 @@ const Thresold = (props) => {
       // clear this otherwise will be problem
       //localStorage.removeItem("ehrId");
       setdisableChart(false);
+      var finalId = "ADMIN_" + patientId;
+      setUserType(userType);
+      coreContext.fetchThresold(finalId, userType);
     }
     console.log();
-    var finalId = "ADMIN_" + patientId;
-    setUserType(userType);
-    coreContext.fetchThresold(finalId, userType);
+   
+    
     //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
 
     setThData(coreContext.thresoldData);
+    
 
     // setting default value
     if (coreContext.thresoldData.length === 0) {
@@ -99,18 +102,21 @@ const Thresold = (props) => {
       thdata.weight_high = 10;
       thDatas.push(thdata);
       setThData(thDatas);
-      console.log("check threshold value", coreContext.thresoldData);
+      // console.log("check threshold value", coreContext.thresoldData);
+      // console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
     } else {
       setThData(coreContext.thresoldData);
       console.log("check threshold value", coreContext.thresoldData);
+      console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
 
       var bgdata = coreContext.thresoldData.filter(
         (a) => a.Element_value === "Blood Glucose"
       );
-
+        
       if (bgdata.length > 0) {
         setBgMin(bgdata[0].bg_low);
         setBgMax(bgdata[0].bg_high);
+        console.log("vhekvdjhfjdbg datat",bgMax)
       } else {
         setBgMin(0);
         setBgMax(0);
@@ -168,6 +174,7 @@ const Thresold = (props) => {
   };
 
   useEffect(fetchThresold, []);
+  useEffect(fetchThresold,[coreContext.thresoldData.length])
 
   const onBGChange = (e) => {
     setBgMin(e.from);
@@ -225,266 +232,264 @@ const Thresold = (props) => {
     }
 
     if (coreContext.thresoldData.length > 0) {
-      return <h1>{coreContext.thresoldData[0].bg_high}</h1>;
+      return ("sa"  );
     }
   };
 
   return (
+    
     <React.Fragment>
-      <div className="row">
-        <div className="col-md-6">
-          <div className="card">
-            <h4 className="card-header">
-              {" "}
-              Blood Glucose (mg / dl){" "}
-              <span>
-                {userType === "doctor" ||
-                userType === "admin" ||
-                userType === "provider" ? (
-                  <button
-                    type="button"
-                    style={{ width: "190px" }}
-                    onClick={() => {
-                      coreContext.UpdateThreshold(
-                        "ADMIN_" + patientId,
-                        "bg",
-                        bgMax,
-                        bgMin,
-                        userType
-                      );
-                      // alert("onClick");
-                    }}
-                    className="btn btn-primary mb-2 float-right">
-                    {" "}
-                    Update
-                  </button>
-                ) : (
-                  ""
-                )}
-              </span>
-            </h4>
-            <div className="card-body">
-              <IonRangeSlider
-                disable={disableChart}
-                keyboard={true}
-                onStart={(e) => onBGChange(e)}
-                onFinish={(e) => onBGChange(e)}
-                type="double"
-                min={0}
-                max={500}
-                from={bgMin}
-                to={bgMax}
-                step={0.01}
-                grid={true}
-                grid_margin={true}
-                grid_number={5}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-6">
-          <div className="card">
-            <h4 className="card-header">
-              {" "}
-              BMI (kg / m2)
-              <span>
-                {userType === "doctor" ||
-                userType === "admin" ||
-                userType === "provider" ? (
-                  <button
-                    type="button"
-                    style={{ width: "190px" }}
-                    onClick={() =>
-                      coreContext.UpdateThreshold(
-                        "ADMIN_" + patientId,
-                        "bmi",
-                        bmiMax,
-                        bmiMin,
-                        userType
-                      )
-                    }
-                    class="btn btn-primary mb-2 float-right">
-                    {" "}
-                    Update
-                  </button>
-                ) : (
-                  ""
-                )}
-              </span>
-            </h4>
-            <div className="card-body">
-              <IonRangeSlider
-                disable={disableChart}
-                keyboard={true}
-                onFinish={(e) => onBMIChange(e)}
-                type="double"
-                min={0}
-                max={100}
-                from={bmiMin}
-                to={bmiMax}
-                step={0.01}
-                grid={true}
-                grid_margin={true}
-                grid_number={5}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-6">
-          <div className="card">
-            <h4 className="card-header">
-              {" "}
-              Diastolic (mmHg)
-              <span>
-                {userType === "doctor" ||
-                userType === "admin" ||
-                userType === "provider" ? (
-                  <button
-                    type="button"
-                    style={{ width: "190px" }}
-                    onClick={() =>
-                      coreContext.UpdateThreshold(
-                        "ADMIN_" + patientId,
-                        "Diastolic",
-                        diastolicMax,
-                        diastolicMin,
-                        userType
-                      )
-                    }
-                    class="btn btn-primary mb-2 float-right">
-                    {" "}
-                    Update
-                  </button>
-                ) : (
-                  ""
-                )}
-              </span>
-            </h4>
-            <div className="card-body">
-              <IonRangeSlider
-                disable={disableChart}
-                keyboard={true}
-                onFinish={(e) => onDiastolicChange(e)}
-                type="double"
-                min={0}
-                max={500}
-                from={diastolicMin}
-                to={diastolicMax}
-                step={0.01}
-                grid={true}
-                grid_margin={true}
-                grid_number={5}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-6">
-          <div className="card">
-            <h4 className="card-header">
-              {" "}
-              Systolic (mmHg)
-              <span>
-                {userType === "doctor" ||
-                userType === "admin" ||
-                userType === "provider" ? (
-                  <button
-                    type="button"
-                    style={{ width: "190px" }}
-                    onClick={() =>
-                      coreContext.UpdateThreshold(
-                        "ADMIN_" + patientId,
-                        "Systolic",
-                        systolicMax,
-                        systolicMin,
-                        userType
-                      )
-                    }
-                    class="btn btn-primary mb-2 float-right">
-                    {" "}
-                    Update
-                  </button>
-                ) : (
-                  ""
-                )}
-              </span>
-            </h4>
-            <div className="card-body">
-              <IonRangeSlider
-                disable={disableChart}
-                keyboard={true}
-                onFinish={(e) => onSystolicChange(e)}
-                type="double"
-                min={0}
-                max={500}
-                from={systolicMin}
-                to={systolicMax}
-                step={0.01}
-                grid={true}
-                grid_margin={true}
-                grid_number={5}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-6">
-          <div className="card">
-            <h4 className="card-header">
-              {" "}
-              Weight (lb)
-              <span>
-                {console.log(userType)}
-                {userType === "doctor" ||
-                userType === "admin" ||
-                userType === "provider" ? (
-                  <button
-                    type="button"
-                    style={{ width: "190px" }}
-                    onClick={() =>
-                      coreContext.UpdateThreshold(
-                        "ADMIN_" + patientId,
-                        "Weight",
-                        weightMax,
-                        weightMin,
-                        userType
-                      )
-                    }
-                    class="btn btn-primary mb-2 float-right">
-                    {" "}
-                    Update
-                  </button>
-                ) : (
-                  ""
-                )}{" "}
-              </span>{" "}
-            </h4>
-            <div className="card-body">
-              <IonRangeSlider
-                disable={disableChart}
-                keyboard={true}
-                onFinish={(e) => onWeightChange(e)}
-                type="double"
-                min={50}
-                max={700}
-                from={weightMin}
-                to={weightMax}
-                step={0.01}
-                grid={true}
-                grid_margin={true}
-                grid_number={5}
-              />
-            </div>
+    <div className="row">
+      <div className="col-md-6">
+        <div className="card">
+          <h4 className="card-header">
+            {" "}
+            Blood Glucose (mg / dl){" "}
+            <span>
+              {userType === "doctor" ||
+              userType === "admin" ||
+              userType === "provider" ? (
+                <button
+                  type="button"
+                  style={{ width: "190px" }}
+                  onClick={() => {
+                    coreContext.UpdateThreshold(
+                      "ADMIN_" + patientId,
+                      "bg",
+                      bgMax,
+                      bgMin,
+                      userType
+                    );
+                    // alert("onClick");
+                  }}
+                  className="btn btn-primary mb-2 float-right">
+                  {" "}
+                  Update
+                </button>
+              ) : (
+                ""
+              )}
+            </span>
+          </h4>
+          <div className="card-body">
+            <IonRangeSlider
+              disable={disableChart}
+              keyboard={true}
+              onStart={(e) => onBGChange(e)}
+              onFinish={(e) => onBGChange(e)}
+              type="double"
+              min={0}
+              max={500}
+              from={bgMin}
+              to={bgMax}
+              step={0.01}
+              grid={true}
+              grid_margin={true}
+              grid_number={5}
+            />
           </div>
         </div>
       </div>
-    </React.Fragment>
 
-    // <>
-    // {renderslider()}
-    // </>
+      <div className="col-md-6">
+        <div className="card">
+          <h4 className="card-header">
+            {" "}
+            BMI (kg / m2)
+            <span>
+              {userType === "doctor" ||
+              userType === "admin" ||
+              userType === "provider" ? (
+                <button
+                  type="button"
+                  style={{ width: "190px" }}
+                  onClick={() =>
+                    coreContext.UpdateThreshold(
+                      "ADMIN_" + patientId,
+                      "bmi",
+                      bmiMax,
+                      bmiMin,
+                      userType
+                    )
+                  }
+                  class="btn btn-primary mb-2 float-right">
+                  {" "}
+                  Update
+                </button>
+              ) : (
+                ""
+              )}
+            </span>
+          </h4>
+          <div className="card-body">
+            <IonRangeSlider
+              disable={disableChart}
+              keyboard={true}
+              onFinish={(e) => onBMIChange(e)}
+              type="double"
+              min={0}
+              max={100}
+              from={bmiMin}
+              to={bmiMax}
+              step={0.01}
+              grid={true}
+              grid_margin={true}
+              grid_number={5}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-6">
+        <div className="card">
+          <h4 className="card-header">
+            {" "}
+            Diastolic (mmHg)
+            <span>
+              {userType === "doctor" ||
+              userType === "admin" ||
+              userType === "provider" ? (
+                <button
+                  type="button"
+                  style={{ width: "190px" }}
+                  onClick={() =>
+                    coreContext.UpdateThreshold(
+                      "ADMIN_" + patientId,
+                      "Diastolic",
+                      diastolicMax,
+                      diastolicMin,
+                      userType
+                    )
+                  }
+                  class="btn btn-primary mb-2 float-right">
+                  {" "}
+                  Update
+                </button>
+              ) : (
+                ""
+              )}
+            </span>
+          </h4>
+          <div className="card-body">
+            <IonRangeSlider
+              disable={disableChart}
+              keyboard={true}
+              onFinish={(e) => onDiastolicChange(e)}
+              type="double"
+              min={0}
+              max={500}
+              from={diastolicMin}
+              to={diastolicMax}
+              step={0.01}
+              grid={true}
+              grid_margin={true}
+              grid_number={5}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-6">
+        <div className="card">
+          <h4 className="card-header">
+            {" "}
+            Systolic (mmHg)
+            <span>
+              {userType === "doctor" ||
+              userType === "admin" ||
+              userType === "provider" ? (
+                <button
+                  type="button"
+                  style={{ width: "190px" }}
+                  onClick={() =>
+                    coreContext.UpdateThreshold(
+                      "ADMIN_" + patientId,
+                      "Systolic",
+                      systolicMax,
+                      systolicMin,
+                      userType
+                    )
+                  }
+                  class="btn btn-primary mb-2 float-right">
+                  {" "}
+                  Update
+                </button>
+              ) : (
+                ""
+              )}
+            </span>
+          </h4>
+          <div className="card-body">
+            <IonRangeSlider
+              disable={disableChart}
+              keyboard={true}
+              onFinish={(e) => onSystolicChange(e)}
+              type="double"
+              min={0}
+              max={500}
+              from={systolicMin}
+              to={systolicMax}
+              step={0.01}
+              grid={true}
+              grid_margin={true}
+              grid_number={5}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-6">
+        <div className="card">
+          <h4 className="card-header">
+            {" "}
+            Weight (lb)
+            <span>
+              {console.log(userType)}
+              {userType === "doctor" ||
+              userType === "admin" ||
+              userType === "provider" ? (
+                <button
+                  type="button"
+                  style={{ width: "190px" }}
+                  onClick={() =>
+                    coreContext.UpdateThreshold(
+                      "ADMIN_" + patientId,
+                      "Weight",
+                      weightMax,
+                      weightMin,
+                      userType
+                    )
+                  }
+                  class="btn btn-primary mb-2 float-right">
+                  {" "}
+                  Update
+                </button>
+              ) : (
+                ""
+              )}{" "}
+            </span>{" "}
+          </h4>
+          <div className="card-body">
+            <IonRangeSlider
+              disable={disableChart}
+              keyboard={true}
+              onFinish={(e) => onWeightChange(e)}
+              type="double"
+              min={50}
+              max={700}
+              from={weightMin}
+              to={weightMax}
+              step={0.01}
+              grid={true}
+              grid_margin={true}
+              grid_number={5}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </React.Fragment>
+
   );
 };
 

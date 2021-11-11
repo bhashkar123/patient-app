@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+import { Widget ,addResponseMessage } from 'react-chat-widget';
+
+import 'react-chat-widget/lib/styles.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -43,6 +47,17 @@ function App() {
   useEffect(() => {}, [showSidebar]);
   const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
+  useEffect(() => {
+    localStorage.setItem('highscore',"x");
+    addResponseMessage(localStorage.getItem('highscore'));
+    localStorage.removeItem('highscore')
+  }, []);
+  
+  const handleNewUserMessage = (newMessage) => {
+    console.log(`New message incoming! ${newMessage}`);
+    // Now send the message throught the backend API
+    addResponseMessage();
+  }
   const changestyle = () => {
     if (sidebar === false) {
       setStyle("col-md-9 col-8 col-sm-8 p-0");
@@ -58,11 +73,15 @@ function App() {
       {" "}
       {/**/}{" "}
       {isAuth ? (
+        <>
         <TopMenu
           isAuth={isAuth}
           changestyle={changestyle}
           showSidebar={showSidebar}
         />
+        <Widget
+        handleNewUserMessage={handleNewUserMessage}
+      /></>
       ) : (
         ""
       )}

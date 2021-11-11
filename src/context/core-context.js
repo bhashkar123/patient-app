@@ -765,7 +765,7 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchThresold =  async (userid, usertype) => {
+  const fetchThresold =  (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
 
     let data = "";
@@ -779,7 +779,7 @@ export const CoreContextProvider = (props) => {
       },
     };
 
-   await axios
+    axios
       .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -796,7 +796,7 @@ export const CoreContextProvider = (props) => {
           console.log("threshod datacheckin cre", dataSetthresold);
         } else {
           thresholdData.forEach((th, index) => {
-            console.log("p" + index, th);
+           // console.log("p" + index, th);
             let thdata = {};
 
             if (th.TElements) {
@@ -832,7 +832,7 @@ export const CoreContextProvider = (props) => {
 
         setThresoldData(dataSetthresold);
 
-        console.log("thresolddata111111", thresoldData,dataSetthresold.bg_High);
+        console.log("thresolddata111111",dataSetthresold,thresoldData);
       });
   };
 
@@ -898,7 +898,7 @@ export const CoreContextProvider = (props) => {
 
         setTimeLogData(dataSettimeLog);
 
-        console.log("timeLogData", dataSettimeLog);
+      //console.log("timeLogData", dataSettimeLog);
       });
   };
 
