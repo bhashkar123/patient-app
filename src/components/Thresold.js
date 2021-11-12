@@ -37,18 +37,23 @@ const Thresold = (props) => {
     let patientId = localStorage.getItem("userId");
     // check page if left side menu.
     setPatientId(patientId);
+    setUserType(userType);
+    console.log("sajhdjdjhdjhdj",window.location.href.indexOf("patient-summary"))
 
-    if (userType === "admin" && window.location.href.indexOf("patient-summary") === 0) {
+    if (userType === "admin" &&window.location.href.indexOf("patient-summary")<=0) {
       setdisableChart(false);
-      coreContext.fetchThresold("ADMIN_" + patientId, userType);
+      //alert("sahil")
+      coreContext.fetchThresold("ADMIN_"+patientId, "admin");
+      coreContext.fetchadminThresold("ADMIN_"+patientId, "admin")
     } else if (userType === "patient") {
       setdisableChart(true);
     }
-    console.log("why", userType, patientId);
+    console.log("why", localStorage.getItem("userType"), patientId);
     if (window.location.href.substring("bloodpressure") > 0) {
     }
     if (window.location.href.indexOf("patient-summary") > 0) {
       patientId = localStorage.getItem("ehrId");
+      let aid=localStorage.getItem("userId");
       console.log(patientId);
       //alert(patientId);
 
@@ -60,18 +65,99 @@ const Thresold = (props) => {
       var finalId = "ADMIN_" + patientId;
       setUserType(userType);
       coreContext.fetchThresold(finalId, userType);
+      coreContext.fetchadminThresold("ADMIN_"+aid, "admin")
+      
+
     }
-    console.log();
+    
    
     
     //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
 
     setThData(coreContext.thresoldData);
+    console.log("data sis ",coreContext.thresoldData)
     
+    console.log("adminthresid",coreContext.adminthresold)
+    console.log("patienthresold",coreContext.adminthresold)
+    const setdata=(data)=>
+    {
+      {
+        setThData(data);
+        console.log("check threshold value", coreContext.thresoldData);
+        console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
+  
+        var bgdata = coreContext.thresoldData.filter(
+          (a) => a.Element_value === "Blood Glucose"
+        );
+          
+        if (bgdata.length > 0) {
+          setBgMin(bgdata[0].bg_low);
+          setBgMax(bgdata[0].bg_high);
+          console.log("vhekvdjhfjdbg datat",bgMax)
+        } else {
+          setBgMin(0);
+          setBgMax(0);
+        }
+  
+        var bpdata = coreContext.thresoldData.filter(
+          (a) => a.Element_value === "BMI"
+        );
+        {
+          console.log("chevffgg", coreContext.thresoldData);
+        }
+        if (bpdata.length > 0) {
+          setBmiMin(bpdata[0].bmi_low);
+          setBmiMax(bpdata[0].bmi_high);
+        } else {
+          setBmiMin(0);
+          setBmiMax(0);
+        }
+  
+        var dialostic = coreContext.thresoldData.filter(
+          (a) => a.Element_value === "DIASTOLIC"
+        );
+  
+        if (dialostic.length > 0) {
+          setDiastolicMin(dialostic[0].diastolic_low);
+          setDiastolicMax(dialostic[0].diastolic_high);
+        } else {
+          setDiastolicMin(0);
+          setDiastolicMax(0);
+        }
+  
+        var systolic = coreContext.thresoldData.filter(
+          (a) => a.Element_value === "SYSTOLIC"
+        );
+        if (systolic.length > 0) {
+          setSystolicMin(systolic[0].systolic_low);
+          setSystolicMax(systolic[0].systolic_high);
+        } else {
+          setSystolicMin(0);
+          setSystolicMax(0);
+        }
+  
+        var weight = coreContext.thresoldData.filter(
+          (a) => a.Element_value === "Weight"
+        );
+  
+        if (weight.length > 0) {
+          setWeightMin(weight[0].weight_low);
+          setWeightMax(weight[0].weight_high);
+        } else {
+          setWeightMin(0);
+          setWeightMax(0);
+        }
+      }
+    }
 
     // setting default value
-    if (coreContext.thresoldData.length === 0) {
+    if (coreContext.thresoldData.length === 0 ) {
+      alert(coreContext.adminthresold.length)
+      //coreContext.fetchThresold("ADMIN_"+localStorage.getItem("userType"), "admin");
+      if(coreContext.adminthresold.length===0){
+        alert("inside",coreContext.adminthresold.length)
       let thdata = {};
+      console.log(thdata)
       const thDatas = [];
       thdata.Element_value = "Blood Glucose";
       thdata.bg_low = 0;
@@ -101,79 +187,22 @@ const Thresold = (props) => {
       thdata.weight_low = 0;
       thdata.weight_high = 10;
       thDatas.push(thdata);
-      setThData(thDatas);
+      setThData(thDatas);}
+      else{
+        setdata(coreContext.adminthresold)
+        alert("data")
+      }
       // console.log("check threshold value", coreContext.thresoldData);
       // console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
-    } else {
-      setThData(coreContext.thresoldData);
-      console.log("check threshold value", coreContext.thresoldData);
-      console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
-
-      var bgdata = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "Blood Glucose"
-      );
-        
-      if (bgdata.length > 0) {
-        setBgMin(bgdata[0].bg_low);
-        setBgMax(bgdata[0].bg_high);
-        console.log("vhekvdjhfjdbg datat",bgMax)
-      } else {
-        setBgMin(0);
-        setBgMax(0);
-      }
-
-      var bpdata = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "BMI"
-      );
-      {
-        console.log("chevffgg", coreContext.thresoldData);
-      }
-      if (bpdata.length > 0) {
-        setBmiMin(bpdata[0].bmi_low);
-        setBmiMax(bpdata[0].bmi_high);
-      } else {
-        setBmiMin(0);
-        setBmiMax(0);
-      }
-
-      var dialostic = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "DIASTOLIC"
-      );
-
-      if (dialostic.length > 0) {
-        setDiastolicMin(dialostic[0].diastolic_low);
-        setDiastolicMax(dialostic[0].diastolic_high);
-      } else {
-        setDiastolicMin(0);
-        setDiastolicMax(0);
-      }
-
-      var systolic = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "SYSTOLIC"
-      );
-      if (systolic.length > 0) {
-        setSystolicMin(systolic[0].systolic_low);
-        setSystolicMax(systolic[0].systolic_high);
-      } else {
-        setSystolicMin(0);
-        setSystolicMax(0);
-      }
-
-      var weight = coreContext.thresoldData.filter(
-        (a) => a.Element_value === "Weight"
-      );
-
-      if (weight.length > 0) {
-        setWeightMin(weight[0].weight_low);
-        setWeightMax(weight[0].weight_high);
-      } else {
-        setWeightMin(0);
-        setWeightMax(0);
-      }
+      
+    } else{
+      setdata(coreContext.thresoldData)
     }
   };
 
+
   useEffect(fetchThresold, []);
+  
   useEffect(fetchThresold,[coreContext.thresoldData.length])
 
   const onBGChange = (e) => {
@@ -215,7 +244,7 @@ const Thresold = (props) => {
     );
   };
   const renderslider = () => {
-    if (coreContext.thresoldData.length === 0) {
+    if (coreContext.adminthresold.length === 0) {
       return (
         <div
           style={{
@@ -231,8 +260,8 @@ const Thresold = (props) => {
       );
     }
 
-    if (coreContext.thresoldData.length > 0) {
-      return ("sa"  );
+    if (coreContext.adminthresold.length > 0) {
+      return ( coreContext.adminthresold[0].bg_high);
     }
   };
 
@@ -343,7 +372,7 @@ const Thresold = (props) => {
       <div className="col-md-6">
         <div className="card">
           <h4 className="card-header">
-            {" "}
+            {console.log("sahil is id",userType)}
             Diastolic (mmHg)
             <span>
               {userType === "doctor" ||
@@ -488,6 +517,7 @@ const Thresold = (props) => {
         </div>
       </div>
     </div>
+    {renderslider()}
   </React.Fragment>
 
   );

@@ -54,9 +54,9 @@ function App() {
   }, []);
   
   const handleNewUserMessage = (newMessage) => {
-    console.log(`New message incoming! ${newMessage}`);
+    //console.log(`New message incoming! ${newMessage}`);
     // Now send the message throught the backend API
-    addResponseMessage();
+    //addResponseMessage();
   }
   const changestyle = () => {
     if (sidebar === false) {
@@ -79,9 +79,7 @@ function App() {
           changestyle={changestyle}
           showSidebar={showSidebar}
         />
-        <Widget
-        handleNewUserMessage={handleNewUserMessage}
-      /></>
+        </>
       ) : (
         ""
       )}

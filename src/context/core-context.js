@@ -10,6 +10,7 @@ export const CoreContextProvider = (props) => {
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
+  const [adminthresold,setadminthresold]=useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightApiData, setweightdeviceApiData] = useState([]);
@@ -791,10 +792,78 @@ export const CoreContextProvider = (props) => {
         const thresholdData = response.data;
         console.log("threshod datacheckin cre", thresholdData.length);
         const dataSetthresold = [];
-        if (thresholdData.length === 0) {
-          dataSetthresold.push("no data found");
-          console.log("threshod datacheckin cre", dataSetthresold);
-        } else {
+        {
+          thresholdData.forEach((th, index) => {
+           // console.log("p" + index, th);
+            const thdata = {};
+
+            if (th.TElements) {
+              thdata.Element_value = th.TElements.s;
+            }
+            if (th.Low) {
+              th.Low_value = th.Low.s;
+            }
+            if (th.High) {
+              th.High_value = th.High.s;
+            }
+
+            if (thdata.Element_value === "Blood Glucose") {
+              thdata.bg_low = th.Low_value;
+              thdata.bg_high = th.High_value;
+            } else if (thdata.Element_value === "SYSTOLIC") {
+              thdata.systolic_low = th.Low_value;
+              thdata.systolic_high = th.High_value;
+            } else if (thdata.Element_value === "DIASTOLIC") {
+              thdata.diastolic_low = th.Low_value;
+              thdata.diastolic_high = th.High_value;
+            } else if (thdata.Element_value === "BMI") {
+              thdata.bmi_low = th.Low_value;
+              thdata.bmi_high = th.High_value;
+            } else if (thdata.Element_value === "Weight") {
+              thdata.weight_low = th.Low_value;
+              thdata.weight_high = th.High_value;
+            }
+
+            dataSetthresold.push(thdata);
+          });
+        }
+if(usertype==="admin"){
+  setadminthresold(dataSetthresold)
+}
+        setThresoldData(dataSetthresold);
+
+        console.log("thresolddata111111",dataSetthresold,thresoldData);
+      });
+  };
+  const fetchadminThresold =  (userid, usertype) => {
+    const token = localStorage.getItem("app_jwt");
+    alert(userid)
+
+    let data = "";
+    data = {
+      TableName: userTable,
+      ProjectionExpression: "PK,SK,Low,High,TElements",
+      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "THRESHOLDRANGE_ADMIN" },
+        ":v_SK": { S: userid },
+      },
+    };
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) =>  {
+        const thresholdData = response.data;
+        console.log("sahiladmin",thresholdData)
+        console.log("threshod datacheckin cre", thresholdData.length);
+        const dataSetthresold = [];
+        {
           thresholdData.forEach((th, index) => {
            // console.log("p" + index, th);
             let thdata = {};
@@ -830,7 +899,8 @@ export const CoreContextProvider = (props) => {
           });
         }
 
-        setThresoldData(dataSetthresold);
+  setadminthresold(dataSetthresold)
+        
 
         console.log("thresolddata111111",dataSetthresold,thresoldData);
       });
@@ -898,7 +968,7 @@ export const CoreContextProvider = (props) => {
 
         setTimeLogData(dataSettimeLog);
 
-      //console.log("timeLogData", dataSettimeLog);
+      console.log("timeLogData", dataSettimeLog);
       });
   };
 
@@ -3156,6 +3226,8 @@ export const CoreContextProvider = (props) => {
         result,
         genderOptions,
         languageOptions,
+        adminthresold,
+        fetchadminThresold
       }}>
       {props.children}
     </CoreContext.Provider>
