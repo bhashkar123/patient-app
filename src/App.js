@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import { Widget ,addResponseMessage } from 'react-chat-widget';
-
-import 'react-chat-widget/lib/styles.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -30,7 +27,14 @@ import { TablePagination } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
+//import React from 'react';
+import { Widget, addResponseMessage } from 'react-chat-widget-2';
+import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
+import {io} from "socket.io-client"
+const socket = io("http://localhost:8000", {
+  transports: ["websocket"]
+});
 
 function App() {
   const { register, errors } = useForm();
@@ -39,6 +43,18 @@ function App() {
   const [sidebar, setSidebar] = useState(true);
 
   const showSidebar = () => setSidebar(!sidebar);
+  const handleNewUserMessage = (newMessage) => {
+    console.log(`New message incoming! ${newMessage}`);
+    socket.emit("send-message",`${localStorage.getItem("userName")}:${newMessage}`)
+    // Now send the message throught the backend API
+    socket.on("get-message",(response)=>{
+      addResponseMessage(response);
+    })
+    
+  };
+  useEffect(() => {
+    addResponseMessage('Welcome to this awesome chat!');
+  }, []);
   //const isAuth = true;
   //const coreContext = useContext(CoreContext);
 
@@ -47,17 +63,8 @@ function App() {
   useEffect(() => {}, [showSidebar]);
   const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
-  useEffect(() => {
-    localStorage.setItem('highscore',"x");
-    addResponseMessage(localStorage.getItem('highscore'));
-    localStorage.removeItem('highscore')
-  }, []);
   
-  const handleNewUserMessage = (newMessage) => {
-    //console.log(`New message incoming! ${newMessage}`);
-    // Now send the message throught the backend API
-    //addResponseMessage();
-  }
+  
   const changestyle = () => {
     if (sidebar === false) {
       setStyle("col-md-9 col-8 col-sm-8 p-0");
@@ -79,6 +86,10 @@ function App() {
           changestyle={changestyle}
           showSidebar={showSidebar}
         />
+        <Widget title={localStorage.getItem("userName")}
+        handleNewUserMessage={handleNewUserMessage}
+      />
+    
         </>
       ) : (
         ""
