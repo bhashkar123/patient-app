@@ -28,12 +28,12 @@ import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
 //import React from 'react';
-import { Widget, addResponseMessage } from 'react-chat-widget-2';
+import { Widget, addResponseMessage } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
-import {io} from "socket.io-client"
-const socket = io("http://localhost:8000", {
-  transports: ["websocket"]
+import { io } from "socket.io-client";
+const socket = io("http://localhost:8800", {
+  transports: ["websocket"],
 });
 
 function App() {
@@ -45,15 +45,17 @@ function App() {
   const showSidebar = () => setSidebar(!sidebar);
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
-    socket.emit("send-message",`${localStorage.getItem("userName")}:${newMessage}`)
+    socket.emit(
+      "send-message",
+      `${localStorage.getItem("userName")}:${newMessage}`
+    );
     // Now send the message throught the backend API
-    socket.on("get-message",(response)=>{
+    socket.on("get-message", (response) => {
       addResponseMessage(response);
-    })
-    
+    });
   };
   useEffect(() => {
-    addResponseMessage('Welcome to this awesome chat!');
+    addResponseMessage("Welcome to this awesome chat!");
   }, []);
   //const isAuth = true;
   //const coreContext = useContext(CoreContext);
@@ -63,8 +65,7 @@ function App() {
   useEffect(() => {}, [showSidebar]);
   const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
-  
-  
+
   const changestyle = () => {
     if (sidebar === false) {
       setStyle("col-md-9 col-8 col-sm-8 p-0");
@@ -81,15 +82,15 @@ function App() {
       {/**/}{" "}
       {isAuth ? (
         <>
-        <TopMenu
-          isAuth={isAuth}
-          changestyle={changestyle}
-          showSidebar={showSidebar}
-        />
-        <Widget title={localStorage.getItem("userName")}
-        handleNewUserMessage={handleNewUserMessage}
-      />
-    
+          <TopMenu
+            isAuth={isAuth}
+            changestyle={changestyle}
+            showSidebar={showSidebar}
+          />
+          <Widget
+            title={localStorage.getItem("userName")}
+            handleNewUserMessage={handleNewUserMessage}
+          />
         </>
       ) : (
         ""
@@ -111,7 +112,7 @@ function App() {
               {" "}
               {sidebar === true ? <Menu /> : <Menu2 />}{" "}
             </div>{" "}
-            <div  className={style} style={{marginLeft:"-20px"}}>
+            <div className={style} style={{ marginLeft: "-20px" }}>
               <Router>
                 <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
@@ -152,8 +153,6 @@ function App() {
                     path="/weightaverage"
                     component={WeightAverage}
                   />{" "}
-
-
                   <Route exact path="/weight" component={Pages.Weight} />{" "}
                   <Route exact path="/logout" component={Pages.Logout} />{" "}
                   <Route exact path="/profile" component={Pages.MyProfile} />{" "}
@@ -214,7 +213,6 @@ function App() {
           <Route exact path="/thankyou">
             <Thankyou />
           </Route>{" "}
-
         </Switch>{" "}
       </Router>{" "}
     </>
