@@ -47,7 +47,7 @@ function App() {
     console.log(`New message incoming! ${newMessage}`);
     socket.emit(
       "send-message",
-      `${localStorage.getItem("userName")}:${newMessage}`
+      `${localStorage.getItem("userName")}:  ${newMessage}`
     );
     // Now send the message throught the backend API
     socket.on("get-message", (response) => {
