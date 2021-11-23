@@ -5,6 +5,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import Loader from "react-loader-spinner";
 import axios from "axios";
 import Sidebar from "react-sidebar";
 import * as Pages from "./components";
@@ -42,27 +43,46 @@ function App() {
   const [sidebar, setSidebar] = useState(true);
   const coreContext = useContext(CoreContext);
   const showSidebar = () => setSidebar(!sidebar);
+  const usertype=localStorage.getItem("userType")
   const id=localStorage.getItem('userId');
+  
+  const getdetail=()=>{
+    if(localStorage.getItem("userType")==="patient"){
+      coreContext.fetchPatientListfromApi("patient",localStorage.getItem("userId"),true);
+      console.log("checckresponse form app",coreContext.patients)
+
+    } 
+  }
+ var doctorName
+ const getdoctor=(name)=>{
+  doctorName=name;
+ }
   const handleNewUserMessage = (newMessage) => {
+    if (usertype==="patient"){
+      socket.emit("send-message",`${doctorName} ${localStorage.getItem("userId")}: ${newMessage}`)
+
+    }
+    if(usertype==="doctor"){
+      socket.emit("send-message",`${localStorage.getItem("userName")}: ${newMessage}`)
+    }
     
     
     
-    socket.emit("send-message",`${localStorage.getItem("userId")}: ${newMessage}`)
 
   };
+  
   useEffect(() => {
-    if(localStorage.getItem("userType")==='patient'){
+    getdetail();
+    if(usertype==='patient'){
       socket.on("get-message",(message)=>{
-        if(message.includes("world")){
+        if(message.includes(doctorName)){
           addResponseMessage(message)  
         }
-
-        
       })
     }
     if(localStorage.getItem("userType")==='doctor'){
       socket.on("get-message",(message)=>{
-        if(message.includes("your")){
+        if(message.includes(localStorage.getItem("userName"))){
           addResponseMessage(message)  
         }
 
@@ -74,7 +94,38 @@ function App() {
     // })
   }, []);
   //const isAuth = true;
-  
+  const renderchat=()=>{
+    if(coreContext.patients.length===0){
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+
+      )
+    }
+    if(coreContext.patients.length!==0){
+      if(coreContext.patients[0].ProviderName!==undefined && usertype==="patient"){
+        getdoctor(coreContext.patients[0].ProviderName);
+      }
+      
+      return(
+        <Widget
+          handleNewUserMessage={handleNewUserMessage}
+          
+          title="My new awesome title"
+          subtitle="And my cool subtitle"
+        />
+      )
+    }
+  }
 
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
@@ -102,12 +153,10 @@ function App() {
           changestyle={changestyle}
           showSidebar={showSidebar}
         />
+      
         
-        <Widget
-        title={localStorage.getItem("userName")}
-        subtitle="Chat with patient"
-        handleNewUserMessage={handleNewUserMessage}
-      />
+        
+      {renderchat()}
     
         </>
       ) : (

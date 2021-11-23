@@ -355,7 +355,7 @@ export const CoreContextProvider = (props) => {
         FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
           ":v_PK": { S: "patient" },
-          ":v_SK": { S: "PATIENT_" + userId },
+          ":v_SK": { S: userId },
           ":v_status": { S: "Active" },
         },
       };
@@ -373,7 +373,7 @@ export const CoreContextProvider = (props) => {
         // setJwt(response.data);
         //  console.log(response.data);
         const patients = response.data;
-        // console.log("i need to check the patient",patients.length)
+        console.log("i need to check the patient",patients.length)
         const ps = [];
         if (patients.length === 0) {
           ps.push("No data found");
