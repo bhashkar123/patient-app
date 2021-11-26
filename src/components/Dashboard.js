@@ -107,7 +107,7 @@ const Dashboard = (props) => {
         );
         if (patientTimelog.length > 0) {
           let totalTimeLog = 0;
-          console.log("checktimedata", patientTimelog);
+          
           patientTimelog.map((timelog) => {
             totalTimeLog = Number(timelog.timeAmount) + totalTimeLog;
           });
@@ -134,7 +134,7 @@ const Dashboard = (props) => {
             sixty.push(curr.userId);
             //nine=nine+1;
           }
-          console.log("check time log",totalTimeLog);
+          
         } else {
           inactive.push(curr.userId);
         }

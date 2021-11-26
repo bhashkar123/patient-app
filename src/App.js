@@ -1,4 +1,5 @@
 import React, { useState, useEffect,useContext } from "react";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -28,75 +29,76 @@ import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
 //import React from 'react';
-import { Widget, addResponseMessage } from 'react-chat-widget-2';
+import { Widget, addResponseMessage } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
-import {io} from "socket.io-client"
-const socket = io("http://localhost:8080", {
-  transports: ["websocket"]
+import { io } from "socket.io-client";
+
+const socket = io("https://demoapi.apatternplus.com/", {
+  transports: ["websocket"],
 });
+
+// const socket = io("http://localhost:8800", {
+//   transports: ["websocket"],
+// });
 
 function App() {
   const { register, errors } = useForm();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isAuth = localStorage.getItem("app_isAuth");
   const [sidebar, setSidebar] = useState(true);
-  const coreContext = useContext(CoreContext);
+  const email=localStorage.getItem("userEmail");
+  console.log("check email of user",email)
+  var usertype;
+  var userid;
+  var doctorid;
+  var doctorname;
+
   const showSidebar = () => setSidebar(!sidebar);
-  const usertype=localStorage.getItem("userType")
-  const id=localStorage.getItem('userId');
   
-  const getdetail=()=>{
-    if(localStorage.getItem("userType")==="patient"){
-      coreContext.fetchPatientListfromApi("patient",localStorage.getItem("userId"),true);
-      console.log("checckresponse form app",coreContext.patients)
-
-    } 
-  }
- var doctorName
- const getdoctor=(name)=>{
-  doctorName=name;
- }
   const handleNewUserMessage = (newMessage) => {
+    console.log(`New message incoming! ${newMessage}`);
     if (usertype==="patient"){
-      socket.emit("send-message",`${doctorName} ${localStorage.getItem("userId")}: ${newMessage}`)
-
+      socket.emit(
+        "send-message",
+        `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
+      );
     }
     if(usertype==="doctor"){
-      socket.emit("send-message",`${localStorage.getItem("userName")}: ${newMessage}`)
+      socket.emit(
+        "send-message",
+        `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+      );
     }
     
-    
-    
-
-  };
-  
-  useEffect(() => {
-    getdetail();
-    if(usertype==='patient'){
-      socket.on("get-message",(message)=>{
-        if(message.includes(doctorName)){
-          addResponseMessage(message)  
+    // Now send the message throught the backend API
+    if(usertype==="patient"){
+      socket.on("get-message", (response) => {
+        if(response.includes(`${doctorname}(${doctorid})`)){
+          addResponseMessage(response);
         }
-      })
-    }
-    if(localStorage.getItem("userType")==='doctor'){
-      socket.on("get-message",(message)=>{
-        if(message.includes(localStorage.getItem("userName"))){
-          addResponseMessage(message)  
+      
+    });
+  }
+    if (usertype==="doctor"){
+      socket.on("get-message", (response) => {
+        if(response.includes(userid)){
+          addResponseMessage(response);
         }
-
         
-      })
+      });
     }
-    // socket.on("get-message",(message)=>{
-    //   addResponseMessage(message)
-    // })
+    
+  };
+  useEffect(() => {
+    addResponseMessage("Welcome to this awesome chat!");
+   
   }, []);
   //const isAuth = true;
-  const renderchat=()=>{
-    if(coreContext.patients.length===0){
-      return (
+  const coreContext = useContext(CoreContext);
+  const renderuser=()=>{
+    if(coreContext.userinfo.length===0){
+      return(
         <div
           style={{
             height: 680,
@@ -111,27 +113,30 @@ function App() {
 
       )
     }
-    if(coreContext.patients.length!==0){
-      if(coreContext.patients[0].ProviderName!==undefined && usertype==="patient"){
-        getdoctor(coreContext.patients[0].ProviderName);
+    if(coreContext.userinfo.length>0){
+      console.log("userdata from app",coreContext.userinfo)
+      usertype=coreContext.userinfo[0].UserType.s
+      if(usertype==="patient"){
+        doctorid=coreContext.userinfo[0].DoctorId.s
+        doctorname=coreContext.userinfo[0].DoctorName.s
       }
-      
+      userid=coreContext.userinfo[0].UserId.n
+      console.log("checkusertype form pp",usertype,userid)
       return(
         <Widget
-          handleNewUserMessage={handleNewUserMessage}
-          
-          title="My new awesome title"
-          subtitle="And my cool subtitle"
-        />
+            title={localStorage.getItem("userName")}
+            handleNewUserMessage={handleNewUserMessage}
+          />
       )
     }
   }
 
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
-  // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
+  // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, /";
   useEffect(() => {}, [showSidebar]);
   const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
+
   const changestyle = () => {
     if (sidebar === false) {
       setStyle("col-md-9 col-8 col-sm-8 p-0");
@@ -148,16 +153,16 @@ function App() {
       {/**/}{" "}
       {isAuth ? (
         <>
-        <TopMenu
-          isAuth={isAuth}
-          changestyle={changestyle}
-          showSidebar={showSidebar}
-        />
-      
-        
-        
-      {renderchat()}
-    
+          <TopMenu
+            isAuth={isAuth}
+            changestyle={changestyle}
+            showSidebar={showSidebar}
+          />
+          
+          {/* <Widget
+            title={localStorage.getItem("userName")}
+            handleNewUserMessage={handleNewUserMessage}
+          /> */}
         </>
       ) : (
         ""
@@ -179,7 +184,7 @@ function App() {
               {" "}
               {sidebar === true ? <Menu /> : <Menu2 />}{" "}
             </div>{" "}
-            <div  className={style} style={{marginLeft:"-20px"}}>
+            <div className={style} style={{ marginLeft: "-20px" }}>
               <Router>
                 <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
@@ -220,8 +225,6 @@ function App() {
                     path="/weightaverage"
                     component={WeightAverage}
                   />{" "}
-
-
                   <Route exact path="/weight" component={Pages.Weight} />{" "}
                   <Route exact path="/logout" component={Pages.Logout} />{" "}
                   <Route exact path="/profile" component={Pages.MyProfile} />{" "}
@@ -282,9 +285,9 @@ function App() {
           <Route exact path="/thankyou">
             <Thankyou />
           </Route>{" "}
-
         </Switch>{" "}
       </Router>{" "}
+      {renderuser()}
     </>
   );
 }
