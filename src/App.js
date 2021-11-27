@@ -28,15 +28,16 @@ import { TablePagination } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
+import Chat from './components/Chat'
 //import React from 'react';
-import { Widget, addResponseMessage } from "react-chat-widget-2";
+//import { Widget, addResponseMessage } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
-const socket = io("https://demoapi.apatternplus.com/", {
-  transports: ["websocket"],
-});
+// const socket = io("https://demoapi.apatternplus.com/", {
+//   transports: ["websocket"],upgrade: false
+// });
 
 // const socket = io("http://localhost:8800", {
 //   transports: ["websocket"],
@@ -54,46 +55,53 @@ function App() {
   var doctorid;
   var doctorname;
 
+
   const showSidebar = () => setSidebar(!sidebar);
   
-  const handleNewUserMessage = (newMessage) => {
-    console.log(`New message incoming! ${newMessage}`);
-    if (usertype==="patient"){
-      socket.emit(
-        "send-message",
-        `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
-      );
-    }
-    if(usertype==="doctor"){
-      socket.emit(
-        "send-message",
-        `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
-      );
-    }
+  // const handleNewUserMessage = (newMessage) => {
+  //   console.log(`New message incoming! ${newMessage}`);
+  //   if (usertype==="patient"){
+  //     socket.emit(
+  //       "send-message",
+  //       `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
+  //     );
+  //   }
+  //   if(usertype==="doctor"){
+  //     socket.emit(
+  //       "send-message",
+  //       `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+  //     );
+  //   }
     
-    // Now send the message throught the backend API
-    if(usertype==="patient"){
-      socket.on("get-message", (response) => {
-        if(response.includes(`${doctorname}(${doctorid})`)){
-          addResponseMessage(response);
-        }
-      
-    });
-  }
-    if (usertype==="doctor"){
-      socket.on("get-message", (response) => {
-        if(response.includes(userid)){
-          addResponseMessage(response);
-        }
-        
-      });
-    }
+  //   // Now send the message throught the backend API
     
-  };
-  useEffect(() => {
-    addResponseMessage("Welcome to this awesome chat!");
+    
+  // };
+  // useEffect(() => {
+  //   addResponseMessage("Welcome to this awesome chat!");
+    
    
-  }, []);
+  // }, []);
+  // useEffect(()=>{
+  //   socket.on("get-message", (response) => {
+  //     if (usertype==="doctor"){
+  //     if(response.includes(userid)){
+  //       console.log(response.replace(`to DOCTOR_${userid}`,""))
+  //       addResponseMessage(response.replace(`to DOCTOR_${userid}`,""));
+  //     }
+      
+  //   }
+  //   if(usertype==="patient"){
+  //     if(response.includes(`${doctorname}(${doctorid})`)){
+  //       addResponseMessage(response.replace(`(${doctorid})`,""));
+  //     }
+  //   }
+  // });
+  
+  // })
+
+    
+  
   //const isAuth = true;
   const coreContext = useContext(CoreContext);
   const renderuser=()=>{
@@ -123,10 +131,11 @@ function App() {
       userid=coreContext.userinfo[0].UserId.n
       console.log("checkusertype form pp",usertype,userid)
       return(
-        <Widget
-            title={localStorage.getItem("userName")}
-            handleNewUserMessage={handleNewUserMessage}
-          />
+        // <Widget
+        //     title={localStorage.getItem("userName")}
+        //     handleNewUserMessage={handleNewUserMessage}
+        //   />
+        <Chat doctorid={doctorid} userid={userid} doctorname={doctorname} usertype={usertype}/>
       )
     }
   }
