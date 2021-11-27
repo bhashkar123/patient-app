@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import {
   BrowserRouter as Router,
@@ -28,16 +28,16 @@ import { TablePagination } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
-import Chat from './components/Chat'
 //import React from 'react';
-//import { Widget, addResponseMessage } from "react-chat-widget-2";
+import { Widget, addResponseMessage } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
+const Moment = require("moment");
 
-// const socket = io("https://demoapi.apatternplus.com/", {
-//   transports: ["websocket"],upgrade: false
-// });
+const socket = io("https://demoapi.apatternplus.com/", {
+  transports: ["websocket"],
+});
 
 // const socket = io("http://localhost:8800", {
 //   transports: ["websocket"],
@@ -48,65 +48,101 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isAuth = localStorage.getItem("app_isAuth");
   const [sidebar, setSidebar] = useState(true);
-  const email=localStorage.getItem("userEmail");
-  console.log("check email of user",email)
+  const email = localStorage.getItem("userEmail");
+  console.log("check email of user", email);
   var usertype;
   var userid;
   var doctorid;
   var doctorname;
 
-
   const showSidebar = () => setSidebar(!sidebar);
-  
-  // const handleNewUserMessage = (newMessage) => {
-  //   console.log(`New message incoming! ${newMessage}`);
-  //   if (usertype==="patient"){
-  //     socket.emit(
-  //       "send-message",
-  //       `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
-  //     );
-  //   }
-  //   if(usertype==="doctor"){
-  //     socket.emit(
-  //       "send-message",
-  //       `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
-  //     );
-  //   }
-    
-  //   // Now send the message throught the backend API
-    
-    
-  // };
-  // useEffect(() => {
-  //   addResponseMessage("Welcome to this awesome chat!");
-    
-   
-  // }, []);
-  // useEffect(()=>{
-  //   socket.on("get-message", (response) => {
-  //     if (usertype==="doctor"){
-  //     if(response.includes(userid)){
-  //       console.log(response.replace(`to DOCTOR_${userid}`,""))
-  //       addResponseMessage(response.replace(`to DOCTOR_${userid}`,""));
-  //     }
-      
-  //   }
-  //   if(usertype==="patient"){
-  //     if(response.includes(`${doctorname}(${doctorid})`)){
-  //       addResponseMessage(response.replace(`(${doctorid})`,""));
-  //     }
-  //   }
-  // });
-  
-  // })
 
-    
-  
+  const handleNewUserMessage = (newMessage) => {
+    console.log(`New message incoming! ${newMessage}`);
+    if (usertype === "patient") {
+      socket.emit(
+        "send-message",
+        `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
+      );
+    }
+    if (usertype === "doctor") {
+      socket.emit(
+        "send-message",
+        `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+      );
+    }
+
+    // Now send the message throught the backend API
+    if (usertype === "patient") {
+      socket.on("get-message", (response) => {
+        let currentTimeInMilliseconds = Moment();
+        if (response.includes(`${doctorname}(${doctorid})`)) {
+          if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
+            addResponseMessage(response.replace(`(${doctorid})`, ""));
+          }
+          //addResponseMessage(response);
+        }
+      });
+    }
+
+    if (usertype === "doctor") {
+      socket.on("get-message", (response) => {
+        let currentTimeInMilliseconds = Moment();
+        if (response.includes(userid)) {
+          if (validateMessage(response, currentTimeInMilliseconds, "doctor")) {
+            addResponseMessage(response.replace(`to DOCTOR_${userid}`, ""));
+          }
+        }
+      });
+    }
+  };
+
+  var oldmessage = null;
+  var oldTimeInMilliseconds = null;
+  var oldType = null;
+
+  function validateMessage(message, date, type) {
+    // check here msg and time... if time different is less than 10 second its same msg
+
+    if (oldType == null) oldType = type;
+
+    // check if this new is 1st time msg
+    if (oldmessage == null && oldTimeInMilliseconds == null) {
+      oldmessage = message;
+      oldTimeInMilliseconds = date;
+      return true;
+    }
+
+    if (oldmessage != null && oldTimeInMilliseconds != null) {
+      // check if this new msg is same but diff is more than 10 sec, than add
+      let seconds = date.diff(oldTimeInMilliseconds, "seconds");
+      console.log("seconds" + seconds);
+      if (oldmessage == message && oldType == type && seconds > 50) {
+        oldmessage = message;
+        oldTimeInMilliseconds = date;
+        return true;
+      }
+      if (oldmessage.toString().trim() === message.toString().trim()) {
+        // if this msg not same
+        oldmessage = message;
+        oldTimeInMilliseconds = date;
+        return false;
+      } else {
+        oldmessage = message;
+        oldTimeInMilliseconds = date;
+        return true;
+      }
+    }
+  }
+
+  useEffect(() => {
+    addResponseMessage("Welcome to this awesome chat!");
+  }, []);
   //const isAuth = true;
   const coreContext = useContext(CoreContext);
-  const renderuser=()=>{
-    if(coreContext.userinfo.length===0){
-      return(
+  const renderuser = () => {
+    if (coreContext.userinfo.length === 0) {
+      return (
         <div
           style={{
             height: 680,
@@ -118,27 +154,25 @@ function App() {
           }}>
           <Loader type="Circles" color="#00BFFF" height={100} width={100} />
         </div>
-
-      )
+      );
     }
-    if(coreContext.userinfo.length>0){
-      console.log("userdata from app",coreContext.userinfo)
-      usertype=coreContext.userinfo[0].UserType.s
-      if(usertype==="patient"){
-        doctorid=coreContext.userinfo[0].DoctorId.s
-        doctorname=coreContext.userinfo[0].DoctorName.s
+    if (coreContext.userinfo.length > 0) {
+      console.log("userdata from app", coreContext.userinfo);
+      usertype = coreContext.userinfo[0].UserType.s;
+      if (usertype === "patient") {
+        doctorid = coreContext.userinfo[0].DoctorId.s;
+        doctorname = coreContext.userinfo[0].DoctorName.s;
       }
-      userid=coreContext.userinfo[0].UserId.n
-      console.log("checkusertype form pp",usertype,userid)
-      return(
-        // <Widget
-        //     title={localStorage.getItem("userName")}
-        //     handleNewUserMessage={handleNewUserMessage}
-        //   />
-        <Chat doctorid={doctorid} userid={userid} doctorname={doctorname} usertype={usertype}/>
-      )
+      userid = coreContext.userinfo[0].UserId.n;
+      console.log("checkusertype form pp", usertype, userid);
+      return (
+        <Widget
+          title={localStorage.getItem("userName")}
+          handleNewUserMessage={handleNewUserMessage}
+        />
+      );
     }
-  }
+  };
 
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
   // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, /";
@@ -167,7 +201,7 @@ function App() {
             changestyle={changestyle}
             showSidebar={showSidebar}
           />
-          
+
           {/* <Widget
             title={localStorage.getItem("userName")}
             handleNewUserMessage={handleNewUserMessage}
