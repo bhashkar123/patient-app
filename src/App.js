@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import {
   BrowserRouter as Router,
@@ -6,6 +6,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import Loader from "react-loader-spinner";
 import axios from "axios";
 import Sidebar from "react-sidebar";
 import * as Pages from "./components";
@@ -24,44 +25,164 @@ import TopMenu from "./components/common/TopMenu";
 import { CoreContext } from "./context/core-context";
 import { Row, Col } from "react-bootstrap";
 import { TablePagination } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
 //import React from 'react';
-import { Widget, addResponseMessage } from "react-chat-widget-2";
+import { Widget, addResponseMessage,handleToggle } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
 import { io } from "socket.io-client";
-const socket = io("http://localhost:8800", {
+const Moment = require("moment");
+
+const socket = io("https://demoapi.apatternplus.com/", {
   transports: ["websocket"],
 });
+
+// const socket = io("http://localhost:8800", {
+//   transports: ["websocket"],
+// });
 
 function App() {
   const { register, errors } = useForm();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isAuth = localStorage.getItem("app_isAuth");
   const [sidebar, setSidebar] = useState(true);
+  const email = localStorage.getItem("userEmail");
+  console.log("check email of user", email);
+  var usertype;
+  var userid;
+  var doctorid;
+  var doctorname;
 
   const showSidebar = () => setSidebar(!sidebar);
+  useEffect(() => {
+    coreContext.userDetails(email,"")
+  },[])
+  
+
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
-    socket.emit(
-      "send-message",
-      `${localStorage.getItem("userName")}:  ${newMessage}`
-    );
+    if (usertype === "patient") {
+      socket.emit(
+        "send-message",
+        `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
+      );
+    }
+    if (usertype === "doctor") {
+      socket.emit(
+        "send-message",
+        `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+      );
+    }
+
     // Now send the message throught the backend API
-    socket.on("get-message", (response) => {
-      addResponseMessage(response);
-    });
+    if (usertype === "patient") {
+      socket.on("get-message", (response) => {
+        let currentTimeInMilliseconds = Moment();
+        if (response.includes(`${doctorname}(${doctorid})`)) {
+          if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
+            addResponseMessage(response.replace(`(${doctorid})`, ""));
+          }
+          //addResponseMessage(response);
+        }
+      });
+    }
+
+    if (usertype === "doctor") {
+      socket.on("get-message", (response) => {
+        let currentTimeInMilliseconds = Moment();
+        if (response.includes(userid)) {
+          if (validateMessage(response, currentTimeInMilliseconds, "doctor")) {
+            addResponseMessage(response.replace(`to DOCTOR_${userid}`, ""));
+          }
+        }
+      });
+    }
   };
+
+  var oldmessage = null;
+  var oldTimeInMilliseconds = null;
+  var oldType = null;
+
+  function validateMessage(message, date, type) {
+    // check here msg and time... if time different is less than 10 second its same msg
+
+    if (oldType == null) oldType = type;
+
+    // check if this new is 1st time msg
+    if (oldmessage == null && oldTimeInMilliseconds == null) {
+      oldmessage = message;
+      oldTimeInMilliseconds = date;
+      return true;
+    }
+
+    if (oldmessage != null && oldTimeInMilliseconds != null) {
+      // check if this new msg is same but diff is more than 10 sec, than add
+      let seconds = date.diff(oldTimeInMilliseconds, "seconds");
+      console.log("seconds" + seconds);
+      if (oldmessage == message && oldType == type && seconds > 10) {
+        oldmessage = message;
+        oldTimeInMilliseconds = date;
+        return true;
+      }
+      if (oldmessage.toString().trim() === message.toString().trim()) {
+        // if this msg not same
+        oldmessage = message;
+        oldTimeInMilliseconds = date;
+        return false;
+      } else {
+        oldmessage = message;
+        oldTimeInMilliseconds = date;
+        return true;
+      }
+    }
+  }
+
   useEffect(() => {
     addResponseMessage("Welcome to this awesome chat!");
   }, []);
   //const isAuth = true;
-  //const coreContext = useContext(CoreContext);
+  const coreContext = useContext(CoreContext);
+  const renderuser = () => {
+    if (coreContext.userinfo.length === 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
+    if (coreContext.userinfo.length > 0) {
+      console.log("userdata from app", coreContext.userinfo);
+      usertype = coreContext.userinfo[0].UserType.s;
+      if (usertype === "patient") {
+        doctorid = coreContext.userinfo[0].DoctorId.s;
+        doctorname = coreContext.userinfo[0].DoctorName.s;
+      }
+      userid = coreContext.userinfo[0].UserId.n;
+      console.log("checkusertype form pp", usertype, userid);
+      return (
+        <Widget
+          title={localStorage.getItem("userName")}
+          handleNewUserMessage={handleNewUserMessage}
+          handleToggle={()=>(alert("true"))}
+        />
+      );
+    }
+  };
 
   // axios.defaults.headers.common.AUTHORIZATION = 'Bearer ' + coreContext.jwt;
-  // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, */*";
+  // axios.defaults.headers.common.ACCEPT = "application/json, text/plain, /";
   useEffect(() => {}, [showSidebar]);
   const [style, setStyle] = useState("col-md-9 col-8 col-sm-8 p-0");
   const [style1, setStyle1] = useState("col-md-2 col-3 col-sm-3 mr-3");
@@ -87,10 +208,11 @@ function App() {
             changestyle={changestyle}
             showSidebar={showSidebar}
           />
-          <Widget
+
+          {/* <Widget
             title={localStorage.getItem("userName")}
             handleNewUserMessage={handleNewUserMessage}
-          />
+          /> */}
         </>
       ) : (
         ""
@@ -215,6 +337,7 @@ function App() {
           </Route>{" "}
         </Switch>{" "}
       </Router>{" "}
+      {renderuser()}
     </>
   );
 }
