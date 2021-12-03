@@ -8,13 +8,13 @@ export const CoreContext = React.createContext({});
 export const CoreContextProvider = (props) => {
   const [patients, setPatients] = useState([]);
   const [bgData, setbgData] = useState([]);
+  const [userinfo,setuserInfo]=useState([]);
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
   const [adminthresold,setadminthresold]=useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightApiData, setweightdeviceApiData] = useState([]);
-  const [startData,setStartData]=useState([]);
 
   const [thresoldData, setThresoldData] = useState([]);
   const [timeLogData, setTimeLogData] = useState([]);
@@ -33,7 +33,6 @@ export const CoreContextProvider = (props) => {
   const [coachData, setcoachData] = useState([]);
   const [resetForm, setResetForm] = useState(0);
   const [tasktimerUserData, settasktimerUserData] = useState([]);
-  const [userinfo,setuserInfo]=useState([]);
 
   const [patient, setPatient] = useState({});
   const [threads, setThreads] = useState([]);
@@ -185,10 +184,11 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         // setJwt(response.data);
-        const startData = response.data;
+        const userData = response.data;
+        //console.log('userData', userData);
         setuserInfo(response.data)
 
-        startData.forEach((p) => {
+        userData.forEach((p) => {
           localStorage.setItem("userName", p.UserName.s);
           localStorage.setItem("userType", p.UserType.s);
           localStorage.setItem("userId", p.SK.s);
@@ -229,7 +229,7 @@ export const CoreContextProvider = (props) => {
 
         setShowLoader(false);
 
-        if (startData.length === 0) window.location.assign("profile");
+        if (userData.length === 0) window.location.assign("profile");
         else if (url) window.location.assign(url);
 
         // if (userType === 'patient')
@@ -241,26 +241,6 @@ export const CoreContextProvider = (props) => {
         //         window.location.assign('/dashboard');
         //     }
       });
-  };
-  const userInfo = async (useremail, url = "") => {
-    const token = localStorage.getItem("app_jwt");
-    //let url ='';
-    const data = {
-      TableName: userTable,
-      IndexName: "Email-Index",
-      KeyConditionExpression: "Email = :v_Email",
-      ExpressionAttributeValues: { ":v_Email": { S: useremail } },
-    };
-
-    await axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      
   };
 
   const getdp = (d) => {
@@ -377,7 +357,7 @@ export const CoreContextProvider = (props) => {
         FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
           ":v_PK": { S: "patient" },
-          ":v_SK": { S: userId },
+          ":v_SK": { S: "PATIENT_" + userId },
           ":v_status": { S: "Active" },
         },
       };
@@ -395,7 +375,7 @@ export const CoreContextProvider = (props) => {
         // setJwt(response.data);
         //  console.log(response.data);
         const patients = response.data;
-        console.log("i need to check the patient",patients.length)
+        // console.log("i need to check the patient",patients.length)
         const ps = [];
         if (patients.length === 0) {
           ps.push("No data found");
@@ -3186,8 +3166,6 @@ if(usertype==="admin"){
         getdp,
         dpatient,
         login,
-      startData,
-
         fetchPatientListfromApi,
         inbox,
         fetchMessages,
@@ -3244,7 +3222,6 @@ if(usertype==="admin"){
         resetForm,
         providerOptions,
         coachOptions,
-        userinfo,
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,
@@ -3252,7 +3229,8 @@ if(usertype==="admin"){
         genderOptions,
         languageOptions,
         adminthresold,
-        fetchadminThresold
+        fetchadminThresold,
+        userinfo
       }}>
       {props.children}
     </CoreContext.Provider>

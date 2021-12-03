@@ -1,16 +1,19 @@
-import React, { useEffect } from "react";
-import { Widget, addResponseMessage } from "react-chat-widget-2";
+import { Widget, addResponseMessage,handleToggle } from "react-chat-widget-2";
+import React, { useState, useEffect, useContext } from "react";
 import "react-chat-widget-2/lib/styles.css";
 import { io } from "socket.io-client";
+import { Box} from "@mui/system";
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+const Moment = require("moment");
 
 const socket = io("https://demoapi.apatternplus.com/", {
   transports: ["websocket"],
-  upgrade: false,
 });
 
-const Moment = require("moment");
-
-const Chat = ({ doctorid, doctorname, userid, usertype }) => {
+const Chat = ({usertype,userid,doctorid,doctorname,handleOpen,enduser}) => {
+  
+ 
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
     if (usertype === "patient") {
@@ -22,16 +25,40 @@ const Chat = ({ doctorid, doctorname, userid, usertype }) => {
     if (usertype === "doctor") {
       socket.emit(
         "send-message",
-        `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+        `${localStorage.getItem("userName")}(DOCTOR_${userid} to ${enduser}):  ${newMessage}`
       );
     }
 
     // Now send the message throught the backend API
+    if (usertype === "patient") {
+      socket.on("get-message", (response) => {
+        let currentTimeInMilliseconds = Moment();
+        if (response.includes(`${doctorname}(${doctorid} to ${userid})`)) {
+          if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
+            addResponseMessage(response.replace(`(${doctorid})`, ""));
+          }
+          //addResponseMessage(response);
+        }
+      });
+    }
+
+    if (usertype === "doctor") {
+      socket.on("get-message", (response) => {
+        let currentTimeInMilliseconds = Moment();
+        if (response.includes(userid)) {
+          if (validateMessage(response, currentTimeInMilliseconds, "doctor")) {
+            addResponseMessage(response.replace(`to DOCTOR_${userid}`, ""));
+          }
+        }
+      });
+    }
   };
+
 
   var oldmessage = null;
   var oldTimeInMilliseconds = null;
   var oldType = null;
+
   function validateMessage(message, date, type) {
     // check here msg and time... if time different is less than 10 second its same msg
 
@@ -48,12 +75,12 @@ const Chat = ({ doctorid, doctorname, userid, usertype }) => {
       // check if this new msg is same but diff is more than 10 sec, than add
       let seconds = date.diff(oldTimeInMilliseconds, "seconds");
       console.log("seconds" + seconds);
-      if (oldmessage == message && oldType == type && seconds > 50) {
+      if (oldmessage === message && oldType === type && seconds > 50) {
         oldmessage = message;
         oldTimeInMilliseconds = date;
         return true;
       }
-      if (oldmessage === message) {
+      if (oldmessage.toString().trim() === message.toString().trim()) {
         // if this msg not same
         oldmessage = message;
         oldTimeInMilliseconds = date;
@@ -69,34 +96,17 @@ const Chat = ({ doctorid, doctorname, userid, usertype }) => {
   useEffect(() => {
     addResponseMessage("Welcome to this awesome chat!");
   }, []);
-
-  socket.on("get-message", (response) => {
-    let currentTimeInMilliseconds = Moment();
-    if (usertype === "doctor") {
-      if (response.includes(userid)) {
-        console.log(response.replace(`to DOCTOR_${userid}`, ""));
-        if (validateMessage(response, currentTimeInMilliseconds, "doctor")) {
-          addResponseMessage(response.replace(`to DOCTOR_${userid}`, ""));
-        }
-      }
-    }
-    if (usertype === "patient") {
-      if (response.includes(`${doctorname}(${doctorid})`)) {
-        if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
-          addResponseMessage(response.replace(`(${doctorid})`, ""));
-        }
-      }
-    }
-  });
-
   return (
     <div>
+      
       <Widget
-        title={localStorage.getItem("userName")}
-        handleNewUserMessage={handleNewUserMessage}
-      />
+          title={localStorage.getItem("userName")}
+          subtitle={`Chat With${enduser}`}
+          handleNewUserMessage={handleNewUserMessage}
+          // handleToggle={()=>{(usertype==="doctor")?handleOpen():alert("start chatting")}}
+        />
     </div>
-  );
-};
 
-export default Chat;
+  )}
+
+export default Chat

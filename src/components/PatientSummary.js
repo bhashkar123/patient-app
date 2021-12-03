@@ -217,7 +217,7 @@ const PatientSummary = (props) => {
     setpatientId(patientId);
     
     setPerformedBy(userName);
-    setNotes(coreContext.patient.notes);
+    setNotes(coreContext.patients.notes);
     //setTaskType("Care Coordination")
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
@@ -328,12 +328,12 @@ const PatientSummary = (props) => {
     // }
   };
 
-  useEffect(fetchPatient, [coreContext.patient.length]);
+  useEffect(fetchPatient, [coreContext.patients.length]);
 
-  // useEffect(fetchPatient, [coreContext.patient.notes]);
+  // useEffect(fetchPatient, [coreContext.patients.notes]);
   useEffect(
-    () => setNotes(coreContext.patient.notes),
-    [coreContext.patient.notes]
+    () => setNotes(coreContext.patients.notes),
+    [coreContext.patients.notes]
   );
 const checkthresoldvalue=()=>{
 
@@ -1242,7 +1242,7 @@ console.log("finaldaata",finaldata)
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
 
-  //useEffect(fetchPatient, [coreContext.patient]);
+  //useEffect(fetchPatient, [coreContext.patients]);
 
   useEffect(coreContext.checkLocalAuth, []);
 
@@ -1581,57 +1581,57 @@ console.log("finaldaata",finaldata)
   };
 
   const UpdatePatient = () => {
-    if (coreContext.patient.ProviderName === undefined) {
-      coreContext.patient.ProviderName = "Select Provider";
+    if (coreContext.patients.ProviderName === undefined) {
+      coreContext.patients.ProviderName = "Select Provider";
       setProvider("");
     } else {
       let result = coreContext.providerOptions.filter((name) =>
-        name.name.includes(coreContext.patient.ProviderName)
+        name.name.includes(coreContext.patients.ProviderName)
       );
       if (result.length > 0) setProvider(result[0].value);
       else setProvider("");
     }
 
-    if (coreContext.patient.CareName === undefined) {
-      coreContext.patient.CareName = "Select Coordinator";
+    if (coreContext.patients.CareName === undefined) {
+      coreContext.patients.CareName = "Select Coordinator";
       setCoordinator("");
     } else {
       let result = coreContext.careCoordinatorOptions.filter((name) =>
-        name.name.includes(coreContext.patient.CareName)
+        name.name.includes(coreContext.patients.CareName)
       );
       if (result.length > 0) setCoordinator(result[0].value);
       else setCoordinator("");
     }
 
-    if (coreContext.patient.CoachName === undefined) {
-      coreContext.patient.CoachName = "Select Coach";
+    if (coreContext.patients.CoachName === undefined) {
+      coreContext.patients.CoachName = "Select Coach";
       setCoach("");
     } else {
       let result = coreContext.coachOptions.filter((name) =>
-        name.name.includes(coreContext.patient.CoachName)
+        name.name.includes(coreContext.patients.CoachName)
       );
       if (result.length > 0) setCoach(result[0].value);
       else setCoach("");
     }
 
     coreContext.UpdatePatient(
-      coreContext.patient.firstName,
-      coreContext.patient.lastName,
-      coreContext.patient.mobile,
-      coreContext.patient.dob,
-      coreContext.patient.height,
+      coreContext.patients.firstName,
+      coreContext.patients.lastName,
+      coreContext.patients.mobile,
+      coreContext.patients.dob,
+      coreContext.patients.height,
       provider,
       coordinator,
       coach,
-      coreContext.patient.userId,
-      coreContext.patient.gender,
-      coreContext.patient.language,
-      coreContext.patient.workPhone,
-      coreContext.patient.mobilePhone,
-      coreContext.patient.street,
-      coreContext.patient.zip,
-      coreContext.patient.city,
-      coreContext.patient.state,
+      coreContext.patients.userId,
+      coreContext.patients.gender,
+      coreContext.patients.language,
+      coreContext.patients.workPhone,
+      coreContext.patients.mobilePhone,
+      coreContext.patients.street,
+      coreContext.patients.zip,
+      coreContext.patients.city,
+      coreContext.patients.state,
       notes
     );
   };
@@ -1640,32 +1640,32 @@ console.log("finaldaata",finaldata)
     {
       
     }
-    if (coreContext.patient)
+    if (coreContext.patients)
       return (
         <div className="row">
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
-            {coreContext.patient.name}
+            {coreContext.patients.name}
           </div>
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
-            {"DOB : " + coreContext.patient.dob}
+            {"DOB : " + coreContext.patients.dob}
           </div>
           <div className="col-md-2" style={{ fontWeight: "bold" }}>
-            {coreContext.patient.gender === "Male" ? (
+            {coreContext.patients.gender === "Male" ? (
               <GenderMale />
             ) : (
               <GenderFemale />
             )}
-            {coreContext.patient.gender}
+            {coreContext.patients.gender}
           </div>
           <div className="col-md-4" style={{ fontWeight: "bold" }}>
-            EHR ID : {coreContext.patient.ehrId}
+            EHR ID : {coreContext.patients.ehrId}
           </div>
         </div>
       );
   };
 
   const renderAddModifyFlags = () => {
-    if (coreContext.patient)
+    if (coreContext.patients)
       return (
         <div className="row">
           <div className="col-md-3">
@@ -1676,7 +1676,7 @@ console.log("finaldaata",finaldata)
   };
 
   const renderAddNotes = () => {
-    if (coreContext.patient)
+    if (coreContext.patients)
       return (
         <div className="card">
           <div className="card-body">
@@ -1707,7 +1707,7 @@ console.log("finaldaata",finaldata)
   };
 
   const renderExpandCollapse = () => {
-    if (coreContext.patient)
+    if (coreContext.patients)
       return (
         <div className="row">
           <div className="col-md-3">
@@ -1743,10 +1743,10 @@ console.log("finaldaata",finaldata)
 
   const renderPatientinformation = () => {
     if (coreContext.patients.length > 0) {
-      coreContext.patient = coreContext.patients[0];
+      coreContext.patients = coreContext.patients[0];
     }
-    if (coreContext.patient) {
-      localStorage.setItem("ehrId", coreContext.patient.ehrId);
+    if (coreContext.patients) {
+      localStorage.setItem("ehrId", coreContext.patients.ehrId);
       return (
         <div
           className="row"
@@ -1757,15 +1757,15 @@ console.log("finaldaata",finaldata)
               <MDBCardText>
                 <div>
                   <b style={{ paddingRight: "10px" }}>Height:</b>
-                  {coreContext.patient.height}
+                  {coreContext.patients.height}
                 </div>
                 <div>
                   <b style={{ paddingRight: "10px" }}>Weight:</b>
-                  {coreContext.patient.Weight}
+                  {coreContext.patients.Weight}
                 </div>
                 <div>
                   <b style={{ paddingRight: "10px" }}>BMI :</b>{" "}
-                  {coreContext.patient.BMI}
+                  {coreContext.patients.BMI}
                 </div>
               </MDBCardText>
             </MDBCardBody>
@@ -1776,15 +1776,15 @@ console.log("finaldaata",finaldata)
               <MDBCardText>
                 <div>
                   <b style={{ paddingRight: "10px" }}>Provider:</b>
-                  {coreContext.patient.ProviderName}
+                  {coreContext.patients.ProviderName}
                 </div>
                 <div>
                   <b style={{ paddingRight: "10px" }}>Care Coordinator:</b>
-                  {coreContext.patient.CareName}
+                  {coreContext.patients.CareName}
                 </div>
                 <div>
                   <b style={{ paddingRight: "10px" }}>Coach :</b>{" "}
-                  {coreContext.patient.CoachName}
+                  {coreContext.patients.CoachName}
                 </div>
               </MDBCardText>
             </MDBCardBody>
@@ -1912,7 +1912,7 @@ console.log("finaldaata",finaldata)
   }
 
   const renderTabs = () => {
-    if (coreContext.patient)
+    if (coreContext.patients)
       return (
         <Tabs
           onSelect={(index) => handleSelect(index)}

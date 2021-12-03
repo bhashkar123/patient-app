@@ -25,13 +25,11 @@ import TopMenu from "./components/common/TopMenu";
 import { CoreContext } from "./context/core-context";
 import { Row, Col } from "react-bootstrap";
 import { TablePagination } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
 import { WeightAverage } from "./components/WeightAverage";
 //import React from 'react';
-import { Widget, addResponseMessage,handleToggle } from "react-chat-widget-2";
+import { Widget, addResponseMessage } from "react-chat-widget-2";
 import "react-chat-widget-2/lib/styles.css";
 import { Vdeviceinfo } from "./components/Vdevice";
 import { io } from "socket.io-client";
@@ -58,10 +56,6 @@ function App() {
   var doctorname;
 
   const showSidebar = () => setSidebar(!sidebar);
-  useEffect(() => {
-    coreContext.userDetails(email,"")
-  },[])
-  
 
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
@@ -123,7 +117,7 @@ function App() {
       // check if this new msg is same but diff is more than 10 sec, than add
       let seconds = date.diff(oldTimeInMilliseconds, "seconds");
       console.log("seconds" + seconds);
-      if (oldmessage == message && oldType == type && seconds > 10) {
+      if (oldmessage == message && oldType == type && seconds > 50) {
         oldmessage = message;
         oldTimeInMilliseconds = date;
         return true;
@@ -175,7 +169,6 @@ function App() {
         <Widget
           title={localStorage.getItem("userName")}
           handleNewUserMessage={handleNewUserMessage}
-          handleToggle={()=>(alert("true"))}
         />
       );
     }
