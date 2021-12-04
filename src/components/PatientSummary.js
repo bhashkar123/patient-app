@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState,useMemo } from "react";
 import axios from "axios";
 import "../App.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -328,7 +328,9 @@ const PatientSummary = (props) => {
     // }
   };
 
-  useEffect(fetchPatient, [coreContext.patient.length]);
+  
+  const pateientvalue = useMemo(() => fetchPatient, [coreContext.patient.length]);
+  useEffect(pateientvalue, []);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
   useEffect(
@@ -358,14 +360,17 @@ return String(ttt[0].bg_high)
     }
   }
 
-  const tvalue=checkthresoldvalue();
-  const tMinvalue=checkthresoldMinvalue();
+  //const tvalue=checkthresoldvalue();
+  const tvalue = useMemo(() => checkthresoldvalue(), []);
+  //const tMinvalue=checkthresoldMinvalue();
+  const tMinvalue = useMemo(() => checkthresoldMinvalue(), []);
+  
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
   //alert(checkthresoldvalue())
   
 
-  console.log("sahil",coreContext.thresoldData)
+  
   const renderDates = () => {
     return (
       <>
@@ -431,7 +436,7 @@ return String(ttt[0].bg_high)
         }
         return SliderDays;
   }
-console.log("thresolf fdjfjdjfdfdjfd",coreContext.thresoldData.length)
+
   const renderslider = () => {
     return (
       <>
@@ -761,6 +766,9 @@ console.log("finaldaata",finaldata)
       return <h1>no data found</h1>;
     }
   };
+  // const getbpdata1 = useMemo(() => getbpdata(1), []);
+  // const getbpdata3 = useMemo(() => getbpdata(3), []);
+  // const getbpdata2 = useMemo(() => getbpdata(2), []);
 
   const renderBloodGlucose = (index) => {
     if (coreContext.bloodglucoseData.length == 0) {
@@ -1249,6 +1257,7 @@ console.log("finaldaata",finaldata)
   const { seconds, minutes, start, pause, reset } = useStopwatch({
     autoStart: true,
   });
+
 
   const onBGChange = (e) => {
     setBgMin(e.from);
