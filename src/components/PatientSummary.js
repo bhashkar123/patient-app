@@ -1672,6 +1672,7 @@ console.log("finaldaata",finaldata)
         </div>
       );
   };
+  const rendertop=React.useMemo(()=>renderTopDetails(),[])
 
   const renderAddModifyFlags = () => {
     if (coreContext.patient)
@@ -2558,7 +2559,7 @@ console.log("finaldaata",finaldata)
       </div> */}
 
       <div onClick={() => setShowNotesTextBox(false)} className="card-header">
-        {renderTopDetails()}
+        {rendertop}
       </div>
       <div onClick={() => setShowNotesTextBox(false)} className="card-header">
         {renderAddModifyFlags()}
