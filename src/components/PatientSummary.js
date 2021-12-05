@@ -329,8 +329,9 @@ const PatientSummary = (props) => {
   };
 
   
-  const pateientvalue = useMemo(() => fetchPatient, [coreContext.patient.length]);
+  const pateientvalue = useMemo(() => fetchPatient, []);
   useEffect(pateientvalue, []);
+  
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
   useEffect(
@@ -1646,33 +1647,46 @@ console.log("finaldaata",finaldata)
   };
 
   const renderTopDetails = () => {
-    {
+    if(coreContext.patients.length===0){
+      return(
+        <div
+        style={{
+          height: 50,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
+          alignItems: "center",
+        }}>
+        <Loader type="Circles" color="#00BFFF" height={50} width={50} />
+      </div>
+      )
       
     }
-    if (coreContext.patient)
+    if (coreContext.patients.length>0)
       return (
         <div className="row">
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
-            {coreContext.patient.name}
+            {coreContext.patients[0].name}
           </div>
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
-            {"DOB : " + coreContext.patient.dob}
+            {"DOB : " + coreContext.patients[0].dob}
           </div>
           <div className="col-md-2" style={{ fontWeight: "bold" }}>
-            {coreContext.patient.gender === "Male" ? (
+            {coreContext.patients[0].gender === "Male" ? (
               <GenderMale />
             ) : (
               <GenderFemale />
             )}
-            {coreContext.patient.gender}
+            {coreContext.patients[0].gender}
           </div>
           <div className="col-md-4" style={{ fontWeight: "bold" }}>
-            EHR ID : {coreContext.patient.ehrId}
+            EHR ID : {coreContext.patients[0].ehrId}
           </div>
         </div>
       );
   };
-  const rendertop=React.useMemo(()=>renderTopDetails(),[])
+  const rendertop=React.useMemo(()=>renderTopDetails(),[coreContext.patients.length])
 
   const renderAddModifyFlags = () => {
     if (coreContext.patient)
