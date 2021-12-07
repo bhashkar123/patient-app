@@ -2362,7 +2362,7 @@ export const CoreContextProvider = (props) => {
           ":v_PK": { S: "DEVICE_BP_READING" },
           ":v_ActiveStatus": { S: "Deactive" },
           ":v_GSI1PK1": { S: "DEVICE_BP_PATIENT_121524123727622" },
-          ":v_GSI1PK2": { S: "DEVICE_BP_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_BP_PATIENT_1627230254837" },
         },
       };
     }
