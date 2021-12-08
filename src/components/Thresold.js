@@ -38,11 +38,11 @@ const Thresold = (props) => {
     // check page if left side menu.
     setPatientId(patientId);
     setUserType(userType);
-    console.log("sajhdjdjhdjhdj",window.location.href.indexOf("patient-summary"))
+  
 
     if (userType === "admin" &&window.location.href.indexOf("patient-summary")<=0) {
       setdisableChart(false);
-      //alert("sahil")
+      
       coreContext.fetchThresold("ADMIN_"+patientId, "admin");
       coreContext.fetchadminThresold("ADMIN_"+patientId, "admin")
     } else if (userType === "patient") {
@@ -54,8 +54,8 @@ const Thresold = (props) => {
     if (window.location.href.indexOf("patient-summary") > 0) {
       patientId = localStorage.getItem("ehrId");
       let aid=localStorage.getItem("userId");
-      console.log(patientId);
-      //alert(patientId);
+    
+   
 
       setPatientId(patientId);
       // userType = "patient";
@@ -152,10 +152,10 @@ const Thresold = (props) => {
 
     // setting default value
     if (coreContext.thresoldData.length === 0 ) {
-      alert(coreContext.adminthresold.length)
+     
       //coreContext.fetchThresold("ADMIN_"+localStorage.getItem("userType"), "admin");
       if(coreContext.adminthresold.length===0){
-        alert("inside",coreContext.adminthresold.length)
+       
       let thdata = {};
       console.log(thdata)
       const thDatas = [];
@@ -190,7 +190,7 @@ const Thresold = (props) => {
       setThData(thDatas);}
       else{
         setdata(coreContext.adminthresold)
-        alert("data")
+    
       }
       // console.log("check threshold value", coreContext.thresoldData);
       // console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
@@ -289,7 +289,7 @@ const Thresold = (props) => {
                       bgMin,
                       userType
                     );
-                    // alert("onClick");
+                   
                   }}
                   className="btn btn-primary mb-2 float-right">
                   {" "}

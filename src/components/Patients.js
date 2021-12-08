@@ -846,6 +846,12 @@ const Patients = (props) => {
                 setShowModal(false);
                 fetchPatients();
                 fetchPatients();
+                coreContext.AssignCareTeam(
+                  provider,
+                  coordinator,
+                  coach,
+                  patientId
+                );
 
                 //alert("updated");
               }}

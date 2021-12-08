@@ -210,6 +210,7 @@ const PatientSummary = (props) => {
 
   const fetchPatient = () => {
     const patientId = atob(props.match.params.patient);
+    console.log("checking patient id from summry page",patientId)
     const usertype = localStorage.getItem("userType");
     setUserType(localStorage.getItem("userType"));
     setUserId(localStorage.getItem("userId"));

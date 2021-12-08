@@ -2,12 +2,14 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { CoreContext } from "../context/core-context";
+import Loader from "react-loader-spinner";
 import {
   GenderMale,
   GenderFemale,
   PencilSquare,
   CaretDown,
 } from "react-bootstrap-icons";
+
 import DatePicker from "react-datepicker";
 import { Button, Form } from "react-bootstrap";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -58,8 +60,10 @@ const PatientProfile = (props) => {
     const userType = localStorage.getItem("userType");
     //  coreContext.fetchPatient(patientId);
     //const patientId =userId.split("_").pop();
-    let patientId = localStorage.getItem("userId");
+    let patientId = localStorage.getItem("userId").replace("PATIENT_","");
     localStorage.setItem("userId", patientId);
+    coreContext.fetchPatientListfromApi("patient", patientId);
+    console.log("fetchpatientfunction",patientId)
 
     // Chart Data
     coreContext.fetchBgChartData(patientId, userType);
@@ -281,30 +285,51 @@ const PatientProfile = (props) => {
   };
 
   const renderTopDetails = () => {
+    if(coreContext.patients.length===0){
+      return(
+  <div
+        style={{
+          height: 50,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
+          alignItems: "center",
+        }}>
+        <Loader type="Circles" color="#00BFFF" height={50} width={50} />
+      </div>
+      )
+    }
+    if(coreContext.patients.length>0){
     const userName = localStorage.getItem("userName");
-    coreContext.patient.DOB = "";
+    console.log("checking one patient detail",coreContext.patients)
+    
     return (
+
       <div className="row">
         <div className="col-md-3" style={{ fontWeight: "bold" }}>
           {userName}
         </div>
         <div className="col-md-3" style={{ fontWeight: "bold" }}>
-          {"DOB : " + coreContext.patient.DOB}
+          {"DOB : " + coreContext.patients[0].dob}
         </div>
         <div className="col-md-2" style={{ fontWeight: "bold" }}>
-          {coreContext.patient.gender === "Male" ? (
+          {coreContext.patients[0].gender === "Male" ? (
             <GenderMale />
           ) : (
             <GenderFemale />
           )}
-          {coreContext.patient.gender}
+          {coreContext.patients[0].gender}
         </div>
         <div className="col-md-4" style={{ fontWeight: "bold" }}>
-          EHR ID : {coreContext.patient.ehrId}
+          EHR ID : {coreContext.patients[0].ehrId}
         </div>
       </div>
+      
     );
+          }
   };
+  //const rendertop=React.useMemo(()=>renderTopDetails(),[coreContext.patient])
 
   const renderAddModifyFlags = () => {
     if (coreContext.patient)

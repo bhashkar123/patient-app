@@ -33,7 +33,14 @@ const Dashboard = (props) => {
     coreContext.userDetails(email);
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
-    coreContext.fetchPatientListfromApi("admin");
+    console.log("check ysertype from dashboard",userType)
+    if (userType==="doctor"){
+      coreContext.fetchPatientListfromApi(userType,userId);
+    }
+    if(userType==="admin"){
+      coreContext.fetchPatientListfromApi("admin");
+    }
+    
     coreContext.fetchAllTimeLog();
     coreContext.fetchPatientWithDevice();
   };
@@ -85,32 +92,35 @@ const Dashboard = (props) => {
   };
 
   const renderTimeLogs = () => {
-    if (coreContext.AlltimeLogData.length == 0) {
+    if (coreContext.patients.length == 0) {
       return (
         <div
           style={{
-            height: 680,
+            height: 80,
             width: "100%",
             display: "flex",
             justifyContent: "center",
             marginTop: "10px",
             alignItems: "center",
           }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          <Loader type="Circles" color="#00BFFF" height={50} width={50} />
         </div>
       );
     }
-    if (coreContext.AlltimeLogData.length > 0) {
+    if (coreContext.patients.length > 0) {
+      console.log("check dashbpoard patient",coreContext.patients,coreContext.AlltimeLogData)
       coreContext.patients.map((curr) => {
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId
         );
+        console.log("patient time log",patientTimelog)
         if (patientTimelog.length > 0) {
           let totalTimeLog = 0;
           
           patientTimelog.map((timelog) => {
             totalTimeLog = Number(timelog.timeAmount) + totalTimeLog;
           });
+          console.log("checking timelog",totalTimeLog)
           if (totalTimeLog >= 0 && totalTimeLog <= 60) {
             zero.push(curr.userId);
           } else if (totalTimeLog >= 60 && totalTimeLog <= 540) {
