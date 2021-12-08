@@ -6,12 +6,12 @@ import Moment from "moment";
 export const CoreContext = React.createContext({});
 
 export const CoreContextProvider = (props) => {
-  const [userinfo,setuserinfo]=useState([]);
+  const [userinfo, setuserinfo] = useState([]);
   const [patients, setPatients] = useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
-  const [adminthresold,setadminthresold]=useState([]);
+  const [adminthresold, setadminthresold] = useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightApiData, setweightdeviceApiData] = useState([]);
@@ -185,7 +185,7 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         // setJwt(response.data);
         const userData = response.data;
-        setuserinfo(userData)
+        setuserinfo(userData);
         //console.log('userData', userData);
 
         userData.forEach((p) => {
@@ -768,7 +768,7 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchThresold =  (userid, usertype) => {
+  const fetchThresold = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
 
     let data = "";
@@ -790,13 +790,13 @@ export const CoreContextProvider = (props) => {
           Authorization: "Bearer " + token,
         },
       })
-      .then((response) =>  {
+      .then((response) => {
         const thresholdData = response.data;
         console.log("threshod datacheckin cre", thresholdData.length);
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
-           // console.log("p" + index, th);
+            // console.log("p" + index, th);
             const thdata = {};
 
             if (th.TElements) {
@@ -829,17 +829,17 @@ export const CoreContextProvider = (props) => {
             dataSetthresold.push(thdata);
           });
         }
-if(usertype==="admin"){
-  setadminthresold(dataSetthresold)
-}
+        if (usertype === "admin") {
+          setadminthresold(dataSetthresold);
+        }
         setThresoldData(dataSetthresold);
 
-        console.log("thresolddata111111",dataSetthresold,thresoldData);
+        console.log("thresolddata111111", dataSetthresold, thresoldData);
       });
   };
-  const fetchadminThresold =  (userid, usertype) => {
+  const fetchadminThresold = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
-    alert(userid)
+    alert(userid);
 
     let data = "";
     data = {
@@ -860,14 +860,14 @@ if(usertype==="admin"){
           Authorization: "Bearer " + token,
         },
       })
-      .then((response) =>  {
+      .then((response) => {
         const thresholdData = response.data;
-        console.log("sahiladmin",thresholdData)
+        console.log("sahiladmin", thresholdData);
         console.log("threshod datacheckin cre", thresholdData.length);
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
-           // console.log("p" + index, th);
+            // console.log("p" + index, th);
             let thdata = {};
 
             if (th.TElements) {
@@ -901,10 +901,9 @@ if(usertype==="admin"){
           });
         }
 
-  setadminthresold(dataSetthresold)
-        
+        setadminthresold(dataSetthresold);
 
-        console.log("thresolddata111111",dataSetthresold,thresoldData);
+        console.log("thresolddata111111", dataSetthresold, thresoldData);
       });
   };
 
@@ -970,7 +969,7 @@ if(usertype==="admin"){
 
         setTimeLogData(dataSettimeLog);
 
-      console.log("timeLogData", dataSettimeLog);
+        console.log("timeLogData", dataSettimeLog);
       });
   };
 
@@ -2348,17 +2347,22 @@ if(usertype==="admin"){
     }
 
     if (usertype === "doctor") {
+      // var titleObject = {
+      //   :v_GSI1PK1" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
+      //     ":v_GSI1PK2" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
+      // };
       data = {
         TableName: userTable,
         ProjectionExpression:
           "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BP_READING" },
-          ":v_GSI1SK": { S: "DEVICE_BP_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
+          ":v_GSI1PK1": { S: "DEVICE_BP_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_BP_PATIENT_1627230254837" },
         },
       };
     }
@@ -3230,8 +3234,7 @@ if(usertype==="admin"){
         languageOptions,
         adminthresold,
         fetchadminThresold,
-        userinfo
-
+        userinfo,
       }}>
       {props.children}
     </CoreContext.Provider>
