@@ -162,10 +162,12 @@ const Dashboard = (props) => {
           (p) => p.ehrId === patientData.patientId
         );
         if (patient.length > 0) {
-          patientwdevice.push(patient);
+          console.log("dshhsdffdfdhfdfd",patient)
+          patientwdevice.push(patient[0].ehrId);
         }
       });
     }
+    console.log("patientwdevice",patientwdevice)
   };
 
   const fetchDevice = () => {
@@ -327,7 +329,7 @@ const Dashboard = (props) => {
             </th>
             <th style={{ textAlign: "center" }}>
               <a href="/device-info" onClick={() => setPatient(inactive)}>
-                {patientwdevice.length}
+                {[...new Set(patientwdevice)].length}
               </a>
             </th>
             <th style={{ textAlign: "center" }}>

@@ -164,12 +164,17 @@ function App() {
     }
     if (coreContext.userinfo.length > 0) {
       console.log("userdata from app", coreContext.userinfo);
-      usertype = coreContext.userinfo[0].UserType.s;
+      usertype = (coreContext.userinfo[0].UserType.s!=="undefined")?coreContext.userinfo[0].UserType.s:""
       if (usertype === "patient") {
-        doctorid = coreContext.userinfo[0].DoctorId.s;
-        doctorname = coreContext.userinfo[0].DoctorName.s;
+        if(coreContext.userinfo[0].DoctorId!==undefined){
+          doctorid = coreContext.userinfo[0].DoctorId.s
+        }
+        if(coreContext.userinfo[0].DoctorName!==undefined){
+          doctorname = coreContext.userinfo[0].DoctorName.s
+        }
+        //doctorname = (coreContext.userinfo[0].DoctorName!=="undefined")?coreContext.userinfo[0].DoctorName.s:"";
       }
-      userid = coreContext.userinfo[0].UserId.n;
+      userid = (coreContext.userinfo[0].UserId.n!=="undefined")?coreContext.userinfo[0].UserId.n:""
       console.log("checkusertype form pp", usertype, userid);
       return (
         <Widget

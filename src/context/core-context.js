@@ -1982,7 +1982,7 @@ export const CoreContextProvider = (props) => {
         ":v_GSI1PK": { S: patientId },
       },
     };
-    if (usertype == "admin") {
+    if (usertype === "admin"||usertype==="doctor") {
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
@@ -2553,6 +2553,7 @@ export const CoreContextProvider = (props) => {
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
+        console.log("checking the blood glucose why this is happe",bloodglucoseData)
 
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
