@@ -773,7 +773,7 @@ console.log("finaldaata",finaldata)
   // const getbpdata2 = useMemo(() => getbpdata(2), []);
 
   const renderBloodGlucose = (index) => {
-    if (coreContext.bloodglucoseData.length == 0) {
+    if (coreContext.bloodglucoseData.length === 0) {
       return (
         <div
           style={{
@@ -1233,21 +1233,22 @@ console.log("finaldaata",finaldata)
         );
       }
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
-    } else {
-      return (
-        <div
-          style={{
-            height: 60,
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "10px",
-            alignItems: "center",
-          }}>
-          <h1>No data Found</h1>
-        </div>
-      );
-    }
+    } 
+    // else {
+    //   return (
+    //     <div
+    //       style={{
+    //         height: 60,
+    //         width: "100%",
+    //         display: "flex",
+    //         justifyContent: "center",
+    //         marginTop: "10px",
+    //         alignItems: "center",
+    //       }}>
+    //       <h1>No data Found</h1>
+    //     </div>
+    //   );
+    // }
   };
 
   //useEffect(fetchPatient, [coreContext.timeLogData.length]);
@@ -2060,12 +2061,6 @@ console.log("finaldaata",finaldata)
                           </TabPanel>
                         </Tabs>
                       </TabPanel>
-
-                      {/* <TabPanel>
-                        <div className="card">
-                          <BloodPressureAverage />
-                        </div>
-                      </TabPanel> */}
                       <TabPanel>
                         <Tabs>
                           <TabList>
@@ -2090,18 +2085,9 @@ console.log("finaldaata",finaldata)
                             {renderBloodGlucose(2)}
                           </TabPanel>
                         </Tabs>
-                        {/* <BloodGlucose></BloodGlucose> */}
-                        {/* <h4 className="card-header">Blood Glucose</h4>
-                                         <div className="card-body">
-                                             {renderVitalDataBG()}
-                                        </div> */}
-                        {/* </div> */}
+                        
                       </TabPanel>
-                      {/* <TabPanel>
-                        <div className="card">
-                          <BloodGlucoseAverage />
-                        </div>
-                      </TabPanel> */}
+                      
                       <TabPanel>
                         <div className="card-body">
                           <Weight></Weight>
