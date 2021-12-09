@@ -1982,7 +1982,7 @@ export const CoreContextProvider = (props) => {
         ":v_GSI1PK": { S: patientId },
       },
     };
-    if (usertype === "admin"||usertype==="doctor") {
+    if (usertype === "admin" || usertype === "doctor") {
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
@@ -2477,11 +2477,12 @@ export const CoreContextProvider = (props) => {
     if (usertype === "patient") {
       data = {
         TableName: userTable,
-        IndexName: "Patient-Doctor-Device-Index",
-        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
-        KeyConditionExpression: "GSI1PK = :v_PK",
+        KeyConditionExpression: "PK = :v_PK",
+        FilterExpression:
+          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BG_" + userid },
+          ":v_PK": { S: "DEVICE_BG_READING" },
+          ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
         },
       };
@@ -2518,10 +2519,11 @@ export const CoreContextProvider = (props) => {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "CarecoordinatorId = :v_CarecoordinatorId AND ActiveStatus <> :v_ActiveStatus",
+          "GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2) AND ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BG_READING" },
-          ":v_CarecoordinatorId": { S: +userid },
+          ":v_GSI1PK1": { S: "DEVICE_BG_PATIENT_1201117191624936" },
+          ":v_GSI1PK2": { S: "DEVICE_BG_PATIENT_121229133714481" },
           ":v_ActiveStatus": { S: "Deactive" },
         },
       };
@@ -2553,7 +2555,10 @@ export const CoreContextProvider = (props) => {
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
-        console.log("checking the blood glucose why this is happe",bloodglucoseData)
+        console.log(
+          "checking the blood glucose why this is happe",
+          bloodglucoseData
+        );
 
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
