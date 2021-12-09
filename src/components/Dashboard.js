@@ -8,9 +8,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
 import Moment from "moment";
 
-import { Widget } from 'react-chat-widget';
+import { Widget } from "react-chat-widget";
 
-import 'react-chat-widget/lib/styles.css';
+import "react-chat-widget/lib/styles.css";
 
 const Dashboard = (props) => {
   const [date, setDate] = useState();
@@ -33,14 +33,13 @@ const Dashboard = (props) => {
     coreContext.userDetails(email);
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
-    console.log("check ysertype from dashboard",userType)
-    if (userType==="doctor"){
-      coreContext.fetchPatientListfromApi(userType,userId);
-    }
-    if(userType==="admin"){
+    console.log("check ysertype from dashboard", userType);
+
+    if (userType === "admin") {
       coreContext.fetchPatientListfromApi("admin");
+    } else {
+      coreContext.fetchPatientListfromApi(userType, userId);
     }
-    
     coreContext.fetchAllTimeLog();
     coreContext.fetchPatientWithDevice();
   };
@@ -108,19 +107,23 @@ const Dashboard = (props) => {
       );
     }
     if (coreContext.patients.length > 0) {
-      console.log("check dashbpoard patient",coreContext.patients,coreContext.AlltimeLogData)
+      console.log(
+        "check dashbpoard patient",
+        coreContext.patients,
+        coreContext.AlltimeLogData
+      );
       coreContext.patients.map((curr) => {
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId
         );
-        console.log("patient time log",patientTimelog)
+        console.log("patient time log", patientTimelog);
         if (patientTimelog.length > 0) {
           let totalTimeLog = 0;
-          
+
           patientTimelog.map((timelog) => {
             totalTimeLog = Number(timelog.timeAmount) + totalTimeLog;
           });
-          console.log("checking timelog",totalTimeLog)
+          console.log("checking timelog", totalTimeLog);
           if (totalTimeLog >= 0 && totalTimeLog <= 60) {
             zero.push(curr.userId);
           } else if (totalTimeLog >= 60 && totalTimeLog <= 540) {
@@ -144,7 +147,6 @@ const Dashboard = (props) => {
             sixty.push(curr.userId);
             //nine=nine+1;
           }
-          
         } else {
           inactive.push(curr.userId);
         }
@@ -162,12 +164,12 @@ const Dashboard = (props) => {
           (p) => p.ehrId === patientData.patientId
         );
         if (patient.length > 0) {
-          console.log("dshhsdffdfdhfdfd",patient)
+          console.log("dshhsdffdfdhfdfd", patient);
           patientwdevice.push(patient[0].ehrId);
         }
       });
     }
-    console.log("patientwdevice",patientwdevice)
+    console.log("patientwdevice", patientwdevice);
   };
 
   const fetchDevice = () => {
