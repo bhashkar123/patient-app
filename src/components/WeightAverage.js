@@ -82,12 +82,13 @@ const WeightAverage = (props) => {
         },
         
       ];
-      
+      console.log(coreContext.weightData , "coreContext.weightData")
       //https://material-ui.com/components/data-grid/
       let avgData=[];
     let newrows=coreContext.weightData.map((curr)=>curr.UserName).filter((item, i, ar) => ar.indexOf(item) === i)
     console.log(newrows[0])
     const getweight=(value)=>{
+      console.log(value ,"value")
         let averageweight=0;
         let record=0
         let today=new Date();
@@ -95,13 +96,18 @@ const WeightAverage = (props) => {
         
         coreContext.weightData.map((curr)=>
         { 
-            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)&&curr.weight!==undefined){
+          console.log(curr.UserName,"curr.UserName");
+          console.log(curr.UserName== value,"curr.CreatedDate")
+          console.log(new Date(curr.CreatedDate)< new Date(bfr),"bfr")
+            if (curr.UserName== value && new Date(curr.CreatedDate) < new Date(bfr) && curr.weight!==undefined){
                 averageweight=averageweight+Number(curr.weight);
             record=record+1
         //    console.log(new Date(curr.CreatedDate), new Date(bfr),new Date(curr.CreatedDate)>new Date(bfr))
         }
     }
          )
+        console.log(averageweight,"averageweight") 
+
     return averageweight/record;
 
     }
@@ -120,7 +126,7 @@ const WeightAverage = (props) => {
            // setId(id+1)
             
       //  setAvgData([...avgdaData,avg])
-      console.log(avgData)
+      console.log(avgData , "avgData")
       return avgData
     // console.log(avgData)
         })

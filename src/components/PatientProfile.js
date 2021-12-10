@@ -2,14 +2,12 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { CoreContext } from "../context/core-context";
-import Loader from "react-loader-spinner";
 import {
   GenderMale,
   GenderFemale,
   PencilSquare,
   CaretDown,
 } from "react-bootstrap-icons";
-
 import DatePicker from "react-datepicker";
 import { Button, Form } from "react-bootstrap";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -22,6 +20,7 @@ import {
   MDBCardText,
   MDBBtn,
 } from "mdb-react-ui-kit";
+import Loader from "react-loader-spinner";
 
 import { useStopwatch } from "react-timer-hook";
 import Dropdown from "react-dropdown";
@@ -60,15 +59,15 @@ const PatientProfile = (props) => {
     const userType = localStorage.getItem("userType");
     //  coreContext.fetchPatient(patientId);
     //const patientId =userId.split("_").pop();
-    let patientId = localStorage.getItem("userId").replace("PATIENT_","");
+    let patientId = localStorage.getItem("userId");
     localStorage.setItem("userId", patientId);
     coreContext.fetchPatientListfromApi("patient", patientId);
-    console.log("fetchpatientfunction",patientId)
 
     // Chart Data
     coreContext.fetchBgChartData(patientId, userType);
     coreContext.fetchBpChartData(patientId, userType);
     coreContext.fetchWSChartData(patientId, userType);
+    
 
     coreContext.fetchBgData(patientId, userType);
     // coreContext.fetchBloodPressure(patientId, username, usertype);
@@ -183,6 +182,10 @@ const PatientProfile = (props) => {
   useEffect(fetchPatient, [coreContext.wsChartData.length]);
   useEffect(fetchPatient, [coreContext.bpChartData.length]);
   useEffect(coreContext.checkLocalAuth, []);
+  //useEffect(coreContext.fetchPatientListfromApi(localStorage.getItem("userType"), localStorage.getItem("userId")), []);
+  
+
+  
 
   const { seconds, minutes, start, pause, reset } = useStopwatch({
     autoStart: false,
@@ -329,7 +332,6 @@ const PatientProfile = (props) => {
     );
           }
   };
-  //const rendertop=React.useMemo(()=>renderTopDetails(),[coreContext.patient])
 
   const renderAddModifyFlags = () => {
     if (coreContext.patient)

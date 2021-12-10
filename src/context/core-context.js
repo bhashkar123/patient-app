@@ -682,12 +682,13 @@ export const CoreContextProvider = (props) => {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BP_READING" },
-          ":v_GSI1SK": { S: "DEVICE_WS_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
+        "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "DEVICE_WS_READING" },
+        ":v_ActiveStatus": { S: "Deactive" },
+        ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+        ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
+      },
       };
     }
 
@@ -2474,31 +2475,57 @@ export const CoreContextProvider = (props) => {
 
     let data = "";
 
+    // if (usertype === "patient") {
+    //   data = {
+    //     TableName: userTable,
+    //     KeyConditionExpression: "PK = :v_PK",
+    //     FilterExpression:
+    //       "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+    //     ExpressionAttributeValues: {
+    //       ":v_PK": { S: "DEVICE_BG_READING" },
+    //       ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+    //       ":v_ActiveStatus": { S: "Deactive" },
+    //     },
+    //   };
+    // }
     if (usertype === "patient") {
       data = {
         TableName: userTable,
-        KeyConditionExpression: "PK = :v_PK",
-        FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+        IndexName: "Patient-Doctor-Device-Index",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        KeyConditionExpression: "GSI1PK = :v_PK",
         ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BG_READING" },
-          ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+          ":v_PK": { S: "DEVICE_BG_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
         },
       };
     }
 
+
     if (usertype === "doctor") {
+      // data = {
+      //   TableName: userTable,
+      //   KeyConditionExpression: "PK = :v_PK",
+      //   FilterExpression:
+      //     "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+      //   ExpressionAttributeValues: {
+      //     ":v_PK": { S: "DEVICE_BG_READING" },
+      //     ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+      //     ":v_ActiveStatus": { S: "Deactive" },
+      //   },
+      // };
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BG_READING" },
-          ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
+        "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "DEVICE_BG_READING" },
+        ":v_ActiveStatus": { S: "Deactive" },
+        ":v_GSI1PK1": { S: "DEVICE_BG_PATIENT_121524123727622" },
+        ":v_GSI1PK2": { S: "DEVICE_BG_PATIENT_121530113343911" },
+      },
+      
       };
     }
     if (usertype === "coach") {
@@ -2860,12 +2887,13 @@ export const CoreContextProvider = (props) => {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
-        ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_WS_READING" },
-          ":v_GSI1SK": { S: "DEVICE_WS_" + userid },
-          ":v_ActiveStatus": { S: "Deactive" },
-        },
+        "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "DEVICE_WS_READING" },
+        ":v_ActiveStatus": { S: "Deactive" },
+        ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+        ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
+      },
       };
     }
 
