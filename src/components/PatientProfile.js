@@ -61,7 +61,8 @@ const PatientProfile = (props) => {
     //const patientId =userId.split("_").pop();
     let patientId = localStorage.getItem("userId");
     localStorage.setItem("userId", patientId);
-    coreContext.fetchPatientListfromApi("patient", patientId);
+    console.log("sahila arora",patientId)
+    
 
     // Chart Data
     coreContext.fetchBgChartData(patientId, userType);
@@ -178,10 +179,13 @@ const PatientProfile = (props) => {
 
     //setData4(d4);
   };
-
+const fetchuser=()=>{
+  coreContext.fetchPatientListfromApi("patient", localStorage.getItem("userId"));
+}
   useEffect(fetchPatient, [coreContext.wsChartData.length]);
   useEffect(fetchPatient, [coreContext.bpChartData.length]);
   useEffect(coreContext.checkLocalAuth, []);
+  useEffect(fetchuser,[])
   //useEffect(coreContext.fetchPatientListfromApi(localStorage.getItem("userType"), localStorage.getItem("userId")), []);
   
 

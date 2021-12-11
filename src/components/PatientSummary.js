@@ -485,9 +485,10 @@ return String(ttt[0].bg_high)
         </div>
       </>);
     }
+    console.log(coreContext.bloodpressureData[0].UserName,"coreContext.bloodpressureData[0].UserName")
     if (
       coreContext.bloodpressureData.length > 0 &&
-      coreContext.bloodpressureData[0].UserName !== undefined
+      coreContext.bloodpressureData[0].UserName !== 'undefined'
     ) {
       if (to.getDate() !== from.getDate()) {
         console.log(coreContext.bloodpressureData, "coreContext.bloodpressureData")
@@ -745,9 +746,15 @@ return String(ttt[0].bg_high)
                 Average Reading per day
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.round(
+                {/* {Math.round(
                   Math.round((finaldata.length / daydfrnc) * 10) / 10
-                )}
+                )} */}
+                 {
+                (finaldata.length > 0 || daydfrnc == "undefined") ?
+                Math.round(Number(
+                  Math.round(Number(finaldata.length / daydfrnc) * 10) / 10)
+                ): "0"
+                }
               </div>
             </div>
             <div className="d-flex">
@@ -758,7 +765,10 @@ return String(ttt[0].bg_high)
                 Average Systolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.round(avgsys)} mm HG
+                {/* {console.log(isNaN(avgsys),"avgsys")} */}
+
+                {(isNaN(avgsys)) ? '0'
+                :Number(Math.round(avgsys)) } mm HG
               </div>
             </div>
             <div className="d-flex">
@@ -769,7 +779,10 @@ return String(ttt[0].bg_high)
                 Average Diastolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.round(avgdia)} mm HG
+                {console.log(avgdia,"avgdia")}
+                {(isNaN(avgdia)) ? '0 '
+                :Number(Math.round(avgsys)) }
+                 mm HG
               </div>
             </div>
             <div className="d-flex">
@@ -780,7 +793,9 @@ return String(ttt[0].bg_high)
                 Lowest Systolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.min(...Systolic)} mm HG
+                {console.log(Systolic,"Systolic")}
+                { Systolic.length > 0 ?
+                Math.min(...Systolic) : "0"} mm HG
               </div>
             </div>
             <div className="d-flex">
@@ -791,7 +806,9 @@ return String(ttt[0].bg_high)
                 Highest Diastolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.max(...diastolic)} mm HG
+                { diastolic.length > 0 ?
+                Number(Math.max(...diastolic)) : "0"} mm HG
+                
               </div>
             </div>
           </>
@@ -806,7 +823,7 @@ return String(ttt[0].bg_high)
   // const getbpdata2 = useMemo(() => getbpdata(2), []);
 
   const renderBloodGlucose = (index) => {
-    if (coreContext.bloodglucoseData.length === 0) {
+    if (coreContext.bloodglucoseData.length == 0) {
       return (
         <div
           style={{
@@ -824,7 +841,7 @@ return String(ttt[0].bg_high)
 
     if (
       coreContext.bloodglucoseData.length > 0 &&
-      coreContext.bloodglucoseData[0].UserName !== undefined
+      coreContext.bloodglucoseData[0].UserName !== 'undefined'
     ) {
       if (slider === 100) {
         var finalbgdata = coreContext.bloodglucoseData.filter(
@@ -872,13 +889,22 @@ return String(ttt[0].bg_high)
       let sorteddates = [];
       let pcolorb = [];
       console.log(finalbgdata, "finalbgdataglocouse")
-     
+      // for graph 
+      // let labelsgrap = [];
+      // let bgbeforegraph = [];
+      // let bgaftergrapph = [];
+      // let thrsholdgraph = [];
+      // let thresholdmingraph = [];
+
+      // finalbgdata.map((curr)=>{
+
+      // })
 
  var sortData = finalbgdata.sort(function (a, b) {
           return (new Date(Moment(a.CreatedDate).format("MM-DD-YYYY hh:mm A")) - new Date(Moment(b.CreatedDate).format("MM-DD-YYYY hh:mm A")))
         })
 
-        sortData.map((curr) => {
+      finalbgdata.map((curr) => {
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
@@ -1223,9 +1249,12 @@ return String(ttt[0].bg_high)
                 Average Reading per day
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.round(
+                {
+                (finalbgdata.length > 0 || daydfrnc == "undefined") ?
+                Math.round(
                   Math.round((finalbgdata.length / daydfrnc) * 10) / 10
-                )}
+                ): "0"
+                }
               </div>
             </div>
             <div className="d-flex">
@@ -1236,7 +1265,10 @@ return String(ttt[0].bg_high)
                 Average Glucose Level
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.round(avgbg)} mg/dl
+                {console.log(avgbg,"avgbg")}
+                {
+                  isNaN(avgbg)? '0': 
+                Number(Math.round(avgbg))} mg/dl
               </div>
             </div>
             {/* <div className="d-flex">
@@ -1251,7 +1283,9 @@ return String(ttt[0].bg_high)
                 Lowest Glucose Level
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.min(...bg)} mg/dl
+                {console.log(bg,"bg")}
+                {bg.length > 0?
+                Number(Math.min(...bg)) : '0'} mg/dl
               </div>
             </div>
             <div className="d-flex">
@@ -1262,7 +1296,8 @@ return String(ttt[0].bg_high)
                 Highest Glucose Level
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {Math.max(...bg)} mg/dl
+                {bg.length > 0 ?
+                Math.max(...bg) : '0'} mg/dl
               </div>
             </div>
           </div>
