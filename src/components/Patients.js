@@ -485,7 +485,9 @@ const Patients = (props) => {
       coreContext.patients.length > 0 &&
       usertype === "admin" &&
       coreContext.patients[0].name !== undefined
-    ) {
+    ) 
+    console.log("uttkarsh",coreContext.patients)
+    {
       return (
         <>
           <div style={{ height: 680, width: "100%" }}>
