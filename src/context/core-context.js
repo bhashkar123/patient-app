@@ -2514,18 +2514,15 @@ export const CoreContextProvider = (props) => {
       //     ":v_ActiveStatus": { S: "Deactive" },
       //   },
       // };
-      data = {
+
+       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
-        FilterExpression:
-        "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "DEVICE_BG_READING" },
-        ":v_ActiveStatus": { S: "Deactive" },
-        ":v_GSI1PK1": { S: "DEVICE_BG_PATIENT_121524123727622" },
-        ":v_GSI1PK2": { S: "DEVICE_BG_PATIENT_121530113343911" },
-      },
-      
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
       };
     }
     if (usertype === "coach") {
