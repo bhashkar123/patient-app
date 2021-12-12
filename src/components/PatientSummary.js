@@ -218,7 +218,8 @@ const PatientSummary = (props) => {
     setpatientId(patientId);
     
     setPerformedBy(userName);
-    setNotes(coreContext.patient.notes);
+    console.log(coreContext.patient.notes,"coreContext.patient.notes")
+    coreContext.patient.notes != undefined && setNotes(coreContext.patient.notes);
     //setTaskType("Care Coordination")
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
@@ -749,12 +750,19 @@ return String(ttt[0].bg_high)
                 {/* {Math.round(
                   Math.round((finaldata.length / daydfrnc) * 10) / 10
                 )} */}
-                 {
-                (finaldata.length > 0 || daydfrnc == "undefined") ?
+                {console.log(daydfrnc,"daydfrncutkarsh")}
+                 {/* {
+                (finaldata.length > 0 && daydfrnc != 'undefined') ?
                 Math.round(Number(
                   Math.round(Number(finaldata.length / daydfrnc) * 10) / 10)
                 ): "0"
+                } */}
+                {
+                  isNaN(Math.round(Number(
+                    Math.round(Number(finaldata.length / daydfrnc) * 10) / 10))) ? "0": Math.round(Number(
+                      Math.round(Number(finaldata.length / daydfrnc) * 10) / 10))
                 }
+
               </div>
             </div>
             <div className="d-flex">
@@ -1782,7 +1790,7 @@ return String(ttt[0].bg_high)
               class="form-control"
               rows="3"
               placeholder="Enter notes"
-              value={notes}
+              value={notes != 'undefined' ? notes : ""}
               onChange={(e) => setNotes(e.target.value)}
             />{" "}
             <button

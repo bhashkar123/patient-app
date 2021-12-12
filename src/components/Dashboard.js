@@ -7,6 +7,7 @@ import { Bezier, Bezier2, Cash, GraphUp } from "react-bootstrap-icons";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
 import Moment from "moment";
+import "../css/dasboard.css";
 
 import { Widget } from "react-chat-widget";
 
@@ -228,7 +229,7 @@ const Dashboard = (props) => {
           <input type="checkbox" /> Show Only My Patients
         </div>
       </div>
-      <div className="card-body">
+      <div className="card_body">
         <h5>
           <Bezier /> Chronic Care Management
         </h5>
@@ -307,7 +308,7 @@ const Dashboard = (props) => {
           </tr>
         </table>
       </div>
-      <div className="card-body">
+      <div className="card_body">
         <h5>
           <GraphUp /> Remote Patient Monitoring
         </h5>
@@ -360,7 +361,7 @@ const Dashboard = (props) => {
           </tr>
         </table>
       </div>
-      <div className="card-body">
+      <div className="card_body">
         <h5>
           <Cash /> Billing & Claims
         </h5>
