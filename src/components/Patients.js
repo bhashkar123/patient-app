@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import Input from "./common/Input";
 import * as React from "react";
 import Switch from "@material-ui/core/Switch";
-import moment from'moment';
+import moment from 'moment';
 
 import {
   DataGrid,
@@ -138,6 +138,7 @@ const Patients = (props) => {
     setPatientId(patient.userId);
     setHeight(patient.height);
     console.log(patient.gender,"patient.gender")
+    // patient.gender == "Female" ? setGender(1) : setGender(0);
     patient.gender == "Female" ? setGender(1) : setGender(0);
     // setGender(patient.gender);
     // setLanguage(patient.language);
