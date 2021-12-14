@@ -235,6 +235,7 @@ const BloodGlucose = (props) => {
         <div style={{ height: 680, width: "100%" }}>
           {/* {coreContext.bloodglucoseData} */}
           <DataGrid
+          
             rows={coreContext.bloodglucoseData}
             columns={dgcolumns}
             pageSize={10}

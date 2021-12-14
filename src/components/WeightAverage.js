@@ -4,6 +4,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import Loader from "react-loader-spinner";
 import IonRangeSlider from 'react-ion-slider'
+import moment from 'moment'
 
 
 
@@ -82,26 +83,35 @@ const WeightAverage = (props) => {
         },
         
       ];
-      
+      console.log(coreContext.weightData , "coreContext.weightData")
       //https://material-ui.com/components/data-grid/
       let avgData=[];
     let newrows=coreContext.weightData.map((curr)=>curr.UserName).filter((item, i, ar) => ar.indexOf(item) === i)
     console.log(newrows[0])
     const getweight=(value)=>{
+      console.log(value ,"value")
         let averageweight=0;
         let record=0
         let today=new Date();
         let bfr=new Date().setDate(today.getDate()-Days)
-        
+        console.log( moment(new Date(bfr)).format("DD-MM-YYYY"), "bfr time diffrence")
+        console.log(Days,"Days")
+        console.log(coreContext.weightData , " coreContext.weightData")
         coreContext.weightData.map((curr)=>
         { 
-            if (curr.UserName===value && new Date(curr.CreatedDate)>new Date(bfr)&&curr.weight!==undefined){
+          console.log((new Date(curr.CreatedDate)),"new Date(curr.CreatedDate)")
+          console.log((new Date(bfr)),"bfa data")
+          console.log(new Date(curr.CreatedDate) > new Date(bfr) ,"final checking")
+          
+            if (curr.UserName== value && new Date(curr.CreatedDate) > new Date(bfr) && curr.weight!==undefined){
                 averageweight=averageweight+Number(curr.weight);
             record=record+1
-        //    console.log(new Date(curr.CreatedDate), new Date(bfr),new Date(curr.CreatedDate)>new Date(bfr))
+       
         }
     }
          )
+        console.log(averageweight,"averageweight") 
+
     return averageweight/record;
 
     }
@@ -120,7 +130,7 @@ const WeightAverage = (props) => {
            // setId(id+1)
             
       //  setAvgData([...avgdaData,avg])
-      console.log(avgData)
+      console.log(avgData , "avgData")
       return avgData
     // console.log(avgData)
         })
@@ -194,7 +204,7 @@ const WeightAverage = (props) => {
 
                     <h4 className="card-header"> Select Days </h4>
                     <div className="card-body">
-                        <IonRangeSlider  keyboard={true} onStart='1' onFinish={(e)=>setDays(e.from)} type='single' min={0} max={90} from={Days} to={Days} step={7} grid={true} grid_margin={true}  />
+                        <IonRangeSlider  keyboard={true} onStart='1' onFinish={(e)=>setDays(e.from)} type='single' min={0} max={180} from={Days} to={Days} step={7} grid={true} grid_margin={true}  />
                         
                         <h3> Last {Days} days Selected</h3>
                     </div>

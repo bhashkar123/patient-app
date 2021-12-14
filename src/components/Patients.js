@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import Input from "./common/Input";
 import * as React from "react";
 import Switch from "@material-ui/core/Switch";
+import moment from 'moment';
 
 import {
   DataGrid,
@@ -131,13 +132,17 @@ const Patients = (props) => {
     }
     setFName(patient.firstName);
     setLName(patient.lastName);
-    setBirthDate(patient.dob);
+    setBirthDate(moment(patient.dob).format('MM/DD/YYYY'));
+    console.log(moment(patient.dob).format('MM/DD/YYYY'),"format")
     setPhone(patient.mobile);
     setPatientId(patient.userId);
     setHeight(patient.height);
-
-    setGender(patient.gender);
-    setLanguage(patient.language);
+    console.log(patient.gender,"patient.gender")
+    // patient.gender == "Female" ? setGender(1) : setGender(0);
+    patient.gender == "Female" ? setGender(1) : setGender(0);
+    // setGender(patient.gender);
+    // setLanguage(patient.language);
+    patient.language == "English"? setLanguage(0) : setLanguage(1);
     setWorkPhone(patient.workPhone);
     setMobilePhone(patient.mobilePhone);
     setStreet(patient.street);
@@ -149,11 +154,25 @@ const Patients = (props) => {
       patient.ProviderName = "Select Provider";
       setProvider("");
     } else {
-      setProvider(
-        coreContext.providerOptions.filter((name) =>
-          name.name.includes(patient.ProviderName)
-        )[0].value
-      );
+      console.log(coreContext.providerOptions,"coreContext.providerOptions")
+      
+
+      coreContext.providerOptions.filter((name)=>{
+        console.log(name.name , "namefilter")
+        if(name.name.includes(patient.ProviderName)){
+          setProvider(patient.ProviderName)
+        }
+        else{
+          setProvider("");
+        }
+        
+      })
+
+      // setProvider(
+      //   coreContext.providerOptions.filter((name) =>
+      //     name.name.includes(patient.ProviderName)
+      //   )[0].value
+      // );
     }
 
     if (patient.CareName === undefined) {
@@ -485,7 +504,9 @@ const Patients = (props) => {
       coreContext.patients.length > 0 &&
       usertype === "admin" &&
       coreContext.patients[0].name !== undefined
-    ) {
+    ) 
+    console.log("uttkarsh",coreContext.patients)
+    {
       return (
         <>
           <div style={{ height: 680, width: "100%" }}>
@@ -846,6 +867,12 @@ const Patients = (props) => {
                 setShowModal(false);
                 fetchPatients();
                 fetchPatients();
+                coreContext.AssignCareTeam(
+                  provider,
+                  coordinator,
+                  coach,
+                  patientId
+                );
 
                 //alert("updated");
               }}

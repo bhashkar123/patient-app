@@ -6,15 +6,15 @@ import Moment from "moment";
 export const CoreContext = React.createContext({});
 
 export const CoreContextProvider = (props) => {
+  const [userinfo, setuserinfo] = useState([]);
   const [patients, setPatients] = useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
-  const [adminthresold,setadminthresold]=useState([]);
+  const [adminthresold, setadminthresold] = useState([]);
 
   const [weightData, setweightData] = useState([]);
   const [weightApiData, setweightdeviceApiData] = useState([]);
-  const [startData,setStartData]=useState([]);
 
   const [thresoldData, setThresoldData] = useState([]);
   const [timeLogData, setTimeLogData] = useState([]);
@@ -33,7 +33,6 @@ export const CoreContextProvider = (props) => {
   const [coachData, setcoachData] = useState([]);
   const [resetForm, setResetForm] = useState(0);
   const [tasktimerUserData, settasktimerUserData] = useState([]);
-  const [userinfo,setuserInfo]=useState([]);
 
   const [patient, setPatient] = useState({});
   const [threads, setThreads] = useState([]);
@@ -185,10 +184,11 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         // setJwt(response.data);
-        const startData = response.data;
-        setuserInfo(response.data)
+        const userData = response.data;
+        setuserinfo(userData);
+        //console.log('userData', userData);
 
-        startData.forEach((p) => {
+        userData.forEach((p) => {
           localStorage.setItem("userName", p.UserName.s);
           localStorage.setItem("userType", p.UserType.s);
           localStorage.setItem("userId", p.SK.s);
@@ -229,7 +229,7 @@ export const CoreContextProvider = (props) => {
 
         setShowLoader(false);
 
-        if (startData.length === 0) window.location.assign("profile");
+        if (userData.length === 0) window.location.assign("profile");
         else if (url) window.location.assign(url);
 
         // if (userType === 'patient')
@@ -241,26 +241,6 @@ export const CoreContextProvider = (props) => {
         //         window.location.assign('/dashboard');
         //     }
       });
-  };
-  const userInfo = async (useremail, url = "") => {
-    const token = localStorage.getItem("app_jwt");
-    //let url ='';
-    const data = {
-      TableName: userTable,
-      IndexName: "Email-Index",
-      KeyConditionExpression: "Email = :v_Email",
-      ExpressionAttributeValues: { ":v_Email": { S: useremail } },
-    };
-
-    await axios
-      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      
   };
 
   const getdp = (d) => {
@@ -377,7 +357,7 @@ export const CoreContextProvider = (props) => {
         FilterExpression: "ActiveStatus = :v_status",
         ExpressionAttributeValues: {
           ":v_PK": { S: "patient" },
-          ":v_SK": { S: userId },
+          ":v_SK": { S: "PATIENT_" + userId },
           ":v_status": { S: "Active" },
         },
       };
@@ -395,7 +375,7 @@ export const CoreContextProvider = (props) => {
         // setJwt(response.data);
         //  console.log(response.data);
         const patients = response.data;
-        console.log("i need to check the patient",patients.length)
+        // console.log("i need to check the patient",patients.length)
         const ps = [];
         if (patients.length === 0) {
           ps.push("No data found");
@@ -702,11 +682,12 @@ export const CoreContextProvider = (props) => {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
         ExpressionAttributeValues: {
-          ":v_PK": { S: "DEVICE_BP_READING" },
-          ":v_GSI1SK": { S: "DEVICE_WS_" + userid },
+          ":v_PK": { S: "DEVICE_WS_READING" },
           ":v_ActiveStatus": { S: "Deactive" },
+          ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
         },
       };
     }
@@ -788,7 +769,7 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const fetchThresold =  (userid, usertype) => {
+  const fetchThresold = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
 
     let data = "";
@@ -810,13 +791,13 @@ export const CoreContextProvider = (props) => {
           Authorization: "Bearer " + token,
         },
       })
-      .then((response) =>  {
+      .then((response) => {
         const thresholdData = response.data;
-        console.log("threshod datacheckin cre", thresholdData.length);
+
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
-           // console.log("p" + index, th);
+            // console.log("p" + index, th);
             const thdata = {};
 
             if (th.TElements) {
@@ -849,17 +830,14 @@ export const CoreContextProvider = (props) => {
             dataSetthresold.push(thdata);
           });
         }
-if(usertype==="admin"){
-  setadminthresold(dataSetthresold)
-}
+        if (usertype === "admin") {
+          setadminthresold(dataSetthresold);
+        }
         setThresoldData(dataSetthresold);
-
-        console.log("thresolddata111111",dataSetthresold,thresoldData);
       });
   };
-  const fetchadminThresold =  (userid, usertype) => {
+  const fetchadminThresold = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
-    alert(userid)
 
     let data = "";
     data = {
@@ -880,14 +858,13 @@ if(usertype==="admin"){
           Authorization: "Bearer " + token,
         },
       })
-      .then((response) =>  {
+      .then((response) => {
         const thresholdData = response.data;
-        console.log("sahiladmin",thresholdData)
-        console.log("threshod datacheckin cre", thresholdData.length);
+
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
-           // console.log("p" + index, th);
+            // console.log("p" + index, th);
             let thdata = {};
 
             if (th.TElements) {
@@ -921,10 +898,7 @@ if(usertype==="admin"){
           });
         }
 
-  setadminthresold(dataSetthresold)
-        
-
-        console.log("thresolddata111111",dataSetthresold,thresoldData);
+        setadminthresold(dataSetthresold);
       });
   };
 
@@ -990,7 +964,7 @@ if(usertype==="admin"){
 
         setTimeLogData(dataSettimeLog);
 
-      console.log("timeLogData", dataSettimeLog);
+        console.log("timeLogData", dataSettimeLog);
       });
   };
 
@@ -1294,7 +1268,8 @@ if(usertype==="admin"){
     state,
     notes
   ) => {
-    console.log(fname);
+    console.log(gender, "check gender");
+    console.log(fname, "fname");
     const token = localStorage.getItem("app_jwt");
 
     var providervalue = providerOptions.filter(
@@ -1319,14 +1294,27 @@ if(usertype==="admin"){
     );
     let coachname = fetchNameFromId(coach, coachOptions);
 
-    let gendervalue = "Male";
-    if (gender === 1) gendervalue = "Female";
-    if (gender === 0) gendervalue = "Male";
+    let gendervalue = "";
+    console.log(gender, "check gender for number");
+    if (gender == 1) {
+      console.log("female here");
+      gendervalue = "Female";
+    }
+    if (gender == 0) {
+      console.log("male here");
+      gendervalue = "Male";
+    }
+    console.log(gendervalue, "gendervalue");
 
-    let languagevalue = "English";
-    if (language === 0) languagevalue = "English";
-    if (language === 1) languagevalue = "Spanish";
-
+    let languagevalue = "";
+    if (language == 0) {
+      languagevalue = "English";
+      console.log("english here");
+    }
+    if (language == 1) {
+      languagevalue = "Spanish";
+      console.log("spanish here");
+    }
     if (fname === undefined) fname = "";
     if (lname === undefined) lname = "";
 
@@ -1368,7 +1356,7 @@ if(usertype==="admin"){
     axios
       .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
         headers: {
-          Accept: "application/json, text/plain, */*",
+          Accept: "application/json, text/plain, /",
           // "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
@@ -1379,6 +1367,7 @@ if(usertype==="admin"){
 
           // updating object
           //fetchPatientListfromApi();
+          console.log(patients, "patients data here");
           let patinet = patients.filter((p) => p.userId == patientId)[0];
           if (patinet == undefined) return;
           patinet.height = height;
@@ -2003,7 +1992,7 @@ if(usertype==="admin"){
         ":v_GSI1PK": { S: patientId },
       },
     };
-    if (usertype == "admin") {
+    if (usertype === "admin" || usertype === "doctor") {
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
@@ -2368,17 +2357,22 @@ if(usertype==="admin"){
     }
 
     if (usertype === "doctor") {
+      // var titleObject = {
+      //   :v_GSI1PK1" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
+      //     ":v_GSI1PK2" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
+      // };
       data = {
         TableName: userTable,
         ProjectionExpression:
           "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BP_READING" },
-          ":v_GSI1SK": { S: "DEVICE_BP_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
+          ":v_GSI1PK1": { S: "DEVICE_BP_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_BP_PATIENT_1627230254837" },
         },
       };
     }
@@ -2490,6 +2484,19 @@ if(usertype==="admin"){
 
     let data = "";
 
+    // if (usertype === "patient") {
+    //   data = {
+    //     TableName: userTable,
+    //     KeyConditionExpression: "PK = :v_PK",
+    //     FilterExpression:
+    //       "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+    //     ExpressionAttributeValues: {
+    //       ":v_PK": { S: "DEVICE_BG_READING" },
+    //       ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+    //       ":v_ActiveStatus": { S: "Deactive" },
+    //     },
+    //   };
+    // }
     if (usertype === "patient") {
       data = {
         TableName: userTable,
@@ -2504,14 +2511,24 @@ if(usertype==="admin"){
     }
 
     if (usertype === "doctor") {
+      // data = {
+      //   TableName: userTable,
+      //   KeyConditionExpression: "PK = :v_PK",
+      //   FilterExpression:
+      //     "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+      //   ExpressionAttributeValues: {
+      //     ":v_PK": { S: "DEVICE_BG_READING" },
+      //     ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
+      //     ":v_ActiveStatus": { S: "Deactive" },
+      //   },
+      // };
+
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
-        FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BG_READING" },
-          ":v_GSI1SK": { S: "DEVICE_BG_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
         },
       };
@@ -2534,10 +2551,11 @@ if(usertype==="admin"){
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "CarecoordinatorId = :v_CarecoordinatorId AND ActiveStatus <> :v_ActiveStatus",
+          "GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2) AND ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BG_READING" },
-          ":v_CarecoordinatorId": { S: +userid },
+          ":v_GSI1PK1": { S: "DEVICE_BG_PATIENT_1201117191624936" },
+          ":v_GSI1PK2": { S: "DEVICE_BG_PATIENT_121229133714481" },
           ":v_ActiveStatus": { S: "Deactive" },
         },
       };
@@ -2569,6 +2587,10 @@ if(usertype==="admin"){
         if (bloodglucoseData.length === 0) {
           dataSetbg.push("No Data Found");
         }
+        console.log(
+          "checking the blood glucose why this is happe",
+          bloodglucoseData
+        );
 
         bloodglucoseData.forEach((bg, index) => {
           //   console.log('p' + index, bg);
@@ -2870,11 +2892,12 @@ if(usertype==="admin"){
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-          "GSI1SK = :v_GSI1SK AND ActiveStatus <> :v_ActiveStatus",
+          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_WS_READING" },
-          ":v_GSI1SK": { S: "DEVICE_WS_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
+          ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
         },
       };
     }
@@ -3186,8 +3209,6 @@ if(usertype==="admin"){
         getdp,
         dpatient,
         login,
-      startData,
-
         fetchPatientListfromApi,
         inbox,
         fetchMessages,
@@ -3244,7 +3265,6 @@ if(usertype==="admin"){
         resetForm,
         providerOptions,
         coachOptions,
-        userinfo,
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,
@@ -3252,7 +3272,8 @@ if(usertype==="admin"){
         genderOptions,
         languageOptions,
         adminthresold,
-        fetchadminThresold
+        fetchadminThresold,
+        userinfo,
       }}>
       {props.children}
     </CoreContext.Provider>

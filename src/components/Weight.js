@@ -22,7 +22,7 @@ const Weight = (props) => {
         // check page if left side menu.
         if(window.location.href.substring('weight')> 0)
         {
-
+          coreContext.fetchWSData(patientId,userType);
         }
         if(window.location.href.indexOf('patient-summary') >0 )
         {

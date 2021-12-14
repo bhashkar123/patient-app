@@ -26,9 +26,12 @@ import { CoreContext } from "./context/core-context";
 import { Row, Col } from "react-bootstrap";
 import { TablePagination } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+import Modal from "./components/common/Modal";
 import { useForm } from "react-hook-form";
 import Thankyou from "./component2/Thankyou";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import { WeightAverage } from "./components/WeightAverage";
 //import React from 'react';
 import { Widget, addResponseMessage,handleToggle } from "react-chat-widget-2";
@@ -45,9 +48,16 @@ const socket = io("https://demoapi.apatternplus.com/", {
 //   transports: ["websocket"],
 // });
 
+
+
+
+
 function App() {
   const { register, errors } = useForm();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [enduser, setenduser] = useState();
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => {setOpen(true);coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))}
+  // const handleClose = () => setOpen(false);
   const isAuth = localStorage.getItem("app_isAuth");
   const [sidebar, setSidebar] = useState(true);
   const email = localStorage.getItem("userEmail");
@@ -56,13 +66,57 @@ function App() {
   var userid;
   var doctorid;
   var doctorname;
+  const getenduser=(id)=>{
+    setenduser(id)
+   
+  }
 
   const showSidebar = () => setSidebar(!sidebar);
   useEffect(() => {
     coreContext.userDetails(email,"")
+   // coreContext.fetchPatientListfromApi("doctor",localStorage.getItem("userId"))
   },[])
   
 
+  // const handleNewUserMessage = (newMessage) => {
+  //   console.log(`New message incoming! ${newMessage}`);
+  //   if (usertype === "patient") {
+  //     socket.emit(
+  //       "send-message",
+  //       `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
+  //     );
+  //   }
+  //   if (usertype === "doctor") {
+  //     socket.emit(
+  //       "send-message",
+  //       `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+  //     );
+  //   }
+
+  //   // Now send the message throught the backend API
+  //   if (usertype === "patient") {
+  //     socket.on("get-message", (response) => {
+  //       let currentTimeInMilliseconds = Moment();
+  //       if (response.includes(`${doctorname}(${doctorid})`)) {
+  //         if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
+  //           addResponseMessage(response.replace(`(${doctorid})`, ""));
+  //         }
+  //         //addResponseMessage(response);
+  //       }
+  //     });
+  //   }
+
+  //   if (usertype === "doctor") {
+  //     socket.on("get-message", (response) => {
+  //       let currentTimeInMilliseconds = Moment();
+  //       if (response.includes(userid)) {
+  //         if (validateMessage(response, currentTimeInMilliseconds, "doctor")) {
+  //           addResponseMessage(response.replace(`to DOCTOR_${userid}`, ""));
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
     if (usertype === "patient") {
@@ -74,7 +128,7 @@ function App() {
     if (usertype === "doctor") {
       socket.emit(
         "send-message",
-        `${localStorage.getItem("userName")}(DOCTOR_${userid}):  ${newMessage}`
+        `${localStorage.getItem("userName")}(DOCTOR_${userid} to ${enduser}):  ${newMessage}`
       );
     }
 
@@ -82,9 +136,9 @@ function App() {
     if (usertype === "patient") {
       socket.on("get-message", (response) => {
         let currentTimeInMilliseconds = Moment();
-        if (response.includes(`${doctorname}(${doctorid})`)) {
+        if (response.includes(`${doctorname}(${doctorid} to ${userid})`)) {
           if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
-            addResponseMessage(response.replace(`(${doctorid})`, ""));
+            addResponseMessage(response.replace(`(${doctorid} to ${userid})`, ""));
           }
           //addResponseMessage(response);
         }
@@ -102,6 +156,7 @@ function App() {
       });
     }
   };
+
 
   var oldmessage = null;
   var oldTimeInMilliseconds = null;
@@ -145,7 +200,11 @@ function App() {
     addResponseMessage("Welcome to this awesome chat!");
   }, []);
   //const isAuth = true;
+  
   const coreContext = useContext(CoreContext);
+  
+  
+    //const memo=React.useMemo(()=>{renderpatient()},[coreContext.patients])
   const renderuser = () => {
     if (coreContext.userinfo.length === 0) {
       return (
@@ -164,18 +223,24 @@ function App() {
     }
     if (coreContext.userinfo.length > 0) {
       console.log("userdata from app", coreContext.userinfo);
-      usertype = coreContext.userinfo[0].UserType.s;
+      usertype = (coreContext.userinfo[0].UserType.s!=="undefined")?coreContext.userinfo[0].UserType.s:""
       if (usertype === "patient") {
-        doctorid = coreContext.userinfo[0].DoctorId.s;
-        doctorname = coreContext.userinfo[0].DoctorName.s;
+        if(coreContext.userinfo[0].DoctorId!==undefined){
+          doctorid = coreContext.userinfo[0].DoctorId.s
+        }
+        if(coreContext.userinfo[0].DoctorName!==undefined){
+          doctorname = coreContext.userinfo[0].DoctorName.s
+        }
+        //doctorname = (coreContext.userinfo[0].DoctorName!=="undefined")?coreContext.userinfo[0].DoctorName.s:"";
       }
-      userid = coreContext.userinfo[0].UserId.n;
+     
+      userid = (coreContext.userinfo[0].UserId.n!=="undefined")?coreContext.userinfo[0].UserId.n:""
       console.log("checkusertype form pp", usertype, userid);
       return (
         <Widget
           title={localStorage.getItem("userName")}
           handleNewUserMessage={handleNewUserMessage}
-          handleToggle={()=>(alert("true"))}
+          //handleToggle={()=>(alert("true"))}
         />
       );
     }
@@ -208,7 +273,9 @@ function App() {
             changestyle={changestyle}
             showSidebar={showSidebar}
           />
-
+          
+          {/* <Button onClick={handleOpen}>Open modal</Button> */}
+          
           {/* <Widget
             title={localStorage.getItem("userName")}
             handleNewUserMessage={handleNewUserMessage}
@@ -233,8 +300,11 @@ function App() {
             <div className={style1}>
               {" "}
               {sidebar === true ? <Menu /> : <Menu2 />}{" "}
+              
             </div>{" "}
             <div className={style} style={{ marginLeft: "-20px" }}>
+            {(localStorage.getItem("userType")==="doctor")?<Modal getenduser={getenduser}/>:""}
+            
               <Router>
                 <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
@@ -243,6 +313,7 @@ function App() {
                     path="/care-coordinator"
                     component={Pages.CareCoordinator}
                   />{" "}
+                  
                   <Route exact path="/coach" component={Pages.Coach} />{" "}
                   <Route exact path="/inbox" component={Pages.Inbox} />{" "}
                   <Route exact path="/outbox" component={Pages.Outbox} />{" "}
@@ -327,6 +398,7 @@ function App() {
     <>
       {" "}
       {content}{" "}
+      
       <Router>
         <Switch>
           <Route exact path="/covid">
@@ -338,6 +410,31 @@ function App() {
         </Switch>{" "}
       </Router>{" "}
       {renderuser()}
+      {/* <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+><Box sx={{
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}}>
+  {}
+          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography> */}
+        {/* </Box>
+      </Modal> */} */
     </>
   );
 }

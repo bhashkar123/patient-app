@@ -33,6 +33,19 @@ const Deviceinfo = (props) => {
           );
         }
       }
+      if (userType == "doctor") {
+        coreContext.fetchPatientListfromApi("doctor", patientId);
+        if (coreContext.patients.length > 0) {
+          console.log("coreContext.patients",coreContext.patients)
+          coreContext.fetchDeviceData(
+            patientId,
+            userName,
+            userType,
+            "",
+            coreContext.patients
+          );
+        }
+      }
     }
   };
 

@@ -20,6 +20,7 @@ import {
   MDBCardText,
   MDBBtn,
 } from "mdb-react-ui-kit";
+import Loader from "react-loader-spinner";
 
 import { useStopwatch } from "react-timer-hook";
 import Dropdown from "react-dropdown";
@@ -60,6 +61,7 @@ const PatientProfile = (props) => {
     //const patientId =userId.split("_").pop();
     let patientId = localStorage.getItem("userId");
     localStorage.setItem("userId", patientId);
+    console.log("sahila arora", patientId);
 
     // Chart Data
     coreContext.fetchBgChartData(patientId, userType);
@@ -175,10 +177,18 @@ const PatientProfile = (props) => {
 
     //setData4(d4);
   };
-
+  const fetchuser = () => {
+    let userId = localStorage.getItem("userId");
+    if (userId.includes("PATIENT")) {
+      userId = userId.split("_").pop();
+    }
+    coreContext.fetchPatientListfromApi("patient", userId);
+  };
   useEffect(fetchPatient, [coreContext.wsChartData.length]);
   useEffect(fetchPatient, [coreContext.bpChartData.length]);
   useEffect(coreContext.checkLocalAuth, []);
+  useEffect(fetchuser, []);
+  //useEffect(coreContext.fetchPatientListfromApi(localStorage.getItem("userType"), localStorage.getItem("userId")), []);
 
   const { seconds, minutes, start, pause, reset } = useStopwatch({
     autoStart: false,
@@ -281,29 +291,47 @@ const PatientProfile = (props) => {
   };
 
   const renderTopDetails = () => {
-    const userName = localStorage.getItem("userName");
-    coreContext.patient.DOB = "";
-    return (
-      <div className="row">
-        <div className="col-md-3" style={{ fontWeight: "bold" }}>
-          {userName}
+    if (coreContext.patients.length === 0) {
+      return (
+        <div
+          style={{
+            height: 50,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={50} width={50} />
         </div>
-        <div className="col-md-3" style={{ fontWeight: "bold" }}>
-          {"DOB : " + coreContext.patient.DOB}
+      );
+    }
+    if (coreContext.patients.length > 0) {
+      const userName = localStorage.getItem("userName");
+      console.log("checking one patient detail", coreContext.patients);
+
+      return (
+        <div className="row">
+          <div className="col-md-3" style={{ fontWeight: "bold" }}>
+            {userName}
+          </div>
+          <div className="col-md-3" style={{ fontWeight: "bold" }}>
+            {"DOB : " + coreContext.patients[0].dob}
+          </div>
+          <div className="col-md-2" style={{ fontWeight: "bold" }}>
+            {coreContext.patients[0].gender === "Male" ? (
+              <GenderMale />
+            ) : (
+              <GenderFemale />
+            )}
+            {coreContext.patients[0].gender}
+          </div>
+          <div className="col-md-4" style={{ fontWeight: "bold" }}>
+            EHR ID : {coreContext.patients[0].ehrId}
+          </div>
         </div>
-        <div className="col-md-2" style={{ fontWeight: "bold" }}>
-          {coreContext.patient.gender === "Male" ? (
-            <GenderMale />
-          ) : (
-            <GenderFemale />
-          )}
-          {coreContext.patient.gender}
-        </div>
-        <div className="col-md-4" style={{ fontWeight: "bold" }}>
-          EHR ID : {coreContext.patient.ehrId}
-        </div>
-      </div>
-    );
+      );
+    }
   };
 
   const renderAddModifyFlags = () => {

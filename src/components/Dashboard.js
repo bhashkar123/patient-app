@@ -7,10 +7,11 @@ import { Bezier, Bezier2, Cash, GraphUp } from "react-bootstrap-icons";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "react-loader-spinner";
 import Moment from "moment";
+import "../css/dasboard.css";
 
-import { Widget } from 'react-chat-widget';
+import { Widget } from "react-chat-widget";
 
-import 'react-chat-widget/lib/styles.css';
+import "react-chat-widget/lib/styles.css";
 
 const Dashboard = (props) => {
   const [date, setDate] = useState();
@@ -33,7 +34,13 @@ const Dashboard = (props) => {
     coreContext.userDetails(email);
     const userType = localStorage.getItem("userType");
     const userId = localStorage.getItem("userId");
-    coreContext.fetchPatientListfromApi("admin");
+    console.log("check ysertype from dashboard", userType);
+
+    if (userType === "admin") {
+      coreContext.fetchPatientListfromApi("admin");
+    } else {
+      coreContext.fetchPatientListfromApi(userType, userId);
+    }
     coreContext.fetchAllTimeLog();
     coreContext.fetchPatientWithDevice();
   };
@@ -85,32 +92,39 @@ const Dashboard = (props) => {
   };
 
   const renderTimeLogs = () => {
-    if (coreContext.AlltimeLogData.length == 0) {
+    if (coreContext.patients.length == 0) {
       return (
         <div
           style={{
-            height: 680,
+            height: 80,
             width: "100%",
             display: "flex",
             justifyContent: "center",
             marginTop: "10px",
             alignItems: "center",
           }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          <Loader type="Circles" color="#00BFFF" height={50} width={50} />
         </div>
       );
     }
-    if (coreContext.AlltimeLogData.length > 0) {
+    if (coreContext.patients.length > 0) {
+      console.log(
+        "check dashbpoard patient",
+        coreContext.patients,
+        coreContext.AlltimeLogData
+      );
       coreContext.patients.map((curr) => {
         let patientTimelog = coreContext.AlltimeLogData.filter(
           (app) => app.UserId == curr.userId
         );
+        console.log("patient time log", patientTimelog);
         if (patientTimelog.length > 0) {
           let totalTimeLog = 0;
-          
+
           patientTimelog.map((timelog) => {
             totalTimeLog = Number(timelog.timeAmount) + totalTimeLog;
           });
+          console.log("checking timelog", totalTimeLog);
           if (totalTimeLog >= 0 && totalTimeLog <= 60) {
             zero.push(curr.userId);
           } else if (totalTimeLog >= 60 && totalTimeLog <= 540) {
@@ -134,7 +148,6 @@ const Dashboard = (props) => {
             sixty.push(curr.userId);
             //nine=nine+1;
           }
-          
         } else {
           inactive.push(curr.userId);
         }
@@ -152,10 +165,12 @@ const Dashboard = (props) => {
           (p) => p.ehrId === patientData.patientId
         );
         if (patient.length > 0) {
-          patientwdevice.push(patient);
+          console.log("dshhsdffdfdhfdfd", patient);
+          patientwdevice.push(patient[0].ehrId);
         }
       });
     }
+    console.log("patientwdevice", patientwdevice);
   };
 
   const fetchDevice = () => {
@@ -214,7 +229,7 @@ const Dashboard = (props) => {
           <input type="checkbox" /> Show Only My Patients
         </div>
       </div>
-      <div className="card-body">
+      <div className="card_body">
         <h5>
           <Bezier /> Chronic Care Management
         </h5>
@@ -293,7 +308,7 @@ const Dashboard = (props) => {
           </tr>
         </table>
       </div>
-      <div className="card-body">
+      <div className="card_body">
         <h5>
           <GraphUp /> Remote Patient Monitoring
         </h5>
@@ -317,7 +332,7 @@ const Dashboard = (props) => {
             </th>
             <th style={{ textAlign: "center" }}>
               <a href="/device-info" onClick={() => setPatient(inactive)}>
-                {patientwdevice.length}
+                {[...new Set(patientwdevice)].length}
               </a>
             </th>
             <th style={{ textAlign: "center" }}>
@@ -346,7 +361,7 @@ const Dashboard = (props) => {
           </tr>
         </table>
       </div>
-      <div className="card-body">
+      <div className="card_body">
         <h5>
           <Cash /> Billing & Claims
         </h5>
