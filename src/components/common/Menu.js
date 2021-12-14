@@ -114,9 +114,9 @@ const Menu = (props) => {
                 <a className="nav-link" href="/weight"><GiWeight size={20} /> Weight</a>
             </li>
             <NavDropdown.Divider />
-            {/* <li className="nav-item">
+            {(localStorage.getItem("userType")==="admin")?<><li className="nav-item">
                 <a className="nav-link" href="/thresold"><GiAerialSignal size={20} /> Thresold</a>
-            </li> */}
+            </li> <NavDropdown.Divider /></>:""}
            {/* /<NavDropdown.Divider /> */}
             {renderOrderInformation()}
             {/* {renderAverage()} */}

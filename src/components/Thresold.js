@@ -75,16 +75,12 @@ const Thresold = (props) => {
     //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
 
     setThData(coreContext.thresoldData);
-    console.log("data sis ",coreContext.thresoldData)
     
-    console.log("adminthresid",coreContext.adminthresold)
-    console.log("patienthresold",coreContext.adminthresold)
     const setdata=(data)=>
     {
       {
         setThData(data);
-        console.log("check threshold value", coreContext.thresoldData);
-        console.log("admincxbnnnnnnnnnnnnnnnnnnnnnndata",coreContext.thresoldData)
+       
   
         var bgdata = coreContext.thresoldData.filter(
           (a) => a.Element_value === "Blood Glucose"
@@ -103,7 +99,7 @@ const Thresold = (props) => {
           (a) => a.Element_value === "BMI"
         );
         {
-          console.log("chevffgg", coreContext.thresoldData);
+          
         }
         if (bpdata.length > 0) {
           setBmiMin(bpdata[0].bmi_low);

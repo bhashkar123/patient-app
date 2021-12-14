@@ -793,7 +793,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const thresholdData = response.data;
-        console.log("threshod datacheckin cre", thresholdData.length);
+        
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
@@ -835,12 +835,12 @@ export const CoreContextProvider = (props) => {
         }
         setThresoldData(dataSetthresold);
 
-        console.log("thresolddata111111", dataSetthresold, thresoldData);
+        
       });
   };
   const fetchadminThresold = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
-    alert(userid);
+   
 
     let data = "";
     data = {
@@ -863,8 +863,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const thresholdData = response.data;
-        console.log("sahiladmin", thresholdData);
-        console.log("threshod datacheckin cre", thresholdData.length);
+      
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
@@ -904,7 +903,7 @@ export const CoreContextProvider = (props) => {
 
         setadminthresold(dataSetthresold);
 
-        console.log("thresolddata111111", dataSetthresold, thresoldData);
+        
       });
   };
 
