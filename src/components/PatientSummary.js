@@ -2111,7 +2111,7 @@ return String(ttt[0].bg_high)
                         <Tab onClick={pause}>Blood Glucose</Tab>
                         {/* <Tab onClick={pause}>Blood GLucose Average</Tab> */}
                         <Tab onClick={pause}>Weight</Tab>
-                        <Tab onClick={pause}>Weight Average</Tab>
+                        {/* <Tab onClick={pause}>Weight Average</Tab> */}
                         <Tab onClick={pause}>Threshold</Tab>
                       </TabList>
                       <TabPanel>
@@ -2171,11 +2171,11 @@ return String(ttt[0].bg_high)
                           <Weight></Weight>
                         </div>
                       </TabPanel>
-                      <TabPanel>
+                      {/* <TabPanel>
                         <div className="card">
                           <WeightAverage />
                         </div>
-                      </TabPanel>
+                      </TabPanel> */}
                       <TabPanel>
                         <div className="card-body">
                           <Thresold></Thresold>
