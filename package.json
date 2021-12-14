@@ -18,6 +18,7 @@
     "admin-lte": "^3.1.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "caniuse-lite": "^1.0.30001286",
     "chart.js": "^2.9.4",
     "chartjs-plugin-annotation": "^1.0.2",
     "g": "^2.0.1",

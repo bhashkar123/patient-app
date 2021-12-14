@@ -682,13 +682,13 @@ export const CoreContextProvider = (props) => {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-        "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "DEVICE_WS_READING" },
-        ":v_ActiveStatus": { S: "Deactive" },
-        ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
-        ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
-      },
+          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_WS_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+          ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
+        },
       };
     }
 
@@ -793,7 +793,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const thresholdData = response.data;
-        
+
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
@@ -834,13 +834,10 @@ export const CoreContextProvider = (props) => {
           setadminthresold(dataSetthresold);
         }
         setThresoldData(dataSetthresold);
-
-        
       });
   };
   const fetchadminThresold = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
-   
 
     let data = "";
     data = {
@@ -863,7 +860,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         const thresholdData = response.data;
-      
+
         const dataSetthresold = [];
         {
           thresholdData.forEach((th, index) => {
@@ -902,8 +899,6 @@ export const CoreContextProvider = (props) => {
         }
 
         setadminthresold(dataSetthresold);
-
-        
       });
   };
 
@@ -1273,7 +1268,8 @@ export const CoreContextProvider = (props) => {
     state,
     notes
   ) => {
-    console.log(fname);
+    console.log(gender, "check gender");
+    console.log(fname, "fname");
     const token = localStorage.getItem("app_jwt");
 
     var providervalue = providerOptions.filter(
@@ -1298,14 +1294,27 @@ export const CoreContextProvider = (props) => {
     );
     let coachname = fetchNameFromId(coach, coachOptions);
 
-    let gendervalue = "Male";
-    if (gender === 1) gendervalue = "Female";
-    if (gender === 0) gendervalue = "Male";
+    let gendervalue = "";
+    console.log(gender, "check gender for number");
+    if (gender == 1) {
+      console.log("female here");
+      gendervalue = "Female";
+    }
+    if (gender == 0) {
+      console.log("male here");
+      gendervalue = "Male";
+    }
+    console.log(gendervalue, "gendervalue");
 
-    let languagevalue = "English";
-    if (language === 0) languagevalue = "English";
-    if (language === 1) languagevalue = "Spanish";
-
+    let languagevalue = "";
+    if (language == 0) {
+      languagevalue = "English";
+      console.log("english here");
+    }
+    if (language == 1) {
+      languagevalue = "Spanish";
+      console.log("spanish here");
+    }
     if (fname === undefined) fname = "";
     if (lname === undefined) lname = "";
 
@@ -1347,7 +1356,7 @@ export const CoreContextProvider = (props) => {
     axios
       .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
         headers: {
-          Accept: "application/json, text/plain, */*",
+          Accept: "application/json, text/plain, /",
           // "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
@@ -1358,6 +1367,7 @@ export const CoreContextProvider = (props) => {
 
           // updating object
           //fetchPatientListfromApi();
+          console.log(patients, "patients data here");
           let patinet = patients.filter((p) => p.userId == patientId)[0];
           if (patinet == undefined) return;
           patinet.height = height;
@@ -2500,7 +2510,6 @@ export const CoreContextProvider = (props) => {
       };
     }
 
-
     if (usertype === "doctor") {
       // data = {
       //   TableName: userTable,
@@ -2514,7 +2523,7 @@ export const CoreContextProvider = (props) => {
       //   },
       // };
 
-       data = {
+      data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression: "ActiveStatus <> :v_ActiveStatus",
@@ -2883,13 +2892,13 @@ export const CoreContextProvider = (props) => {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
-        "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
-      ExpressionAttributeValues: {
-        ":v_PK": { S: "DEVICE_WS_READING" },
-        ":v_ActiveStatus": { S: "Deactive" },
-        ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
-        ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
-      },
+          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_WS_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+          ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+          ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
+        },
       };
     }
 
