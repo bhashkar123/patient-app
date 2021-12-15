@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useContext, useState,useMemo } from "react";
+import React, { useEffect, useContext, useState, useMemo } from "react";
 import axios from "axios";
 import "../App.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,8 +8,6 @@ import Loader from "react-loader-spinner";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
-
-
 
 import {
   GenderMale,
@@ -86,9 +84,9 @@ const PatientSummary = (props) => {
   const [to, setto] = useState(new Date());
   const [slider, setslider] = useState(30);
   const [Days, setDays] = useState();
-  const [tddata,settddata]=useState([]);
-  const [pointcolor,setpointcolor]=useState([]);
-  
+  const [tddata, settddata] = useState([]);
+  const [pointcolor, setpointcolor] = useState([]);
+
   const marks = [
     {
       value: 0,
@@ -210,16 +208,17 @@ const PatientSummary = (props) => {
 
   const fetchPatient = () => {
     const patientId = atob(props.match.params.patient);
-    console.log("checking patient id from summry page",patientId)
+    console.log("checking patient id from summry page", patientId);
     const usertype = localStorage.getItem("userType");
     setUserType(localStorage.getItem("userType"));
     setUserId(localStorage.getItem("userId"));
     setUserName(localStorage.getItem("userName"));
     setpatientId(patientId);
-    
+
     setPerformedBy(userName);
-    console.log(coreContext.patient.notes,"coreContext.patient.notes")
-    coreContext.patient.notes != undefined && setNotes(coreContext.patient.notes);
+    console.log(coreContext.patient.notes, "coreContext.patient.notes");
+    coreContext.patient.notes != undefined &&
+      setNotes(coreContext.patient.notes);
     //setTaskType("Care Coordination")
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
@@ -330,10 +329,8 @@ const PatientSummary = (props) => {
     // }
   };
 
-  
   const pateientvalue = useMemo(() => fetchPatient, []);
   useEffect(pateientvalue, []);
-  
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
   useEffect(
@@ -352,28 +349,39 @@ return String(ttt[0].bg_high)
 }
   }
 
-  const checkthresoldMinvalue=()=>{
+ 
 
-    if(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose").length===0){
+  const checkthresoldMinvalue = () => {
+    if (
+      coreContext.thresoldData.filter(
+        (curr) => curr.Element_value === "Blood Glucose"
+      ).length === 0
+    ) {
       return "20";
+    } else {
+      console.log(
+        "functionvalue",
+        coreContext.thresoldData.filter(
+          (curr) => curr.Element_value === "Blood Glucose"
+        )[0].bg_high
+      );
+      return String(
+        coreContext.thresoldData.filter(
+          (curr) => curr.Element_value === "Blood Glucose"
+        )[0].bg_low
+      );
     }
-    else{
-      console.log("functionvalue",coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
-    return String(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_low)
-    }
-  }
+  };
 
   //const tvalue=checkthresoldvalue();
   const tvalue = useMemo(() => checkthresoldvalue(), []);
   //const tMinvalue=checkthresoldMinvalue();
   const tMinvalue = useMemo(() => checkthresoldMinvalue(), []);
-  
+
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
   //alert(checkthresoldvalue())
-  
 
-  
   const renderDates = () => {
     return (
       <>
@@ -406,39 +414,41 @@ return String(ttt[0].bg_high)
   const fetchbg = () => {
     coreContext.fetchBloodGlucose(localStorage.getItem("ehrId"), "patient");
   };
-  const fetchTd=()=>{
-    coreContext.fetchThresold("ADMIN_"+localStorage.getItem("ehrId"), "patient");
-  }
+  const fetchTd = () => {
+    coreContext.fetchThresold(
+      "ADMIN_" + localStorage.getItem("ehrId"),
+      "patient"
+    );
+  };
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
   useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
   useEffect(fetchTd, [coreContext.thresoldData.length]);
-  
-  
-  const fetchsliderdays =()=>{
+
+  const fetchsliderdays = () => {
     var SliderDays;
-        if (slider === 0) {
-          SliderDays = 0;
-        }
-        if (slider === 15) {
-          SliderDays = 1;
-        }
-        if (slider === 30) {
-          SliderDays = 7;
-        }
-        if (slider === 45) {
-          SliderDays = 30;
-        }
-        if (slider === 60) {
-          SliderDays = 60;
-        }
-        if (slider === 75) {
-          SliderDays = 90;
-        }
-        if (slider === 100) {
-          SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
-        }
-        return SliderDays;
-  }
+    if (slider === 0) {
+      SliderDays = 0;
+    }
+    if (slider === 15) {
+      SliderDays = 1;
+    }
+    if (slider === 30) {
+      SliderDays = 7;
+    }
+    if (slider === 45) {
+      SliderDays = 30;
+    }
+    if (slider === 60) {
+      SliderDays = 60;
+    }
+    if (slider === 75) {
+      SliderDays = 90;
+    }
+    if (slider === 100) {
+      SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
+    }
+    return SliderDays;
+  };
 
   const renderslider = () => {
     return (
@@ -456,8 +466,6 @@ return String(ttt[0].bg_high)
               //alert(new Date(new Date().setDate(from.getDate() -slider)));
               //alert(new Date())
               //setto(new Date())
-              
-              
             }}
           />
           {/* {console.log("check slider value", slider)} */}
@@ -465,39 +473,47 @@ return String(ttt[0].bg_high)
       </>
     );
   };
-  useEffect(()=>{
-    setfrom(new Date(new Date().setDate(new Date().getDate() -fetchsliderdays())));
-  },[slider])
-  
+  useEffect(() => {
+    setfrom(
+      new Date(new Date().setDate(new Date().getDate() - fetchsliderdays()))
+    );
+  }, [slider]);
+
   const getbpdata = (index) => {
     if (coreContext.bloodpressureData.length == 0) {
-      return (<>
-
-        <div
-          style={{
-            height: 680,
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "10px",
-            alignItems: "center",
-          }}>
-          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
-        </div>
-      </>);
+      return (
+        <>
+          <div
+            style={{
+              height: 680,
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "10px",
+              alignItems: "center",
+            }}>
+            <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+          </div>
+        </>
+      );
     }
-    console.log(coreContext.bloodpressureData[0].UserName,"coreContext.bloodpressureData[0].UserName")
+    console.log(
+      coreContext.bloodpressureData[0].UserName,
+      "coreContext.bloodpressureData[0].UserName"
+    );
     if (
       coreContext.bloodpressureData.length > 0 &&
-      coreContext.bloodpressureData[0].UserName !== 'undefined'
+      coreContext.bloodpressureData[0].UserName !== "undefined"
     ) {
       if (to.getDate() !== from.getDate()) {
-        console.log(coreContext.bloodpressureData, "coreContext.bloodpressureData")
+        console.log(
+          coreContext.bloodpressureData,
+          "coreContext.bloodpressureData"
+        );
         var finaldata = coreContext.bloodpressureData.filter(
           (date) => date.CreatedDate >= from && date.CreatedDate <= to
         );
       } else {
-
         var SliderDays;
         if (slider === 0) {
           SliderDays = 0;
@@ -523,15 +539,12 @@ return String(ttt[0].bg_high)
         let today = new Date();
         let bfr = new Date().setDate(today.getDate() - SliderDays);
 
-
-
         var finaldata = coreContext.bloodpressureData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
         );
       }
-      console.log("finaldaata", finaldata)
+      console.log("finaldaata", finaldata);
       {
-
       }
       let Systolic = [];
       let diastolic = [];
@@ -545,8 +558,7 @@ return String(ttt[0].bg_high)
         pulse.push(curr.Pulse);
         dates.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
       });
-      console.log(labels, "labels date")
-
+      console.log(labels, "labels date");
 
       let uniquedates = dates.filter(function (item, pos) {
         return dates.indexOf(item) == pos;
@@ -563,17 +575,13 @@ return String(ttt[0].bg_high)
       let daydfrnc;
       if (slider === 100) {
         daydfrnc = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
-
       } else {
         daydfrnc = SliderDays;
       }
 
-
       if (index === 3) {
         return (
           <>
-
-
             <table className="table table-bordered">
               <thead>
                 <tr style={{ backgroundColor: "#656565", color: "white" }}>
@@ -621,11 +629,14 @@ return String(ttt[0].bg_high)
           </>
         );
       }
-      console.log("hfh sort date", labels.sort(function (a, b) {
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
-        return new Date(b) - new Date(a);
-      }))
+      console.log(
+        "hfh sort date",
+        labels.sort(function (a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b) - new Date(a);
+        })
+      );
       if (index === 2) {
         //var labels =[1,2,3,4,5];
         // console.log(Systolic , "2 Systolic")
@@ -642,25 +653,27 @@ return String(ttt[0].bg_high)
         // pulse.push(curr.Pulse);
         // dates.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
         var sortData = finaldata.sort(function (a, b) {
-          return (new Date(Moment(a.CreatedDate).format("MM-DD-YYYY hh:mm A")) - new Date(Moment(b.CreatedDate).format("MM-DD-YYYY hh:mm A")))
-        })
-        console.log(sortData, "dataAA")
+          return (
+            new Date(Moment(a.CreatedDate).format("MM-DD-YYYY hh:mm A")) -
+            new Date(Moment(b.CreatedDate).format("MM-DD-YYYY hh:mm A"))
+          );
+        });
+        console.log(sortData, "dataAA");
 
         sortData.map((curr) => {
-
           Systolicgrap.push(Number(curr.systolic));
           diastolicgrap.push(Number(curr.diastolic));
-          labelsgrap.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
+          labelsgrap.push(
+            Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A")
+          );
           pulsegrap.push(curr.Pulse);
-        })
+        });
 
         const data = {
           // labels: labels.sort(function (a, b) {
 
           //   return new Date(a) - new Date(b);
-          labels: labelsgrap
-          ,
-
+          labels: labelsgrap,
           datasets: [
             {
               label: "Systolic",
@@ -672,7 +685,7 @@ return String(ttt[0].bg_high)
               pointStyle: "triangle",
               pointBackgroundColor: "blue",
 
-              tension: 0
+              tension: 0,
               //borderColor:["white"],
             },
             {
@@ -685,25 +698,23 @@ return String(ttt[0].bg_high)
               pointBackgroundColor: "green",
               //pointRadius: 8,
               pointStyle: "square",
-              tension: 0
+              tension: 0,
               //borderColor:["white"],
             },
             {
               label: "Pulse",
-              data: pulsegrap
-              ,
+              data: pulsegrap,
               fill: false,
               backgroundColor: ["orange"],
               borderColor: ["orange"],
-              pointStyle: 'rectRot',
+              pointStyle: "rectRot",
               pointBackgroundColor: "orange",
               pointRadius: 10,
-              tension: 0
+              tension: 0,
 
               //borderColor:["white"],
             },
           ],
-
         };
 
         return (
@@ -713,15 +724,18 @@ return String(ttt[0].bg_high)
               style={{ height: "34px" }}>
               <h6>Reading By Dates</h6>
             </nav>
-            <Line data={data} options={{
-              tooltips: {
-                mode: 'index'
-              },
-              legend: {
-                display: true,
-                position: 'right'
-              }
-            }} />
+            <Line
+              data={data}
+              options={{
+                tooltips: {
+                  mode: "index",
+                },
+                legend: {
+                  display: true,
+                  position: "right",
+                },
+              }}
+            />
           </>
         );
       }
@@ -750,19 +764,27 @@ return String(ttt[0].bg_high)
                 {/* {Math.round(
                   Math.round((finaldata.length / daydfrnc) * 10) / 10
                 )} */}
-                {console.log(daydfrnc,"daydfrncutkarsh")}
-                 {/* {
+                {console.log(daydfrnc, "daydfrncutkarsh")}
+                {/* {
                 (finaldata.length > 0 && daydfrnc != 'undefined') ?
                 Math.round(Number(
                   Math.round(Number(finaldata.length / daydfrnc) * 10) / 10)
                 ): "0"
                 } */}
-                {
-                  isNaN(Math.round(Number(
-                    Math.round(Number(finaldata.length / daydfrnc) * 10) / 10))) ? "0": Math.round(Number(
-                      Math.round(Number(finaldata.length / daydfrnc) * 10) / 10))
-                }
-
+                {isNaN(
+                  Math.round(
+                    Number(
+                      Math.round(Number(finaldata.length / daydfrnc) * 10) / 10
+                    )
+                  )
+                )
+                  ? "0"
+                  : Math.round(
+                      Number(
+                        Math.round(Number(finaldata.length / daydfrnc) * 10) /
+                          10
+                      )
+                    )}
               </div>
             </div>
             <div className="d-flex">
@@ -774,9 +796,7 @@ return String(ttt[0].bg_high)
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
                 {/* {console.log(isNaN(avgsys),"avgsys")} */}
-
-                {(isNaN(avgsys)) ? '0'
-                :Number(Math.round(avgsys)) } mm HG
+                {isNaN(avgsys) ? "0" : Number(Math.round(avgsys))} mm HG
               </div>
             </div>
             <div className="d-flex">
@@ -787,10 +807,9 @@ return String(ttt[0].bg_high)
                 Average Diastolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {console.log(avgdia,"avgdia")}
-                {(isNaN(avgdia)) ? '0 '
-                :Number(Math.round(avgsys)) }
-                 mm HG
+                {console.log(avgdia, "avgdia")}
+                {isNaN(avgdia) ? "0 " : Number(Math.round(avgsys))}
+                mm HG
               </div>
             </div>
             <div className="d-flex">
@@ -801,9 +820,8 @@ return String(ttt[0].bg_high)
                 Lowest Systolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {console.log(Systolic,"Systolic")}
-                { Systolic.length > 0 ?
-                Math.min(...Systolic) : "0"} mm HG
+                {console.log(Systolic, "Systolic")}
+                {Systolic.length > 0 ? Math.min(...Systolic) : "0"} mm HG
               </div>
             </div>
             <div className="d-flex">
@@ -814,9 +832,8 @@ return String(ttt[0].bg_high)
                 Highest Diastolic
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                { diastolic.length > 0 ?
-                Number(Math.max(...diastolic)) : "0"} mm HG
-                
+                {diastolic.length > 0 ? Number(Math.max(...diastolic)) : "0"} mm
+                HG
               </div>
             </div>
           </>
@@ -849,7 +866,7 @@ return String(ttt[0].bg_high)
 
     if (
       coreContext.bloodglucoseData.length > 0 &&
-      coreContext.bloodglucoseData[0].UserName !== 'undefined'
+      coreContext.bloodglucoseData[0].UserName !== "undefined"
     ) {
       if (slider === 100) {
         var finalbgdata = coreContext.bloodglucoseData.filter(
@@ -881,7 +898,6 @@ return String(ttt[0].bg_high)
         let today = new Date();
         let bfr = new Date().setDate(today.getDate() - SliderDays-1);
 
-
         var finalbgdata = coreContext.bloodglucoseData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
         );
@@ -896,8 +912,8 @@ return String(ttt[0].bg_high)
       let uniquedates = [];
       let sorteddates = [];
       let pcolorb = [];
-      console.log(finalbgdata, "finalbgdataglocouse")
-      // for graph 
+      console.log(finalbgdata, "finalbgdataglocouse");
+      // for graph
       // let labelsgrap = [];
       // let bgbeforegraph = [];
       // let bgaftergrapph = [];
@@ -908,15 +924,18 @@ return String(ttt[0].bg_high)
 
       // })
 
- var sortData = finalbgdata.sort(function (a, b) {
-          return (new Date(Moment(a.CreatedDate).format("MM-DD-YYYY hh:mm A")) - new Date(Moment(b.CreatedDate).format("MM-DD-YYYY hh:mm A")))
-        })
+      var sortData = finalbgdata.sort(function (a, b) {
+        return (
+          new Date(Moment(a.CreatedDate).format("MM-DD-YYYY hh:mm A")) -
+          new Date(Moment(b.CreatedDate).format("MM-DD-YYYY hh:mm A"))
+        );
+      });
 
       finalbgdata.map((curr) => {
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
-        thrshold.push(tvalue)
+        thrshold.push(tvalue);
         thresholdmin.push(tMinvalue);
         uniquedates = cdate.filter(function (item, pos) {
           return cdate.indexOf(item) == pos;
@@ -929,13 +948,15 @@ return String(ttt[0].bg_high)
         console.log(sorteddates,"check sorteddates")
         if (curr.meal === "Before Meal") {
           bgbefore.push(curr.bloodglucosemgdl);
-          if (Number(curr.bloodglucosemgdl) < Number(tvalue) && Number(curr.bloodglucosemgdl) > Number(tMinvalue)) {
-            pcolorb.push("green")
-          } else if ((Number(curr.bloodglucosemgdl) > Number(tvalue))) {
-            pcolorb.push("red")
-          }
-          else {
-            pcolorb.push("blue")
+          if (
+            Number(curr.bloodglucosemgdl) < Number(tvalue) &&
+            Number(curr.bloodglucosemgdl) > Number(tMinvalue)
+          ) {
+            pcolorb.push("green");
+          } else if (Number(curr.bloodglucosemgdl) > Number(tvalue)) {
+            pcolorb.push("red");
+          } else {
+            pcolorb.push("blue");
           }
         }
         if (curr.meal === "After Meal") {
@@ -946,7 +967,6 @@ return String(ttt[0].bg_high)
       let daydfrnc;
       if (slider === 100) {
         daydfrnc = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
-
       } else {
         daydfrnc = SliderDays;
       }
@@ -986,7 +1006,8 @@ return String(ttt[0].bg_high)
               borderColor: ["red"],
               fill: false,
               borderWidth: 6,
-            }, {
+            },
+            {
               label: "Min Value",
               data: thresholdmin,
               pointRadius: 0,
@@ -996,17 +1017,19 @@ return String(ttt[0].bg_high)
               borderColor: ["#036bfc"],
               fill: false,
               borderWidth: 3,
-            }, {
+            },
+            {
               label: "In range Boundaries",
               backgroundColor: ["green"],
-            }, {
+            },
+            {
               label: "Above range Boundaries",
               backgroundColor: ["red"],
-            }
-            , {
+            },
+            {
               label: "Below range Boundaries",
               backgroundColor: ["Blue"],
-            }
+            },
             // {
             //   label: 'Pulse',
             //   data: pulse,
@@ -1015,7 +1038,7 @@ return String(ttt[0].bg_high)
             // }
           ],
         };
-        const filterarray = []
+        const filterarray = [];
 
         return (
           <>
@@ -1028,60 +1051,62 @@ return String(ttt[0].bg_high)
               data={data}
               options={{
                 tooltips: {
-                  mode: 'index'
+                  mode: "index",
                 },
 
                 legend: {
-
                   display: true,
-                  position: 'bottom'
+                  position: "bottom",
                 },
 
                 responsive: true,
                 scales: {
-                  xAxes: [{
-                    id: 'x',
-                    //type: 'time',
-                    display: true,
-                    title: {
+                  xAxes: [
+                    {
+                      id: "x",
+                      //type: 'time',
                       display: true,
-                      text: 'Date'
+                      title: {
+                        display: true,
+                        text: "Date",
+                      },
+
+                      ticks: {
+                        // Include a dollar sign in the ticks
+                        callback: function (value, index, values) {
+                          if (
+                            filterarray.includes(
+                              Moment(value).format("YYYY-MM-DD")
+                            ) !== true
+                          ) {
+                            filterarray.push(
+                              Moment(value).format("YYYY-MM-DD")
+                            );
+                          } else {
+                            filterarray.push("0");
+                          }
+                          return filterarray[index] !== "0"
+                            ? Moment(value).format("MM-DD")
+                            : "";
+                        },
+                      },
                     },
-
-                    ticks: {
-                      // Include a dollar sign in the ticks
-                      callback: function (value, index, values) {
-
-                        if (filterarray.includes(Moment(value).format('YYYY-MM-DD')) !== true) {
-                          filterarray.push(Moment(value).format('YYYY-MM-DD'))
-                        }
-                        else {
-                          filterarray.push("0")
-                        }
-                        return filterarray[index] !== "0" ? Moment(value).format('MM-DD') : "";
-                      }
-                    }
-
-
-
-                  }],
-
+                  ],
                 },
                 plugins: {
                   autocolors: false,
                   annotation: {
                     annotations: {
                       line1: {
-                        type: 'line',
+                        type: "line",
                         yMin: 60,
                         yMax: 60,
-                        borderColor: 'rgb(255, 99, 132)',
+                        borderColor: "rgb(255, 99, 132)",
                         borderWidth: 2,
-                      }
-                    }
-                  }
-                }
-
+                      },
+                    },
+                  },
+                },
               }}
             />
           </>
@@ -1171,7 +1196,6 @@ return String(ttt[0].bg_high)
                     if (
                       Number(Moment(curr.CreatedDate).format("HH")) > 15 &&
                       Number(Moment(curr.CreatedDate).format("HH")) < 21
-
                     ) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.eveningbm = curr.bloodglucosemgdl;
@@ -1239,7 +1263,6 @@ return String(ttt[0].bg_high)
           <div style={{ height: 680, width: "100%" }}>
             {/* {coreContext.bloodglucoseData} */}
 
-
             <div className="d-flex">
               <div
                 className="p-2 flex-fill finaldashboard1 mb-1 text-light"
@@ -1259,12 +1282,11 @@ return String(ttt[0].bg_high)
                 Average Reading per day
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {
-                (finalbgdata.length > 0 || daydfrnc == "undefined") ?
-                Math.round(
-                  Math.round((finalbgdata.length / daydfrnc) * 10) / 10
-                ): "0"
-                }
+                {finalbgdata.length > 0 || daydfrnc == "undefined"
+                  ? Math.round(
+                      Math.round((finalbgdata.length / daydfrnc) * 10) / 10
+                    )
+                  : "0"}
               </div>
             </div>
             <div className="d-flex">
@@ -1275,10 +1297,8 @@ return String(ttt[0].bg_high)
                 Average Glucose Level
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {console.log(avgbg,"avgbg")}
-                {
-                  isNaN(avgbg)? '0': 
-                Number(Math.round(avgbg))} mg/dl
+                {console.log(avgbg, "avgbg")}
+                {isNaN(avgbg) ? "0" : Number(Math.round(avgbg))} mg/dl
               </div>
             </div>
             {/* <div className="d-flex">
@@ -1293,9 +1313,8 @@ return String(ttt[0].bg_high)
                 Lowest Glucose Level
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {console.log(bg,"bg")}
-                {bg.length > 0?
-                Number(Math.min(...bg)) : '0'} mg/dl
+                {console.log(bg, "bg")}
+                {bg.length > 0 ? Number(Math.min(...bg)) : "0"} mg/dl
               </div>
             </div>
             <div className="d-flex">
@@ -1306,8 +1325,7 @@ return String(ttt[0].bg_high)
                 Highest Glucose Level
               </div>
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
-                {bg.length > 0 ?
-                Math.max(...bg) : '0'} mg/dl
+                {bg.length > 0 ? Math.max(...bg) : "0"} mg/dl
               </div>
             </div>
           </div>
@@ -1341,11 +1359,9 @@ return String(ttt[0].bg_high)
     autoStart: true,
   });
 
-
   const onBGChange = (e) => {
     setBgMin(e.from);
     setBgMax(e.to);
-    
   };
 
   const onBMIChange = (e) => {
@@ -1487,7 +1503,7 @@ return String(ttt[0].bg_high)
     setTaskType(tl.taskType);
     setPerformedBy(tl.performedBy);
     setDate(new Date(tl.performedOn));
-    
+
     //setTaskType(tl.taskType)
     //alert(converter(3660))
     setTlValue(converter(tl.timeAmount));
@@ -1598,7 +1614,7 @@ return String(ttt[0].bg_high)
             justifyContent: "center",
             marginTop: "10px",
             alignItems: "center",
-        }}>
+          }}>
           <h6>no data found</h6>
           {/* <Loader type="Circles" color="#00BFFF" height={100} width={100} /> */}
         </div>
@@ -1606,7 +1622,6 @@ return String(ttt[0].bg_high)
     }
 
     if (coreContext.deviceData.length > 0) {
-      
     }
     {
       return coreContext.deviceData.map((deviceData, index) => {
@@ -1729,23 +1744,22 @@ return String(ttt[0].bg_high)
   };
 
   const renderTopDetails = () => {
-    if(coreContext.patients.length===0){
-      return(
+    if (coreContext.patients.length === 0) {
+      return (
         <div
-        style={{
-          height: 50,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "10px",
-          alignItems: "center",
-        }}>
-        <Loader type="Circles" color="#00BFFF" height={50} width={50} />
-      </div>
-      )
-      
+          style={{
+            height: 50,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={50} width={50} />
+        </div>
+      );
     }
-    if (coreContext.patients.length>0)
+    if (coreContext.patients.length > 0)
       return (
         <div className="row">
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
@@ -1768,7 +1782,10 @@ return String(ttt[0].bg_high)
         </div>
       );
   };
-  const rendertop=React.useMemo(()=>renderTopDetails(),[coreContext.patients.length])
+  const rendertop = React.useMemo(
+    () => renderTopDetails(),
+    [coreContext.patients.length]
+  );
 
   const renderAddModifyFlags = () => {
     if (coreContext.patient)
@@ -1787,12 +1804,12 @@ return String(ttt[0].bg_high)
         <div className="card">
           <div className="card-body">
             {" "}
-            <label for="exampleFormControlTextarea1">Notes for Patient</label>
+            <label for="exampleFormControlTextarea1">Internal Notes:</label>
             <textarea
               class="form-control"
               rows="3"
               placeholder="Enter notes"
-              value={notes != 'undefined' ? notes : ""}
+              value={notes != "undefined" ? notes : ""}
               onChange={(e) => setNotes(e.target.value)}
             />{" "}
             <button
@@ -1862,11 +1879,11 @@ return String(ttt[0].bg_high)
               <MDBCardTitle>Patient Information</MDBCardTitle>
               <MDBCardText>
                 <div>
-                  <b style={{ paddingRight: "10px" }}>Height:</b>
+                  <b style={{ paddingRight: "10px" }}>Height (Inches) :</b>
                   {coreContext.patient.height}
                 </div>
                 <div>
-                  <b style={{ paddingRight: "10px" }}>Weight:</b>
+                  <b style={{ paddingRight: "10px" }}>Weight (Pounds):</b>
                   {coreContext.patient.Weight}
                 </div>
                 <div>
@@ -1901,12 +1918,9 @@ return String(ttt[0].bg_high)
   };
 
   const [timelogIdCounter, settimelogIdCounter] = useState(1);
-  const calctime = () => {
-    
-  };
+  const calctime = () => {};
 
   const handleSelect = (index) => {
-    
     let _timerLog = {};
     if (index == 7) {
       //       setstartDT(new Date());
@@ -1917,7 +1931,6 @@ return String(ttt[0].bg_high)
       fetchtotaltime();
       //coreContext.fetchTimeLog();
       {
-        
       }
     }
 
@@ -2009,7 +2022,6 @@ return String(ttt[0].bg_high)
 
   const handleLeaveTab = (index) => {
     if (index == 7) {
-      
     }
   };
 
@@ -2152,7 +2164,6 @@ return String(ttt[0].bg_high)
                             {renderDates()}
                             {renderslider()}
                             {renderBloodGlucose(1)}
-                            
                           </TabPanel>
                           <TabPanel>
                             {renderDates()}
@@ -2165,9 +2176,8 @@ return String(ttt[0].bg_high)
                             {renderBloodGlucose(2)}
                           </TabPanel>
                         </Tabs>
-                        
                       </TabPanel>
-                      
+
                       <TabPanel>
                         <div className="card-body">
                           <Weight></Weight>
@@ -2440,7 +2450,6 @@ return String(ttt[0].bg_high)
                           placeholderText="Enter a date"
                           dateFormat="MM/dd/yyyy hh:mm:ss aa"
                         />
-                        
                       </div>
                       <div className="col-md-6">
                         <label for="appt">Enter Total Time:</label>
@@ -2515,10 +2524,7 @@ return String(ttt[0].bg_high)
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        
-                        {renderDeviceData()}
-                      </tbody>
+                      <tbody>{renderDeviceData()}</tbody>
                     </table>
                   </div>
                   <div className="col-md-4">
@@ -2773,7 +2779,6 @@ return String(ttt[0].bg_high)
                             placeholderText="Enter a date"
                             dateFormat="MM/dd/yyyy hh:mm:ss aa"
                           />
-                          
                         </div>
                         <div className="col-md-6">
                           <label for="appt">Enter Total Time:</label>
@@ -2815,7 +2820,6 @@ return String(ttt[0].bg_high)
       </div>
       <div onClick={() => setShowNotesTextBox(false)} className="card-header">
         {renderTabs()}
-         
       </div>
     </div>
   );
