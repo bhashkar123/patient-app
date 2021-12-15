@@ -537,7 +537,7 @@ return String(ttt[0].bg_high)
           SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
         }
         let today = new Date();
-        let bfr = new Date().setDate(today.getDate() - SliderDays);
+        let bfr = new Date().setDate(today.getDate() - SliderDays-1);
 
         var finaldata = coreContext.bloodpressureData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
