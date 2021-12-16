@@ -337,26 +337,19 @@ const PatientSummary = (props) => {
     () => setNotes(coreContext.patient.notes),
     [coreContext.patient.notes]
   );
-  const checkthresoldvalue = () => {
-    if (
-      coreContext.thresoldData.filter(
-        (curr) => curr.Element_value === "Blood Glucose"
-      ).length === 0
-    ) {
-      return "90";
-    } else {
-      let ttt = coreContext.thresoldData.filter(
-        (curr) => curr.Element_value === "Blood Glucose"
-      );
-      console.log(
-        "functionvalue",
-        coreContext.thresoldData.filter(
-          (curr) => curr.Element_value === "Blood Glucose"
-        )[0].bg_high
-      );
-      return String(ttt[0].bg_high);
-    }
-  };
+const checkthresoldvalue=()=>{
+
+if(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose").length===0){
+  return "150";
+}
+else {
+  let ttt=coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")
+  console.log("functionvalue",coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
+return String(ttt[0].bg_high)
+}
+  }
+
+ 
 
   const checkthresoldMinvalue = () => {
     if (
@@ -381,9 +374,9 @@ const PatientSummary = (props) => {
   };
 
   //const tvalue=checkthresoldvalue();
-  const tvalue = useMemo(() => checkthresoldvalue(), []);
+  const tvalue = useMemo(() => checkthresoldvalue(), [coreContext.thresoldData.length]);
   //const tMinvalue=checkthresoldMinvalue();
-  const tMinvalue = useMemo(() => checkthresoldMinvalue(), []);
+  const tMinvalue = useMemo(() => checkthresoldMinvalue(), [coreContext.thresoldData.length]);
 
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
@@ -544,7 +537,7 @@ const PatientSummary = (props) => {
           SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
         }
         let today = new Date();
-        let bfr = new Date().setDate(today.getDate() - SliderDays);
+        let bfr = new Date().setDate(today.getDate() - SliderDays-1);
 
         var finaldata = coreContext.bloodpressureData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
@@ -903,7 +896,7 @@ const PatientSummary = (props) => {
           SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
         }
         let today = new Date();
-        let bfr = new Date().setDate(today.getDate() - SliderDays);
+        let bfr = new Date().setDate(today.getDate() - SliderDays-1);
 
         var finalbgdata = coreContext.bloodglucoseData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
@@ -952,6 +945,7 @@ const PatientSummary = (props) => {
           // to get a value that is either negative, positive, or zero.
           return new Date(b) - new Date(a);
         });
+        console.log(sorteddates,"check sorteddates")
         if (curr.meal === "Before Meal") {
           bgbefore.push(curr.bloodglucosemgdl);
           if (
@@ -1157,7 +1151,7 @@ const PatientSummary = (props) => {
                     (item) =>
                       Moment(item.CreatedDate).format("MM-DD-YYYY") === curr
                   );
-
+                        console.log("fileterd data",filtereddarta)
                   let dataBMAM = {
                     morningbm: "",
                     morningam: "",
@@ -1180,14 +1174,11 @@ const PatientSummary = (props) => {
                     if (Number(Moment(curr.CreatedDate).format("HH")) < 10) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.morningbm = curr.bloodglucosemgdl;
-                        dataBMAM.morningbmtime = Moment(
-                          curr.CreatedDate
-                        ).format("HH:MM A");
+                        dataBMAM.morningbmtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        console.log("check date from app",Moment(curr.CreatedDate).format("hh:mm"))
                       } else {
                         dataBMAM.morningam = curr.bloodglucosemgdl;
-                        dataBMAM.morningamtime = Moment(
-                          curr.CreatedDate
-                        ).format("HH:MM A");
+                        dataBMAM.morningamtime = Moment(curr.CreatedDate).format("hh:mm A")
                       }
                     }
                     if (
@@ -1196,14 +1187,10 @@ const PatientSummary = (props) => {
                     ) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.noonbm = curr.bloodglucosemgdl;
-                        dataBMAM.noonbmtime = Moment(curr.CreatedDate).format(
-                          "HH:MM A"
-                        );
+                        dataBMAM.noonbmtime = Moment(curr.CreatedDate).format("hh:mm A")
                       } else {
                         dataBMAM.noonam = curr.bloodglucosemgdl;
-                        dataBMAM.noonamtime = Moment(curr.CreatedDate).format(
-                          "HH:MM A"
-                        );
+                        dataBMAM.noonamtime = Moment(curr.CreatedDate).format("hh:mm A")
                       }
                     }
                     if (
@@ -1212,27 +1199,19 @@ const PatientSummary = (props) => {
                     ) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.eveningbm = curr.bloodglucosemgdl;
-                        dataBMAM.eveningbmtime = Moment(
-                          curr.CreatedDate
-                        ).format("HH:MM A");
+                        dataBMAM.eveningbmtime = Moment(curr.CreatedDate).format("hh:mm A")
                       } else {
                         dataBMAM.eveningam = curr.bloodglucosemgdl;
-                        dataBMAM.eveningamtime = Moment(
-                          curr.CreatedDate
-                        ).format("HH:MM A");
+                        dataBMAM.eveningamtime = Moment(curr.CreatedDate).format("hh:mm A")
                       }
                     }
                     if (Number(Moment(curr.CreatedDate).format("HH")) >= 21) {
                       if (curr.meal === "Before Meal") {
                         dataBMAM.nightbm = curr.bloodglucosemgdl;
-                        dataBMAM.nightbmtime = Moment(curr.CreatedDate).format(
-                          "HH:MM A"
-                        );
+                        dataBMAM.nightbmtime = Moment(curr.CreatedDate).format("hh:mm A")
                       } else {
                         dataBMAM.nightam = curr.bloodglucosemgdl;
-                        dataBMAM.nightamtime = Moment(curr.CreatedDate).format(
-                          "HH:MM A"
-                        );
+                        dataBMAM.nightamtime = Moment(curr.CreatedDate).format("hh:mm A")
                       }
                     }
                   });
@@ -1241,124 +1220,14 @@ const PatientSummary = (props) => {
                     <>
                       <tr>
                         <td rowspan="2">{curr}</td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.morningbm < 150 &&
-                              dataBMAM.morningbm !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.morningbm !== "" &&
-                                  dataBMAM.morningbm > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          <p>
-                            {dataBMAM.morningbm}
-                            <br />
-                            {dataBMAM.morningbmtime}
-                          </p>
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.morningam < 150 &&
-                              dataBMAM.morningam !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.morningam !== "" &&
-                                  dataBMAM.morningam > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.morningam}
-                          <br />
-                          {dataBMAM.noonamtime}
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.noonbm < 150 && dataBMAM.noonbm !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.noonbm !== "" &&
-                                  dataBMAM.noonbm > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.noonbm}
-                          <br />
-                          {dataBMAM.noonbmtime}
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.noonam < 150 && dataBMAM.noonam !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.noonam !== "" &&
-                                  dataBMAM.noonam > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.noonam}
-                          <br />
-                          {dataBMAM.noonamtime}
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.eveningbm < 150 &&
-                              dataBMAM.eveningbm !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.eveningbm !== "" &&
-                                  dataBMAM.eveningbm > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.eveningbm}
-                          <br />
-                          {dataBMAM.eveningbmtime}
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.eveningam < 150 &&
-                              dataBMAM.eveningam !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.eveningam !== "" &&
-                                  dataBMAM.eveningam > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.eveningam}
-                          <br />
-                          {dataBMAM.eveningamtime}
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.nightbm < 150 && dataBMAM.nightbm !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.nightbm !== "" &&
-                                  dataBMAM.nightbm > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.nightbm}
-                          <br />
-                          {dataBMAM.nightbmtime}
-                        </td>
-                        <td
-                          style={{
-                            backgroundColor:
-                              dataBMAM.nightam < 150 && dataBMAM.nightam !== ""
-                                ? "rgba(0, 255, 0, 0.15)"
-                                : dataBMAM.nightam !== "" &&
-                                  dataBMAM.nightam > 150
-                                ? "#f6a683"
-                                : "grey",
-                          }}>
-                          {dataBMAM.nightam}
-                          <br />
-                          {dataBMAM.nightamtime}
-                        </td>
+                        <td style={{ backgroundColor: (dataBMAM.morningbm < tvalue && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > tvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
+                        <td style={{ backgroundColor: (dataBMAM.morningam < tvalue && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonbm < tvalue && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonam < tvalue && dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningbm < tvalue && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningam < tvalue && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightbm < tvalue && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightam < tvalue && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
                       </tr>
                       <tr>
                         <td></td>
