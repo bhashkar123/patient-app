@@ -374,9 +374,9 @@ return String(ttt[0].bg_high)
   };
 
   //const tvalue=checkthresoldvalue();
-  const tvalue = useMemo(() => checkthresoldvalue(), []);
+  const tvalue = useMemo(() => checkthresoldvalue(), [coreContext.thresoldData.length]);
   //const tMinvalue=checkthresoldMinvalue();
-  const tMinvalue = useMemo(() => checkthresoldMinvalue(), []);
+  const tMinvalue = useMemo(() => checkthresoldMinvalue(), [coreContext.thresoldData.length]);
 
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
