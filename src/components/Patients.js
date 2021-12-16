@@ -157,16 +157,24 @@ const Patients = (props) => {
       console.log(coreContext.providerOptions,"coreContext.providerOptions")
       
 
-      coreContext.providerOptions.filter((name)=>{
-        console.log(name.name , "namefilter")
-        if(name.name.includes(patient.ProviderName)){
-          setProvider(patient.ProviderName)
-        }
-        else{
-          setProvider("");
-        }
+      // coreContext.providerOptions.filter((name)=>{
+      //   console.log(name.name , "namefilter")
+      //   if(name.name.includes(patient.ProviderName)){
+      //     setProvider(patient.ProviderName)
+      //   }
+      //   else{
+      //     setProvider("");
+      //   }
         
-      })
+      // })
+      setProvider(
+        coreContext.providerOptions.filter((name) =>
+          name.name.includes(patient.ProviderName)
+        )[0].value !== undefined ?  coreContext.providerOptions.filter((name) =>
+        name.name.includes(patient.ProviderName)
+      )[0].value : ""
+      );
+    
 
       // setProvider(
       //   coreContext.providerOptions.filter((name) =>
