@@ -199,7 +199,7 @@ const Thresold = (props) => {
 
   useEffect(fetchThresold, []);
   
-  useEffect(fetchThresold,[coreContext.thresoldData.length])
+  useEffect(fetchThresold,[JSON.stringify(coreContext.thresoldData)])
 
   const onBGChange = (e) => {
     setBgMin(e.from);
@@ -285,7 +285,7 @@ const Thresold = (props) => {
                       bgMin,
                       userType
                     );
-                   
+                    
                   }}
                   className="btn btn-primary mb-2 float-right">
                   {" "}

@@ -328,6 +328,9 @@ const PatientSummary = (props) => {
     //   }
     // }
   };
+  const fetchtime =()=>{
+    coreContext.fetchTimeLog("PATIENT_" + patientId)
+  }
 
   const pateientvalue = useMemo(() => fetchPatient, []);
   useEffect(pateientvalue, []);
@@ -374,9 +377,9 @@ return String(ttt[0].bg_high)
   };
 
   //const tvalue=checkthresoldvalue();
-  const tvalue = useMemo(() => checkthresoldvalue(), [coreContext.thresoldData.length]);
+  const tvalue = useMemo(() => checkthresoldvalue(), [JSON.stringify(coreContext.thresoldData)]);
   //const tMinvalue=checkthresoldMinvalue();
-  const tMinvalue = useMemo(() => checkthresoldMinvalue(), [coreContext.thresoldData.length]);
+  const tMinvalue = useMemo(() => checkthresoldMinvalue(), [JSON.stringify(coreContext.thresoldData)]);
 
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
@@ -422,7 +425,7 @@ return String(ttt[0].bg_high)
   };
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
   useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
-  useEffect(fetchTd, [coreContext.thresoldData.length]);
+  useEffect(fetchTd, [JSON.stringify(coreContext.thresoldData)]);
 
   const fetchsliderdays = () => {
     var SliderDays;
@@ -1390,8 +1393,7 @@ return String(ttt[0].bg_high)
     sett1("");
     setShowModal(false);
     coreContext.fetchTimeLog("PATIENT_" + patientId);
-    coreContext.fetchTimeLog("PATIENT_" + patientId);
-    coreContext.fetchTimeLog("PATIENT_" + patientId);
+    
     setTlValue("00:00:00");
   };
   const columns = [
@@ -1492,9 +1494,10 @@ return String(ttt[0].bg_high)
   const deleteTimeLog = (tl) => {
     coreContext.DeleteTimeLog(tl);
     coreContext.fetchTimeLog("PATIENT_" + patientId);
-    renderTimelogs();
-    fetchtotaltime();
+    // renderTimelogs();
+    // fetchtotaltime();
   };
+
 
   const setCurrentTL = (tl) => {
     setShowModal(true);
@@ -1593,7 +1596,10 @@ return String(ttt[0].bg_high)
     }
   };
 
-  useEffect(renderTimelogs, [coreContext.timeLogData.length]);
+  useEffect(renderTimelogs, [JSON.stringify(coreContext.timeLogData)]);
+  useEffect(fetchtime, [JSON.stringify(coreContext.timeLogData)]);
+
+  
   // const deleteDevice = (patient) => {
   //   alert('Hi how are you');
   //coreContext.DeletePatient(patient.userId)
@@ -2122,7 +2128,7 @@ return String(ttt[0].bg_high)
                         <Tab onClick={pause}>Blood Pressure</Tab>
                         {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
                         {/* <Tab onClick={pause}>Blood Pressure Average</Tab> */}
-                        <Tab onClick={pause}>Blood Glucose</Tab>
+                        <Tab onClick={()=>{pause();fetchTd()}}>Blood Glucose</Tab>
                         {/* <Tab onClick={pause}>Blood GLucose Average</Tab> */}
                         <Tab onClick={pause}>Weight</Tab>
                         {/* <Tab onClick={pause}>Weight Average</Tab> */}
