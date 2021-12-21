@@ -86,6 +86,7 @@ const PatientSummary = (props) => {
   const [Days, setDays] = useState();
   const [tddata, settddata] = useState([]);
   const [pointcolor, setpointcolor] = useState([]);
+  const [mainThresold,setMainThresold]=useState();
 
   const marks = [
     {
@@ -147,6 +148,7 @@ const PatientSummary = (props) => {
   };
   const myst3 = {
     backgroundColor: "orange",
+
     marginRight: "20px",
     width: "50px",
   };
@@ -343,7 +345,7 @@ const PatientSummary = (props) => {
 const checkthresoldvalue=()=>{
 
 if(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose").length===0){
-  return "150";
+  return "0";
 }
 else {
   let ttt=coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")
@@ -351,6 +353,17 @@ else {
 return String(ttt[0].bg_high)
 }
   }
+  const checkadminthresoldvalue=()=>{
+
+    if(coreContext.adminthresold.filter((curr)=>curr.Element_value==="Blood Glucose").length===0){
+      return "150";
+    }
+    else {
+      let ttt=coreContext.adminthresold.filter((curr)=>curr.Element_value==="Blood Glucose")
+      
+    return String(ttt[0].bg_high)
+    }
+      }
 
  
 
@@ -360,7 +373,7 @@ return String(ttt[0].bg_high)
         (curr) => curr.Element_value === "Blood Glucose"
       ).length === 0
     ) {
-      return "20";
+      return "0";
     } else {
       console.log(
         "functionvalue",
@@ -375,11 +388,35 @@ return String(ttt[0].bg_high)
       );
     }
   };
+  const checkadminthresoldMinvalue = () => {
+    if (
+      coreContext.adminthresold.filter(
+        (curr) => curr.Element_value === "Blood Glucose"
+      ).length === 0
+    ) {
+      return "20";
+    } else {
+      console.log(
+        "functionvalue",
+        coreContext.adminthresold.filter(
+          (curr) => curr.Element_value === "Blood Glucose"
+        )[0].bg_high
+      );
+      return String(
+        coreContext.adminthresold.filter(
+          (curr) => curr.Element_value === "Blood Glucose"
+        )[0].bg_low
+      );
+    }
+  };
 
   //const tvalue=checkthresoldvalue();
   const tvalue = useMemo(() => checkthresoldvalue(), [JSON.stringify(coreContext.thresoldData)]);
+  const tadminvalue=useMemo(()=>checkadminthresoldvalue(),[JSON.stringify(coreContext.adminthresold)])
+  console.log(tadminvalue,"patiensummery page")
   //const tMinvalue=checkthresoldMinvalue();
   const tMinvalue = useMemo(() => checkthresoldMinvalue(), [JSON.stringify(coreContext.thresoldData)]);
+  const tadminMinvalue = useMemo(() => checkadminthresoldMinvalue(), [JSON.stringify(coreContext.adminthresold)]);
 
   //alert(tvalue)
   //alert(alert(checkthresoldvalue()))
@@ -423,10 +460,14 @@ return String(ttt[0].bg_high)
       "patient"
     );
   };
+  const fetchadmintd=()=>{
+    coreContext.fetchadminThresold("ADMIN_"+localStorage.getItem("userId"), "admin")
+  }
   useEffect(fetchbp, [coreContext.bloodpressureData.length]);
   useEffect(fetchbg, [coreContext.bloodglucoseData.length]);
   useEffect(fetchTd, [JSON.stringify(coreContext.thresoldData)]);
-
+  useEffect(fetchadmintd, [JSON.stringify(coreContext.adminthresold)]);
+console.log("check admin thresold from patient",coreContext.thresoldData)
   const fetchsliderdays = () => {
     var SliderDays;
     if (slider === 0) {
@@ -938,8 +979,12 @@ return String(ttt[0].bg_high)
         bg.push(Number(curr.bloodglucosemgdl));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         cdate.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
-        thrshold.push(tvalue);
-        thresholdmin.push(tMinvalue);
+        {
+          (tvalue!=="0")?thrshold.push(tvalue):thrshold.push(tadminvalue);
+          (tMinvalue!=="0")?thresholdmin.push(tMinvalue):thresholdmin.push(tadminMinvalue);
+        }
+        
+        
         uniquedates = cdate.filter(function (item, pos) {
           return cdate.indexOf(item) == pos;
         });
@@ -952,11 +997,11 @@ return String(ttt[0].bg_high)
         if (curr.meal === "Before Meal") {
           bgbefore.push(curr.bloodglucosemgdl);
           if (
-            Number(curr.bloodglucosemgdl) < Number(tvalue) &&
-            Number(curr.bloodglucosemgdl) > Number(tMinvalue)
+            Number(curr.bloodglucosemgdl) < Number((tvalue!=="0")?tvalue:tadminvalue) &&
+            Number(curr.bloodglucosemgdl) > Number((tMinvalue!=="0")?tMinvalue:tadminMinvalue)
           ) {
             pcolorb.push("green");
-          } else if (Number(curr.bloodglucosemgdl) > Number(tvalue)) {
+          } else if (Number(curr.bloodglucosemgdl) > Number((tvalue!=="0")?tvalue:tadminvalue)) {
             pcolorb.push("red");
           } else {
             pcolorb.push("blue");
@@ -1223,14 +1268,14 @@ return String(ttt[0].bg_high)
                     <>
                       <tr>
                         <td rowspan="2">{curr}</td>
-                        <td style={{ backgroundColor: (dataBMAM.morningbm < tvalue && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > tvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
-                        <td style={{ backgroundColor: (dataBMAM.morningam < tvalue && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonbm < tvalue && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonam < tvalue && dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningbm < tvalue && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningam < tvalue && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightbm < tvalue && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightam < tvalue && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.morningbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
+                        <td style={{ backgroundColor: (dataBMAM.morningam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
                       </tr>
                       <tr>
                         <td></td>
@@ -1600,9 +1645,7 @@ return String(ttt[0].bg_high)
   useEffect(fetchtime, [JSON.stringify(coreContext.timeLogData)]);
 
   
-  // const deleteDevice = (patient) => {
-  //   alert('Hi how are you');
-  //coreContext.DeletePatient(patient.userId)
+  
   //  }
 
   const deleteDevice = (deviceData) => {
@@ -2128,7 +2171,7 @@ return String(ttt[0].bg_high)
                         <Tab onClick={pause}>Blood Pressure</Tab>
                         {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
                         {/* <Tab onClick={pause}>Blood Pressure Average</Tab> */}
-                        <Tab onClick={()=>{pause();fetchTd()}}>Blood Glucose</Tab>
+                        <Tab onClick={()=>{pause();fetchTd();fetchadmintd()}}>Blood Glucose</Tab>
                         {/* <Tab onClick={pause}>Blood GLucose Average</Tab> */}
                         <Tab onClick={pause}>Weight</Tab>
                         {/* <Tab onClick={pause}>Weight Average</Tab> */}

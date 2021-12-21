@@ -75,6 +75,7 @@ const Thresold = (props) => {
     //const memoizedValue = useMemo(() => coreContext.fetchThresold(patientId, userType), [corecontext.thresoldData]);
 
     setThData(coreContext.thresoldData);
+    console.log("check admin thresold from patient",coreContext.thresoldData,coreContext.adminthresold)
     
     const setdata=(data)=>
     {
