@@ -375,12 +375,7 @@ return String(ttt[0].bg_high)
     ) {
       return "0";
     } else {
-      console.log(
-        "functionvalue",
-        coreContext.thresoldData.filter(
-          (curr) => curr.Element_value === "Blood Glucose"
-        )[0].bg_high
-      );
+      
       return String(
         coreContext.thresoldData.filter(
           (curr) => curr.Element_value === "Blood Glucose"
@@ -409,11 +404,84 @@ return String(ttt[0].bg_high)
       );
     }
   };
+  const checkadmindiastolic = (type) => {
+    if(type==="SYSTOLIC"){
+      let option="systolic_high"
+    }else{
+      let option ="diastolic_high"
+
+    }
+
+    if (
+      coreContext.adminthresold.filter(
+        (curr) => curr.Element_value === type
+      ).length === 0
+    ) {
+      return "20";
+    } else {
+      if(type==="SYSTOLIC"){
+        
+        return String(
+          coreContext.adminthresold.filter(
+            (curr) => curr.Element_value === type
+          )[0].systolic_high
+        );
+      }
+      if(type==="DIASTOLIC"){
+        return String(
+          coreContext.adminthresold.filter(
+            (curr) => curr.Element_value === type
+          )[0].diastolic_high
+        );
+      }
+     
+      
+    }
+  };
+  const checkdiastolic = (type) => {
+    if(type==="SYSTOLIC"){
+      let option="systolic_high"
+    }else{
+      let option ="diastolic_high"
+
+    }
+
+    if (
+      coreContext.thresoldData.filter(
+        (curr) => curr.Element_value === type
+      ).length === 0
+    ) {
+      return "20";
+    } else {
+      if(type==="SYSTOLIC"){
+        
+        return String(
+          coreContext.thresoldData.filter(
+            (curr) => curr.Element_value === type
+          )[0].systolic_high
+        );
+      }
+      if(type==="DIASTOLIC"){
+        return String(
+          coreContext.thresoldData.filter(
+            (curr) => curr.Element_value === type
+          )[0].diastolic_high
+        );
+      }
+     
+      
+    }
+  };
 
   //const tvalue=checkthresoldvalue();
   const tvalue = useMemo(() => checkthresoldvalue(), [JSON.stringify(coreContext.thresoldData)]);
   const tadminvalue=useMemo(()=>checkadminthresoldvalue(),[JSON.stringify(coreContext.adminthresold)])
-  console.log(tadminvalue,"patiensummery page")
+  const tadmindiastolic=useMemo(()=>checkadmindiastolic("DIASTOLIC"),[JSON.stringify(coreContext.adminthresold)])
+  const tadminsystolic=useMemo(()=>checkadmindiastolic("SYSTOLIC"),[JSON.stringify(coreContext.adminthresold)])
+  const tsystolic=useMemo(()=>checkdiastolic("SYSTOLIC"),[JSON.stringify(coreContext.thresoldData)])
+  const tdiastolic=useMemo(()=>checkdiastolic("DIASTOLIC"),[JSON.stringify(coreContext.thresoldData)])
+
+  console.log(tadminvalue,tadminsystolic,"patiensummery page")
   //const tMinvalue=checkthresoldMinvalue();
   const tMinvalue = useMemo(() => checkthresoldMinvalue(), [JSON.stringify(coreContext.thresoldData)]);
   const tadminMinvalue = useMemo(() => checkadminthresoldMinvalue(), [JSON.stringify(coreContext.adminthresold)]);
@@ -595,11 +663,13 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       let labels = [];
       let pulse = [];
       let dates = [];
+      
       finaldata.map((curr) => {
         Systolic.push(Number(curr.systolic));
         diastolic.push(Number(curr.diastolic));
         labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
         pulse.push(curr.Pulse);
+        
         dates.push(Moment(curr.CreatedDate).format("MM-DD-YYYY"));
       });
       console.log(labels, "labels date");
@@ -691,6 +761,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         let diastolicgrap = [];
         let labelsgrap = [];
         let pulsegrap = [];
+        let thresolddiastolic=[];
+      let thresoldsystolic=[];
         // Systolic.push(Number(curr.systolic));
         // diastolic.push(Number(curr.diastolic));
         // labels.push(Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A"));
@@ -707,6 +779,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         sortData.map((curr) => {
           Systolicgrap.push(Number(curr.systolic));
           diastolicgrap.push(Number(curr.diastolic));
+        {(tdiastolic==="0")? thresolddiastolic.push(tadmindiastolic): thresolddiastolic.push(tdiastolic)} 
+          {(tsystolic==="0")?thresoldsystolic.push(tadminsystolic):thresoldsystolic.push(tsystolic)}
           labelsgrap.push(
             Moment(curr.CreatedDate).format("MM-DD-YYYY hh:mm A")
           );
@@ -757,6 +831,28 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
               tension: 0,
 
               //borderColor:["white"],
+            },
+            {
+              label: "Max Diastolic",
+              data: thresolddiastolic,
+              pointRadius: 0,
+              //pointBackgroundColor:"white",
+
+              backgroundColor: ["red"],
+              borderColor: ["red"],
+              fill: false,
+              borderWidth: 6,
+            },
+            {
+              label: "Max Systolic",
+              data: thresoldsystolic,
+              pointRadius: 0,
+              //pointBackgroundColor:"white",
+
+              backgroundColor: ["indigo"],
+              borderColor: ["indigo"],
+              fill: false,
+              borderWidth: 6,
             },
           ],
         };
