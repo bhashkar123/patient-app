@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { CoreContext } from "../context/core-context";
 import Loader from "react-loader-spinner";
 import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
+import Slider from "@mui/material/Slider";      
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
 
 import {
