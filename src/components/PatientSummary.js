@@ -478,6 +478,8 @@ return String(ttt[0].bg_high)
   //const tvalue=checkthresoldvalue();
   const tvalue = useMemo(() => checkthresoldvalue(), [JSON.stringify(coreContext.thresoldData)]);
   const tadminvalue=useMemo(()=>checkadminthresoldvalue(),[JSON.stringify(coreContext.adminthresold)])
+  const tvaluemin = useMemo(() => checkthresoldMinvalue(), [JSON.stringify(coreContext.thresoldData)]);
+  const tadminvaluemin=useMemo(()=>checkadminthresoldMinvalue(),[JSON.stringify(coreContext.adminthresold)])
   const tadmindiastolic=useMemo(()=>checkadmindiastolic("DIASTOLIC"),[JSON.stringify(coreContext.adminthresold)])
   const tadminsystolic=useMemo(()=>checkadmindiastolic("SYSTOLIC"),[JSON.stringify(coreContext.adminthresold)])
   const tsystolic=useMemo(()=>checkdiastolic("SYSTOLIC"),[JSON.stringify(coreContext.thresoldData)])
@@ -1361,19 +1363,20 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                       }
                     }
                   });
-
+                    let colorset=(tvalue!=="0")?tvalue:tadminvalue
+                    let colorsetmin=(tvalue!=="0")?tvaluemin:tadminvaluemin
                   return (
                     <>
                       <tr>
                         <td rowspan="2">{curr}</td>
-                        <td style={{ backgroundColor: (dataBMAM.morningbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
-                        <td style={{ backgroundColor: (dataBMAM.morningam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightbm < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightam < (tvalue!=="0")?tvalue:tadminvalue && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > (tvalue!=="0")?tvalue:tadminvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.morningbm < Number(colorset) && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > Number(colorsetmin) )? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
+                        <td style={{ backgroundColor: (dataBMAM.morningam < Number(colorset) && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > Number(colorsetmin) ) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonbm < Number(colorset) && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > Number(colorsetmin)) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonam < Number(colorset)&& dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > Number(colorsetmin)) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningbm < Number(colorset) && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > Number(colorsetmin) ) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningam < Number(colorset) && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > Number(colorsetmin)) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightbm < Number(colorset) && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > Number(colorsetmin ))? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightam < Number(colorset) && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > Number(colorsetmin) ) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
                       </tr>
                       <tr>
                         <td></td>
