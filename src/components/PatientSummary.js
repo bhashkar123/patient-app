@@ -162,6 +162,7 @@ const PatientSummary = (props) => {
   const [deviceId, setDeviceId] = useState("");
   const [thData, setThData] = useState([]);
   const [timerLogs, setTimerLog] = useState([]);
+  const [adddeviceflag, setdeviceflag] = useState(1);
   const [taskType, setTaskType] = useState();
   const [performedBy, setPerformedBy] = useState("");
   const [performedOn, setPerformedOn] = useState("");
@@ -333,23 +334,24 @@ const PatientSummary = (props) => {
   useEffect(pateientvalue, []);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
+  useEffect(fetchPatient, [adddeviceflag]);
   useEffect(
     () => setNotes(coreContext.patient.notes),
     [coreContext.patient.notes]
   );
-const checkthresoldvalue=()=>{
+  const checkthresoldvalue = () => {
 
-if(coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose").length===0){
-  return "150";
-}
-else {
-  let ttt=coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")
-  console.log("functionvalue",coreContext.thresoldData.filter((curr)=>curr.Element_value==="Blood Glucose")[0].bg_high)
-return String(ttt[0].bg_high)
-}
+    if (coreContext.thresoldData.filter((curr) => curr.Element_value === "Blood Glucose").length === 0) {
+      return "150";
+    }
+    else {
+      let ttt = coreContext.thresoldData.filter((curr) => curr.Element_value === "Blood Glucose")
+      console.log("functionvalue", coreContext.thresoldData.filter((curr) => curr.Element_value === "Blood Glucose")[0].bg_high)
+      return String(ttt[0].bg_high)
+    }
   }
 
- 
+
 
   const checkthresoldMinvalue = () => {
     if (
@@ -537,7 +539,7 @@ return String(ttt[0].bg_high)
           SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
         }
         let today = new Date();
-        let bfr = new Date().setDate(today.getDate() - SliderDays-1);
+        let bfr = new Date().setDate(today.getDate() - SliderDays - 1);
 
         var finaldata = coreContext.bloodpressureData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
@@ -780,11 +782,11 @@ return String(ttt[0].bg_high)
                 )
                   ? "0"
                   : Math.round(
-                      Number(
-                        Math.round(Number(finaldata.length / daydfrnc) * 10) /
-                          10
-                      )
-                    )}
+                    Number(
+                      Math.round(Number(finaldata.length / daydfrnc) * 10) /
+                      10
+                    )
+                  )}
               </div>
             </div>
             <div className="d-flex">
@@ -896,7 +898,7 @@ return String(ttt[0].bg_high)
           SliderDays = Math.ceil(Math.abs(to - from) / (1000 * 60 * 60 * 24));
         }
         let today = new Date();
-        let bfr = new Date().setDate(today.getDate() - SliderDays-1);
+        let bfr = new Date().setDate(today.getDate() - SliderDays - 1);
 
         var finalbgdata = coreContext.bloodglucoseData.filter(
           (date) => date.CreatedDate >= new Date(bfr)
@@ -945,7 +947,7 @@ return String(ttt[0].bg_high)
           // to get a value that is either negative, positive, or zero.
           return new Date(b) - new Date(a);
         });
-        console.log(sorteddates,"check sorteddates")
+        console.log(sorteddates, "check sorteddates")
         if (curr.meal === "Before Meal") {
           bgbefore.push(curr.bloodglucosemgdl);
           if (
@@ -1146,88 +1148,167 @@ return String(ttt[0].bg_high)
                 </tr>
               </thead>
               <tbody>
+                {console.log(sorteddates,"sorteddatesutkarsh")}
                 {sorteddates.map((curr) => {
                   const filtereddarta = finalbgdata.filter(
                     (item) =>
                       Moment(item.CreatedDate).format("MM-DD-YYYY") === curr
                   );
-                        console.log("fileterd data",filtereddarta)
+                  console.log("fileterd data", filtereddarta)
                   let dataBMAM = {
-                    morningbm: "",
-                    morningam: "",
-                    noonbm: "",
-                    noonam: "",
-                    eveningbm: "",
-                    eveningam: "",
-                    nightbm: "",
-                    nightam: "",
-                    morningbmtime: "",
-                    morningamtime: "",
-                    noonbmtime: "",
-                    noonamtime: "",
-                    eveningbmtime: "",
-                    eveningamtime: "",
-                    nightbmtime: "",
-                    nightamtime: "",
+                    morningbm: [],
+                    morningam: [],
+                    noonbm: [],
+                    noonam: [],
+                    eveningbm: [],
+                    eveningam: [],
+                    nightbm: [],
+                    nightam: [],
+                    morningbmtime: [],
+                    morningamtime: [],
+                    noonbmtime: [],
+                    noonamtime: [],
+                    eveningbmtime: [],
+                    eveningamtime: [],
+                    nightbmtime: [],
+                    nightamtime: [],
                   };
+                  console.log(filtereddarta, "filtereddartautkarsh")
                   filtereddarta.map((curr) => {
                     if (Number(Moment(curr.CreatedDate).format("HH")) < 10) {
                       if (curr.meal === "Before Meal") {
-                        dataBMAM.morningbm = curr.bloodglucosemgdl;
-                        dataBMAM.morningbmtime = Moment(curr.CreatedDate).format("hh:mm A")
-                        console.log("check date from app",Moment(curr.CreatedDate).format("hh:mm"))
+                        dataBMAM.morningbm.push(curr.bloodglucosemgdl);
+                        dataBMAM.morningbmtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
+                        console.log("check date from app", Moment(curr.CreatedDate).format("hh:mm"))
                       } else {
-                        dataBMAM.morningam = curr.bloodglucosemgdl;
-                        dataBMAM.morningamtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.morningam.push(curr.bloodglucosemgdl);
+                        dataBMAM.morningamtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
                       }
                     }
                     if (
-                      Number(Moment(curr.CreatedDate).format("HH")) > 10 &&
+                      Number(Moment(curr.CreatedDate).format("HH")) >= 10 &&
                       Number(Moment(curr.CreatedDate).format("HH")) < 15
                     ) {
                       if (curr.meal === "Before Meal") {
-                        dataBMAM.noonbm = curr.bloodglucosemgdl;
-                        dataBMAM.noonbmtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.noonbm.push(curr.bloodglucosemgdl);
+                        dataBMAM.noonbmtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
                       } else {
-                        dataBMAM.noonam = curr.bloodglucosemgdl;
-                        dataBMAM.noonamtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.noonam.push(curr.bloodglucosemgdl);
+                        dataBMAM.noonamtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
                       }
                     }
                     if (
-                      Number(Moment(curr.CreatedDate).format("HH")) > 15 &&
+                      Number(Moment(curr.CreatedDate).format("HH")) >= 15 &&
                       Number(Moment(curr.CreatedDate).format("HH")) < 21
                     ) {
                       if (curr.meal === "Before Meal") {
-                        dataBMAM.eveningbm = curr.bloodglucosemgdl;
-                        dataBMAM.eveningbmtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.eveningbm.push(curr.bloodglucosemgdl);
+                        dataBMAM.eveningbmtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
                       } else {
-                        dataBMAM.eveningam = curr.bloodglucosemgdl;
-                        dataBMAM.eveningamtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.eveningam.push(curr.bloodglucosemgdl);
+                        dataBMAM.eveningamtime.push(Moment(curr.CreatedDate).format("hh:mm A"));
                       }
                     }
                     if (Number(Moment(curr.CreatedDate).format("HH")) >= 21) {
                       if (curr.meal === "Before Meal") {
-                        dataBMAM.nightbm = curr.bloodglucosemgdl;
-                        dataBMAM.nightbmtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.nightbm.push(curr.bloodglucosemgdl);
+                        dataBMAM.nightbmtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
                       } else {
-                        dataBMAM.nightam = curr.bloodglucosemgdl;
-                        dataBMAM.nightamtime = Moment(curr.CreatedDate).format("hh:mm A")
+                        dataBMAM.nightam.push(curr.bloodglucosemgdl);
+                        dataBMAM.nightamtime.push(Moment(curr.CreatedDate).format("hh:mm A"))
                       }
                     }
                   });
 
                   return (
                     <>
+                      {console.log(dataBMAM, "dataBMAMutkarshcheck")}
                       <tr>
                         <td rowspan="2">{curr}</td>
-                        <td style={{ backgroundColor: (dataBMAM.morningbm < tvalue && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > tvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
-                        <td style={{ backgroundColor: (dataBMAM.morningam < tvalue && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonbm < tvalue && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonam < tvalue && dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningbm < tvalue && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningam < tvalue && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightbm < tvalue && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightam < tvalue && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>
+                            {
+                              dataBMAM.morningbm.map((data, index) => (
+                                <td style={{ backgroundColor: (dataBMAM.morningbm[index] < tvalue && dataBMAM.morningbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm[index] !== "" && dataBMAM.morningbm[index] > tvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm[index]}<br />{dataBMAM.morningbmtime[index]}</p></td>
+                              ))
+
+                            }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr >
+                            {
+                              dataBMAM.morningam.map((data, index) => (
+                                <td style={{ backgroundColor: (dataBMAM.morningam[index] < tvalue && dataBMAM.morningam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam[index] !== "" && dataBMAM.morningam[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam[index]}<br />{dataBMAM.noonamtime[index]}</td>
+                              ))
+
+                            }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>
+                            {
+                              dataBMAM.noonbm.map((data, index) => (
+                                <td style={{ backgroundColor: (dataBMAM.noonbm[index] < tvalue && dataBMAM.noonbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm[index] !== "" && dataBMAM.noonbm[index] > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm[index]}<br />{dataBMAM.noonbmtime[index]}</td>
+                              ))
+                            }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>{
+                            dataBMAM.noonam.map((data, index) => (
+                              <td style={{ backgroundColor: (dataBMAM.noonam[index] < tvalue && dataBMAM.noonam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam[index] !== "" && dataBMAM.noonam[index] > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam[index]}<br />{dataBMAM.noonamtime[index]}</td>
+                            ))
+                          }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>
+                            {
+                              dataBMAM.eveningbm.map((data, index) => (
+                                <td style={{ backgroundColor: (dataBMAM.eveningbm[index] < tvalue && dataBMAM.eveningbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm[index] !== "" && dataBMAM.eveningbm[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm[index]}<br />{dataBMAM.eveningbmtime[index]}</td>
+                              ))
+                            }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>
+                            {
+                              dataBMAM.eveningam.map((data, index) => (
+                                <td style={{ backgroundColor: (dataBMAM.eveningam[index] < tvalue && dataBMAM.eveningam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam[index] !== "" && dataBMAM.eveningam[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam[index]}<br />{dataBMAM.eveningamtime[index]}</td>
+                              ))
+                            }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>{
+                            dataBMAM.nightbm.map((data, index) => (
+                              <td style={{ backgroundColor: (dataBMAM.nightbm[index] < tvalue && dataBMAM.nightbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm[index] !== "" && dataBMAM.nightbm[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm[index]}<br />{dataBMAM.nightbmtime[index]}</td>
+                            ))
+                          }
+
+                          </tr>
+                        </td>
+                        <td style={{backgroundColor:"rgba(0, 255, 0, 0.15)"}}>
+                          <tr>
+                            {
+                              dataBMAM.nightam.map((data, index) => (
+                                <td style={{ backgroundColor: (dataBMAM.nightam[index] < tvalue && dataBMAM.nightam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam[index] !== "" && dataBMAM.nightam[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam[index]}<br />{dataBMAM.nightamtime[index]}</td>
+                              ))
+
+                            }
+
+                          </tr>
+                        </td >
+
+
+
                       </tr>
                       <tr>
                         <td></td>
@@ -1284,8 +1365,8 @@ return String(ttt[0].bg_high)
               <div className="p-2 flex  ml-2 text-light " style={myst1}>
                 {finalbgdata.length > 0 || daydfrnc == "undefined"
                   ? Math.round(
-                      Math.round((finalbgdata.length / daydfrnc) * 10) / 10
-                    )
+                    Math.round((finalbgdata.length / daydfrnc) * 10) / 10
+                  )
                   : "0"}
               </div>
             </div>
@@ -1635,7 +1716,11 @@ return String(ttt[0].bg_high)
               <a
                 style={{ marginRight: "5px" }}
                 href="#"
-                onClick={() => deleteDevice(deviceData)}>
+                onClick={() => {
+                  deleteDevice(deviceData)
+                  setdeviceflag(adddeviceflag + 1)
+                }}>
+
                 {" "}
                 <Trash />
               </a>
@@ -1918,7 +2003,7 @@ return String(ttt[0].bg_high)
   };
 
   const [timelogIdCounter, settimelogIdCounter] = useState(1);
-  const calctime = () => {};
+  const calctime = () => { };
 
   const handleSelect = (index) => {
     let _timerLog = {};
@@ -2553,8 +2638,10 @@ return String(ttt[0].bg_high)
                       />
                       <button
                         type="button"
-                        onClick={() =>
+                        onClick={() => {
+                          setdeviceflag(adddeviceflag + 1)
                           coreContext.addDevice(deviceType, deviceId, patientId)
+                        }
                         }
                         className="btn btn-primary mb-2">
                         Add Device
