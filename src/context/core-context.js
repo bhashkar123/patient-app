@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import loader from "../assets/images/835.gif";
 import Moment from "moment";
-import swal from 'sweetalert';
-
+import swal from "sweetalert";
 
 export const CoreContext = React.createContext({});
 
@@ -1153,11 +1152,11 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         if (response.data === "Updated") {
-          swal("success","Threshold Update Successfully.", "success");
+          swal("success", "Threshold Update Successfully.", "success");
           //alert("Threshold Update Successfully.");
         } else {
-          swal("error","Threshold did not Update.", "error");
-         // alert("");
+          swal("error", "Threshold did not Update.", "error");
+          // alert("");
         }
       });
   };
@@ -1242,7 +1241,7 @@ export const CoreContextProvider = (props) => {
         console.log(response);
         if (response.data === "Updated") {
           //alert("Record Updated Successfully.");
-          swal("success","Record Updated Successfully.", "success");
+          swal("success", "Record Updated Successfully.", "success");
           userDetails(email, "");
         }
       });
@@ -1368,7 +1367,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         if (response.data === "Updated") {
-         // alert("");
+          // alert("");
           swal("success", "Patient data Update Successfully.", "success");
 
           // updating object
@@ -1436,11 +1435,11 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         if (response.data === "Updated") {
           //alert("");
-          swal("success","Data update Successfully.", "success");
+          swal("success", "Data update Successfully.", "success");
         } else {
           console.log(response);
-         // alert("");
-          swal("error","Data did did not Update  Successfully.", "error");
+          // alert("");
+          swal("error", "Data did did not Update  Successfully.", "error");
         }
       });
   };
@@ -1472,7 +1471,6 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         if (response.data === "Updated") {
           alert("Provider data Update Successfully.");
-
         } else {
           alert("Patient data did not Update  Successfully.");
         }
@@ -1568,8 +1566,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         if (response.data === "Updated") {
-          
-          swal("success","Patient Deleted Successfully.", "success");
+          swal("success", "Patient Deleted Successfully.", "success");
         }
       });
   };
@@ -1597,8 +1594,12 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         if (response.data === "Updated") {
-         // alert("1 Entry of TimeLog Deleted Successfully.");
-          swal("success", "One Entry of TimeLog Deleted Successfully.", "success");
+          // alert("1 Entry of TimeLog Deleted Successfully.");
+          swal(
+            "success",
+            "One Entry of TimeLog Deleted Successfully.",
+            "success"
+          );
         }
       });
   };
@@ -1653,7 +1654,7 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         if (response.data === "Updated") {
-         // alert("");
+          // alert("");
           swal("success", "Patient Deleted Successfully.", "success");
         } else {
           swal("error", "Server Error", "error");
@@ -2632,8 +2633,10 @@ export const CoreContextProvider = (props) => {
             );
           }
 
-          if (bg.before_meal) bgdata.meal = "Before Meal";
-          if (!bg.before_meal) bgdata.meal = "After Meal";
+          if (bg.before_meal !== undefined) {
+            if (bg.before_meal.bool) bgdata.meal = "Before Meal";
+            if (!bg.before_meal.bool) bgdata.meal = "After Meal";
+          }
 
           if (bg.battery !== undefined) {
             bgdata.battery = bg.battery.n;
@@ -3049,7 +3052,6 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Registered") {
           console.log(response.data);
           swal("success", "TimeLog has been added successfully", "success");
-
         }
       });
   };
