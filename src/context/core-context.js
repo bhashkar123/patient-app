@@ -1078,7 +1078,8 @@ export const CoreContextProvider = (props) => {
       )
       .then((response) => {
         if (response.data === "Registered") {
-          alert("Device Inserted Successfully.");
+          
+          swal("success", "Device Inserted Successfully.", "success");
         }
       });
   };
@@ -1655,7 +1656,7 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         if (response.data === "Updated") {
           // alert("");
-          swal("success", "Patient Deleted Successfully.", "success");
+          swal("success", "Device Deleted Successfully.", "success");
         } else {
           swal("error", "Server Error", "error");
         }
