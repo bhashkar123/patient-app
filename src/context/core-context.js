@@ -498,7 +498,7 @@ export const CoreContextProvider = (props) => {
           if (p.Gender !== undefined) {
             patient.gender = p.Gender.s;
           }
-          if (p.Height !== "undefined") {
+          if (p.Height.s !== "undefined") {
             patient.height = p.Height.s;
           }else {
             patient.height = "";
