@@ -420,7 +420,7 @@ export const CoreContextProvider = (props) => {
             patient.ehrId = p.SK.s;
           }
           patient.pid = window.btoa(p.SK.s);
-          if (p.Height !== undefined) {
+          if (p.Height.s !== "undefined") {
             patient.height = p.Height.s;
           }
           patient.pid = window.btoa(p.SK.s);
@@ -497,6 +497,11 @@ export const CoreContextProvider = (props) => {
 
           if (p.Gender !== undefined) {
             patient.gender = p.Gender.s;
+          }
+          if (p.Height !== "undefined") {
+            patient.height = p.Height.s;
+          }else {
+            patient.height = "";
           }
 
           if (p.Lang !== undefined) {

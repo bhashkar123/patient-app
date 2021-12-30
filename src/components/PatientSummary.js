@@ -2739,7 +2739,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-12">
-                    Total Time Logs (min: sec): {fetchtotaltime()}
+                    Total Time Logs (Hour: Min: Sec): {fetchtotaltime()}
                   </div>
                 </div>
                 <div className="row">
@@ -2920,7 +2920,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       <div className="card-header">{renderAddNotes()}</div>
 
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div
             onClick={() => setShowNotesTextBox(false)}
             className="card-header">
@@ -2932,7 +2932,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
             {renderPatientinformation()}{" "}
           </div>
         </div>
-        <div className="col-md-4">
+        {/* <div className="col-md-4">
           <div
             style={{ fontSize: 12 }}
             className="card shadow p-3 mb-2 mt-3 bg-white rounded">
@@ -2953,7 +2953,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
               />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {Prompt}

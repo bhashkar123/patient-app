@@ -513,7 +513,7 @@ const Patients = (props) => {
       usertype === "admin" &&
       coreContext.patients[0].name !== undefined
     ) 
-    console.log("uttkarsh",coreContext.patients)
+    console.log("uttkarsh patients",coreContext.patients)
     {
       return (
         <>
