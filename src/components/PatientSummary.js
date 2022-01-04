@@ -2025,12 +2025,17 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     }
     if (coreContext.patients.length > 0)
       return (
+        <>
         <div className="row">
-          <div className="col-md-3" style={{ fontWeight: "bold" }}>
+          <div className="col-md-2" style={{ fontWeight: "bold" }}>
             {coreContext.patients[0].name}
           </div>
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
+          Email : {coreContext.patients[0].email}
+          </div>
+          <div className="col-md-2" style={{ fontWeight: "bold" }}>
             {"DOB : " + coreContext.patients[0].dob}
+            
           </div>
           <div className="col-md-2" style={{ fontWeight: "bold" }}>
             {coreContext.patients[0].gender === "Male" ? (
@@ -2040,10 +2045,12 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
             )}
             {coreContext.patients[0].gender}
           </div>
-          <div className="col-md-4" style={{ fontWeight: "bold" }}>
+          <div className="col-md-3" style={{ fontWeight: "bold" }}>
             EHR ID : {coreContext.patients[0].ehrId}
           </div>
         </div>
+        
+        </>
       );
   };
   const rendertop = React.useMemo(
@@ -2119,7 +2126,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     var s = Math.floor(d % 3600 % 60);
     //console.log(coreContext.timeLogData)
     
-    return h+":"+m+":"+s
+    
+    return ('0' + h).slice(-2)+":"+('0' + m).slice(-2)+":"+('0' + s).slice(-2)
   };
   useEffect(() => {
     fetchtotaltime();
@@ -2199,7 +2207,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
     }
 
     if (index === 8) {
-      pause();
+      //pause();
 
       // after pause then should add in list.
       //     // _timerLog.id = timelogIdCounter;
@@ -2301,17 +2309,17 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
           onMouseLeave={(index) => handleLeaveTab(index)}>
           <TabList>
             {/* <Tab onClick={pause}>Conditions</Tab> */}
-            <Tab onClick={pause}>Programs</Tab>
+            <Tab >Programs</Tab>
             {/* <Tab onClick={pause}>Assesments</Tab> */}
-            <Tab onClick={pause}>Clinical Data</Tab>
-            <Tab onClick={pause}>Billing</Tab>
+            <Tab >Clinical Data</Tab>
+            <Tab >Billing</Tab>
             {/* <Tab onClick={pause}>Alerts</Tab> */}
             {/* <Tab onClick={pause}>Documents</Tab> */}
-            <Tab onClick={reset}>Task Timer</Tab>
+            <Tab >Task Timer</Tab>
             {/* <Tab onClick={pause}>Time Logs</Tab> */}
             <Tab>Time Logs</Tab>
-            <Tab onClick={pause}>Devices</Tab>
-            <Tab onClick={pause}>Portal</Tab>
+            <Tab >Devices</Tab>
+            <Tab >Portal</Tab>
           </TabList>
 
           {/* <TabPanel>
@@ -2383,22 +2391,22 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                   <TabPanel>
                     <Tabs>
                       <TabList>
-                        <Tab onClick={pause}>Blood Pressure</Tab>
+                        <Tab >Blood Pressure</Tab>
                         {/* <Tab onClick={pause}>Blood Pressure</Tab> */}
                         {/* <Tab onClick={pause}>Blood Pressure Average</Tab> */}
-                        <Tab onClick={()=>{pause();fetchTd();fetchadmintd()}}>Blood Glucose</Tab>
+                        <Tab onClick={()=>{fetchTd();fetchadmintd()}}>Blood Glucose</Tab>
                         {/* <Tab onClick={pause}>Blood GLucose Average</Tab> */}
-                        <Tab onClick={pause}>Weight</Tab>
+                        <Tab>Weight</Tab>
                         {/* <Tab onClick={pause}>Weight Average</Tab> */}
-                        <Tab onClick={pause}>Threshold</Tab>
+                        <Tab>Threshold</Tab>
                       </TabList>
                       <TabPanel>
                         {/* <div className="card"> */}
                         <Tabs>
                           <TabList>
-                            <Tab onClick={pause}>Dashboard</Tab>
-                            <Tab onClick={pause}>LogBook</Tab>
-                            <Tab onClick={pause}>Charts</Tab>
+                            <Tab >Dashboard</Tab>
+                            <Tab >LogBook</Tab>
+                            <Tab >Charts</Tab>
                           </TabList>
                           <TabPanel>
                             {renderDates()}
@@ -2420,9 +2428,9 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                       <TabPanel>
                         <Tabs>
                           <TabList>
-                            <Tab onClick={pause}>Dashboard</Tab>
-                            <Tab onClick={pause}>LogBook</Tab>
-                            <Tab onClick={pause}>Charts</Tab>
+                            <Tab >Dashboard</Tab>
+                            <Tab >LogBook</Tab>
+                            <Tab >Charts</Tab>
                           </TabList>
                           <TabPanel>
                             {renderDates()}
@@ -2610,7 +2618,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                     className="col-md-8"
                     type="button"
                     onClick={() => {
-                      pause();
+                      reset();
                       coreContext.AddTimeLog(
                         taskType,
                         performedBy,
@@ -2626,6 +2634,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                       coreContext.fetchTimeLog("PATIENT_" + patientId);
                       coreContext.fetchTimeLog("PATIENT_" + patientId);
                       setPristine();
+                      renderTimelogs();
                       setPerformedBy("");
                       setTaskType("");
                       setDate(new Date());
