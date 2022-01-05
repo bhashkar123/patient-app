@@ -3,7 +3,14 @@ import { CoreContext } from "../context/core-context";
 import { DataGrid } from "@material-ui/data-grid";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Loader from "react-loader-spinner";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 const Moment = require("moment");
+
 
 const BloodGlucose = (props) => {
   const coreContext = useContext(CoreContext);
@@ -13,6 +20,7 @@ const BloodGlucose = (props) => {
   const [patientId, setPatientId] = useState("");
   const [userType, setUserType] = useState("");
 
+
   const fetchBloodGlucose = () => {
     // const patientId =  localStorage.getItem("userId");
     let userType = localStorage.getItem("userType");
@@ -20,17 +28,19 @@ const BloodGlucose = (props) => {
     // check page if left side menu.
     if (window.location.href.substring("bloodglucose") > 0) {
     }
-    if (window.location.href.indexOf("patient-summary") > 0) {
-      patientId = localStorage.getItem("ehrId");
-      userType = "patient";
-      // clear this otherwise will be problem
-      localStorage.removeItem("ehrId");
-    }
+    // if (window.location.href.indexOf("patient-summary") > 0) {
+    //   patientId = localStorage.getItem("ehrId");
+    //   userType = "patient";
+    //   // clear this otherwise will be problem
+    //   localStorage.removeItem("ehrId");
+    // }
     setUserType(userType);
     coreContext.fetchBloodGlucose(patientId, userType);
   };
 
-  useEffect(fetchBloodGlucose, [coreContext.bloodglucoseData.length]);
+  useEffect(fetchBloodGlucose, []);
+
+  
 
   const columns = [
     {
@@ -39,10 +49,10 @@ const BloodGlucose = (props) => {
       width: 200,
       type: "string",
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`} onClick={()=>console.log("sahil",params.row)}>
           {" "}
           {params.row.UserName}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -116,14 +126,14 @@ const BloodGlucose = (props) => {
       renderCell: (params) => (
         <div>
           {" "}
-          <a href="#" onClick={() => showEditForm(params.row)}>
+          <Link to="#" onClick={() => showEditForm(params.row)}>
             {" "}
             <PencilSquare />
-          </a>
-          <a href="#" onClick={() => deletePatient(params.row)}>
+          </Link>
+          <Link to="#" onClick={() => deletePatient(params.row)}>
             {" "}
             <Trash />
-          </a>
+          </Link>
         </div>
       ),
     },
@@ -260,11 +270,12 @@ const BloodGlucose = (props) => {
       );
     }
   };
-
+const jh=React.useMemo(()=>renderBloodGlucose(),[]
+)
   return (
     <div className="card">
       <h4 className="card-header">BLOOD GLUCOSE INFORMATION</h4>
-      <div className="card-body">{renderBloodGlucose()}</div>
+      <div className="card-body">{jh}</div>
     </div>
   );
 };

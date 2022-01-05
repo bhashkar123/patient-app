@@ -5,6 +5,13 @@ import { CoreContext } from "../context/core-context";
 import Input from "./common/Input";
 import Logo from "../assets/images/logo.png";
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 import { LockFill } from "react-bootstrap-icons";
 
 const Login = (props) => {
@@ -53,10 +60,10 @@ const Login = (props) => {
             justifyContent: "center",
             marginTop: "15px",
           }}>
-          <a href="#">
+          <Link to="#">
             {" "}
             <img src={Logo} style={{ height: 50 }} alt="" />
-          </a>
+          </Link>
         </div>
         <div className="card-body">
           <Form autoComplete="off" onSubmit={handleSubmit(login)} noValidate>
@@ -101,9 +108,9 @@ const Login = (props) => {
               />
             </center>
             <center>
-              <a href="reset-password">
+              <Link to="reset-password">
                 <LockFill /> Forgot your password?
-              </a>
+              </Link>
             </center>
             <br />
             <center>
