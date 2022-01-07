@@ -2014,7 +2014,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   };
 
   const renderTopDetails = () => {
-    if (coreContext.pss.length === 0) {
+    if (coreContext.pss.length !== 1) {
       return (
         <div
           style={{
@@ -2029,7 +2029,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
         </div>
       );
     }
-    if (coreContext.pss.length > 0)
+    if (coreContext.pss.length===1)
       return (
         <>
         <div className="row">
