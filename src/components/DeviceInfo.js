@@ -121,11 +121,12 @@ const Deviceinfo = (props) => {
     }
   };
 
+  const js=React.useMemo(()=>renderdeviceinfo(),[])
   return (
     <div className="card">
       <h4 className="card-header">Device information</h4>
 
-      <div className="card-body">{renderdeviceinfo()}</div>
+      <div className="card-body">{js}</div>
     </div>
   );
 };

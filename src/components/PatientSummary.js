@@ -190,6 +190,7 @@ const PatientSummary = (props) => {
   useEffect(fetchCareCoordinator, []);
   useEffect(() => {
     //coreContext.cleanup();
+    coreContext.setdeviceData([]);
     return () => {
       coreContext.cleanup();
     }
@@ -241,7 +242,7 @@ const PatientSummary = (props) => {
 
     //coreContext.fetchTaskTimerUser();
 
-    coreContext.fetchDeviceData("PATIENT_" + patientId, userName, userType);
+    coreContext.fetchDeviceData("PATIENT_" + patientId,patientName);
     /// setting default value
     // if (coreContext.thresoldData.length === 0) {
     //   let thdata = {};
@@ -343,7 +344,7 @@ const PatientSummary = (props) => {
 
   const pateientvalue = useMemo(() => fetchPatient, []);
   useEffect(pateientvalue, []);
-  useEffect(fetchPatient,[adddeviceflag]);
+  useEffect(fetchPatient,[adddeviceflag,coreContext.pss.length]);
 
   // useEffect(fetchPatient, [coreContext.patient.notes]);
   useEffect(
@@ -1871,7 +1872,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   };
 
   const renderDeviceData = () => {
-    if (coreContext.deviceData.length === 0) {
+    console.log("check something",coreContext.patientdevicedata)
+    if (coreContext.patientdevicedata.length === 0) {
       return (
         <div
           style={{
@@ -1888,10 +1890,10 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       );
     }
 
-    if (coreContext.deviceData.length > 0) {
+    if (coreContext.patientdevicedata.length > 0) {
     }
     {
-      return coreContext.deviceData.map((deviceData, index) => {
+      return coreContext.patientdevicedata.map((deviceData, index) => {
         return (
           <tr>
             <td>{deviceData.DeviceType} </td>
@@ -1915,7 +1917,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       });
     }
   };
-  useEffect(renderDeviceData, [coreContext.deviceData.length]);
+  const renderdevice=React.useMemo(()=>renderDeviceData(),[coreContext.patientdevicedata.length])
+ // useEffect(renderDeviceData, [coreContext.patientdevicedata.length]);
 
   const renderThreads = () => {
     if (coreContext.threads.length > 0) {
@@ -2012,7 +2015,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       notes
     );
   };
-
+let patientName;
   const renderTopDetails = () => {
     if (coreContext.pss.length !== 1) {
       return (
@@ -2030,11 +2033,13 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
       );
     }
     if (coreContext.pss.length===1)
+    {patientName=coreContext.pss[0].name}
       return (
         <>
         <div className="row">
           <div className="col-md-2" style={{ fontWeight: "bold" }}>
             {coreContext.pss[0].name}
+            
           </div>
           <div className="col-md-3" style={{ fontWeight: "bold" }}>
           Email : {coreContext.pss[0].email}
@@ -2803,7 +2808,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <tbody>{renderDeviceData()}</tbody>
+                      <tbody>{renderdevice}</tbody>
                     </table>
                   </div>
                   <div className="col-md-4">

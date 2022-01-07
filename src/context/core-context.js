@@ -26,6 +26,7 @@ export const CoreContextProvider = (props) => {
   const [patientbloodglucoseData, setpatientbloodglucoseData] = useState([]);
   
   const [bloodglucoseData, setbloodglucoseData] = useState([]);
+  const [patientdevicedata,setpatientdeviceddata]=useState([]);
 
   const [deviceData, setdeviceData] = useState([]);
   const [patientWDevice, setPatientWDevice] = useState([]);
@@ -2074,7 +2075,7 @@ export const CoreContextProvider = (props) => {
           dataSetdevice.push("no device found");
         }
 
-        //    console.log('deviceData', deviceData);
+         console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
           let devicedata = {};
           devicedata.id = index;
@@ -2090,7 +2091,11 @@ export const CoreContextProvider = (props) => {
           }
           if (p.SK !== undefined) {
             devicedata.id = p.SK.s;
-
+            
+           if(window.location.href.indexOf("patient-summary")>0)
+           {
+             devicedata.username=username
+           }
             if (patients.length > 0) {
               let patient = patients.filter(
                 (p) => p.ehrId === devicedata.patientId
@@ -2099,13 +2104,14 @@ export const CoreContextProvider = (props) => {
             } else {
               devicedata.username = username;
             }
+
           }
 
           if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
         });
 
         if (dataSetdevice[0] !== "no device found") {
-          setdeviceData(dataSetdevice);
+          (window.location.href.indexOf("patient-summary")>0)?setpatientdeviceddata(dataSetdevice):setdeviceData(dataSetdevice);
         }
 
         if (type == "Weight") {
@@ -3208,6 +3214,7 @@ export const CoreContextProvider = (props) => {
     //setbloodpressureData([]);
     //setPatient();
     setpss([]);
+    setpatientdeviceddata([]);
     setpatientbloodpressureData([]);
     setpatientbloodglucoseData([]);
   }
@@ -3322,6 +3329,7 @@ export const CoreContextProvider = (props) => {
         fetchBloodPressure,
         fetchBloodGlucose,
         relogin,
+        setdeviceData,
         patientbloodpressureData,
         patientbloodglucoseData,
         Registration,
@@ -3329,6 +3337,7 @@ export const CoreContextProvider = (props) => {
         providerOptions,
         coachOptions,
         updateChat,
+        patientdevicedata,
         pss,
         careCoordinatorOptions,
         SubmitIntakeRequest,
