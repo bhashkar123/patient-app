@@ -11,6 +11,7 @@ export const CoreContextProvider = (props) => {
   const [patients, setPatients] = useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
+  const [message1,setmessage1]=useState("");
   const [wsData, setwsData] = useState([]);
   const [adminthresold, setadminthresold] = useState([]);
 
@@ -1399,6 +1400,138 @@ export const CoreContextProvider = (props) => {
         }
       });
   };
+
+  const updateChat=(patientId,message)=>{
+    const token = localStorage.getItem("app_jwt");
+    let type="";
+    (patientId.includes("DOCTOR"))?type="doctor":type="patient"
+    const data = {
+      TableName: userTable,
+      Key: {
+        PK: { S: type },
+        SK: { S: "PATIENT_" + patientId },
+      },
+      UpdateExpression:
+        "SET SendMessage = :v_SendMessage",
+        ExpressionAttributeValues: {
+         
+          ":v_SendMessage": { S: "" + message + "" },
+        },
+      };
+  
+      axios
+      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, /",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        console.log(response.data)
+      
+    });
+
+
+  }
+  const updateChat2=(patientId,message)=>{
+    const token = localStorage.getItem("app_jwt");
+    let type="";
+    (patientId.includes("DOCTOR"))?type="doctor":type="patient"
+    const data = {
+      TableName: userTable,
+      Key: {
+        PK: { S: type },
+        SK: { S: patientId },
+      },
+      UpdateExpression:
+        "SET ReceiveMessage = :v_ReceiveMessage",
+        ExpressionAttributeValues: {
+         
+          ":v_ReceiveMessage": { S: message },
+        },
+      };
+  
+      axios
+      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, /",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        console.log("sahio",response.data)
+      
+    });
+
+
+  }
+  // const updateChat2 = (
+    
+  //   patientId,
+  //  message
+  // ) => {
+  //   const token = localStorage.getItem("app_jwt");
+  //       const data = JSON.stringify({
+  //         id:patientId,
+      
+  //     PK: "doctor",
+  //     SK: "4",
+    
+  //     GotMessage: message,
+  //   });
+
+  //   axios
+  //     .post(
+  //       apiUrl +
+  //         "/DynamoDbAPIs/PutItem?jsonData=" +
+  //         data +
+  //         "&tableName=" +
+  //         userTable +
+  //         "&actionType=register",
+  //       {
+  //         headers: {
+  //           Accept: "application/json, text/plain, */*",
+  //           // "Content-Type": "application/json",
+  //           Authorization: "Bearer " + token,
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       if (response.data === "Registered") {
+  //         console.log("asd",response.data);
+  //         swal("success", "chat successfully", "success");
+  //       }
+  //     });
+  // };
+  const fetchchat = (patientId) => {
+    const token = localStorage.getItem("app_jwt");
+
+    let data = {
+      TableName: userTable,
+      KeyConditionExpression: "PK =:v_PK AND SK = :v_SK",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "doctor" },
+        ":v_SK": { S: patientId },
+      },
+    };
+    
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        console.log("check response of cgat",response.data)
+       {(patientId.includes("DOCTOR"))? setmessage1(response.data[0].ReceiveMessage.s):setmessage1("")}
+        
+  })
+}
+  
 
   const AssignCareTeam = (provider, coordinator, coach, patientId) => {
     const token = localStorage.getItem("app_jwt");
@@ -3213,6 +3346,7 @@ export const CoreContextProvider = (props) => {
         bgData,
         bpData,
         wsData,
+        updateChat,
         bgChartData,
         bpChartData,
         wsChartData,
@@ -3291,12 +3425,15 @@ export const CoreContextProvider = (props) => {
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,
+        updateChat2,
         result,
         genderOptions,
         languageOptions,
         adminthresold,
         fetchadminThresold,
         userinfo,
+        fetchchat,
+        message1
       }}>
       {props.children}
     </CoreContext.Provider>
