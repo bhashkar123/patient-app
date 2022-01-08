@@ -1052,7 +1052,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
           (date) => date.MeasurementDateTime >= new Date(bfr)
         );
       }
-      let bg = [];
+      console.log("finalbgdata",coreContext.bloodglucoseData)
+            let bg = [];
       let bgbefore = [];
       let bgafter = [];
       let labels = [];
