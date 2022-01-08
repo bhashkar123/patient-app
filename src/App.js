@@ -156,14 +156,16 @@ function App() {
         "send-message",
         `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
       );
-      coreContext.updateChat(localStorage.getItem("userId"),newMessage)
-      coreContext.updateChat2(doctorid,`${localStorage.getItem("userName")}:  ${newMessage}`) 
+      coreContext.updateChat(localStorage.getItem("userId"),doctorid,`${localStorage.getItem("userName")}:  ${newMessage}`)
+      //coreContext.updateChat2(doctorid,`${localStorage.getItem("userName")}:  ${newMessage}`) 
     }
     if (usertype === "doctor") {
       socket.emit(
         "send-message",
         `${localStorage.getItem("userName")}(DOCTOR_${userid} to ${enduser}):  ${newMessage}`
+        
       );
+      coreContext.updateChat(`DOCTOR_${userid}`,`PATIENT_${enduser}`,`${localStorage.getItem("userName")}:  ${newMessage}`)
     }
 
     // Now send the message throught the backend API
@@ -239,14 +241,18 @@ function App() {
     
   }, []);
   const sahil=()=>{
-    if(coreContext.message1.length>0){
-      addResponseMessage(coreContext.message1)
+    if(coreContext.chatting.length>0){
+      coreContext.chatting.map((message)=>{
+        addResponseMessage(message)
+      })
+      
     }
     
   }
   useEffect(() => {
+    console.log("checkmessage",coreContext.chatting.length)
    sahil()
-  }, [coreContext.message1.length])
+  }, [coreContext.chatting.length])
   
     //const memo=React.useMemo(()=>{renderpatient()},[coreContext.patients])
   const renderuser = () => {

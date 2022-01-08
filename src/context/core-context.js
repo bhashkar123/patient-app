@@ -11,7 +11,8 @@ export const CoreContextProvider = (props) => {
   const [patients, setPatients] = useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
-  const [message1,setmessage1]=useState("");
+  const [message1,setmessage1]=useState([]);
+  const [chatting,setchatting]=useState([]);
   const [wsData, setwsData] = useState([]);
   const [adminthresold, setadminthresold] = useState([]);
 
@@ -1401,21 +1402,27 @@ export const CoreContextProvider = (props) => {
       });
   };
 
-  const updateChat=(patientId,message)=>{
+  const updateChat=(sender,receiver,message)=>{
     const token = localStorage.getItem("app_jwt");
-    let type="";
-    (patientId.includes("DOCTOR"))?type="doctor":type="patient"
+    let pktype="";
+    let sktype="";
+    {(sender.includes("DOCTOR"))?pktype="doctor":pktype="patient"}
+    (pktype==="patient")?sktype="doctor":sktype="patient"
     const data = {
       TableName: userTable,
       Key: {
-        PK: { S: type },
-        SK: { S: "PATIENT_" + patientId },
+        PK: { S: "Chatting"+pktype},
+        SK: { S: "Chatting"+sktype},
+        
+  
       },
       UpdateExpression:
-        "SET SendMessage = :v_SendMessage",
+        "SET Sender=:v_Sender, Receiver=:v_Receiver, Chat = :v_Chat",
         ExpressionAttributeValues: {
          
-          ":v_SendMessage": { S: "" + message + "" },
+          ":v_Chat": { S: message1 +"~/~"+ message + "" },
+          ":v_Sender": { S: "" + sender + "" },
+          ":v_Receiver": { S: "" + receiver + "" }
         },
       };
   
@@ -1429,44 +1436,45 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         console.log(response.data)
+        alert(response.data)
       
     });
 
 
   }
-  const updateChat2=(patientId,message)=>{
-    const token = localStorage.getItem("app_jwt");
-    let type="";
-    (patientId.includes("DOCTOR"))?type="doctor":type="patient"
-    const data = {
-      TableName: userTable,
-      Key: {
-        PK: { S: type },
-        SK: { S: patientId },
-      },
-      UpdateExpression:
-        "SET ReceiveMessage = :v_ReceiveMessage",
-        ExpressionAttributeValues: {
+  // const updateChat2=(patientId,message)=>{
+  //   const token = localStorage.getItem("app_jwt");
+  //   let type="";
+  //   (patientId.includes("DOCTOR"))?type="doctor":type="patient"
+  //   const data = {
+  //     TableName: userTable,
+  //     Key: {
+  //       PK: { S: type },
+  //       SK: { S: patientId },
+  //     },
+  //     UpdateExpression:
+  //       "SET ReceiveMessage = :v_ReceiveMessage",
+  //       ExpressionAttributeValues: {
          
-          ":v_ReceiveMessage": { S: message },
-        },
-      };
+  //         ":v_ReceiveMessage": { S: message },
+  //       },
+  //     };
   
-      axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, /",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        console.log("sahio",response.data)
+  //     axios
+  //     .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+  //       headers: {
+  //         Accept: "application/json, text/plain, /",
+  //         // "Content-Type": "application/json",
+  //         Authorization: "Bearer " + token,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log("sahio",response.data)
       
-    });
+  //   });
 
 
-  }
+  // }
   // const updateChat2 = (
     
   //   patientId,
@@ -1507,16 +1515,28 @@ export const CoreContextProvider = (props) => {
   // };
   const fetchchat = (patientId) => {
     const token = localStorage.getItem("app_jwt");
+    let pktype="";
+    let sktype="";
+    if(patientId.includes("PATIENT")){
+      pktype="doctor"
+      sktype="patient"
+  }else{
+    pktype="patient"
+    sktype="doctor"
+  }
 
     let data = {
       TableName: userTable,
-      KeyConditionExpression: "PK =:v_PK AND SK = :v_SK",
+      KeyConditionExpression: "PK = :v_PK AND SK = :v_SK",
+      FilterExpression: "Receiver = :v_Receiver",
       ExpressionAttributeValues: {
-        ":v_PK": { S: "doctor" },
-        ":v_SK": { S: patientId },
+        
+        ":v_PK": { S: "Chatting"+pktype },
+        ":v_SK": { S: "Chatting"+sktype},
+        ":v_Receiver": { S: patientId},
       },
     };
-    
+    console.log(data,"check data of hu")
     axios
       .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
         headers: {
@@ -1527,7 +1547,18 @@ export const CoreContextProvider = (props) => {
       })
       .then((response) => {
         console.log("check response of cgat",response.data)
-       {(patientId.includes("DOCTOR"))? setmessage1(response.data[0].ReceiveMessage.s):setmessage1("")}
+        let chat=[];
+        if(response.data.length>0){
+          setmessage1(response.data[0].Chat.s)
+         chat= response.data[0].Chat.s.split("~/~")
+         console.log("chat array",chat)
+         setchatting(chat)
+
+        }
+        else{
+          setmessage1("")
+        }
+       
         
   })
 }
@@ -3425,7 +3456,8 @@ export const CoreContextProvider = (props) => {
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,
-        updateChat2,
+        message1,
+        chatting,
         result,
         genderOptions,
         languageOptions,
@@ -3433,7 +3465,7 @@ export const CoreContextProvider = (props) => {
         fetchadminThresold,
         userinfo,
         fetchchat,
-        message1
+        
       }}>
       {props.children}
     </CoreContext.Provider>
