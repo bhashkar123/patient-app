@@ -1404,6 +1404,11 @@ export const CoreContextProvider = (props) => {
 
   const updateChat=(sender,receiver,message)=>{
     const token = localStorage.getItem("app_jwt");
+    if(receiver.includes("undefined")){
+      swal("error","Select Person with whom you want to chat","error")
+    }else{
+
+    
     let pktype="";
     let sktype="";
     {(sender.includes("DOCTOR"))?pktype="doctor":pktype="patient"}
@@ -1412,9 +1417,7 @@ export const CoreContextProvider = (props) => {
       TableName: userTable,
       Key: {
         PK: { S: "Chatting"+pktype},
-        SK: { S: "Chatting"+sktype},
-        
-  
+        SK: { S: "Chatting"+sktype+receiver},
       },
       UpdateExpression:
         "SET Sender=:v_Sender, Receiver=:v_Receiver, Chat = :v_Chat",
@@ -1437,8 +1440,11 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         console.log(response.data)
         alert(response.data)
+  
+
       
     });
+  }
 
 
   }
@@ -1532,7 +1538,7 @@ export const CoreContextProvider = (props) => {
       ExpressionAttributeValues: {
         
         ":v_PK": { S: "Chatting"+pktype },
-        ":v_SK": { S: "Chatting"+sktype},
+        ":v_SK": { S: "Chatting"+sktype+patientId},
         ":v_Receiver": { S: patientId},
       },
     };
