@@ -8,6 +8,8 @@ import { PencilSquare, Trash, Person } from "react-bootstrap-icons";
 import { IconName } from "react-icons/bs";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
+import swal from 'sweetalert';
+
 import Input from "./common/Input";
 import * as React from "react";
 import Switch from "@material-ui/core/Switch";
@@ -259,7 +261,22 @@ const Patients = (props) => {
   useEffect(fetchPatients, [checked]);
 
   const deletePatient = (patient) => {
-    coreContext.DeletePatient(patient.userId);
+
+    swal({
+      title: "Are you sure?",
+      
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        coreContext.DeletePatient(patient.userId);
+      } else {
+        swal("Delete Cancelled");
+      }
+    });
+    
   };
 
   const admincolumns = [
@@ -875,12 +892,7 @@ const Patients = (props) => {
                 setShowModal(false);
                 fetchPatients();
                 fetchPatients();
-                coreContext.AssignCareTeam(
-                  provider,
-                  coordinator,
-                  coach,
-                  patientId
-                );
+                
 
                 //alert("updated");
               }}

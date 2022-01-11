@@ -7,6 +7,7 @@ import { CoreContext } from "../context/core-context";
 import Loader from "react-loader-spinner";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import swal from "sweetalert";
 import { Bar, Line, Scatter, Bubble, Stacked } from "react-chartjs-2";
 
 import {
@@ -1393,14 +1394,14 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                     <>
                       {/* <tr>
                         <td rowspan="2">{curr}</td>
-                        <td style={{ backgroundColor: (dataBMAM.morningbm < Number(colorset) && dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && dataBMAM.morningbm > Number(colorsetmin) )? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
-                        <td style={{ backgroundColor: (dataBMAM.morningam < Number(colorset) && dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && dataBMAM.morningam > Number(colorsetmin) ) ? "#f6a683" : "grey" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonbm < Number(colorset) && dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && dataBMAM.noonbm > Number(colorsetmin)) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.noonam < Number(colorset)&& dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && dataBMAM.noonam > Number(colorsetmin)) ? "#f6a683" : "grey" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningbm < Number(colorset) && dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && dataBMAM.eveningbm > Number(colorsetmin) ) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.eveningam < Number(colorset) && dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && dataBMAM.eveningam > Number(colorsetmin)) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightbm < Number(colorset) && dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && dataBMAM.nightbm > Number(colorsetmin ))? "#f6a683" : "grey" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
-                        <td style={{ backgroundColor: (dataBMAM.nightam < Number(colorset) && dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && dataBMAM.nightam > Number(colorsetmin) ) ? "#f6a683" : "grey" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.morningbm < Number(colorset) && Number(dataBMAM.morningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm !== "" && Number(dataBMAM.morningbm > Number(colorsetmin) )? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}><p>{dataBMAM.morningbm}<br />{dataBMAM.morningbmtime}</p></td>
+                        <td style={{ backgroundColor: (dataBMAM.morningam < Number(colorset) && Number(dataBMAM.morningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam !== "" && Number(dataBMAM.morningam > Number(colorsetmin) ) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.morningam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonbm < Number(colorset) && Number(dataBMAM.noonbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm !== "" && Number(dataBMAM.noonbm > Number(colorsetmin)) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonbm}<br />{dataBMAM.noonbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.noonam < Number(colorset)&& Number(dataBMAM.noonam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam !== "" && Number(dataBMAM.noonam > Number(colorsetmin)) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonam}<br />{dataBMAM.noonamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningbm < Number(colorset) && Number(dataBMAM.eveningbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm !== "" && Number(dataBMAM.eveningbm > Number(colorsetmin) ) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningbm}<br />{dataBMAM.eveningbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.eveningam < Number(colorset) && Number(dataBMAM.eveningam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam !== "" && Number(dataBMAM.eveningam > Number(colorsetmin)) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningam}<br />{dataBMAM.eveningamtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightbm < Number(colorset) && Number(dataBMAM.nightbm !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm !== "" && Number(dataBMAM.nightbm > Number(colorsetmin ))? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightbm}<br />{dataBMAM.nightbmtime}</td>
+                        <td style={{ backgroundColor: (dataBMAM.nightam < Number(colorset) && Number(dataBMAM.nightam !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam !== "" && Number(dataBMAM.nightam > Number(colorsetmin) ) ? "#f6a683" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightam}<br />{dataBMAM.nightamtime}</td>
                       </tr> */}
                       
                       <tr>
@@ -1409,8 +1410,10 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <tr>
                             {
                               dataBMAM.morningbm.map((data, index) => (
-                                <td style={{ backgroundColor: (dataBMAM.morningbm[index] < tvalue && dataBMAM.morningbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningbm[index] !== "" && dataBMAM.morningbm[index] > tvalue) ? "#f6a683" : "grey" }}><p>{dataBMAM.morningbm[index]}<br />{dataBMAM.morningbmtime[index]}</p></td>
-                              ))
+                                <td style={{ backgroundColor: (Number(dataBMAM.morningbm[index]) < Number(colorset) && Number(dataBMAM.morningbm[index]) > Number(colorsetmin) && Number(dataBMAM.morningbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}><p>{dataBMAM.morningbm[index]}<br />{dataBMAM.morningbmtime[index]}</p></td>
+                              
+                                ))
+                                
 
                             }
 
@@ -1420,7 +1423,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <tr >
                             {
                               dataBMAM.morningam.map((data, index) => (
-                                <td style={{ backgroundColor: (dataBMAM.morningam[index] < tvalue && dataBMAM.morningam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.morningam[index] !== "" && dataBMAM.morningam[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.morningam[index]}<br />{dataBMAM.morningamtime[index]}</td>
+                                <td style={{ backgroundColor: (Number(dataBMAM.morningam[index]) < Number(colorset) && Number(dataBMAM.morningam[index]) > Number(colorsetmin) && Number(dataBMAM.morningam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" :  "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.morningam[index]}<br />{dataBMAM.morningamtime[index]}</td>
                               ))
 
                             }
@@ -1431,7 +1434,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <tr>
                             {
                               dataBMAM.noonbm.map((data, index) => (
-                                <td style={{ backgroundColor: (dataBMAM.noonbm[index] < tvalue && dataBMAM.noonbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonbm[index] !== "" && dataBMAM.noonbm[index] > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonbm[index]}<br />{dataBMAM.noonbmtime[index]}</td>
+                                <td style={{ backgroundColor: (Number(dataBMAM.noonbm[index]) < Number(colorset) && Number(dataBMAM.noonbm[index]) > Number(colorsetmin) && Number(dataBMAM.noonbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonbm[index]}<br />{dataBMAM.noonbmtime[index]}</td>
                               ))
                             }
 
@@ -1440,7 +1443,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                         <td style={{backgroundColor:"white"}}>
                           <tr>{
                             dataBMAM.noonam.map((data, index) => (
-                              <td style={{ backgroundColor: (dataBMAM.noonam[index] < tvalue && dataBMAM.noonam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.noonam[index] !== "" && dataBMAM.noonam[index] > 150) ? "#f6a683" : "grey" }}>{dataBMAM.noonam[index]}<br />{dataBMAM.noonamtime[index]}</td>
+                              <td style={{ backgroundColor: (Number(dataBMAM.noonam[index]) < Number(colorset) && Number(dataBMAM.noonam[index]) > Number(colorsetmin) && Number(dataBMAM.noonam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" :  "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.noonam[index]}<br />{dataBMAM.noonamtime[index]}</td>
                             ))
                           }
 
@@ -1450,7 +1453,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <tr>
                             {
                               dataBMAM.eveningbm.map((data, index) => (
-                                <td style={{ backgroundColor: (dataBMAM.eveningbm[index] < tvalue && dataBMAM.eveningbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningbm[index] !== "" && dataBMAM.eveningbm[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningbm[index]}<br />{dataBMAM.eveningbmtime[index]}</td>
+                                <td style={{ backgroundColor: (Number(dataBMAM.eveningbm[index]) < Number(colorset) && Number(dataBMAM.eveningbm[index]) > Number(colorsetmin) && Number(dataBMAM.eveningbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningbm[index]}<br />{dataBMAM.eveningbmtime[index]}</td>
                               ))
                             }
 
@@ -1460,7 +1463,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <tr>
                             {
                               dataBMAM.eveningam.map((data, index) => (
-                                <td style={{ backgroundColor: (dataBMAM.eveningam[index] < tvalue && dataBMAM.eveningam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.eveningam[index] !== "" && dataBMAM.eveningam[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.eveningam[index]}<br />{dataBMAM.eveningamtime[index]}</td>
+                                <td style={{ backgroundColor: (Number(dataBMAM.eveningam[index]) < Number(colorset) && Number(dataBMAM.eveningam[index]) > Number(colorsetmin) && Number(dataBMAM.eveningam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.eveningam[index]}<br />{dataBMAM.eveningamtime[index]}</td>
                               ))
                             }
 
@@ -1469,7 +1472,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                         <td style={{backgroundColor:"white"}}>
                           <tr>{
                             dataBMAM.nightbm.map((data, index) => (
-                              <td style={{ backgroundColor: (dataBMAM.nightbm[index] < tvalue && dataBMAM.nightbm[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightbm[index] !== "" && dataBMAM.nightbm[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightbm[index]}<br />{dataBMAM.nightbmtime[index]}</td>
+                              <td style={{ backgroundColor: (Number(dataBMAM.nightbm[index]) < Number(colorset) && Number(dataBMAM.nightbm[index]) > Number(colorsetmin) && Number(dataBMAM.nightbm[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightbm[index]}<br />{dataBMAM.nightbmtime[index]}</td>
                             ))
                           }
 
@@ -1479,7 +1482,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                           <tr>
                             {
                               dataBMAM.nightam.map((data, index) => (
-                                <td style={{ backgroundColor: (dataBMAM.nightam[index] < tvalue && dataBMAM.nightam[index] !== "") ? "rgba(0, 255, 0, 0.15)" : (dataBMAM.nightam[index] !== "" && dataBMAM.nightam[index] > tvalue) ? "#f6a683" : "grey" }}>{dataBMAM.nightam[index]}<br />{dataBMAM.nightamtime[index]}</td>
+                                <td style={{ backgroundColor: (Number(dataBMAM.nightam[index]) < Number(colorset) && Number(dataBMAM.nightam[index]) > Number(colorsetmin) && Number(dataBMAM.nightam[index]) !== "") ? "rgba(0, 255, 0, 0.15)" : "rgba(255, 0, 0, 0.2)" }}>{dataBMAM.nightam[index]}<br />{dataBMAM.nightamtime[index]}</td>
                               ))
 
                             }
@@ -1808,7 +1811,12 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   //         });
   //     }
   // }
-
+const renderthresold=()=>{
+  return(
+    <Thresold></Thresold>
+  )
+}
+const thresoldbars=React.useMemo(()=>renderthresold(),[JSON.stringify(coreContext.thresoldData)])
   const renderTaskTimer = () => {
     if (coreContext.tasktimerUserData.length > 0) {
       return coreContext.tasktimerUserData.map((tl, index) => {
@@ -1862,8 +1870,25 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
   //  }
 
   const deleteDevice = (deviceData) => {
-    coreContext.DeleteDeviceData(deviceData.id);
+    swal({
+      title: "Are you sure?",
+      
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        coreContext.DeleteDeviceData(deviceData.id);
+        setdeviceflag(adddeviceflag + 1 )
+      } else {
+        swal("Delete Cancelled");
+      }
+    });
+    
   };
+
+  
 
   const renderDeviceData = () => {
     if (coreContext.deviceData.length === 0) {
@@ -1899,7 +1924,8 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                 href="#"
                 onClick={() => {
                   deleteDevice(deviceData)
-                  setdeviceflag(adddeviceflag + 1 )
+                  
+                  
                   }}>
                 {" "}
                 <Trash />
@@ -2463,7 +2489,7 @@ console.log("check admin thresold from patient",coreContext.thresoldData)
                       </TabPanel> */}
                       <TabPanel>
                         <div className="card-body">
-                          <Thresold></Thresold>
+                        {thresoldbars}
                         </div>
                         {/* <React.Fragment>
                                                 <div className='row'>

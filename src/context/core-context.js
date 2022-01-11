@@ -1279,9 +1279,11 @@ export const CoreContextProvider = (props) => {
     state,
     notes
   ) => {
-    console.log(gender, "check gender");
-    console.log(fname, "fname");
+    
     const token = localStorage.getItem("app_jwt");
+    if(!phone||!mobilePhone||!birthDate){
+      swal("error","Please fill all necessary details","error")
+    } else{
 
     var providervalue = providerOptions.filter(
       (p) => p.name == "Select Provider"
@@ -1376,6 +1378,12 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Updated") {
           // alert("");
           swal("success", "Patient data Update Successfully.", "success");
+       AssignCareTeam(
+            provider,
+            coordinator,
+            coach,
+            patientId
+          );
 
           // updating object
           //fetchPatientListfromApi();
@@ -1398,6 +1406,7 @@ export const CoreContextProvider = (props) => {
           swal("error", "Patient data did not Update  Successfully.", "error");
         }
       });
+    }
   };
 
   const AssignCareTeam = (provider, coordinator, coach, patientId) => {
