@@ -134,8 +134,8 @@ const Patients = (props) => {
     }
     setFName(patient.firstName);
     setLName(patient.lastName);
-    setBirthDate(moment(patient.dob).format('MM/DD/YYYY'));
-    console.log(moment(patient.dob).format('MM/DD/YYYY'),"format")
+    setBirthDate(moment(patient.dob).format('YYYY-MM-DD'));
+    console.log(moment(patient.dob).format('YYYY-MM-DD'),"format")
     setPhone(patient.mobile);
     setPatientId(patient.userId);
     setHeight(patient.height);
@@ -705,7 +705,23 @@ const Patients = (props) => {
                   errors={errors}
                   name="dob"
                   value={birthDate}
+                  pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
                 />
+               {/* <DatePicker
+                          className="form-control mt-2"
+                          selected={birthDate}
+                          required={true}
+                  register={register}
+                  errors={errors}
+                          
+                          
+                          
+                          onChange={(birthDate) => {
+                            setBirthDate()
+                          }}
+                          placeholderText="Enter a date"
+                          dateFormat="MM/dd/yyyy"
+                        /> */}
                 {console.log(birthDate)}
                 {/* <input type="date"/> */}
                 <Input

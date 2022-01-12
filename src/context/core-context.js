@@ -553,7 +553,7 @@ export const CoreContextProvider = (props) => {
           // }
           ps.push(patient);
         });
-
+          console.log(ps,"cjkli")
         setPatients(ps);
       })
       .catch(() => {
@@ -1796,7 +1796,8 @@ export const CoreContextProvider = (props) => {
     city,
     state,
     pcm,
-    pp
+    pp,
+    ppname
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -1832,6 +1833,9 @@ export const CoreContextProvider = (props) => {
             LastName: lastname,
             ActiveStatus: "Active",
             Gender: gender,
+            DoctorName: ppname,
+            DoctorId: pp,
+            GSI1SK: pp,
             Lang: language,
             WorkPhone: workPhone,
             MobilePhone: mobilePhone,
@@ -1862,6 +1866,7 @@ export const CoreContextProvider = (props) => {
               if (putresponse.status === 200) {
                 alert("Verification code sent to your email " + email);
                 handlePatientConfirmationModalShow();
+                
 
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
@@ -1872,6 +1877,7 @@ export const CoreContextProvider = (props) => {
           if (response.data == "User already exists")
             response.data = "Email already exists";
           alert(response.data);
+
         }
       });
   };
