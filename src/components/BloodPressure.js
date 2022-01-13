@@ -6,6 +6,12 @@ import { DataGrid } from "@material-ui/data-grid";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Loader from "react-loader-spinner";
 import IconButton from "@material-ui/core/IconButton";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 import ClearIcon from "@material-ui/icons/Clear";
 import SearchIcon from "@material-ui/icons/Search";
@@ -102,33 +108,45 @@ const BloodPressure = (props) => {
     // check page if left side menu.
     if (window.location.href.substring("bloodpressure") > 0) {
     }
-    if (window.location.href.indexOf("patient-summary") > 0) {
-      patientId = localStorage.getItem("ehrId");
-      userType = "patient";
-      // clear this otherwise will be problem
-      localStorage.removeItem("ehrId");
-      setdisablelink(true);
-    }
+    // if (window.location.href.indexOf("patient-summary") > 0) {
+    //   patientId = localStorage.getItem("ehrId");
+    //   userType = "patient";
+    //   // clear this otherwise will be problem
+    //   localStorage.removeItem("ehrId");
+    //   setdisablelink(true);
+    // }
     setUserType(userType);
 
     coreContext.fetchBloodPressure(patientId, userType);
   };
 
-  useEffect(fetchBloodPressure, [coreContext.bloodpressureData.length]);
+  useEffect(fetchBloodPressure, []);
 
   const columns = [
+    // {
+    //   field: "UserName",
+    //   headerName: "Patient Name",
+    //   width: 200,
+    //   type: "string",
+    //   renderCell: (params) => (
+    //     <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
+            
+            
+    //       {" "}
+    //       {params.row.UserName}{" "}
+    //     </Link>
+    //   ),
+    // },
     {
       field: "UserName",
       headerName: "Patient Name",
       width: 200,
       type: "string",
       renderCell: (params) => (
-        <a
-          disable={disablelink}
-          href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`} onClick={()=>console.log("sahil",params.row)}>
           {" "}
           {params.row.UserName}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -356,7 +374,7 @@ const BloodPressure = (props) => {
       );
     }
   };
-
+const js=React.useMemo(()=>renderBloodPressure(),[])
   return (
     <div className="card">
       <h4 className="card-header">BLOOD PRESSURE INFORMATION</h4>
@@ -367,7 +385,7 @@ const BloodPressure = (props) => {
           Refresh
         </button>
       </div>
-      <div className="card-body">{renderBloodPressure()}</div>
+      <div className="card-body">{js}</div>
     </div>
   );
 };

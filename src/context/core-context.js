@@ -9,6 +9,7 @@ export const CoreContext = React.createContext({});
 export const CoreContextProvider = (props) => {
   const [userinfo, setuserinfo] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [pss,setpss]=useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
   const [wsData, setwsData] = useState([]);
@@ -21,7 +22,11 @@ export const CoreContextProvider = (props) => {
   const [timeLogData, setTimeLogData] = useState([]);
   const [AlltimeLogData, setAllTimeLogData] = useState([]);
   const [bloodpressureData, setbloodpressureData] = useState([]);
+  const [patientbloodpressureData, setpatientbloodpressureData] = useState([]);
+  const [patientbloodglucoseData, setpatientbloodglucoseData] = useState([]);
+  
   const [bloodglucoseData, setbloodglucoseData] = useState([]);
+  const [patientdevicedata,setpatientdeviceddata]=useState([]);
 
   const [deviceData, setdeviceData] = useState([]);
   const [patientWDevice, setPatientWDevice] = useState([]);
@@ -253,6 +258,7 @@ export const CoreContextProvider = (props) => {
   console.log(dpatient);
   // capture from patient List page.
   const fetchPatientListfromApi = async (usertype, userId, AllActive) => {
+    
     const token = localStorage.getItem("app_jwt");
 
     let data = "";
@@ -553,7 +559,9 @@ export const CoreContextProvider = (props) => {
           // }
           ps.push(patient);
         });
-          console.log(ps,"cjkli")
+        
+(window.location.href.indexOf("patient-summary")>0)?setpss(ps):
+
         setPatients(ps);
       })
       .catch(() => {
@@ -1408,6 +1416,31 @@ export const CoreContextProvider = (props) => {
       });
     }
   };
+  const updateChat=(patientId,message)=>{
+    const token = localStorage.getItem("app_jwt");
+    const data = {
+      TableName: userTable,
+      Key: {
+        PK: { S: "patient" },
+        SK: { S: "PATIENT_" + patientId },
+      },
+      UpdateExpression:
+      "SET RecentChat = :v_RecentChat",
+      ExpressionAttributeValues: {
+        ":v_RecentChat": { S: "" + message + "" },
+      }};
+      axios
+      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, /",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        console.log("new message",response)
+      });
+    }
 
   const AssignCareTeam = (provider, coordinator, coach, patientId) => {
     const token = localStorage.getItem("app_jwt");
@@ -2058,7 +2091,7 @@ export const CoreContextProvider = (props) => {
           dataSetdevice.push("no device found");
         }
 
-        //    console.log('deviceData', deviceData);
+         console.log('deviceData', deviceData);
         deviceData.forEach((p, index) => {
           let devicedata = {};
           devicedata.id = index;
@@ -2074,7 +2107,11 @@ export const CoreContextProvider = (props) => {
           }
           if (p.SK !== undefined) {
             devicedata.id = p.SK.s;
-
+            
+           if(window.location.href.indexOf("patient-summary")>0)
+           {
+             devicedata.username=username
+           }
             if (patients.length > 0) {
               let patient = patients.filter(
                 (p) => p.ehrId === devicedata.patientId
@@ -2083,13 +2120,14 @@ export const CoreContextProvider = (props) => {
             } else {
               devicedata.username = username;
             }
+
           }
 
           if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
         });
 
         if (dataSetdevice[0] !== "no device found") {
-          setdeviceData(dataSetdevice);
+          (window.location.href.indexOf("patient-summary")>0)?setpatientdeviceddata(dataSetdevice):setdeviceData(dataSetdevice);
         }
 
         if (type == "Weight") {
@@ -2436,13 +2474,14 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        const bloodpressureData = response.data;
+       // const bloodpressureData = response.data;
+      
         const dataSetbp = [];
-        if (bloodpressureData.length === 0) {
+        if (response.data.length === 0) {
           dataSetbp.push("No Data Found");
         }
 
-        bloodpressureData.forEach((bp, index) => {
+        response.data.forEach((bp, index) => {
           //   console.log('p' + index, bg);
           let bpdata = {};
           bpdata.id = index;
@@ -2502,7 +2541,7 @@ export const CoreContextProvider = (props) => {
 
           dataSetbp.push(bpdata);
         });
-
+        (window.location.href.indexOf("patient-summary")>0)?setpatientbloodpressureData(dataSetbp):
         setbloodpressureData(dataSetbp);
       });
   };
@@ -2618,17 +2657,14 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        const bloodglucoseData = response.data;
+        //const bloodglucoseData = response.data;
+        console.log("hcekcin",response.data)
         const dataSetbg = [];
-        if (bloodglucoseData.length === 0) {
+        if (response.data.length === 0) {
           dataSetbg.push("No Data Found");
         }
-        console.log(
-          "checking the blood glucose why this is happe",
-          bloodglucoseData
-        );
-
-        bloodglucoseData.forEach((bg, index) => {
+       
+        response.data.forEach((bg, index) => {
           //   console.log('p' + index, bg);
           let bgdata = {};
           bgdata.id = index;
@@ -2688,7 +2724,7 @@ export const CoreContextProvider = (props) => {
 
           dataSetbg.push(bgdata);
         });
-
+        (window.location.href.indexOf("patient-summary")>0)?setpatientbloodglucoseData(dataSetbg):
         setbloodglucoseData(dataSetbg);
       });
   };
@@ -3189,6 +3225,15 @@ export const CoreContextProvider = (props) => {
   // }
 
   // Submit intake
+  const cleanup=()=>{
+    //setPatients([]);
+    //setbloodpressureData([]);
+    //setPatient();
+    setpss([]);
+    setpatientdeviceddata([]);
+    setpatientbloodpressureData([]);
+    setpatientbloodglucoseData([]);
+  }
   const SubmitIntakeRequest = () => {
     const data = {
       firstname: Tab1data.FirstName,
@@ -3284,6 +3329,7 @@ export const CoreContextProvider = (props) => {
         fetchTaskTimerUser,
         addCareCoordinator,
         addCoach,
+        cleanup,
         AddTimeLog,
         UpdateTimeLog,
         UpdatePatient,
@@ -3299,10 +3345,16 @@ export const CoreContextProvider = (props) => {
         fetchBloodPressure,
         fetchBloodGlucose,
         relogin,
+        setdeviceData,
+        patientbloodpressureData,
+        patientbloodglucoseData,
         Registration,
         resetForm,
         providerOptions,
         coachOptions,
+        updateChat,
+        patientdevicedata,
+        pss,
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,

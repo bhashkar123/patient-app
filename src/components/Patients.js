@@ -12,6 +12,11 @@ import swal from 'sweetalert';
 
 import Input from "./common/Input";
 import * as React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from "react-router-dom";
 import Switch from "@material-ui/core/Switch";
 import moment from 'moment';
 
@@ -110,6 +115,12 @@ const Patients = (props) => {
 
   useEffect(coreContext.checkLocalAuth, []);
   useEffect(fetchPatients, []);
+  useEffect(() => {
+    
+    return () => {
+      coreContext.cleanup();
+    }
+  }, [])
 
   function formatAMPM(date) {
     var d = new Date(date);
@@ -285,10 +296,10 @@ const Patients = (props) => {
       headerName: "Patient Name",
       width: 200,
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -363,31 +374,31 @@ const Patients = (props) => {
       width: 120,
       renderCell: (params) => (
         <div style={{ width: "100px" }}>
-          <a
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => showEditForm(params.row)}>
             {" "}
             <PencilSquare />
-          </a>
+          </Link>
           {/* {console.log("sahil",params.row)} */}
-          <a
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => {
               deletePatient(params.row);
               fetchPatients();
             }}>
             {" "}
             <Trash />
-          </a>
-          <a
+          </Link>
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => showAssignDoctor(params.row)}>
             {" "}
             <Person />
-          </a>
+          </Link>
         </div>
       ),
     },
@@ -399,10 +410,10 @@ const Patients = (props) => {
       headerName: "Patient Name",
       width: 200,
       renderCell: (params) => (
-        <a href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
           {" "}
           {params.value}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -477,24 +488,24 @@ const Patients = (props) => {
       width: 120,
       renderCell: (params) => (
         <div style={{ width: "100px" }}>
-          <a
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => showEditForm(params.row)}>
             {" "}
             <PencilSquare />
-          </a>
-          <a
+          </Link>
+          <Link
             style={{ marginRight: "5px" }}
-            href="#"
+            to="#"
             onClick={() => {
               deletePatient(params.row);
               fetchPatients();
             }}>
             {" "}
             <Trash />
-          </a>
-          {/* <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></a> */}
+          </Link>
+          {/* <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showAssignDoctor(params.row)}>  <Person /></Link> */}
         </div>
       ),
     },
@@ -508,6 +519,7 @@ const Patients = (props) => {
   //   }));
 
   // const classes = useStyles();
+  
 
   const renderPatients = () => {
     if (coreContext.patients.length == 0) {
@@ -616,9 +628,9 @@ const Patients = (props) => {
   };
   // const renderbuttons=()=>{
   //   <div style={{  width: '100px' }}  >
-  //   <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(rows)}>  <PencilSquare /></a>
-  //   <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(rows);fetchPatients();}}>  <Trash /></a>
-  //   <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(rows)}>  <Person /></a>
+  //   <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showEditForm(rows)}>  <PencilSquare /></Link>
+  //   <Link style={{  marginRight: '5px' }} to="#" onClick={() => {deletePatient(rows);fetchPatients();}}>  <Trash /></Link>
+  //   <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showAssignDoctor(rows)}>  <Person /></Link>
   //   </div>
   // }
 
@@ -642,14 +654,14 @@ const Patients = (props) => {
 
         {/* {renderbuttons()} */}
         {/* {(usertype==='admin')?((selectionModel.length!==0)? <div style={{  width: '100px',marginLeft:'20px' }}  >
-                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
+                <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></Link>
                 
-                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></a>
-                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showAssignDoctor(coreContext.patients[selectionModel])}>  <Person /></a>
+                <Link style={{  marginRight: '5px' }} to="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></Link>
+                <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showAssignDoctor(coreContext.patients[selectionModel])}>  <Person /></Link>
                 </div>: null):((selectionModel.length!==0)? <div style={{  width: '100px' }}  >
-                <a  style={{  marginRight: '5px' }} href="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></a>
+                <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showEditForm(coreContext.patients[selectionModel])}>  <PencilSquare /></Link>
                 
-                <a style={{  marginRight: '5px' }} href="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></a>
+                <Link style={{  marginRight: '5px' }} to="#" onClick={() => {deletePatient(coreContext.patients[selectionModel]);fetchPatients();}}>  <Trash /></Link>
               
                 </div>: null)}
                 
