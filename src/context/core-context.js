@@ -561,6 +561,7 @@ export const CoreContextProvider = (props) => {
         });
         
 (window.location.href.indexOf("patient-summary")>0)?setpss(ps):
+
         setPatients(ps);
       })
       .catch(() => {
@@ -1286,9 +1287,11 @@ export const CoreContextProvider = (props) => {
     state,
     notes
   ) => {
-    console.log(gender, "check gender");
-    console.log(fname, "fname");
+    
     const token = localStorage.getItem("app_jwt");
+    if(!phone||!mobilePhone||!birthDate){
+      swal("error","Please fill all necessary details","error")
+    } else{
 
     var providervalue = providerOptions.filter(
       (p) => p.name == "Select Provider"
@@ -1383,6 +1386,12 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Updated") {
           // alert("");
           swal("success", "Patient data Update Successfully.", "success");
+       AssignCareTeam(
+            provider,
+            coordinator,
+            coach,
+            patientId
+          );
 
           // updating object
           //fetchPatientListfromApi();
@@ -1405,6 +1414,7 @@ export const CoreContextProvider = (props) => {
           swal("error", "Patient data did not Update  Successfully.", "error");
         }
       });
+    }
   };
   const updateChat=(patientId,message)=>{
     const token = localStorage.getItem("app_jwt");
@@ -1819,7 +1829,8 @@ export const CoreContextProvider = (props) => {
     city,
     state,
     pcm,
-    pp
+    pp,
+    ppname
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -1855,6 +1866,9 @@ export const CoreContextProvider = (props) => {
             LastName: lastname,
             ActiveStatus: "Active",
             Gender: gender,
+            DoctorName: ppname,
+            DoctorId: pp,
+            GSI1SK: pp,
             Lang: language,
             WorkPhone: workPhone,
             MobilePhone: mobilePhone,
@@ -1885,6 +1899,7 @@ export const CoreContextProvider = (props) => {
               if (putresponse.status === 200) {
                 alert("Verification code sent to your email " + email);
                 handlePatientConfirmationModalShow();
+                
 
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
@@ -1895,6 +1910,7 @@ export const CoreContextProvider = (props) => {
           if (response.data == "User already exists")
             response.data = "Email already exists";
           alert(response.data);
+
         }
       });
   };

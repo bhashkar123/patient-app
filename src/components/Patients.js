@@ -8,6 +8,8 @@ import { PencilSquare, Trash, Person } from "react-bootstrap-icons";
 import { IconName } from "react-icons/bs";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
+import swal from 'sweetalert';
+
 import Input from "./common/Input";
 import * as React from "react";
 import {
@@ -143,8 +145,8 @@ const Patients = (props) => {
     }
     setFName(patient.firstName);
     setLName(patient.lastName);
-    setBirthDate(moment(patient.dob).format('MM/DD/YYYY'));
-    console.log(moment(patient.dob).format('MM/DD/YYYY'),"format")
+    setBirthDate(moment(patient.dob).format('YYYY-MM-DD'));
+    console.log(moment(patient.dob).format('YYYY-MM-DD'),"format")
     setPhone(patient.mobile);
     setPatientId(patient.userId);
     setHeight(patient.height);
@@ -270,7 +272,22 @@ const Patients = (props) => {
   useEffect(fetchPatients, [checked]);
 
   const deletePatient = (patient) => {
-    coreContext.DeletePatient(patient.userId);
+
+    swal({
+      title: "Are you sure?",
+      
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        coreContext.DeletePatient(patient.userId);
+      } else {
+        swal("Delete Cancelled");
+      }
+    });
+    
   };
 
   const admincolumns = [
@@ -700,7 +717,23 @@ const Patients = (props) => {
                   errors={errors}
                   name="dob"
                   value={birthDate}
+                  pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
                 />
+               {/* <DatePicker
+                          className="form-control mt-2"
+                          selected={birthDate}
+                          required={true}
+                  register={register}
+                  errors={errors}
+                          
+                          
+                          
+                          onChange={(birthDate) => {
+                            setBirthDate()
+                          }}
+                          placeholderText="Enter a date"
+                          dateFormat="MM/dd/yyyy"
+                        /> */}
                 {console.log(birthDate)}
                 {/* <input type="date"/> */}
                 <Input
@@ -887,12 +920,7 @@ const Patients = (props) => {
                 setShowModal(false);
                 fetchPatients();
                 fetchPatients();
-                coreContext.AssignCareTeam(
-                  provider,
-                  coordinator,
-                  coach,
-                  patientId
-                );
+                
 
                 //alert("updated");
               }}

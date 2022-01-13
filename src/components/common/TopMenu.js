@@ -73,6 +73,7 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   const [isrpm, setIsrpm] = useState(false);
   const [pcm, setPcm] = useState("");
   const [pp, setPp] = useState("");
+  const [ppname, setPpname] = useState("");
   const [homePhone, setHomePhone] = useState("");
   const [mobilePhone, setMobilePhone] = useState("");
   const [patientid, setPatientid] = useState("");
@@ -119,11 +120,28 @@ const TopMenu = ({ changestyle, showSidebar }) => {
   };
 
   useEffect(fetchProviders, []);
+  // useEffect(console.log(pp), [pp]);
+  useEffect(()=>{
+    console.log(pp);
+    console.log(ppname)
+  },[pp])
 
   useEffect(fetchCareCoordinator, []);
+const handlechangeprovider=(p)=>{
+  setPp(p)
+  let c;
+  coreContext.providerOptions.map((curr)=>{
+    if(curr.value===p){
+      c=curr.name
+    }
 
+  })
+  console.log(c)
+  setPpname(c)
+}
   // const fetchPatients = () => {
   //     coreContext.fetchPatients();
+
   // }
 
   // useEffect(fetchPatients, [coreContext.patients.length]);
@@ -196,7 +214,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
       city,
       state,
       pcm,
-      pp
+      pp,
+      ppname
     );
     handleClose();
   };
@@ -809,7 +828,8 @@ const TopMenu = ({ changestyle, showSidebar }) => {
                     value={pp}
                     elementType="select"
                     options={coreContext.providerOptions}
-                    onChange={(e) => setPp(e.target.value)}
+                    onChange={(e) => {handlechangeprovider(e.target.value)}}
+                    
                   />
                 </form>
                 {/* <Form.Group>
