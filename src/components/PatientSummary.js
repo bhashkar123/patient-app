@@ -234,7 +234,7 @@ const PatientSummary = (props) => {
     //let patientData = JSON.parse(localStorage.getItem('app_patient'));
 
     //setPatient(patientData);
-    coreContext.fetchPatientListfromApi("patient", patientId);
+    coreContext.fetchPatientListfromApiForPatient("patient", patientId);
 
     //coreContext.fetchThresold("ADMIN_PATIENT_" + patientId, userType);
 

@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import { CoreContext } from "../context/core-context";
-import { DataGrid } from "@material-ui/data-grid";
+
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Loader from "react-loader-spinner";
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
+  
   Link
 } from "react-router-dom";
+import DataGridTable from "./common/DataGrid";
 const Moment = require("moment");
 
 
@@ -17,7 +17,7 @@ const BloodGlucose = (props) => {
 
   useEffect(coreContext.checkLocalAuth, []);
 
-  const [patientId, setPatientId] = useState("");
+  
   const [userType, setUserType] = useState("");
 
 
@@ -242,17 +242,12 @@ const BloodGlucose = (props) => {
     ) {
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
       return (
-        <div style={{ height: 680, width: "100%" }}>
-          {/* {coreContext.bloodglucoseData} */}
-          <DataGrid
-          
-            rows={coreContext.bloodglucoseData}
-            columns={dgcolumns}
-            pageSize={10}
-            sortingOrder={["desc", "asc"]}
-            sortModel={[{ field: "MeasurementDateTime", sort: "desc" }]}
-          />
-        </div>
+        <>
+         
+          {/* <DataGridTable columns={dgcolumns} rows={coreContext.bloodglucoseData}/> */}
+          <DataGridTable columns={dgcolumns} rows={coreContext.bloodglucoseData}/>
+          </>
+        
       );
     } else {
       return (
@@ -270,8 +265,7 @@ const BloodGlucose = (props) => {
       );
     }
   };
-const jh=React.useMemo(()=>renderBloodGlucose(),[]
-)
+const jh=React.useMemo(()=>renderBloodGlucose(),[coreContext.bloodglucoseData.length>1])
   return (
     <div className="card">
       <h4 className="card-header">BLOOD GLUCOSE INFORMATION</h4>

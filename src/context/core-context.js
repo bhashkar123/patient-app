@@ -257,6 +257,190 @@ export const CoreContextProvider = (props) => {
   };
   console.log(dpatient);
   // capture from patient List page.
+
+  const convert=(data)=>{
+    const patients = data;
+    // console.log("i need to check the patient",patients.length)
+    const ps = [];
+    if (patients.length === 0) {
+      ps.push("No data found");
+    }
+    console.log("i need to check the patient", ps);
+
+    patients.forEach((p, index) => {
+      let patient = {};
+
+      patient.id = index;
+
+      patient.mobilePhone = "";
+      patient.workPhone = "";
+
+      //console.log("i need to check the patient", patient);
+      if (p.UserId !== undefined) {
+        patient.userId = p.UserId.n;
+      }
+      if (p.UserName !== undefined) {
+        patient.name = p.UserName.s;
+      }
+      if (p.Email !== undefined) {
+        patient.email = p.Email.s;
+      }
+      if (p.ContactNo !== undefined) {
+        patient.mobile = p.ContactNo.s;
+      }
+      if (p.DOB !== undefined) {
+        patient.dob = Moment(p.DOB.s).format("MMM-DD-YYYY");
+      }
+      if (p.DoctorName !== undefined) {
+        patient.ProviderName = p.DoctorName.s;
+      }
+      if (p.CarecoordinatorName !== undefined) {
+        patient.CareName = p.CarecoordinatorName.s;
+      }
+      if (p.Coach !== undefined) {
+        patient.CoachName = p.Coach.s;
+      }
+      if (p.SK !== undefined) {
+        patient.ehrId = p.SK.s;
+      }
+      patient.pid = window.btoa(p.SK.s);
+      if (p.Height !== undefined) {
+        (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
+        
+      }
+      patient.pid = window.btoa(p.SK.s);
+
+      if (p.reading !== undefined) {
+        patient.bg_reading = p.reading.s;
+      }
+      if (p.diastolic !== undefined) {
+        let num = p.diastolic.s;
+        if (num === "") num = 0;
+        patient.diastolic = parseFloat(num).toFixed(2);
+      }
+      if (p.systolic !== undefined) {
+        let num = p.systolic.s;
+        if (num === "") num = 0;
+        patient.systolic = parseFloat(num).toFixed(2);
+      }
+
+      if (p.weight !== undefined) {
+        let num = p.weight.s;
+        if (num === "") num = 0;
+        patient.Weight = parseFloat(num).toFixed(2);
+      }
+      if (p.BMI !== undefined) {
+        let num1 = p.BMI.s;
+        if (num1 === "") num1 = 0;
+        if (parseFloat(num1) > 0) {
+          if (parseFloat(num1).toFixed(2) < 18.5) {
+            patient.BMI =
+              "Underweight" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+          if (
+            parseFloat(num1).toFixed(2) > 18.5 &&
+            parseFloat(num1).toFixed(2) < 24.9
+          ) {
+            patient.BMI =
+              "Normal" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+          if (
+            parseFloat(num1).toFixed(2) > 25 &&
+            parseFloat(num1).toFixed(2) < 29.9
+          ) {
+            patient.BMI =
+              "Overweight" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+          if (parseFloat(num1).toFixed(2) > 30) {
+            patient.BMI =
+              "Obese" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+        }
+      }
+
+      if (p.ActiveStatus !== undefined) {
+        patient.ActiveStatus = p.ActiveStatus.s;
+      }
+
+      if (p.FirstName !== undefined) {
+        patient.firstName = p.FirstName.s;
+      }
+
+      if (p.LastName !== undefined) {
+        patient.lastName = p.LastName.s;
+      }
+
+      // if firstname and lastname undefined then take name from name and put it.
+      if (patient.name !== undefined) {
+        patient.lastName = patient.name.split(",")[0];
+        patient.firstName = patient.name.split(",")[1];
+      }
+
+      if (p.FirstName !== undefined && p.LastName !== undefined) {
+        patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
+      }
+
+      if (p.Gender !== undefined) {
+        patient.gender = p.Gender.s;
+      }
+      if (p.Height !== undefined) {
+        (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
+      }else {
+        patient.height = "";
+      }
+
+      if (p.Lang !== undefined) {
+        patient.language = p.Lang.s;
+      } else {
+        patient.language = "";
+      }
+
+      if (p.Street !== undefined) {
+        patient.street = p.Street.s;
+      } else {
+        patient.street = "";
+      }
+
+      if (p.City !== undefined) {
+        patient.city = p.City.s;
+      } else {
+        patient.city = "";
+      }
+
+      if (p.Zip !== undefined) {
+        patient.zip = p.Zip.s;
+      } else {
+        patient.zip = "";
+      }
+
+      if (p.WorkPhone !== undefined) {
+        patient.workPhone = p.WorkPhone.s;
+      } else {
+        patient.workPhone = "";
+      }
+
+      if (p.MobilePhone !== undefined) {
+        patient.mobilePhone = p.MobilePhone.s;
+      } else {
+        patient.mobilePhone = "";
+      }
+
+      if (p.Notes !== undefined) {
+        patient.notes = p.Notes.s;
+        console.log("Notes" + p.Notes.s);
+      } else {
+        patient.notes = "";
+      }
+
+      // if (patient.userId !== undefined && patient.name) {
+      //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+      // }
+      ps.push(patient);
+    });
+   
+    return( ps)
+
+  }
   const fetchPatientListfromApi = async (usertype, userId, AllActive) => {
     
     const token = localStorage.getItem("app_jwt");
@@ -347,6 +531,21 @@ export const CoreContextProvider = (props) => {
         },
       };
     }
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "patient" },
+          ":v_SK": { S: "PATIENT_" + userId },
+          ":v_status": { S: "Active" },
+        },
+      };
+    }
+
     // if (usertype === "patient" && userName !==undefined) {
     //     data = {
     //         "TableName":userTable,
@@ -355,6 +554,34 @@ export const CoreContextProvider = (props) => {
     //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
     //     }
     // }
+    
+    await axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        // setJwt(response.data);
+        //  console.log(response.data);
+        {var some=()=>convert(response.data)}
+        
+
+
+        setPatients(some)
+      })
+      .catch(() => {
+        relogin();
+      });
+  };
+  const fetchPatientListfromApiForPatient = async (usertype, userId, AllActive) => {
+    
+    const token = localStorage.getItem("app_jwt");
+
+    let data = "";
+
     if (usertype === "patient") {
       data = {
         TableName: userTable,
@@ -381,188 +608,11 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         // setJwt(response.data);
         //  console.log(response.data);
-        const patients = response.data;
-        // console.log("i need to check the patient",patients.length)
-        const ps = [];
-        if (patients.length === 0) {
-          ps.push("No data found");
-        }
-        console.log("i need to check the patient", ps);
-
-        patients.forEach((p, index) => {
-          let patient = {};
-
-          patient.id = index;
-
-          patient.mobilePhone = "";
-          patient.workPhone = "";
-
-          //console.log("i need to check the patient", patient);
-          if (p.UserId !== undefined) {
-            patient.userId = p.UserId.n;
-          }
-          if (p.UserName !== undefined) {
-            patient.name = p.UserName.s;
-          }
-          if (p.Email !== undefined) {
-            patient.email = p.Email.s;
-          }
-          if (p.ContactNo !== undefined) {
-            patient.mobile = p.ContactNo.s;
-          }
-          if (p.DOB !== undefined) {
-            patient.dob = Moment(p.DOB.s).format("MMM-DD-YYYY");
-          }
-          if (p.DoctorName !== undefined) {
-            patient.ProviderName = p.DoctorName.s;
-          }
-          if (p.CarecoordinatorName !== undefined) {
-            patient.CareName = p.CarecoordinatorName.s;
-          }
-          if (p.Coach !== undefined) {
-            patient.CoachName = p.Coach.s;
-          }
-          if (p.SK !== undefined) {
-            patient.ehrId = p.SK.s;
-          }
-          patient.pid = window.btoa(p.SK.s);
-          if (p.Height !== undefined) {
-            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
-            
-          }
-          patient.pid = window.btoa(p.SK.s);
-
-          if (p.reading !== undefined) {
-            patient.bg_reading = p.reading.s;
-          }
-          if (p.diastolic !== undefined) {
-            let num = p.diastolic.s;
-            if (num === "") num = 0;
-            patient.diastolic = parseFloat(num).toFixed(2);
-          }
-          if (p.systolic !== undefined) {
-            let num = p.systolic.s;
-            if (num === "") num = 0;
-            patient.systolic = parseFloat(num).toFixed(2);
-          }
-
-          if (p.weight !== undefined) {
-            let num = p.weight.s;
-            if (num === "") num = 0;
-            patient.Weight = parseFloat(num).toFixed(2);
-          }
-          if (p.BMI !== undefined) {
-            let num1 = p.BMI.s;
-            if (num1 === "") num1 = 0;
-            if (parseFloat(num1) > 0) {
-              if (parseFloat(num1).toFixed(2) < 18.5) {
-                patient.BMI =
-                  "Underweight" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (
-                parseFloat(num1).toFixed(2) > 18.5 &&
-                parseFloat(num1).toFixed(2) < 24.9
-              ) {
-                patient.BMI =
-                  "Normal" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (
-                parseFloat(num1).toFixed(2) > 25 &&
-                parseFloat(num1).toFixed(2) < 29.9
-              ) {
-                patient.BMI =
-                  "Overweight" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (parseFloat(num1).toFixed(2) > 30) {
-                patient.BMI =
-                  "Obese" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-            }
-          }
-
-          if (p.ActiveStatus !== undefined) {
-            patient.ActiveStatus = p.ActiveStatus.s;
-          }
-
-          if (p.FirstName !== undefined) {
-            patient.firstName = p.FirstName.s;
-          }
-
-          if (p.LastName !== undefined) {
-            patient.lastName = p.LastName.s;
-          }
-
-          // if firstname and lastname undefined then take name from name and put it.
-          if (patient.name !== undefined) {
-            patient.lastName = patient.name.split(",")[0];
-            patient.firstName = patient.name.split(",")[1];
-          }
-
-          if (p.FirstName !== undefined && p.LastName !== undefined) {
-            patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
-          }
-
-          if (p.Gender !== undefined) {
-            patient.gender = p.Gender.s;
-          }
-          if (p.Height !== undefined) {
-            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
-          }else {
-            patient.height = "";
-          }
-
-          if (p.Lang !== undefined) {
-            patient.language = p.Lang.s;
-          } else {
-            patient.language = "";
-          }
-
-          if (p.Street !== undefined) {
-            patient.street = p.Street.s;
-          } else {
-            patient.street = "";
-          }
-
-          if (p.City !== undefined) {
-            patient.city = p.City.s;
-          } else {
-            patient.city = "";
-          }
-
-          if (p.Zip !== undefined) {
-            patient.zip = p.Zip.s;
-          } else {
-            patient.zip = "";
-          }
-
-          if (p.WorkPhone !== undefined) {
-            patient.workPhone = p.WorkPhone.s;
-          } else {
-            patient.workPhone = "";
-          }
-
-          if (p.MobilePhone !== undefined) {
-            patient.mobilePhone = p.MobilePhone.s;
-          } else {
-            patient.mobilePhone = "";
-          }
-
-          if (p.Notes !== undefined) {
-            patient.notes = p.Notes.s;
-            console.log("Notes" + p.Notes.s);
-          } else {
-            patient.notes = "";
-          }
-
-          // if (patient.userId !== undefined && patient.name) {
-          //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
-          // }
-          ps.push(patient);
-        });
+        {var some=()=>convert(response.data)}
         
-(window.location.href.indexOf("patient-summary")>0)?setpss(ps):
+setpss(some)
 
-        setPatients(ps);
+
       })
       .catch(() => {
         relogin();
@@ -3363,6 +3413,7 @@ export const CoreContextProvider = (props) => {
         languageOptions,
         adminthresold,
         fetchadminThresold,
+        fetchPatientListfromApiForPatient,
         userinfo,
       }}>
       {props.children}
