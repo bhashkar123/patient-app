@@ -6,6 +6,13 @@ import { DataGrid } from "@material-ui/data-grid";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Loader from "react-loader-spinner";
 import IconButton from "@material-ui/core/IconButton";
+import DataGridTable from "./common/DataGrid";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 import ClearIcon from "@material-ui/icons/Clear";
 import SearchIcon from "@material-ui/icons/Search";
@@ -38,63 +45,14 @@ const useStyles = makeStyles(
 );
 
 const Moment = require("moment");
-function escapeRegExp(value) {
-  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
-function QuickSearchToolbar(props) {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <TextField
-        variant="standard"
-        value={props.value}
-        onChange={props.onChange}
-        placeholder="Search…"
-        InputProps={{
-          startAdornment: <SearchIcon fontSize="small" />,
-          endAdornment: (
-            <IconButton
-              title="Clear"
-              aria-label="Clear"
-              size="small"
-              style={{ visibility: props.value ? "visible" : "hidden" }}
-              onClick={props.clearSearch}>
-              <ClearIcon fontSize="small" />
-            </IconButton>
-          ),
-        }}
-      />
-    </div>
-  );
-}
-QuickSearchToolbar.propTypes = {
-  clearSearch: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-};
-
 const BloodPressure = (props) => {
   const coreContext = useContext(CoreContext);
   const [patientId, setPatientId] = useState("");
   const [userType, setUserType] = useState("");
   const [disablelink, setdisablelink] = useState(false);
-  const [searchText, setSearchText] = React.useState("");
-  const [rows, setRows] = React.useState(coreContext.bloodpressureData);
-  const requestSearch = (searchValue) => {
-    setSearchText(searchValue);
-    const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
-    const filteredRows = coreContext.bloodpressureData.filter((row) => {
-      return Object.keys(row).some((field) => {
-        return searchRegex.test(row[field].toString());
-      });
-    });
-    setRows(filteredRows);
-  };
+  
 
-  React.useEffect(() => {
-    setRows(coreContext.bloodpressureData);
-  }, [coreContext.bloodpressureData]);
-
+  
   const fetchBloodPressure = () => {
     let userType = localStorage.getItem("userType");
     let patientId = localStorage.getItem("userId");
@@ -102,33 +60,45 @@ const BloodPressure = (props) => {
     // check page if left side menu.
     if (window.location.href.substring("bloodpressure") > 0) {
     }
-    if (window.location.href.indexOf("patient-summary") > 0) {
-      patientId = localStorage.getItem("ehrId");
-      userType = "patient";
-      // clear this otherwise will be problem
-      localStorage.removeItem("ehrId");
-      setdisablelink(true);
-    }
+    // if (window.location.href.indexOf("patient-summary") > 0) {
+    //   patientId = localStorage.getItem("ehrId");
+    //   userType = "patient";
+    //   // clear this otherwise will be problem
+    //   localStorage.removeItem("ehrId");
+    //   setdisablelink(true);
+    // }
     setUserType(userType);
 
     coreContext.fetchBloodPressure(patientId, userType);
   };
 
-  useEffect(fetchBloodPressure, [coreContext.bloodpressureData.length]);
+  useEffect(fetchBloodPressure, []);
 
   const columns = [
+    // {
+    //   field: "UserName",
+    //   headerName: "Patient Name",
+    //   width: 200,
+    //   type: "string",
+    //   renderCell: (params) => (
+    //     <Link to={`/patient-summary/${btoa(params.row.userId)}`}>
+            
+            
+    //       {" "}
+    //       {params.row.UserName}{" "}
+    //     </Link>
+    //   ),
+    // },
     {
       field: "UserName",
       headerName: "Patient Name",
       width: 200,
       type: "string",
       renderCell: (params) => (
-        <a
-          disable={disablelink}
-          href={`/patient-summary/${btoa(params.row.userId)}`}>
+        <Link to={`/patient-summary/${btoa(params.row.userId)}`} onClick={()=>console.log("sahil",params.row)}>
           {" "}
           {params.row.UserName}{" "}
-        </a>
+        </Link>
       ),
     },
     {
@@ -322,23 +292,8 @@ const BloodPressure = (props) => {
     ) {
       //coreContext.bloodpressureData  = coreContext.bloodpressureData.sort((a,b) => new Moment(b.sortDateColumn) - new Moment(a.sortDateColumn));
       return (
-        <div style={{ height: 680, width: "100%" }}>
-          <DataGrid
-            components={{ Toolbar: QuickSearchToolbar }}
-            rows={rows}
-            columns={dgcolumns}
-            pageSize={10}
-            sortModel={[{ field: "MeasurementDateTime", sort: "desc" }]}
-            sortingOrder={["desc", "asc"]}
-            componentsProps={{
-              toolbar: {
-                value: searchText,
-                onChange: (event) => requestSearch(event.target.value),
-                clearSearch: () => requestSearch(""),
-              },
-            }}
-          />
-        </div>
+        
+        <DataGridTable columns={dgcolumns} rows={coreContext.bloodpressureData}/>
       );
     } else {
       return (
@@ -356,7 +311,7 @@ const BloodPressure = (props) => {
       );
     }
   };
-
+const js=React.useMemo(()=>renderBloodPressure(),[coreContext.bloodpressureData.length])
   return (
     <div className="card">
       <h4 className="card-header">BLOOD PRESSURE INFORMATION</h4>
@@ -367,7 +322,7 @@ const BloodPressure = (props) => {
           Refresh
         </button>
       </div>
-      <div className="card-body">{renderBloodPressure()}</div>
+      <div className="card-body">{js}</div>
     </div>
   );
 };

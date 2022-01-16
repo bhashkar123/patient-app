@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { CoreContext } from "../context/core-context";
 import { DataGrid } from "@material-ui/data-grid";
 import Loader from "react-loader-spinner";
+import DataGridTable from "./common/DataGrid";
 
 const Deviceinfo = (props) => {
   const coreContext = useContext(CoreContext);
@@ -95,14 +96,8 @@ const Deviceinfo = (props) => {
       coreContext.deviceData[0].username !== undefined
     ) {
       return (
-        <div style={{ height: 680, width: "100%" }}>
-          <DataGrid
-            rows={coreContext.deviceData}
-            columns={columns}
-            pageSize={10}
-            sortModel={[{ field: "deviceID", sort: "asc" }]}
-          />
-        </div>
+        
+        <DataGridTable columns={columns} rows={coreContext.deviceData}/>
       );
     } else {
       return (
@@ -121,11 +116,12 @@ const Deviceinfo = (props) => {
     }
   };
 
+  const js=React.useMemo(()=>renderdeviceinfo(),[coreContext.deviceData.length])
   return (
     <div className="card">
       <h4 className="card-header">Device information</h4>
 
-      <div className="card-body">{renderdeviceinfo()}</div>
+      <div className="card-body">{js}</div>
     </div>
   );
 };

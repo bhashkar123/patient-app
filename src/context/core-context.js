@@ -9,6 +9,7 @@ export const CoreContext = React.createContext({});
 export const CoreContextProvider = (props) => {
   const [userinfo, setuserinfo] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [pss,setpss]=useState([]);
   const [bgData, setbgData] = useState([]);
   const [bpData, setbpData] = useState([]);
   const [message1,setmessage1]=useState([]);
@@ -23,7 +24,11 @@ export const CoreContextProvider = (props) => {
   const [timeLogData, setTimeLogData] = useState([]);
   const [AlltimeLogData, setAllTimeLogData] = useState([]);
   const [bloodpressureData, setbloodpressureData] = useState([]);
+  const [patientbloodpressureData, setpatientbloodpressureData] = useState([]);
+  const [patientbloodglucoseData, setpatientbloodglucoseData] = useState([]);
+  
   const [bloodglucoseData, setbloodglucoseData] = useState([]);
+  const [patientdevicedata,setpatientdeviceddata]=useState([]);
 
   const [deviceData, setdeviceData] = useState([]);
   const [patientWDevice, setPatientWDevice] = useState([]);
@@ -254,7 +259,380 @@ export const CoreContextProvider = (props) => {
   };
   console.log(dpatient);
   // capture from patient List page.
+
+  const convertPatientList=(data)=>{
+    const patients = data;
+    // console.log("i need to check the patient",patients.length)
+    const ps = [];
+    if (patients.length === 0) {
+      ps.push("No data found");
+    }
+    console.log("i need to check the patient", ps);
+
+    patients.forEach((p, index) => {
+      let patient = {};
+
+      patient.id = index;
+
+      patient.mobilePhone = "";
+      patient.workPhone = "";
+
+      //console.log("i need to check the patient", patient);
+      if (p.UserId !== undefined) {
+        patient.userId = p.UserId.n;
+      }
+      if (p.UserName !== undefined) {
+        patient.name = p.UserName.s;
+      }
+      if (p.Email !== undefined) {
+        patient.email = p.Email.s;
+      }
+      if (p.ContactNo !== undefined) {
+        patient.mobile = p.ContactNo.s;
+      }
+      if (p.DOB !== undefined) {
+        patient.dob = Moment(p.DOB.s).format("MMM-DD-YYYY");
+      }
+      if (p.DoctorName !== undefined) {
+        patient.ProviderName = p.DoctorName.s;
+      }
+      if (p.CarecoordinatorName !== undefined) {
+        patient.CareName = p.CarecoordinatorName.s;
+      }
+      if (p.Coach !== undefined) {
+        patient.CoachName = p.Coach.s;
+      }
+      if (p.SK !== undefined) {
+        patient.ehrId = p.SK.s;
+      }
+      patient.pid = window.btoa(p.SK.s);
+      if (p.Height !== undefined) {
+        (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
+        
+      }
+      patient.pid = window.btoa(p.SK.s);
+
+      if (p.reading !== undefined) {
+        patient.bg_reading = p.reading.s;
+      }
+      if (p.diastolic !== undefined) {
+        let num = p.diastolic.s;
+        if (num === "") num = 0;
+        patient.diastolic = parseFloat(num).toFixed(2);
+      }
+      if (p.systolic !== undefined) {
+        let num = p.systolic.s;
+        if (num === "") num = 0;
+        patient.systolic = parseFloat(num).toFixed(2);
+      }
+
+      if (p.weight !== undefined) {
+        let num = p.weight.s;
+        if (num === "") num = 0;
+        patient.Weight = parseFloat(num).toFixed(2);
+      }
+      if (p.BMI !== undefined) {
+        let num1 = p.BMI.s;
+        if (num1 === "") num1 = 0;
+        if (parseFloat(num1) > 0) {
+          if (parseFloat(num1).toFixed(2) < 18.5) {
+            patient.BMI =
+              "Underweight" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+          if (
+            parseFloat(num1).toFixed(2) > 18.5 &&
+            parseFloat(num1).toFixed(2) < 24.9
+          ) {
+            patient.BMI =
+              "Normal" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+          if (
+            parseFloat(num1).toFixed(2) > 25 &&
+            parseFloat(num1).toFixed(2) < 29.9
+          ) {
+            patient.BMI =
+              "Overweight" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+          if (parseFloat(num1).toFixed(2) > 30) {
+            patient.BMI =
+              "Obese" + " (" + parseFloat(num1).toFixed(2) + ")";
+          }
+        }
+      }
+
+      if (p.ActiveStatus !== undefined) {
+        patient.ActiveStatus = p.ActiveStatus.s;
+      }
+
+      if (p.FirstName !== undefined) {
+        patient.firstName = p.FirstName.s;
+      }
+
+      if (p.LastName !== undefined) {
+        patient.lastName = p.LastName.s;
+      }
+
+      // if firstname and lastname undefined then take name from name and put it.
+      if (patient.name !== undefined) {
+        patient.lastName = patient.name.split(",")[0];
+        patient.firstName = patient.name.split(",")[1];
+      }
+
+      if (p.FirstName !== undefined && p.LastName !== undefined) {
+        patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
+      }
+
+      if (p.Gender !== undefined) {
+        patient.gender = p.Gender.s;
+      }
+      if (p.Height !== undefined) {
+        (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
+      }else {
+        patient.height = "";
+      }
+
+      if (p.Lang !== undefined) {
+        patient.language = p.Lang.s;
+      } else {
+        patient.language = "";
+      }
+
+      if (p.Street !== undefined) {
+        patient.street = p.Street.s;
+      } else {
+        patient.street = "";
+      }
+
+      if (p.City !== undefined) {
+        patient.city = p.City.s;
+      } else {
+        patient.city = "";
+      }
+
+      if (p.Zip !== undefined) {
+        patient.zip = p.Zip.s;
+      } else {
+        patient.zip = "";
+      }
+
+      if (p.WorkPhone !== undefined) {
+        patient.workPhone = p.WorkPhone.s;
+      } else {
+        patient.workPhone = "";
+      }
+
+      if (p.MobilePhone !== undefined) {
+        patient.mobilePhone = p.MobilePhone.s;
+      } else {
+        patient.mobilePhone = "";
+      }
+
+      if (p.Notes !== undefined) {
+        patient.notes = p.Notes.s;
+        console.log("Notes" + p.Notes.s);
+      } else {
+        patient.notes = "";
+      }
+
+      // if (patient.userId !== undefined && patient.name) {
+      //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
+      // }
+      ps.push(patient);
+    });
+   
+    return( ps)
+
+  }
+  const ConvertBG=(data)=>{
+    const dataSetbg = [];
+        if (data.length === 0) {
+          dataSetbg.push("No Data Found");
+        }
+       
+        data.forEach((bg, index) => {
+          //   console.log('p' + index, bg);
+          let bgdata = {};
+          bgdata.id = index;
+          if (bg.GSI1PK !== undefined) {
+            bgdata.gSI1PK = bg.GSI1PK.s;
+            bgdata.userId = bg.GSI1PK.s.split("_").pop();
+          }
+          if (bg.UserName !== undefined) {
+            bgdata.UserName = bg.UserName.s;
+            if (bgdata.UserName == "Dale Cadwallader") {
+              let test = "";
+            }
+          }
+
+          if (bg.bloodglucosemmol !== undefined) {
+            bgdata.bloodglucosemmol = parseFloat(bg.bloodglucosemmol.n).toFixed(
+              0
+            );
+          }
+
+          if (bg.bloodglucosemgdl !== undefined) {
+            bgdata.bloodglucosemgdl = parseFloat(bg.bloodglucosemgdl.n).toFixed(
+              0
+            );
+          }
+
+          if (bg.before_meal !== undefined) {
+            if (bg.before_meal.bool) bgdata.meal = "Before Meal";
+            if (!bg.before_meal.bool) bgdata.meal = "After Meal";
+          }
+
+          if (bg.battery !== undefined) {
+            bgdata.battery = bg.battery.n;
+          }
+          if (bg.TimeSlots !== undefined) {
+            bgdata.timeSlots = bg.TimeSlots.s;
+          }
+          if (bg.MeasurementDateTime !== undefined) {
+            bgdata.MeasurementDateTime = bg.MeasurementDateTime.s;
+            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
+            bgdata.sortDateColumn = bg.MeasurementDateTime.s;
+            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
+          }
+          if (bg.CreatedDate !== undefined) {
+            bgdata.CreatedDate = bg.CreatedDate.s;
+            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
+            // bgdata.CreatedDate =Moment(bgdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
+          }
+
+          if (bg.SK !== undefined) {
+            bgdata.readingId = bg.SK.s.split("_").pop();
+          }
+
+          if (bg.DeviceId !== undefined) {
+            bgdata.DeviceId = bg.DeviceId.s;
+          }
+
+          dataSetbg.push(bgdata);
+        });
+        return(dataSetbg)
+
+  }
+  const ConvertBP=(data)=>{
+    const dataSetbp = [];
+        if (data.length === 0) {
+          dataSetbp.push("No Data Found");
+        }
+
+        data.forEach((bp, index) => {
+          //   console.log('p' + index, bg);
+          let bpdata = {};
+          bpdata.id = index;
+          if (bp.GSI1PK !== undefined) {
+            bpdata.gSI1PK = bp.GSI1PK.s;
+            bpdata.userId = bp.GSI1PK.s.split("_").pop();
+          }
+
+          
+          
+          if (bp.UserName !== undefined) {
+            bpdata.UserName = bp.UserName.s;
+          }
+
+          if (bp.irregular !== undefined) {
+            bpdata.irregular = bp.irregular.n;
+          }
+          if (bp.systolic !== undefined) {
+            bpdata.systolic = parseFloat(bp.systolic.n).toFixed(0);
+          }
+          if (bp.diastolic !== undefined) {
+            bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
+          }
+          if (bp.pulse !== undefined) {
+            bpdata.Pulse = bp.pulse.n;
+          }
+          if (bp.TimeSlots !== undefined) {
+            bpdata.timeSlots = bp.TimeSlots.s;
+          }
+          if (bp.MeasurementDateTime !== undefined) {
+            bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
+            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
+            bpdata.sortDateColumn = bp.MeasurementDateTime.s;
+            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
+          }
+
+          if (bp.CreatedDate !== undefined) {
+            bpdata.CreatedDate = bp.CreatedDate.s;
+            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
+            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
+          }
+
+          // bpdata.date_recorded = bp.date_recorded.s;
+
+          if (bp.DeviceId !== undefined) {
+            bpdata.DeviceId = bp.DeviceId.s;
+          }
+
+          if (bp.IMEI !== undefined) {
+            bpdata.DeviceId = bp.IMEI.s;
+          }
+
+          if (bp.SK !== undefined) {
+            bpdata.readingId = bp.SK.s.split("_").pop();
+          }
+
+          if (bp.ActionTaken !== undefined) {
+            bpdata.actionTaken = bp.ActionTaken.s;
+          }
+
+          dataSetbp.push(bpdata);
+        });
+   
+        return(dataSetbp)
+
+  }
+  const ConvertDevice=(data,username)=>{
+    const deviceData = data;
+    const dataSetdevice = [];
+    let deviceType = "";
+    if (deviceData.length === 0) {
+      dataSetdevice.push("no device found");
+    }
+
+     console.log('deviceData', deviceData);
+    deviceData.forEach((p, index) => {
+      let devicedata = {};
+      devicedata.id = index;
+
+      if (p.DeviceId != undefined) {
+        devicedata.deviceID = p.DeviceId.s;
+      }
+      if (p.DeviceType != undefined) {
+        devicedata.DeviceType = p.DeviceType.s;
+      }
+      if (p.GSI1PK != undefined) {
+        devicedata.patientId = p.GSI1PK.s;
+      }
+      if (p.SK !== undefined) {
+        devicedata.id = p.SK.s;
+        
+       if(window.location.href.indexOf("patient-summary")>0)
+       {
+         devicedata.username=username
+       }
+        if (patients.length > 0) {
+          let patient = patients.filter(
+            (p) => p.ehrId === devicedata.patientId
+          );
+          if (patient.length > 0) devicedata.username = patient[0].name;
+        } else {
+          devicedata.username = username;
+        }
+
+      }
+
+      if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
+    });
+
+        return(dataSetdevice)
+
+  }
   const fetchPatientListfromApi = async (usertype, userId, AllActive) => {
+    
     const token = localStorage.getItem("app_jwt");
 
     let data = "";
@@ -343,6 +721,21 @@ export const CoreContextProvider = (props) => {
         },
       };
     }
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,Email,ContactNo,DOB,DoctorName,CarecoordinatorName,Coach,Height,reading,diastolic,systolic,weight,BMI,FirstName,LastName,Gender,Lang,Street,City,Zip,WorkPhone,MobilePhone,ActiveStatus,Notes",
+        KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+        FilterExpression: "ActiveStatus = :v_status",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "patient" },
+          ":v_SK": { S: "PATIENT_" + userId },
+          ":v_status": { S: "Active" },
+        },
+      };
+    }
+
     // if (usertype === "patient" && userName !==undefined) {
     //     data = {
     //         "TableName":userTable,
@@ -351,6 +744,34 @@ export const CoreContextProvider = (props) => {
     //         "ExpressionAttributeValues":{":v_PK":{"S":"patient"},":v_SK":{"S":userName},":v_status":{"S":"Active"}}
     //     }
     // }
+    
+    await axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        // setJwt(response.data);
+        //  console.log(response.data);
+        {var some=()=>convertPatientList(response.data)}
+        
+
+
+        setPatients(some)
+      })
+      .catch(() => {
+        relogin();
+      });
+  };
+  const fetchPatientListfromApiForPatient = async (usertype, userId, AllActive) => {
+    
+    const token = localStorage.getItem("app_jwt");
+
+    let data = "";
+
     if (usertype === "patient") {
       data = {
         TableName: userTable,
@@ -377,186 +798,11 @@ export const CoreContextProvider = (props) => {
       .then((response) => {
         // setJwt(response.data);
         //  console.log(response.data);
-        const patients = response.data;
-        // console.log("i need to check the patient",patients.length)
-        const ps = [];
-        if (patients.length === 0) {
-          ps.push("No data found");
-        }
-        console.log("i need to check the patient", ps);
+        {var some=()=>convertPatientList(response.data)}
+        
+setpss(some)
 
-        patients.forEach((p, index) => {
-          let patient = {};
 
-          patient.id = index;
-
-          patient.mobilePhone = "";
-          patient.workPhone = "";
-
-          //console.log("i need to check the patient", patient);
-          if (p.UserId !== undefined) {
-            patient.userId = p.UserId.n;
-          }
-          if (p.UserName !== undefined) {
-            patient.name = p.UserName.s;
-          }
-          if (p.Email !== undefined) {
-            patient.email = p.Email.s;
-          }
-          if (p.ContactNo !== undefined) {
-            patient.mobile = p.ContactNo.s;
-          }
-          if (p.DOB !== undefined) {
-            patient.dob = Moment(p.DOB.s).format("MMM-DD-YYYY");
-          }
-          if (p.DoctorName !== undefined) {
-            patient.ProviderName = p.DoctorName.s;
-          }
-          if (p.CarecoordinatorName !== undefined) {
-            patient.CareName = p.CarecoordinatorName.s;
-          }
-          if (p.Coach !== undefined) {
-            patient.CoachName = p.Coach.s;
-          }
-          if (p.SK !== undefined) {
-            patient.ehrId = p.SK.s;
-          }
-          patient.pid = window.btoa(p.SK.s);
-          if (p.Height !== undefined) {
-            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
-            
-          }
-          patient.pid = window.btoa(p.SK.s);
-
-          if (p.reading !== undefined) {
-            patient.bg_reading = p.reading.s;
-          }
-          if (p.diastolic !== undefined) {
-            let num = p.diastolic.s;
-            if (num === "") num = 0;
-            patient.diastolic = parseFloat(num).toFixed(2);
-          }
-          if (p.systolic !== undefined) {
-            let num = p.systolic.s;
-            if (num === "") num = 0;
-            patient.systolic = parseFloat(num).toFixed(2);
-          }
-
-          if (p.weight !== undefined) {
-            let num = p.weight.s;
-            if (num === "") num = 0;
-            patient.Weight = parseFloat(num).toFixed(2);
-          }
-          if (p.BMI !== undefined) {
-            let num1 = p.BMI.s;
-            if (num1 === "") num1 = 0;
-            if (parseFloat(num1) > 0) {
-              if (parseFloat(num1).toFixed(2) < 18.5) {
-                patient.BMI =
-                  "Underweight" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (
-                parseFloat(num1).toFixed(2) > 18.5 &&
-                parseFloat(num1).toFixed(2) < 24.9
-              ) {
-                patient.BMI =
-                  "Normal" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (
-                parseFloat(num1).toFixed(2) > 25 &&
-                parseFloat(num1).toFixed(2) < 29.9
-              ) {
-                patient.BMI =
-                  "Overweight" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-              if (parseFloat(num1).toFixed(2) > 30) {
-                patient.BMI =
-                  "Obese" + " (" + parseFloat(num1).toFixed(2) + ")";
-              }
-            }
-          }
-
-          if (p.ActiveStatus !== undefined) {
-            patient.ActiveStatus = p.ActiveStatus.s;
-          }
-
-          if (p.FirstName !== undefined) {
-            patient.firstName = p.FirstName.s;
-          }
-
-          if (p.LastName !== undefined) {
-            patient.lastName = p.LastName.s;
-          }
-
-          // if firstname and lastname undefined then take name from name and put it.
-          if (patient.name !== undefined) {
-            patient.lastName = patient.name.split(",")[0];
-            patient.firstName = patient.name.split(",")[1];
-          }
-
-          if (p.FirstName !== undefined && p.LastName !== undefined) {
-            patient.name = p.LastName.s + "," + "  " + p.FirstName.s;
-          }
-
-          if (p.Gender !== undefined) {
-            patient.gender = p.Gender.s;
-          }
-          if (p.Height !== undefined) {
-            (p.Height.s!=="undefined")?patient.height = p.Height.s:patient.height = ""
-          }else {
-            patient.height = "";
-          }
-
-          if (p.Lang !== undefined) {
-            patient.language = p.Lang.s;
-          } else {
-            patient.language = "";
-          }
-
-          if (p.Street !== undefined) {
-            patient.street = p.Street.s;
-          } else {
-            patient.street = "";
-          }
-
-          if (p.City !== undefined) {
-            patient.city = p.City.s;
-          } else {
-            patient.city = "";
-          }
-
-          if (p.Zip !== undefined) {
-            patient.zip = p.Zip.s;
-          } else {
-            patient.zip = "";
-          }
-
-          if (p.WorkPhone !== undefined) {
-            patient.workPhone = p.WorkPhone.s;
-          } else {
-            patient.workPhone = "";
-          }
-
-          if (p.MobilePhone !== undefined) {
-            patient.mobilePhone = p.MobilePhone.s;
-          } else {
-            patient.mobilePhone = "";
-          }
-
-          if (p.Notes !== undefined) {
-            patient.notes = p.Notes.s;
-            console.log("Notes" + p.Notes.s);
-          } else {
-            patient.notes = "";
-          }
-
-          // if (patient.userId !== undefined && patient.name) {
-          //     fetchDeviceData("PATIENT_"+patient.userId,patient.name, 'patient','', patient);
-          // }
-          ps.push(patient);
-        });
-
-        setPatients(ps);
       })
       .catch(() => {
         relogin();
@@ -1281,9 +1527,11 @@ export const CoreContextProvider = (props) => {
     state,
     notes
   ) => {
-    console.log(gender, "check gender");
-    console.log(fname, "fname");
+    
     const token = localStorage.getItem("app_jwt");
+    if(!phone||!mobilePhone||!birthDate){
+      swal("error","Please fill all necessary details","error")
+    } else{
 
     var providervalue = providerOptions.filter(
       (p) => p.name == "Select Provider"
@@ -1378,6 +1626,12 @@ export const CoreContextProvider = (props) => {
         if (response.data === "Updated") {
           // alert("");
           swal("success", "Patient data Update Successfully.", "success");
+       AssignCareTeam(
+            provider,
+            coordinator,
+            coach,
+            patientId
+          );
 
           // updating object
           //fetchPatientListfromApi();
@@ -1400,7 +1654,33 @@ export const CoreContextProvider = (props) => {
           swal("error", "Patient data did not Update  Successfully.", "error");
         }
       });
+    }
   };
+  const updateChat=(patientId,message)=>{
+    const token = localStorage.getItem("app_jwt");
+    const data = {
+      TableName: userTable,
+      Key: {
+        PK: { S: "patient" },
+        SK: { S: "PATIENT_" + patientId },
+      },
+      UpdateExpression:
+      "SET RecentChat = :v_RecentChat",
+      ExpressionAttributeValues: {
+        ":v_RecentChat": { S: "" + message + "" },
+      }};
+      axios
+      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, /",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        console.log("new message",response)
+      });
+    }
 
   const updateChat=(sender,receiver,message)=>{
     const token = localStorage.getItem("app_jwt");
@@ -1957,7 +2237,8 @@ export const CoreContextProvider = (props) => {
     city,
     state,
     pcm,
-    pp
+    pp,
+    ppname
   ) => {
     const token = localStorage.getItem("app_jwt");
     const date = new Date();
@@ -1993,6 +2274,9 @@ export const CoreContextProvider = (props) => {
             LastName: lastname,
             ActiveStatus: "Active",
             Gender: gender,
+            DoctorName: ppname,
+            DoctorId: pp,
+            GSI1SK: pp,
             Lang: language,
             WorkPhone: workPhone,
             MobilePhone: mobilePhone,
@@ -2023,6 +2307,7 @@ export const CoreContextProvider = (props) => {
               if (putresponse.status === 200) {
                 alert("Verification code sent to your email " + email);
                 handlePatientConfirmationModalShow();
+                
 
                 //window.location.replace('confirm-user-screen.html?username='+useremail);
               } else {
@@ -2033,6 +2318,7 @@ export const CoreContextProvider = (props) => {
           if (response.data == "User already exists")
             response.data = "Email already exists";
           alert(response.data);
+
         }
       });
   };
@@ -2206,58 +2492,61 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        const deviceData = response.data;
-        const dataSetdevice = [];
-        let deviceType = "";
-        if (deviceData.length === 0) {
-          dataSetdevice.push("no device found");
+        {var some=()=>ConvertDevice(response.data,username)}
+        
+        if (some[0] !== "no device found") {
+          setdeviceData(some);
         }
 
-        //    console.log('deviceData', deviceData);
-        deviceData.forEach((p, index) => {
-          let devicedata = {};
-          devicedata.id = index;
-
-          if (p.DeviceId != undefined) {
-            devicedata.deviceID = p.DeviceId.s;
-          }
-          if (p.DeviceType != undefined) {
-            devicedata.DeviceType = p.DeviceType.s;
-          }
-          if (p.GSI1PK != undefined) {
-            devicedata.patientId = p.GSI1PK.s;
-          }
-          if (p.SK !== undefined) {
-            devicedata.id = p.SK.s;
-
-            if (patients.length > 0) {
-              let patient = patients.filter(
-                (p) => p.ehrId === devicedata.patientId
-              );
-              if (patient.length > 0) devicedata.username = patient[0].name;
-            } else {
-              devicedata.username = username;
-            }
-          }
-
-          if (devicedata.username !== undefined) dataSetdevice.push(devicedata);
-        });
-
-        if (dataSetdevice[0] !== "no device found") {
-          setdeviceData(dataSetdevice);
-        }
-
-        if (type == "Weight") {
-          fetchWSData(patientId, username, usertype, dataSetdevice);
-        }
-        if (type == "Blood Pressure") {
-          fetchBloodPressure(patientId, username, usertype, dataSetdevice);
-        }
-        if (type == "Blood Glucose") {
-        }
+        // if (type == "Weight") {
+        //   fetchWSData(patientId, username, usertype, dataSetdevice);
+        // }
+        // if (type == "Blood Pressure") {
+        //   fetchBloodPressure(patientId, username, usertype, dataSetdevice);
+        // }
+        // if (type == "Blood Glucose") {
+        // }
       });
   };
+  const fetchDeviceDataForPatient = (patientId, username, usertype, type, patient) => {
+    const token = localStorage.getItem("app_jwt");
 
+    let data = {
+      TableName: userTable,
+      KeyConditionExpression: "PK = :v_PK AND begins_with(SK, :v_SK)",
+      FilterExpression: "DeviceStatus = :v_status AND GSI1PK = :v_GSI1PK",
+      ExpressionAttributeValues: {
+        ":v_PK": { S: "patient" },
+        ":v_SK": { S: "DEVICE_" },
+        ":v_status": { S: "Active" },
+        ":v_GSI1PK": { S: patientId },
+      },
+    };
+       axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        {var some=()=>ConvertDevice(response.data,username)}
+        
+        if (some[0] !== "no device found") {
+          setpatientdeviceddata(some);
+        }
+
+        // if (type == "Weight") {
+        //   fetchWSData(patientId, username, usertype, dataSetdevice);
+        // }
+        // if (type == "Blood Pressure") {
+        //   fetchBloodPressure(patientId, username, usertype, dataSetdevice);
+        // }
+        // if (type == "Blood Glucose") {
+        // }
+      });
+  };
   const fetchProviders = (isactive) => {
     const token = localStorage.getItem("app_jwt");
     const config = {
@@ -2571,12 +2860,58 @@ export const CoreContextProvider = (props) => {
     if (usertype === "admin") {
       data = {
         TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
+        // ProjectionExpression:
+        //   "PK,SK,UserId,UserName,,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression: "ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BP_READING" },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+
+
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+       // const bloodpressureData = response.data;
+      
+       {var some=()=>ConvertBP(response.data)}
+        
+        setbloodpressureData(some);
+      });
+  };
+  
+  const fetchBloodPressureForPatient = (userid, usertype) => {
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+    let data = "";
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        ProjectionExpression:
+          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
+        IndexName: "Patient-Doctor-Device-Index",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        KeyConditionExpression: "GSI1PK = :v_PK",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BP_" + userid },
           ":v_ActiveStatus": { S: "Deactive" },
         },
       };
@@ -2591,74 +2926,11 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        const bloodpressureData = response.data;
-        const dataSetbp = [];
-        if (bloodpressureData.length === 0) {
-          dataSetbp.push("No Data Found");
-        }
-
-        bloodpressureData.forEach((bp, index) => {
-          //   console.log('p' + index, bg);
-          let bpdata = {};
-          bpdata.id = index;
-          if (bp.GSI1PK !== undefined) {
-            bpdata.gSI1PK = bp.GSI1PK.s;
-            bpdata.userId = bp.GSI1PK.s.split("_").pop();
-          }
-          if (bp.UserName !== undefined) {
-            bpdata.UserName = bp.UserName.s;
-          }
-
-          if (bp.irregular !== undefined) {
-            bpdata.irregular = bp.irregular.n;
-          }
-          if (bp.systolic !== undefined) {
-            bpdata.systolic = parseFloat(bp.systolic.n).toFixed(0);
-          }
-          if (bp.diastolic !== undefined) {
-            bpdata.diastolic = parseFloat(bp.diastolic.n).toFixed(0);
-          }
-          if (bp.pulse !== undefined) {
-            bpdata.Pulse = bp.pulse.n;
-          }
-          if (bp.TimeSlots !== undefined) {
-            bpdata.timeSlots = bp.TimeSlots.s;
-          }
-          if (bp.MeasurementDateTime !== undefined) {
-            bpdata.MeasurementDateTime = bp.MeasurementDateTime.s;
-            bpdata.MeasurementDateTime = new Date(bpdata.MeasurementDateTime);
-            bpdata.sortDateColumn = bp.MeasurementDateTime.s;
-            //  bpdata.MeasurementDateTime =Moment(bpdata.MeasurementDateTime).format('MM-DD-YYYY hh:mm A');
-          }
-
-          if (bp.CreatedDate !== undefined) {
-            bpdata.CreatedDate = bp.CreatedDate.s;
-            bpdata.CreatedDate = new Date(bpdata.CreatedDate);
-            //bpdata.CreatedDate =Moment(bpdata.CreatedDate).format('MM-DD-YYYY hh:mm A');
-          }
-
-          // bpdata.date_recorded = bp.date_recorded.s;
-
-          if (bp.DeviceId !== undefined) {
-            bpdata.DeviceId = bp.DeviceId.s;
-          }
-
-          if (bp.IMEI !== undefined) {
-            bpdata.DeviceId = bp.IMEI.s;
-          }
-
-          if (bp.SK !== undefined) {
-            bpdata.readingId = bp.SK.s.split("_").pop();
-          }
-
-          if (bp.ActionTaken !== undefined) {
-            bpdata.actionTaken = bp.ActionTaken.s;
-          }
-
-          dataSetbp.push(bpdata);
-        });
-
-        setbloodpressureData(dataSetbp);
+       // const bloodpressureData = response.data;
+      
+       {var some=()=>ConvertBP(response.data)}
+        
+        setpatientbloodpressureData(some);
       });
   };
 
@@ -2773,80 +3045,58 @@ export const CoreContextProvider = (props) => {
         },
       })
       .then((response) => {
-        const bloodglucoseData = response.data;
-        const dataSetbg = [];
-        if (bloodglucoseData.length === 0) {
-          dataSetbg.push("No Data Found");
-        }
-        console.log(
-          "checking the blood glucose why this is happe",
-          bloodglucoseData
-        );
-
-        bloodglucoseData.forEach((bg, index) => {
-          //   console.log('p' + index, bg);
-          let bgdata = {};
-          bgdata.id = index;
-          if (bg.GSI1PK !== undefined) {
-            bgdata.gSI1PK = bg.GSI1PK.s;
-            bgdata.userId = bg.GSI1PK.s.split("_").pop();
-          }
-          if (bg.UserName !== undefined) {
-            bgdata.UserName = bg.UserName.s;
-            if (bgdata.UserName == "Dale Cadwallader") {
-              let test = "";
-            }
-          }
-
-          if (bg.bloodglucosemmol !== undefined) {
-            bgdata.bloodglucosemmol = parseFloat(bg.bloodglucosemmol.n).toFixed(
-              0
-            );
-          }
-
-          if (bg.bloodglucosemgdl !== undefined) {
-            bgdata.bloodglucosemgdl = parseFloat(bg.bloodglucosemgdl.n).toFixed(
-              0
-            );
-          }
-
-          if (bg.before_meal !== undefined) {
-            if (bg.before_meal.bool) bgdata.meal = "Before Meal";
-            if (!bg.before_meal.bool) bgdata.meal = "After Meal";
-          }
-
-          if (bg.battery !== undefined) {
-            bgdata.battery = bg.battery.n;
-          }
-          if (bg.TimeSlots !== undefined) {
-            bgdata.timeSlots = bg.TimeSlots.s;
-          }
-          if (bg.MeasurementDateTime !== undefined) {
-            bgdata.MeasurementDateTime = bg.MeasurementDateTime.s;
-            bgdata.MeasurementDateTime = new Date(bgdata.MeasurementDateTime);
-            bgdata.sortDateColumn = bg.MeasurementDateTime.s;
-            //bgdata.MeasurementDateTime =Moment(bgdata.MeasurementDateTime).format('MMM-DD-YYYY hh:mm A');
-          }
-          if (bg.CreatedDate !== undefined) {
-            bgdata.CreatedDate = bg.CreatedDate.s;
-            bgdata.CreatedDate = new Date(bgdata.CreatedDate);
-            // bgdata.CreatedDate =Moment(bgdata.CreatedDate).format('MMM-DD-YYYY hh:mm A');
-          }
-
-          if (bg.SK !== undefined) {
-            bgdata.readingId = bg.SK.s.split("_").pop();
-          }
-
-          if (bg.DeviceId !== undefined) {
-            bgdata.DeviceId = bg.DeviceId.s;
-          }
-
-          dataSetbg.push(bgdata);
-        });
-
-        setbloodglucoseData(dataSetbg);
+        //const bloodglucoseData = response.data;
+        console.log("hcekcin",response.data)
+        {var some=()=>ConvertBG(response.data)}
+        
+        
+        setbloodglucoseData(some);
       });
   };
+  const fetchBloodGlucoseForPatient = (userid, usertype) => {
+    const token = localStorage.getItem("app_jwt");
+    const isAuth = localStorage.getItem("app_isAuth");
+    if (isAuth === "yes") {
+      setIsAuthenticated(true);
+      setJwt(token);
+      setUserId(userId);
+    } else {
+      relogin();
+    }
+
+    let data = "";
+
+   
+    if (usertype === "patient") {
+      data = {
+        TableName: userTable,
+        IndexName: "Patient-Doctor-Device-Index",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
+        KeyConditionExpression: "GSI1PK = :v_PK",
+        ExpressionAttributeValues: {
+          ":v_PK": { S: "DEVICE_BG_" + userid },
+          ":v_ActiveStatus": { S: "Deactive" },
+        },
+      };
+    }
+
+    axios
+      .post(apiUrl + "/DynamoDbAPIs/getitem", data, {
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          // "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        //const bloodglucoseData = response.data;
+        console.log("hcekcin",response.data)
+        {var some=()=>ConvertBG(response.data)}
+        
+setpatientbloodglucoseData(some)
+      });
+  };
+
 
   const backUpMessages = () => {
     axios.get("/backup-messages").then((response) => {
@@ -3344,6 +3594,15 @@ export const CoreContextProvider = (props) => {
   // }
 
   // Submit intake
+  const cleanup=()=>{
+    //setPatients([]);
+    //setbloodpressureData([]);
+    //setPatient();
+    setpss([]);
+    setpatientdeviceddata([]);
+    setpatientbloodpressureData([]);
+    setpatientbloodglucoseData([]);
+  }
   const SubmitIntakeRequest = () => {
     const data = {
       firstname: Tab1data.FirstName,
@@ -3440,6 +3699,7 @@ export const CoreContextProvider = (props) => {
         fetchTaskTimerUser,
         addCareCoordinator,
         addCoach,
+        cleanup,
         AddTimeLog,
         UpdateTimeLog,
         UpdatePatient,
@@ -3455,10 +3715,16 @@ export const CoreContextProvider = (props) => {
         fetchBloodPressure,
         fetchBloodGlucose,
         relogin,
+        setdeviceData,
+        patientbloodpressureData,
+        patientbloodglucoseData,
         Registration,
         resetForm,
         providerOptions,
         coachOptions,
+        updateChat,
+        patientdevicedata,
+        pss,
         careCoordinatorOptions,
         SubmitIntakeRequest,
         getTab1data,
@@ -3469,9 +3735,12 @@ export const CoreContextProvider = (props) => {
         languageOptions,
         adminthresold,
         fetchadminThresold,
+        fetchBloodGlucoseForPatient,
+        fetchPatientListfromApiForPatient,
+        fetchBloodPressureForPatient,
         userinfo,
         fetchchat,
-        
+        fetchDeviceDataForPatient,
       }}>
       {props.children}
     </CoreContext.Provider>

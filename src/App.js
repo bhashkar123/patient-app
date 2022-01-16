@@ -175,6 +175,7 @@ function App() {
         if (response.includes(`${doctorname}(${doctorid} to ${userid})`)) {
           if (validateMessage(response, currentTimeInMilliseconds, "patient")) {
             addResponseMessage(response.replace(`(${doctorid} to ${userid})`, ""));
+            coreContext.updateChat(userid,response.replace(`(${doctorid} to ${userid})`, ""));
           }
           //addResponseMessage(response);
         }
@@ -347,7 +348,10 @@ function App() {
                               </button> */}
         {isAuth ? (
           <React.Fragment>
+            <Router>
+                
             <div className={style1}>
+
               {" "}
               {sidebar === true ? <Menu /> : <Menu2 />}{" "}
               
@@ -355,8 +359,7 @@ function App() {
             <div className={style} style={{ marginLeft: "-20px" }}>
             {(localStorage.getItem("userType")==="doctor")?<Modal getenduser={getenduser}/>:""}
             
-              <Router>
-                <Switch>
+            <Switch>
                   <Route exact path="/provider" component={Pages.Provider} />{" "}
                   <Route
                     exact
@@ -423,9 +426,10 @@ function App() {
                   </Route>{" "}
                   <Redirect exact from="/login" to="/patients" />
                   <Redirect exact from="/" to="/patients" />
-                </Switch>{" "}
-              </Router>{" "}
+                  </Switch>{" "}
             </div>{" "}
+            
+              </Router>{" "}
           </React.Fragment>
         ) : (
           <div className="col-md-12">
