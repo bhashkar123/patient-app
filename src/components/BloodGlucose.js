@@ -265,7 +265,7 @@ const BloodGlucose = (props) => {
       );
     }
   };
-const jh=React.useMemo(()=>renderBloodGlucose(),[coreContext.bloodglucoseData.length>1])
+const jh=React.useMemo(()=>renderBloodGlucose(),[coreContext.bloodglucoseData.length])
   return (
     <div className="card">
       <h4 className="card-header">BLOOD GLUCOSE INFORMATION</h4>

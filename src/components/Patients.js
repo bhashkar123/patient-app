@@ -596,7 +596,7 @@ const Patients = (props) => {
       );
     }
   };
-  const ren=React.useMemo(()=>renderPatients(),[]);
+  const ren=React.useMemo(()=>renderPatients(),[coreContext.patients.length]);
   // const renderbuttons=()=>{
   //   <div style={{  width: '100px' }}  >
   //   <Link  style={{  marginRight: '5px' }} to="#" onClick={() => showEditForm(rows)}>  <PencilSquare /></Link>

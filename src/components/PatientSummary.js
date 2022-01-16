@@ -243,7 +243,7 @@ const PatientSummary = (props) => {
 
     //coreContext.fetchTaskTimerUser();
 
-    coreContext.fetchDeviceData("PATIENT_" + patientId,patientName);
+    coreContext.fetchDeviceDataForPatient("PATIENT_" + patientId,patientName);
     /// setting default value
     // if (coreContext.thresoldData.length === 0) {
     //   let thdata = {};
@@ -529,10 +529,10 @@ return String(ttt[0].bg_high)
     );
   };
   const fetchbp = () => {
-    coreContext.fetchBloodPressure(localStorage.getItem("ehrId"), "patient");
+    coreContext.fetchBloodPressureForPatient(localStorage.getItem("ehrId"), "patient");
   };
   const fetchbg = () => {
-    coreContext.fetchBloodGlucose(localStorage.getItem("ehrId"), "patient");
+    coreContext.fetchBloodGlucoseForPatient(localStorage.getItem("ehrId"), "patient");
   };
   const fetchTd = () => {
     coreContext.fetchThresold(

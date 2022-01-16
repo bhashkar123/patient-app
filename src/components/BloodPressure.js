@@ -311,7 +311,7 @@ const BloodPressure = (props) => {
       );
     }
   };
-const js=React.useMemo(()=>renderBloodPressure(),[])
+const js=React.useMemo(()=>renderBloodPressure(),[coreContext.bloodpressureData.length])
   return (
     <div className="card">
       <h4 className="card-header">BLOOD PRESSURE INFORMATION</h4>

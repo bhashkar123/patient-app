@@ -116,7 +116,7 @@ const Deviceinfo = (props) => {
     }
   };
 
-  const js=React.useMemo(()=>renderdeviceinfo(),[])
+  const js=React.useMemo(()=>renderdeviceinfo(),[coreContext.deviceData.length])
   return (
     <div className="card">
       <h4 className="card-header">Device information</h4>
