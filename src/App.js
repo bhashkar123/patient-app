@@ -117,6 +117,38 @@ function App() {
   //     });
   //   }
   // };
+  const rendermessage=()=>{
+    
+    if (coreContext.message1.length === 0) {
+      return (
+        <div
+          style={{
+            height: 680,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+            alignItems: "center",
+          }}>
+          <Loader type="Circles" color="#00BFFF" height={100} width={100} />
+        </div>
+      );
+    }
+    if (coreContext.message1.length > 0) {
+      console.log("check something",coreContext.message1)
+      addResponseMessage(coreContext.message1)
+
+    }
+    
+
+
+  }
+  useEffect(() => {
+    
+      coreContext.fetchchat(localStorage.getItem("userId"))
+    
+    
+  }, [])
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
     if (usertype === "patient") {
@@ -124,12 +156,16 @@ function App() {
         "send-message",
         `${localStorage.getItem("userName")}to ${doctorid}:  ${newMessage}`
       );
+      coreContext.updateChat(localStorage.getItem("userId"),doctorid,`${localStorage.getItem("userName")}:  ${newMessage}`)
+      //coreContext.updateChat2(doctorid,`${localStorage.getItem("userName")}:  ${newMessage}`) 
     }
     if (usertype === "doctor") {
       socket.emit(
         "send-message",
         `${localStorage.getItem("userName")}(DOCTOR_${userid} to ${enduser}):  ${newMessage}`
+        
       );
+      coreContext.updateChat(`DOCTOR_${userid}`,`PATIENT_${enduser}`,`${localStorage.getItem("userName")}:  ${newMessage}`)
     }
 
     // Now send the message throught the backend API
@@ -197,13 +233,27 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    addResponseMessage("Welcome to this awesome chat!");
-  }, []);
+ 
   //const isAuth = true;
   
   const coreContext = useContext(CoreContext);
-  
+  useEffect(() => {
+    addResponseMessage("Welcome to this awesome chat!");
+    
+  }, []);
+  const sahil=()=>{
+    if(coreContext.chatting.length>0){
+      coreContext.chatting.map((message)=>{
+        addResponseMessage(message)
+      })
+      
+    }
+    
+  }
+  useEffect(() => {
+    console.log("checkmessage",coreContext.chatting.length)
+   sahil()
+  }, [coreContext.chatting.length])
   
     //const memo=React.useMemo(()=>{renderpatient()},[coreContext.patients])
   const renderuser = () => {
@@ -226,8 +276,8 @@ function App() {
       console.log("userdata from app", coreContext.userinfo);
       usertype = (coreContext.userinfo[0].UserType.s!=="undefined")?coreContext.userinfo[0].UserType.s:""
       if (usertype === "patient") {
-        if(coreContext.userinfo[0].DoctorId!==undefined){
-          doctorid = coreContext.userinfo[0].DoctorId.s
+        if(coreContext.userinfo[0].GSI1SK!==undefined){
+          doctorid = coreContext.userinfo[0].GSI1SK.s
         }
         if(coreContext.userinfo[0].DoctorName!==undefined){
           doctorname = coreContext.userinfo[0].DoctorName.s
@@ -414,6 +464,7 @@ function App() {
         </Switch>{" "}
       </Router>{" "}
       {renderuser()}
+      {/* {rendermessage()} */}
       {/* <Modal
   open={open}
   onClose={handleClose}
