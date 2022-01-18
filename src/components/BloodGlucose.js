@@ -35,10 +35,11 @@ const BloodGlucose = (props) => {
     //   localStorage.removeItem("ehrId");
     // }
     setUserType(userType);
+    coreContext.fetchPatientListfromApi(userType, patientId);
     coreContext.fetchBloodGlucose(patientId, userType);
   };
 
-  useEffect(fetchBloodGlucose, []);
+  useEffect(fetchBloodGlucose, [coreContext.patients.length]);
 
   
 

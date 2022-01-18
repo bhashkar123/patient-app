@@ -509,7 +509,17 @@ export const CoreContextProvider = (props) => {
 
           dataSetbg.push(bgdata);
         });
-        return(dataSetbg)
+        const pid=[];
+        patients.map((curr)=>pid.push(curr.userId))
+        
+        const filteredata=dataSetbg.filter((curr)=>{
+         return pid.includes(curr.userId)
+
+        })
+        if(filteredata.length===0){
+          filteredata.push("No Data FOund")
+        }
+        return(filteredata)
 
   }
   const ConvertBP=(data)=>{
@@ -578,11 +588,24 @@ export const CoreContextProvider = (props) => {
           if (bp.ActionTaken !== undefined) {
             bpdata.actionTaken = bp.ActionTaken.s;
           }
-
+          
           dataSetbp.push(bpdata);
         });
+        const pid=[];
+        patients.map((curr)=>pid.push(curr.userId))
+        
+        const filteredata=dataSetbp.filter((curr)=>{
+         return pid.includes(curr.userId)
+
+        })
+
+        if(filteredata.length===0){
+          filteredata.push("No Data FOund")
+        }
+
+        console.log(filteredata,pid,"filteredata")
    
-        return(dataSetbp)
+        return(filteredata)
 
   }
   const ConvertDevice=(data,username)=>{
@@ -933,16 +956,25 @@ setpss(some)
     }
 
     if (usertype === "doctor") {
+      // data = {
+      //   TableName: userTable,
+      //   KeyConditionExpression: "PK = :v_PK",
+      //   FilterExpression:
+      //     "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+      //   ExpressionAttributeValues: {
+      //     ":v_PK": { S: "DEVICE_WS_READING" },
+      //     ":v_ActiveStatus": { S: "Deactive" },
+      //     ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
+      //     ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
+      //   },
+      // };
       data = {
         TableName: userTable,
         KeyConditionExpression: "PK = :v_PK",
-        FilterExpression:
-          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_WS_READING" },
           ":v_ActiveStatus": { S: "Deactive" },
-          ":v_GSI1PK1": { S: "DEVICE_WS_PATIENT_121524123727622" },
-          ":v_GSI1PK2": { S: "DEVICE_WS_PATIENT_1627230254837" },
         },
       };
     }
@@ -1020,7 +1052,22 @@ setpss(some)
           dataSetwt.push(wtdata);
         });
 
-        setweightData(dataSetwt);
+        const pid=[];
+        patients.map((curr)=>pid.push(curr.userId))
+        
+        const filteredata=dataSetwt.filter((curr)=>{
+         return pid.includes(curr.userId)
+
+        })
+
+        
+        if(filteredata.length===0){
+          filteredata.push("No Data FOund")
+        }
+   
+       
+
+        setweightData(filteredata);
       });
   };
 
@@ -1656,32 +1703,7 @@ setpss(some)
       });
     }
   };
-  const updateChat=(patientId,message)=>{
-    const token = localStorage.getItem("app_jwt");
-    const data = {
-      TableName: userTable,
-      Key: {
-        PK: { S: "patient" },
-        SK: { S: "PATIENT_" + patientId },
-      },
-      UpdateExpression:
-      "SET RecentChat = :v_RecentChat",
-      ExpressionAttributeValues: {
-        ":v_RecentChat": { S: "" + message + "" },
-      }};
-      axios
-      .post(apiUrl + "/DynamoDbAPIs/updateitem", data, {
-        headers: {
-          Accept: "application/json, text/plain, /",
-          // "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        console.log("new message",response)
-      });
-    }
-
+  
   const updateChat=(sender,receiver,message)=>{
     const token = localStorage.getItem("app_jwt");
     if(receiver.includes("undefined")){
@@ -2808,6 +2830,25 @@ setpss(some)
     //console.log(strTime);
     return strTime;
   }
+  let pk={
+    ":v_PK": { S: "DEVICE_BP_READING" },
+    ":v_ActiveStatus": { S: "Deactive" },
+    
+  };
+  let pkstring='';
+  const makestring=()=>{
+    
+    patients.map((curr,index)=>{
+      pk[`:v_GSI1PK${String(index+1)}`]={ S: `DEVICE_BP_${curr.ehrId}` }
+      if(index+1===patients.length){
+        pkstring=pkstring+":v_GSI1PK"+String(index+1)  
+      }else{
+        pkstring=pkstring+":v_GSI1PK"+String(index+1)+","
+      }
+      
+      console.log("lolo3",curr)
+    })
+  }
 
   const fetchBloodPressure = (userid, usertype) => {
     const token = localStorage.getItem("app_jwt");
@@ -2819,7 +2860,8 @@ setpss(some)
     } else {
       relogin();
     }
-
+{makestring()}
+console.log("lolo2",pk)
     let data = "";
     if (usertype === "patient") {
       data = {
@@ -2841,21 +2883,28 @@ setpss(some)
       //   :v_GSI1PK1" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
       //     ":v_GSI1PK2" : {"S": "DEVICE_BP_PATIENT_121524123727622"},
       // };
+      // data = {
+      //   TableName: userTable,
+      //   ProjectionExpression:
+      //     "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
+      //   KeyConditionExpression: "PK = :v_PK",
+      //   FilterExpression:
+      //     `ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (${pkstring})`,
+      //   ExpressionAttributeValues: pk,
+      // };
       data = {
         TableName: userTable,
-        ProjectionExpression:
-          "PK,SK,UserId,UserName,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
+        // ProjectionExpression:
+        //   "PK,SK,UserId,UserName,,irregular,systolic,diastolic,pulse,TimeSlots,MeasurementDateTime,CreatedDate,DeviceId,IMEI,ActionTaken, ActiveStatus,Notes",
         KeyConditionExpression: "PK = :v_PK",
-        FilterExpression:
-          "ActiveStatus <> :v_ActiveStatus AND GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2)",
+        FilterExpression: "ActiveStatus <> :v_ActiveStatus",
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BP_READING" },
           ":v_ActiveStatus": { S: "Deactive" },
-          ":v_GSI1PK1": { S: "DEVICE_BP_PATIENT_121524123727622" },
-          ":v_GSI1PK2": { S: "DEVICE_BP_PATIENT_1627230254837" },
         },
       };
     }
+    console.log("shi",data)
 
     if (usertype === "admin") {
       data = {
@@ -3015,6 +3064,7 @@ setpss(some)
         KeyConditionExpression: "PK = :v_PK",
         FilterExpression:
           "GSI1PK IN (:v_GSI1PK1, :v_GSI1PK2) AND ActiveStatus <> :v_ActiveStatus",
+          
         ExpressionAttributeValues: {
           ":v_PK": { S: "DEVICE_BG_READING" },
           ":v_GSI1PK1": { S: "DEVICE_BG_PATIENT_1201117191624936" },

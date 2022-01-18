@@ -68,11 +68,12 @@ const BloodPressure = (props) => {
     //   setdisablelink(true);
     // }
     setUserType(userType);
+    coreContext.fetchPatientListfromApi(userType, patientId);
 
     coreContext.fetchBloodPressure(patientId, userType);
   };
 
-  useEffect(fetchBloodPressure, []);
+  useEffect(fetchBloodPressure, [coreContext.patients.length]);
 
   const columns = [
     // {

@@ -33,10 +33,11 @@ const Weight = (props) => {
             localStorage.removeItem("ehrId");
         }
         setUserType(userType);
+        coreContext.fetchPatientListfromApi(userType, patientId);
       coreContext.fetchWSData(patientId,userType);
      
     }
-    useEffect(fetchWeight, [coreContext.weightData.length]);
+    useEffect(fetchWeight, [coreContext.weightData.length,coreContext.patients.length]);
    
 
     const columns = [

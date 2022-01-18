@@ -13,6 +13,7 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
 import { createTheme } from "@material-ui/core/styles";
+import b from '../../clinical2.jpg';
 const defaultTheme = createTheme();
   
   const useStyles = makeStyles(
@@ -34,7 +35,16 @@ const defaultTheme = createTheme();
         color:"white"
       },
       "& .MuiDataGrid-cell":{
-        border:"0.2px ridge grey"
+        border:"0.2px ridge grey",
+        fontStyle:"italic",
+        fontSize:"20px"
+      },
+      "& .MuiDataGrid-renderingZone":{
+        backgroundImage:`url(${b})`,
+        
+        backgroundSize:"cover",
+        backgroundRepeat:"no-repeat"
+        
       }
     },
       textField: {
@@ -116,7 +126,7 @@ const DataGridTable = ({columns,rows}) => {
       }, [rows]);
     
     return (
-        <div style={{ height: 900, width: "100%" }}>
+        <div style={{ height: 750, width: "100%" }}>
         <DataGrid
           className={classes.root1}
           components={{ Toolbar: QuickSearchToolbar }}
