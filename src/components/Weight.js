@@ -36,6 +36,7 @@ const Weight = (props) => {
      
     }
     useEffect(fetchWeight, [coreContext.weightData.length]);
+    console.log(coreContext.weightData,"lopop")
    
 
     const columns = [
@@ -192,7 +193,7 @@ const Weight = (props) => {
           );
     }
       let dgcolumns = columns;
-      if(userType === 'patient'){
+      if(userType === 'patient'||window.location.href.indexOf('patient-summary') >0){
          dgcolumns = patientcolumns;
       }
       
@@ -219,6 +220,7 @@ const Weight = (props) => {
         
        
     }
+    const us=React.useMemo(()=>renderWeight(),[coreContext.weightData.length])
 
     return <div className='card'>
         <h4 className="card-header">WEIGHT INFORMATION</h4>
@@ -228,7 +230,7 @@ const Weight = (props) => {
         </button>
       </div>
         <div className="card-body">
-        {renderWeight()}
+        {us}
         </div>
     </div >
 }
