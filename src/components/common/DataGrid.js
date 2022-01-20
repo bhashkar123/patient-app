@@ -40,7 +40,7 @@ const defaultTheme = createTheme();
         fontSize:"20px"
       },
       "& .MuiDataGrid-renderingZone":{
-        backgroundImage:`url(${b})`,
+        //backgroundImage:`url(${b})`,
         
         backgroundSize:"cover",
         backgroundRepeat:"no-repeat"
